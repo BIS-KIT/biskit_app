@@ -10,6 +10,12 @@ class TestScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     logger.d(context.locale.toString());
     return DefaultLayout(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.setLocale(const Locale('ko', 'KR'));
+          // context.setLocale(const Locale('en', 'US'));
+        },
+      ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
