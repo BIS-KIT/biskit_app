@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../layout/default_layout.dart';
 import '../utils/logger_util.dart';
@@ -17,11 +18,8 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/logo-1.png',
-              fit: BoxFit.contain,
-              width: 184,
-              height: 86,
+            SvgPicture.asset(
+              'assets/images/logo-1.svg',
             ),
           ],
         ),
