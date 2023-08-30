@@ -1,7 +1,9 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/common/view/test_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'common/provider/router_provider.dart';
 
 // 앱에서 지원하는 언어 리스트 변수
 final supportedLocales = [
@@ -17,19 +19,20 @@ void main() async {
       supportedLocales: supportedLocales,
       path: 'assets/translations',
       fallbackLocale: const Locale('ko', 'KR'),
-      child: const MyApp(),
+      child: const ProviderScope(child: MyApp()),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
     logger.d(context.locale.toString());
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'BISKIT',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
       ),
       localizationsDelegates: context.localizationDelegates,
       locale: context.locale,
-      home: const TestScreen(),
+      routerConfig: router,
     );
   }
 }
