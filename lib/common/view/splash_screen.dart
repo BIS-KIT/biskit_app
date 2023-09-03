@@ -14,7 +14,6 @@ class SplashScreen extends StatelessWidget {
     logger.d('SplashScreen build');
     return DefaultLayout(
       backgroundColor: const Color(0xffFEF076),
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
