@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../view/test_screen.dart';
+
 final routerProvider = Provider((ref) {
   final provider = ref.read(routeProvider);
 
@@ -34,6 +36,11 @@ class RouteProvider extends ChangeNotifier {
           path: '/',
           name: RootTab.routeName,
           builder: (context, state) => const RootTab(),
+        ),
+        GoRoute(
+          path: '/test',
+          name: TestScreen.routeName,
+          builder: (context, state) => const TestScreen(),
         ),
       ];
 }
