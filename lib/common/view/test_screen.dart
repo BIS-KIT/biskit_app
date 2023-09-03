@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatelessWidget {
+  static String get routeName => 'test';
   const TestScreen({super.key});
 
   @override
