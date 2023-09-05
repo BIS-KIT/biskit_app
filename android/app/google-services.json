@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "713106577735",
+    "project_id": "biskit-prod",
+    "storage_bucket": "biskit-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713106577735:android:20b1f25d63e2aedf6d9462",
+        "android_client_info": {
+          "package_name": "com.example.biskit_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713106577735-lhsb379m1aqai9esbrscbg03bl08nlks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHHn--eFECoTeuVne05S2oo1ezfLyEw7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713106577735-lhsb379m1aqai9esbrscbg03bl08nlks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
