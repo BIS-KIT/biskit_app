@@ -88,6 +88,7 @@ class RouteProvider extends ChangeNotifier {
         '/signUp',
         '/findId',
         '/findPassword',
+        '/test',
       ].contains(state.matchedLocation)) {
         return null;
       }

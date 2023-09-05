@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/view/test_screen.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_screen.dart';
@@ -52,6 +53,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 },
                 child: const Text(
                   '비밀번호 찾기',
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.pushNamed(TestScreen.routeName);
+                },
+                child: const Text(
+                  'Test Screen',
                 ),
               ),
             ],

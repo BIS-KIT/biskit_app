@@ -3,25 +3,44 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-class TestScreen extends StatelessWidget {
+class TestScreen extends StatefulWidget {
   static String get routeName => 'test';
   const TestScreen({super.key});
 
   @override
+  State<TestScreen> createState() => _TestScreenState();
+}
+
+class _TestScreenState extends State<TestScreen> {
+  @override
   Widget build(BuildContext context) {
-    logger.d(context.locale.toString());
     return DefaultLayout(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.setLocale(const Locale('ko', 'KR'));
-          // context.setLocale(const Locale('en', 'US'));
-        },
-      ),
+      title: 'Test Screen',
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('hello').tr(),
+            Text(tr('hello')),
+            ElevatedButton(
+              onPressed: () async {
+                await context.setLocale(const Locale('ko', 'KR'));
+                logger.d(tr('hello'));
+                setState(() {});
+              },
+              child: const Text(
+                'ko',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await context.setLocale(const Locale('en', 'US'));
+                logger.d(tr('hello'));
+                setState(() {});
+              },
+              child: const Text(
+                'en',
+              ),
+            ),
           ],
         ),
       ),

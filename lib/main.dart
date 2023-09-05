@@ -40,6 +40,7 @@ class MyApp extends ConsumerWidget {
       ),
       localizationsDelegates: context.localizationDelegates,
       locale: context.locale,
+      supportedLocales: context.supportedLocales,
       routerConfig: router,
     );
   }
