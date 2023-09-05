@@ -25,7 +25,6 @@ class _TestScreenState extends State<TestScreen> {
               onPressed: () async {
                 await context.setLocale(const Locale('ko', 'KR'));
                 logger.d(tr('hello'));
-                setState(() {});
               },
               child: const Text(
                 'ko',
@@ -35,7 +34,6 @@ class _TestScreenState extends State<TestScreen> {
               onPressed: () async {
                 await context.setLocale(const Locale('en', 'US'));
                 logger.d(tr('hello'));
-                setState(() {});
               },
               child: const Text(
                 'en',
