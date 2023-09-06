@@ -39,6 +39,16 @@ class _TestScreenState extends State<TestScreen> {
                 'en',
               ),
             ),
+            const Divider(),
+            const Text(
+              '사진첩 테스트',
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text(
+                '갤러리',
+              ),
+            ),
           ],
         ),
       ),
