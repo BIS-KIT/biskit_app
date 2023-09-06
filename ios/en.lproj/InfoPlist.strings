@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by dddog on 2023/09/06.
+  
+*/
+"CFBundleDisplayName" = "BISKIT";
+"NSPhotoLibraryUsageDescription" = "In order to access your photo library";

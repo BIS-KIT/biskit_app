@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by dddog on 2023/09/06.
+  
+*/
+"CFBundleDisplayName" = "BISKIT";
+"NSPhotoLibraryUsageDescription" = "사진앨범 접근을 허용해주세요";

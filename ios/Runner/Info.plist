@@ -52,5 +52,7 @@
 		<string>en</string>
 		<string>ko</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진앨범 접근을 허용해주세요</string>
 </dict>
 </plist>

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -24,14 +26,16 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
   // 권한 확인
   checkPermission() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
-    logger.d(androidInfo.toString());
+      logger.d(androidInfo.toString());
 
-    // android sdk 33부터 권한 요청이 다름
-    // 아직까지는 분기처리 사용안해도 잘 되는듯 함.
-    if (androidInfo.version.sdkInt > 32) {
-    } else {}
+      // android sdk 33부터 권한 요청이 다름
+      // 아직까지는 분기처리 사용안해도 잘 되는듯 함.
+      if (androidInfo.version.sdkInt > 32) {
+      } else {}
+    }
 
     final PermissionState ps = await PhotoManager.requestPermissionExtend();
     logger.d('ps.isAuth:${ps.isAuth}');
