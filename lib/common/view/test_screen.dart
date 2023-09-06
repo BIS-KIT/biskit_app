@@ -1,7 +1,9 @@
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TestScreen extends StatefulWidget {
   static String get routeName => 'test';
@@ -44,7 +46,9 @@ class _TestScreenState extends State<TestScreen> {
               '사진첩 테스트',
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pushNamed(PhotoManagerScreen.routeName);
+              },
               child: const Text(
                 '갤러리',
               ),

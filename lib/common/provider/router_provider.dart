@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/root_tab.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -70,6 +71,11 @@ class RouteProvider extends ChangeNotifier {
           name: TestScreen.routeName,
           builder: (context, state) => const TestScreen(),
         ),
+        GoRoute(
+          path: '/photoManager',
+          name: PhotoManagerScreen.routeName,
+          builder: (context, state) => const PhotoManagerScreen(),
+        ),
       ];
 
   String? redirectLogic(_, GoRouterState state) {
@@ -89,6 +95,7 @@ class RouteProvider extends ChangeNotifier {
         '/findId',
         '/findPassword',
         '/test',
+        '/photoManager',
       ].contains(state.matchedLocation)) {
         return null;
       }
