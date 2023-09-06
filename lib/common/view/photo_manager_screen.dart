@@ -122,125 +122,10 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     return DefaultLayout(
       child: SafeArea(
         child: viewPhoto != null
-            ? Stack(
-                children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        child: AssetEntityImage(
-                          viewPhoto!.assetEntity,
-                          isOriginal: true,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        viewPhoto = null;
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              )
+            ? _buildPreview()
             : Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 16,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.close_rounded,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Container(
-                              child: _albums.isNotEmpty
-                                  ? DropdownButton(
-                                      value: _currentAlbum,
-                                      items: _albums
-                                          .map(
-                                            (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e.name,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: (Album? value) {
-                                        getPhotos(
-                                          value!,
-                                          albumChange: true,
-                                        );
-                                      },
-                                      elevation: 0,
-                                      isDense: false,
-                                      underline: Container(),
-                                    )
-                                  : const SizedBox(),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                              ),
-                              child: Text(
-                                _images
-                                    .where((element) => element.isSelected)
-                                    .toList()
-                                    .length
-                                    .toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.amber,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              // color: Colors.amber,
-                              child: const Text(
-                                '완료',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  height: 1.6,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildTop(context),
 
                   // 사진들
                   Expanded(
@@ -265,67 +150,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                                   ),
                                 ),
                               ..._images.map(
-                                (e) => Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    AssetEntityImage(
-                                      e.assetEntity,
-                                      isOriginal: false,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        logger.d('onTap Container Image:$e');
-                                        setState(() {
-                                          _images = _images.map((i) {
-                                            if (e == i) {
-                                              return e.copyWith(
-                                                isSelected: !e.isSelected,
-                                              );
-                                            } else {
-                                              return i;
-                                            }
-                                          }).toList();
-                                        });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: e.isSelected
-                                              ? Border.all(
-                                                  width: 4,
-                                                  color: Colors.amber
-                                                      .withOpacity(0.9),
-                                                )
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // preview
-                                          logger.d(
-                                              'onTap fullscreen:${e.assetEntity}');
-                                          setState(() {
-                                            viewPhoto = e;
-                                          });
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.all(6),
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Colors.black.withOpacity(0.4),
-                                          ),
-                                          child: const Icon(
-                                            Icons.fullscreen_sharp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                (e) => _buildPhoto(e),
                               ),
                             ],
                           ),
@@ -333,6 +158,190 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 ],
               ),
       ),
+    );
+  }
+
+  Stack _buildPhoto(PhotoModel e) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        AssetEntityImage(
+          e.assetEntity,
+          isOriginal: false,
+          fit: BoxFit.cover,
+        ),
+        GestureDetector(
+          onTap: () {
+            logger.d('onTap Container Image:$e');
+            setState(() {
+              _images = _images.map((i) {
+                if (e == i) {
+                  return e.copyWith(
+                    isSelected: !e.isSelected,
+                  );
+                } else {
+                  return i;
+                }
+              }).toList();
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: e.isSelected
+                  ? Border.all(
+                      width: 4,
+                      color: Colors.amber.withOpacity(0.9),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: GestureDetector(
+            onTap: () {
+              // preview
+              logger.d('onTap fullscreen:${e.assetEntity}');
+              setState(() {
+                viewPhoto = e;
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.4),
+              ),
+              child: const Icon(
+                Icons.fullscreen_sharp,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Padding _buildTop(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        right: 16,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.close_rounded,
+                  color: Colors.black,
+                ),
+              ),
+              Container(
+                child: _albums.isNotEmpty
+                    ? DropdownButton(
+                        value: _currentAlbum,
+                        items: _albums
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(
+                                  e.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (Album? value) {
+                          getPhotos(
+                            value!,
+                            albumChange: true,
+                          );
+                        },
+                        elevation: 0,
+                        isDense: false,
+                        underline: Container(),
+                      )
+                    : const SizedBox(),
+              ),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                ),
+                child: Text(
+                  _images
+                      .where((element) => element.isSelected)
+                      .toList()
+                      .length
+                      .toString(),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                // color: Colors.amber,
+                child: const Text(
+                  '완료',
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: 1.6,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Stack _buildPreview() {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Expanded(
+              child: AssetEntityImage(
+                viewPhoto!.assetEntity,
+                isOriginal: true,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              viewPhoto = null;
+            });
+          },
+          icon: const Icon(
+            Icons.close_rounded,
+            color: Colors.black,
+          ),
+        ),
+      ],
     );
   }
 }
