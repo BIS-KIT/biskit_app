@@ -70,6 +70,7 @@ flutter:
   assets:
     - assets/translations/
     - assets/images/
+    - assets/icons/
 
 flutter_icons:
   android: true

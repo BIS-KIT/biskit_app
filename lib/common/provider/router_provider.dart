@@ -4,6 +4,7 @@ import 'package:biskit_app/common/view/root_tab.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/login_screen.dart';
@@ -45,6 +46,11 @@ class RouteProvider extends ChangeNotifier {
           path: '/login',
           name: LoginScreen.routeName,
           builder: (_, __) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/emailLogin',
+          name: EmailLoginScreen.routeName,
+          builder: (_, __) => const EmailLoginScreen(),
         ),
         GoRoute(
           path: '/signUp',
@@ -91,6 +97,7 @@ class RouteProvider extends ChangeNotifier {
     if (user == null) {
       // 유저정보 없을때 갈 수 있는 페이지들
       if ([
+        '/emailLogin',
         '/signUp',
         '/findId',
         '/findPassword',

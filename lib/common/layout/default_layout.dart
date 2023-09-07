@@ -1,4 +1,7 @@
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
@@ -21,28 +24,40 @@ class DefaultLayout extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor ?? Colors.white,
       body: child,
-      appBar: renderAppBar(),
+      appBar: renderAppBar(context),
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
     );
   }
 
-  AppBar? renderAppBar() {
+  AppBar? renderAppBar(BuildContext context) {
     if (title == null) {
       return null;
     } else {
       return AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: backgroundColor ?? Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
           title!,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+          style: kTsKrHeading18Bd.copyWith(
+            color: kColorGray9,
           ),
         ),
-        foregroundColor: Colors.black,
+        foregroundColor: kColorGray9,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            width: 44,
+            height: 44,
+            padding: const EdgeInsets.all(14),
+            child: SvgPicture.asset(
+              'assets/icons/ic_arrow_back_ios_line_24.svg',
+            ),
+          ),
+        ),
       );
     }
   }
