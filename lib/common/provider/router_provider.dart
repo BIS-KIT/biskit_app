@@ -53,14 +53,14 @@ class RouteProvider extends ChangeNotifier {
           builder: (_, __) => const EmailLoginScreen(),
         ),
         GoRoute(
-          path: '/signUp',
-          name: SignUpScreen.routeName,
-          builder: (_, __) => const SignUpScreen(),
-        ),
-        GoRoute(
           path: '/findId',
           name: FindIdScreen.routeName,
           builder: (_, __) => const FindIdScreen(),
+        ),
+        GoRoute(
+          path: '/signUp',
+          name: SignUpScreen.routeName,
+          builder: (_, __) => const SignUpScreen(),
         ),
         GoRoute(
           path: '/findPassword',
