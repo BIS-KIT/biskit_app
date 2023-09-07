@@ -8,6 +8,7 @@ import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/login_screen.dart';
+import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 import 'package:biskit_app/user/view/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +52,13 @@ class RouteProvider extends ChangeNotifier {
           path: '/emailLogin',
           name: EmailLoginScreen.routeName,
           builder: (_, __) => const EmailLoginScreen(),
+          routes: [
+            GoRoute(
+              path: 'signUpAgree',
+              name: SignUpAgreeScreen.routeName,
+              builder: (_, __) => const SignUpAgreeScreen(),
+            ),
+          ],
         ),
         GoRoute(
           path: '/findId',
@@ -98,6 +106,7 @@ class RouteProvider extends ChangeNotifier {
       // 유저정보 없을때 갈 수 있는 페이지들
       if ([
         '/emailLogin',
+        '/emailLogin/signUpAgree',
         '/signUp',
         '/findId',
         '/findPassword',
