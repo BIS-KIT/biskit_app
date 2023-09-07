@@ -1,3 +1,6 @@
+import 'package:biskit_app/common/component/checkbox_widget.dart';
+import 'package:biskit_app/common/component/filled_button_widget.dart';
+import 'package:biskit_app/common/component/outlined_button_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
@@ -57,6 +60,30 @@ class _TestScreenState extends State<TestScreen> {
               child: const Text(
                 '갤러리',
               ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: FilledButtonWidget(
+                text: '회원가입',
+                isEnable: true,
+                leftIconPath: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: OutlinedButtonWidget(
+                text: '회원가입',
+                isEnable: true,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const CheckboxWidget(
+              value: true,
             ),
           ],
         ),

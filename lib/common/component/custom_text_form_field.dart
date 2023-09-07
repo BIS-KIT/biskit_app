@@ -8,16 +8,16 @@ class CustomTextFormField extends StatefulWidget {
   final String? errorText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
-  final ValueChanged<String>? onChanged;
   final bool obscureText;
+  final ValueChanged<String>? onChanged;
   const CustomTextFormField({
     Key? key,
     this.hintText,
     this.errorText,
     this.keyboardType,
     this.textInputAction,
-    required this.onChanged,
     this.obscureText = false,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
