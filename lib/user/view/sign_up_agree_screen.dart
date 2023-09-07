@@ -3,9 +3,11 @@ import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/view/sign_up_email_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpAgreeScreen extends ConsumerStatefulWidget {
   static String get routeName => 'signUpAgree';
@@ -149,7 +151,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  // TODO 다음 페이지
+                  context.pushNamed(SignUpEmailScreen.routeName);
                 },
                 child: FilledButtonWidget(
                   text: '다음',

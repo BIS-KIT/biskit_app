@@ -9,6 +9,7 @@ import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/login_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
+import 'package:biskit_app/user/view/sign_up_email_screen.dart';
 import 'package:biskit_app/user/view/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,6 +58,13 @@ class RouteProvider extends ChangeNotifier {
               path: 'signUpAgree',
               name: SignUpAgreeScreen.routeName,
               builder: (_, __) => const SignUpAgreeScreen(),
+              routes: [
+                GoRoute(
+                  path: 'signUpEmail',
+                  name: SignUpEmailScreen.routeName,
+                  builder: (_, __) => const SignUpEmailScreen(),
+                ),
+              ],
             ),
           ],
         ),
@@ -107,6 +115,7 @@ class RouteProvider extends ChangeNotifier {
       if ([
         '/emailLogin',
         '/emailLogin/signUpAgree',
+        '/emailLogin/signUpAgree/signUpEmail',
         '/signUp',
         '/findId',
         '/findPassword',
