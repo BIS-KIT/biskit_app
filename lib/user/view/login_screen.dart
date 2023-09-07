@@ -1,9 +1,6 @@
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/view/test_screen.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
-import 'package:biskit_app/user/view/find_id_screen.dart';
-import 'package:biskit_app/user/view/find_password_screen.dart';
-import 'package:biskit_app/user/view/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,30 +29,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 },
                 child: const Text(
                   '이메일 로그인',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context.pushNamed(SignUpScreen.routeName);
-                },
-                child: const Text(
-                  '회원가입',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context.pushNamed(FindIdScreen.routeName);
-                },
-                child: const Text(
-                  '아이디 찾기',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context.pushNamed(FindPasswordScreen.routeName);
-                },
-                child: const Text(
-                  '비밀번호 찾기',
                 ),
               ),
               ElevatedButton(
