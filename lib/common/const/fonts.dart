@@ -157,6 +157,20 @@ const TextStyle kTsEnBody12Rg = TextStyle(
   height: 1.4,
 );
 
+const TextStyle kTsEnCaption12Sb = TextStyle(
+  color: Color(0xFF292C45),
+  fontFamily: 'Pretendard',
+  fontSize: 12,
+  fontWeight: FontWeight.w600,
+  height: 1.4,
+);
+const TextStyle kTsEnCaption12Rg = TextStyle(
+  color: Color(0xFF292C45),
+  fontFamily: 'Pretendard',
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  height: 1.4,
+);
 const TextStyle kTsEnCaption11Md = TextStyle(
   color: Color(0xFF292C45),
   fontFamily: 'Pretendard',
