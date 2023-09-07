@@ -1,4 +1,4 @@
-import 'package:biskit_app/common/component/custom_text_form_field.dart';
+import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common/component/outlined_button_widget.dart';
+import '../../common/component/text_input_widget.dart';
 import '../../common/utils/widget_util.dart';
 
 class EmailLoginScreen extends ConsumerStatefulWidget {
@@ -71,66 +73,38 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'emailScreen.email'.tr(),
-                      style: getTsBody14Sb(context).copyWith(
-                        color: kColorGray8,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Focus(
-                      onFocusChange: (value) {
-                        if (!value && email.isNotEmpty) {
-                          // 포커스 아웃시 처리
-                          checkEmail();
-                        }
-                      },
-                      child: CustomTextFormField(
-                        hintText: '이메일을 입력해주세요',
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        errorText: emailError,
-                        onChanged: (value) {
-                          email = value;
-                          inputCheck();
-                        },
-                      ),
-                    ),
-                  ],
+                Focus(
+                  onFocusChange: (value) {
+                    if (!value && email.isNotEmpty) {
+                      // 포커스 아웃시 처리
+                      checkEmail();
+                    }
+                  },
+                  child: TextInputWidget(
+                    title: 'emailScreen.email'.tr(),
+                    hintText: '이메일을 입력해주세요',
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    errorText: emailError,
+                    onChanged: (value) {
+                      email = value;
+                      inputCheck();
+                    },
+                  ),
                 ),
+
                 const SizedBox(
                   height: 20,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'emailScreen.password'.tr(),
-                      style: getTsBody14Sb(context).copyWith(
-                        color: kColorGray8,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    CustomTextFormField(
-                      hintText: '비밀번호를 입력해주세요',
-                      keyboardType: TextInputType.visiblePassword,
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      errorText: passwordError,
-                      onChanged: (value) {
-                        password = value;
-                        inputCheck();
-                      },
-                    ),
-                  ],
+                TextInputWidget(
+                  title: 'emailScreen.password'.tr(),
+                  hintText: '비밀번호를 입력해주세요',
+                  onChanged: (value) {
+                    password = value;
+                    inputCheck();
+                  },
                 ),
+
                 const SizedBox(
                   height: 44,
                 ),
@@ -142,27 +116,9 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           login();
                         }
                       : null,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: kColorGray4,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '로그인',
-                      style: getTsBody16Sb(context).copyWith(
-                        color: isLoginButtonEnable ? kColorGray8 : kColorGray4,
-                      ),
-                    ),
+                  child: OutlinedButtonWidget(
+                    text: '로그인',
+                    isEnable: isLoginButtonEnable,
                   ),
                 ),
                 const SizedBox(
@@ -171,24 +127,9 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 // signup button
                 GestureDetector(
                   onTap: () async {},
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 16,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: kColorYellow3,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '회원가입',
-                      style: getTsBody16Sb(context).copyWith(
-                        color: kColorGray9,
-                      ),
-                    ),
+                  child: const FilledButtonWidget(
+                    text: '회원가입',
+                    isEnable: true,
                   ),
                 ),
                 const SizedBox(
