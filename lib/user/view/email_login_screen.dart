@@ -5,6 +5,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -59,7 +60,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '이메일 로그인',
+      title: 'emailScreen.title'.tr(),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -74,8 +75,8 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '이메일',
-                      style: kTsKrBody14Sb.copyWith(
+                      'emailScreen.email'.tr(),
+                      style: getTsBody14Sb(context).copyWith(
                         color: kColorGray8,
                       ),
                     ),
@@ -109,8 +110,8 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '비밀번호',
-                      style: kTsKrBody14Sb.copyWith(
+                      'emailScreen.password'.tr(),
+                      style: getTsBody14Sb(context).copyWith(
                         color: kColorGray8,
                       ),
                     ),
@@ -158,7 +159,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     alignment: Alignment.center,
                     child: Text(
                       '로그인',
-                      style: kTsKrBody16Sb.copyWith(
+                      style: getTsBody16Sb(context).copyWith(
                         color: isLoginButtonEnable ? kColorGray8 : kColorGray4,
                       ),
                     ),
@@ -168,22 +169,25 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   height: 16,
                 ),
                 // signup button
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 16,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: kColorYellow3,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(6),
+                GestureDetector(
+                  onTap: () async {},
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 16,
                     ),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '회원가입',
-                    style: kTsKrBody16Sb.copyWith(
-                      color: kColorGray9,
+                    decoration: const BoxDecoration(
+                      color: kColorYellow3,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '회원가입',
+                      style: getTsBody16Sb(context).copyWith(
+                        color: kColorGray9,
+                      ),
                     ),
                   ),
                 ),
@@ -201,7 +205,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       },
                       child: Text(
                         '아이디 찾기',
-                        style: kTsKrBody14Rg.copyWith(
+                        style: getTsBody14Rg(context).copyWith(
                           color: kColorGray7,
                         ),
                       ),
@@ -211,7 +215,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     ),
                     Text(
                       '|',
-                      style: kTsKrBody14Rg.copyWith(
+                      style: getTsBody14Rg(context).copyWith(
                         color: kColorGray3,
                       ),
                     ),
@@ -224,7 +228,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       },
                       child: Text(
                         '비밀번호 재설정',
-                        style: kTsKrBody14Rg.copyWith(
+                        style: getTsBody14Rg(context).copyWith(
                           color: kColorGray7,
                         ),
                       ),

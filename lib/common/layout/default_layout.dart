@@ -1,5 +1,7 @@
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -31,6 +33,7 @@ class DefaultLayout extends StatelessWidget {
   }
 
   AppBar? renderAppBar(BuildContext context) {
+    logger.d(context.locale.languageCode);
     if (title == null) {
       return null;
     } else {
@@ -40,7 +43,7 @@ class DefaultLayout extends StatelessWidget {
         centerTitle: true,
         title: Text(
           title!,
-          style: kTsKrHeading18Bd.copyWith(
+          style: getTsHeading18(context).copyWith(
             color: kColorGray9,
           ),
         ),

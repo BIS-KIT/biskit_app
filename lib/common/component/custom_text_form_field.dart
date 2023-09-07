@@ -85,7 +85,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         fillColor: kColorGray1,
         filled: true,
         hintText: widget.hintText,
-        hintStyle: kTsKrBody16Rg.copyWith(
+        hintStyle: getTsBody16Rg(context).copyWith(
           color: kColorGray5,
         ),
         border: baseBorder,
@@ -97,7 +97,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           ),
         ),
         errorText: widget.errorText,
-        errorStyle: kTsEnCaption12Rg.copyWith(
+        errorStyle: getTsCaption12Rg(context).copyWith(
           color: kColorDangerDark,
         ),
         errorBorder: baseBorder.copyWith(

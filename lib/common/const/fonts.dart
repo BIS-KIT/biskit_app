@@ -1,4 +1,58 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+const kEn = 'en';
+getTsHeading24(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnHeading24Eb
+      : kTsKrHeading24Bd;
+}
+
+getTsHeading20(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnHeading20Eb
+      : kTsKrHeading20Bd;
+}
+
+getTsHeading18(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnHeading18Eb
+      : kTsKrHeading18Bd;
+}
+
+getTsBody16Sb(BuildContext context) {
+  return context.locale.languageCode == kEn ? kTsEnBody16Sb : kTsKrBody16Sb;
+}
+
+getTsBody16Rg(BuildContext context) {
+  return context.locale.languageCode == kEn ? kTsEnBody16Rg : kTsKrBody16Rg;
+}
+
+getTsBody14Sb(BuildContext context) {
+  return context.locale.languageCode == kEn ? kTsEnBody14Sb : kTsKrBody14Sb;
+}
+
+getTsBody14Rg(BuildContext context) {
+  return context.locale.languageCode == kEn ? kTsEnBody14Rg : kTsKrBody14Rg;
+}
+
+getTsCaption12Sb(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnCaption12Sb
+      : kTsKrCaption12Sb;
+}
+
+getTsCaption12Rg(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnCaption12Rg
+      : kTsKrCaption12Rg;
+}
+
+getTsCaption11Md(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnCaption11Md
+      : kTsKrCaption11Md;
+}
 
 // 국문
 const TextStyle kTsKrHeading24Bd = TextStyle(
@@ -57,7 +111,7 @@ const TextStyle kTsKrBody14Rg = TextStyle(
   height: 1.5,
 );
 
-const TextStyle kTsKrBody12Sb = TextStyle(
+const TextStyle kTsKrCaption12Sb = TextStyle(
   color: Color(0xFF292C45),
   fontFamily: 'Pretendard',
   fontSize: 12,
@@ -65,7 +119,7 @@ const TextStyle kTsKrBody12Sb = TextStyle(
   height: 1.5,
 );
 
-const TextStyle kTsKrBody12Rg = TextStyle(
+const TextStyle kTsKrCaption12Rg = TextStyle(
   color: Color(0xFF292C45),
   fontFamily: 'Pretendard',
   fontSize: 12,

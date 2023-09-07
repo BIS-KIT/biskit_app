@@ -1,3 +1,8 @@
 {
-  "hello": "안녕"
+  "hello": "안녕",
+  "emailScreen": {
+    "title": "이메일 로그인",
+    "email": "이메일",
+    "password": "비밀번호"
+  }
 }
