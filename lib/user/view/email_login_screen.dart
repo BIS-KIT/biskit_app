@@ -5,6 +5,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
+import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -126,7 +127,9 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 ),
                 // signup button
                 GestureDetector(
-                  onTap: () async {},
+                  onTap: () {
+                    context.pushNamed(SignUpAgreeScreen.routeName);
+                  },
                   child: const FilledButtonWidget(
                     text: '회원가입',
                     isEnable: true,

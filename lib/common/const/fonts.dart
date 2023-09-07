@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 const kEn = 'en';
-getTsHeading24(BuildContext context) {
+TextStyle getTsHeading24(BuildContext context) {
   return context.locale.languageCode == kEn
       ? kTsEnHeading24Eb
       : kTsKrHeading24Bd;
