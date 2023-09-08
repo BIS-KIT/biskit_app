@@ -44,6 +44,7 @@ dependencies:
   photo_manager: ^2.7.1
   device_info_plus: ^9.0.3
   flutter_timer_countdown: ^1.0.5
+  just_the_tooltip: ^0.0.12
 
 dev_dependencies:
   flutter_test:

@@ -2,11 +2,13 @@ import 'package:biskit_app/common/component/outlined_button_widget.dart';
 import 'package:biskit_app/common/component/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class SignUpPinCodeScreen extends ConsumerStatefulWidget {
   static String get routeName => 'signUpPinCode';
@@ -30,6 +32,8 @@ class _SignUpPinCodeScreen extends ConsumerState<SignUpPinCodeScreen> {
   bool isPinCodeFirst = true;
   String reciveButtonText = '인증번호 받기';
 
+  final JustTheController tooltipController = JustTheController();
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +46,7 @@ class _SignUpPinCodeScreen extends ConsumerState<SignUpPinCodeScreen> {
     super.dispose();
     pinController.dispose();
     pinFocusNode.dispose();
+    tooltipController.dispose();
   }
 
   onTapPinCodeRecive() {
@@ -169,10 +174,48 @@ class _SignUpPinCodeScreen extends ConsumerState<SignUpPinCodeScreen> {
                   ),
                 ),
               ),
-              Text(
-                '메일을 받지 못하셨나요?',
-                style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray6,
+              JustTheTooltip(
+                controller: tooltipController,
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
+                backgroundColor: Colors.black.withOpacity(0.7),
+                elevation: 0,
+                tailBaseWidth: 20,
+                tailLength: 6,
+                preferredDirection: AxisDirection.down,
+                content: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
+                    style: getTsBody14Sb(context).copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                offset: 0,
+                tailBuilder: (tip, point2, point3) {
+                  logger.d(tip);
+                  logger.d(point2);
+                  logger.d(point3);
+                  return Path()
+                    ..moveTo(tip.dx - (tip.dx * 0.5), tip.dy)
+                    ..lineTo(point2.dx - (point2.dx * 0.5), point2.dy)
+                    ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
+                    ..close();
+                },
+                // showDuration: const Duration(seconds: 3),
+                // isModal: true,
+
+                // waitDuration: const Duration(seconds: 3),
+                child: GestureDetector(
+                  onTap: () {
+                    tooltipController.showTooltip();
+                  },
+                  child: Text(
+                    '메일을 받지 못하셨나요?',
+                    style: getTsBody16Rg(context).copyWith(
+                      color: kColorGray6,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
