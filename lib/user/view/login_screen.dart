@@ -25,7 +25,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  context.pushNamed(EmailLoginScreen.routeName);
+                  context.goNamed(
+                    EmailLoginScreen.routeName,
+                  );
                 },
                 child: const Text(
                   '이메일 로그인',
