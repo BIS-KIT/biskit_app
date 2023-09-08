@@ -181,7 +181,7 @@ class _SignUpPinCodeScreen extends ConsumerState<SignUpPinCodeScreen> {
                 elevation: 0,
                 tailBaseWidth: 20,
                 tailLength: 6,
-                preferredDirection: AxisDirection.down,
+                preferredDirection: AxisDirection.up,
                 content: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Text(
