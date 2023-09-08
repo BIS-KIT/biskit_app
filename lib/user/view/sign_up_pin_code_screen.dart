@@ -191,7 +191,7 @@ class _SignUpPinCodeScreen extends ConsumerState<SignUpPinCodeScreen> {
                     ),
                   ),
                 ),
-                offset: 0,
+                offset: 8,
                 tailBuilder: (tip, point2, point3) {
                   logger.d(tip);
                   logger.d(point2);
