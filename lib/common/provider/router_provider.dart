@@ -48,21 +48,27 @@ class RouteProvider extends ChangeNotifier {
           path: '/login',
           name: LoginScreen.routeName,
           builder: (_, __) => const LoginScreen(),
-        ),
-        GoRoute(
-          path: '/emailLogin',
-          name: EmailLoginScreen.routeName,
-          builder: (_, __) => const EmailLoginScreen(),
           routes: [
             GoRoute(
-              path: 'signUpAgree',
-              name: SignUpAgreeScreen.routeName,
-              builder: (_, __) => const SignUpAgreeScreen(),
+              path: 'emailLogin',
+              name: EmailLoginScreen.routeName,
+              builder: (_, state) {
+                return EmailLoginScreen(
+                  email: state.uri.queryParameters['email'],
+                );
+              },
               routes: [
                 GoRoute(
-                  path: 'signUpEmail',
-                  name: SignUpEmailScreen.routeName,
-                  builder: (_, __) => const SignUpEmailScreen(),
+                  path: 'signUpAgree',
+                  name: SignUpAgreeScreen.routeName,
+                  builder: (_, __) => const SignUpAgreeScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'signUpEmail',
+                      name: SignUpEmailScreen.routeName,
+                      builder: (_, __) => const SignUpEmailScreen(),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -113,15 +119,16 @@ class RouteProvider extends ChangeNotifier {
     if (user == null) {
       // 유저정보 없을때 갈 수 있는 페이지들
       if ([
-        '/emailLogin',
-        '/emailLogin/signUpAgree',
-        '/emailLogin/signUpAgree/signUpEmail',
-        '/signUp',
-        '/findId',
-        '/findPassword',
-        '/test',
-        '/photoManager',
-      ].contains(state.matchedLocation)) {
+            '/login/emailLogin',
+            '/login/emailLogin/signUpAgree',
+            '/login/emailLogin/signUpAgree/signUpEmail',
+            '/signUp',
+            '/findId',
+            '/findPassword',
+            '/test',
+            '/photoManager',
+          ].contains(state.matchedLocation) ||
+          state.matchedLocation.indexOf('/login') == 0) {
         return null;
       }
       return logginIn ? null : '/login';

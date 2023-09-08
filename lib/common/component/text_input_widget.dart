@@ -13,6 +13,7 @@ class TextInputWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final bool obscureText;
+  final String? initialValue;
   const TextInputWidget({
     Key? key,
     required this.title,
@@ -22,6 +23,7 @@ class TextInputWidget extends StatelessWidget {
     this.keyboardType,
     this.textInputAction,
     this.obscureText = false,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class TextInputWidget extends StatelessWidget {
           height: 8,
         ),
         CustomTextFormField(
+          initialValue: initialValue,
           hintText: hintText,
           keyboardType: keyboardType,
           textInputAction: textInputAction,

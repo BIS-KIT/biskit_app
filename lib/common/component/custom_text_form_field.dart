@@ -4,6 +4,7 @@ import '../const/colors.dart';
 import '../const/fonts.dart';
 
 class CustomTextFormField extends StatefulWidget {
+  final String? initialValue;
   final String? hintText;
   final String? errorText;
   final TextInputType? keyboardType;
@@ -12,6 +13,7 @@ class CustomTextFormField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   const CustomTextFormField({
     Key? key,
+    this.initialValue,
     this.hintText,
     this.errorText,
     this.keyboardType,
@@ -47,6 +49,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       ),
     );
     return TextFormField(
+      initialValue: widget.initialValue,
       style: kTsEnBody16Rg.copyWith(
         color: kColorGray8,
       ),

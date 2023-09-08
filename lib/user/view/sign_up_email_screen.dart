@@ -2,9 +2,12 @@ import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/component/text_input_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpEmailScreen extends ConsumerStatefulWidget {
   static String get routeName => 'signUpEmail';
@@ -50,6 +53,20 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
 
   onTapPinCode() {
     if (checkEmail()) {
+      // TODO 이미 가입한 계정이면 로그인 화면으로 이동
+      showDefaultModal(
+        context: context,
+        title: '이미 가입된 계정이 있어요',
+        content: 'teambiskit@gmail.com\n계정으로 로그인해주세요',
+        function: () {
+          context.goNamed(
+            EmailLoginScreen.routeName,
+            queryParameters: {
+              'email': email,
+            },
+          );
+        },
+      );
       // TODO 인증번호 받기 화면으로 이동
     }
   }

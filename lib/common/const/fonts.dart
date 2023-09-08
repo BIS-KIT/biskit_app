@@ -8,47 +8,47 @@ TextStyle getTsHeading24(BuildContext context) {
       : kTsKrHeading24Bd;
 }
 
-getTsHeading20(BuildContext context) {
+TextStyle getTsHeading20(BuildContext context) {
   return context.locale.languageCode == kEn
       ? kTsEnHeading20Eb
       : kTsKrHeading20Bd;
 }
 
-getTsHeading18(BuildContext context) {
+TextStyle getTsHeading18(BuildContext context) {
   return context.locale.languageCode == kEn
       ? kTsEnHeading18Eb
       : kTsKrHeading18Bd;
 }
 
-getTsBody16Sb(BuildContext context) {
+TextStyle getTsBody16Sb(BuildContext context) {
   return context.locale.languageCode == kEn ? kTsEnBody16Sb : kTsKrBody16Sb;
 }
 
-getTsBody16Rg(BuildContext context) {
+TextStyle getTsBody16Rg(BuildContext context) {
   return context.locale.languageCode == kEn ? kTsEnBody16Rg : kTsKrBody16Rg;
 }
 
-getTsBody14Sb(BuildContext context) {
+TextStyle getTsBody14Sb(BuildContext context) {
   return context.locale.languageCode == kEn ? kTsEnBody14Sb : kTsKrBody14Sb;
 }
 
-getTsBody14Rg(BuildContext context) {
+TextStyle getTsBody14Rg(BuildContext context) {
   return context.locale.languageCode == kEn ? kTsEnBody14Rg : kTsKrBody14Rg;
 }
 
-getTsCaption12Sb(BuildContext context) {
+TextStyle getTsCaption12Sb(BuildContext context) {
   return context.locale.languageCode == kEn
       ? kTsEnCaption12Sb
       : kTsKrCaption12Sb;
 }
 
-getTsCaption12Rg(BuildContext context) {
+TextStyle getTsCaption12Rg(BuildContext context) {
   return context.locale.languageCode == kEn
       ? kTsEnCaption12Rg
       : kTsKrCaption12Rg;
 }
 
-getTsCaption11Md(BuildContext context) {
+TextStyle getTsCaption11Md(BuildContext context) {
   return context.locale.languageCode == kEn
       ? kTsEnCaption11Md
       : kTsKrCaption11Md;
