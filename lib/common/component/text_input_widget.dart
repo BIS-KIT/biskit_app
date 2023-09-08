@@ -13,7 +13,12 @@ class TextInputWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final bool obscureText;
+  final bool readOnly;
   final String? initialValue;
+  final Widget? suffixIcon;
+  final int? maxLength;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   const TextInputWidget({
     Key? key,
     required this.title,
@@ -23,7 +28,12 @@ class TextInputWidget extends StatelessWidget {
     this.keyboardType,
     this.textInputAction,
     this.obscureText = false,
+    this.readOnly = false,
     this.initialValue,
+    this.suffixIcon,
+    this.maxLength,
+    this.controller,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -48,6 +58,11 @@ class TextInputWidget extends StatelessWidget {
           obscureText: obscureText,
           errorText: errorText,
           onChanged: onChanged,
+          readOnly: readOnly,
+          suffixIcon: suffixIcon,
+          maxLength: maxLength,
+          controller: controller,
+          focusNode: focusNode,
         ),
       ],
     );

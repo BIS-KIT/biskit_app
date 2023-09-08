@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../const/colors.dart';
 import '../const/fonts.dart';
 
-class CustomTextFormField extends StatefulWidget {
+class CustomTextFormField extends StatelessWidget {
   final String? initialValue;
   final String? hintText;
   final String? errorText;
@@ -11,6 +11,11 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final bool obscureText;
   final ValueChanged<String>? onChanged;
+  final bool readOnly;
+  final Widget? suffixIcon;
+  final int? maxLength;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   const CustomTextFormField({
     Key? key,
     this.initialValue,
@@ -20,22 +25,12 @@ class CustomTextFormField extends StatefulWidget {
     this.textInputAction,
     this.obscureText = false,
     required this.onChanged,
+    this.readOnly = false,
+    this.suffixIcon,
+    this.maxLength,
+    this.controller,
+    this.focusNode,
   }) : super(key: key);
-
-  @override
-  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
-}
-
-class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  bool obscureButton = false;
-  bool obscureText = false;
-
-  @override
-  void initState() {
-    obscureText = widget.obscureText;
-    obscureButton = widget.obscureText;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +44,21 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       ),
     );
     return TextFormField(
-      initialValue: widget.initialValue,
+      controller: controller,
+      focusNode: focusNode,
+      initialValue: initialValue,
       style: kTsEnBody16Rg.copyWith(
         color: kColorGray8,
       ),
+      readOnly: readOnly,
       cursorColor: kColorGray8,
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      onChanged: widget.onChanged,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      onChanged: onChanged,
       obscureText: obscureText,
+      maxLength: maxLength,
       decoration: InputDecoration(
+        counterText: '',
         isDense: false,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 0,
@@ -67,27 +67,28 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         prefix: const SizedBox(
           width: 16,
         ),
-        suffixIcon: obscureButton
-            ? IconButton(
-                onPressed: () {
-                  setState(() {
-                    obscureText = !obscureText;
-                  });
-                },
-                icon: Icon(
-                  obscureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: kColorGray7,
-                ),
-              )
-            : null,
+        // suffixIcon: obscureButton
+        //     ? IconButton(
+        //         onPressed: () {
+        //           setState(() {
+        //             obscureText = !obscureText;
+        //           });
+        //         },
+        //         icon: Icon(
+        //           obscureText
+        //               ? Icons.visibility_off_outlined
+        //               : Icons.visibility_outlined,
+        //           color: kColorGray7,
+        //         ),
+        //       )
+        //     : null,
+        suffixIcon: suffixIcon,
         suffix: const SizedBox(
           width: 16,
         ),
         fillColor: kColorGray1,
         filled: true,
-        hintText: widget.hintText,
+        hintText: hintText,
         hintStyle: getTsBody16Rg(context).copyWith(
           color: kColorGray5,
         ),
@@ -99,7 +100,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             color: kColorGray7,
           ),
         ),
-        errorText: widget.errorText,
+        errorText: errorText,
         errorStyle: getTsCaption12Rg(context).copyWith(
           color: kColorDangerDark,
         ),

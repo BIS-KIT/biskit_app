@@ -37,6 +37,8 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   String password = '';
   String? passwordError;
 
+  bool obscureText = true;
+
   @override
   void initState() {
     super.initState();
@@ -123,6 +125,20 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     password = value;
                     inputCheck();
                   },
+                  obscureText: obscureText,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                    icon: Icon(
+                      obscureText
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: kColorGray7,
+                    ),
+                  ),
                 ),
 
                 const SizedBox(
