@@ -2,7 +2,9 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
+import 'common/const/keys.dart';
 import 'common/provider/router_provider.dart';
 
 // 앱에서 지원하는 언어 리스트 변수
@@ -14,6 +16,13 @@ final supportedLocales = [
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  // kakao
+  KakaoSdk.init(
+    nativeAppKey: kKakaoNativeAppKey,
+    javaScriptAppKey: kKakaoJavascriptKey,
+  );
+
   runApp(
     EasyLocalization(
       supportedLocales: supportedLocales,

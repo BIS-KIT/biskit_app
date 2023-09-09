@@ -6,6 +6,8 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class TestScreen extends StatefulWidget {
   static String get routeName => 'test';
@@ -16,6 +18,28 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
+  opTapkakaoLogin() async {
+    logger.d(await KakaoSdk.origin);
+    if (await kakao.isKakaoTalkInstalled()) {
+      try {
+        await kakao.UserApi.instance.loginWithKakaoTalk();
+      } catch (e) {
+        logger.e(e);
+      }
+    } else {
+      try {
+        await kakao.UserApi.instance.loginWithKakaoAccount();
+        kakao.User user = await kakao.UserApi.instance.me();
+        logger.d('사용자 정보 요청 성공'
+            '\n회원번호: ${user.id}'
+            '\n닉네임: ${user.kakaoAccount?.profile?.nickname}'
+            '\n이메일: ${user.kakaoAccount?.email}');
+      } catch (e) {
+        logger.e(e);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -45,7 +69,9 @@ class _TestScreenState extends State<TestScreen> {
             ),
             const Divider(),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () {
+                opTapkakaoLogin();
+              },
               child: const Text(
                 '카카오로그인',
               ),
