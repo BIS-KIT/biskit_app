@@ -44,6 +44,13 @@ class _TestScreenState extends State<TestScreen> {
               ),
             ),
             const Divider(),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text(
+                '카카오로그인',
+              ),
+            ),
+            const Divider(),
             const Text(
               '사진첩 테스트',
             ),
