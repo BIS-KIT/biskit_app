@@ -162,6 +162,10 @@ class _SignUpPinCodeScreen extends ConsumerState<SignUpPinCodeScreen> {
                                     getTsCaption12Rg(context).copyWith(
                                   color: kColorDangerDark,
                                 ),
+                                colonsTextStyle:
+                                    getTsCaption12Rg(context).copyWith(
+                                  color: kColorDangerDark,
+                                ),
                                 onEnd: () {
                                   setState(() {
                                     recivePinCode = '';
