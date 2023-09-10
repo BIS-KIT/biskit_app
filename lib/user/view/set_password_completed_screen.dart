@@ -34,9 +34,9 @@ class _SetPasswordCompletedScreenState
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
+                      padding: const EdgeInsets.all(16),
                       width: 88,
                       height: 88,
-                      padding: const EdgeInsets.all(16),
                       decoration: ShapeDecoration(
                         color: kColorGray2,
                         shape: RoundedRectangleBorder(
@@ -49,19 +49,20 @@ class _SetPasswordCompletedScreenState
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: 56,
-                            height: 56,
+                            width: 40,
+                            height: 40,
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(),
                             child: Stack(children: [
+                              // TODO: icon 너비, 색상 안 맞아서 수정해야 함
                               SvgPicture.asset(
-                                'assets/icons/ic_check_line_24.svg',
+                                'assets/icons/check.svg',
+                                width: 40,
+                                height: 40,
                                 colorFilter: const ColorFilter.mode(
-                                  kColorGray9,
+                                  kColorGray8,
                                   BlendMode.srcIn,
                                 ),
-                                width: 56,
-                                height: 56,
                               )
                             ]),
                           ),
