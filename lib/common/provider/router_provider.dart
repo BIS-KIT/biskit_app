@@ -8,6 +8,7 @@ import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/login_screen.dart';
+import 'package:biskit_app/user/view/set_password_completed_screen.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
@@ -118,6 +119,12 @@ class RouteProvider extends ChangeNotifier {
           ],
         ),
         GoRoute(
+          path: '/setPasswordCompleted',
+          name: SetPasswordCompletedScreen.routeName,
+          builder: (context, state) => const SetPasswordCompletedScreen(),
+        ),
+
+        GoRoute(
           path: '/',
           name: RootTab.routeName,
           builder: (context, state) => const RootTab(),
@@ -152,6 +159,7 @@ class RouteProvider extends ChangeNotifier {
             '/findPassword',
             '/test',
             '/photoManager',
+            '/setPasswordCompleted',
           ].contains(state.matchedLocation) ||
           state.matchedLocation.indexOf('/findPassword') == 0 ||
           state.matchedLocation.indexOf('/login') == 0) {

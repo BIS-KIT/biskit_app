@@ -3,8 +3,10 @@ import 'package:biskit_app/common/component/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
+import 'package:biskit_app/user/view/set_password_completed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SetPasswordScreen extends ConsumerStatefulWidget {
   static String get routeName => 'setPassword';
@@ -146,7 +148,10 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 0),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    context.pushReplacementNamed(
+                        SetPasswordCompletedScreen.routeName);
+                  },
                   child: FilledButtonWidget(
                     text: '완료',
                     isEnable: isActiveConfirmButton,
