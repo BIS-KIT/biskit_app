@@ -107,7 +107,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           focusNode: confirmPasswordFocusNode,
                           onChanged: (value) {
                             confirmPassword = value;
-                            if (value.length >= password.length) {
+                            if (value.length == password.length) {
                               if (value != password) {
                                 setState(() {
                                   confirmPasswordError = '비밀번호가 일치하지 않아요';
@@ -117,11 +117,11 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                                   isActiveConfirmButton = true;
                                   confirmPasswordError = null;
                                 });
-                              } else {
-                                setState(() {
-                                  confirmPasswordError = null;
-                                });
                               }
+                            } else if (value.length > password.length) {
+                              setState(() {
+                                confirmPasswordError = '비밀번호가 일치하지 않아요';
+                              });
                             }
                           },
                           obscureText: confirmObscureText,
