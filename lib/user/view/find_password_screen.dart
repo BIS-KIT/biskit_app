@@ -3,13 +3,14 @@ import 'package:biskit_app/common/component/outlined_button_widget.dart';
 import 'package:biskit_app/common/component/text_input_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
-import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 
@@ -68,6 +69,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
         });
       } else {
         // TODO 비밀번호 재설정 페이지로 이동
+        context.pushReplacementNamed(SetPasswordScreen.routeName);
+
+        // context.pushNamed(SetPasswordScreen.routeName);
       }
     } else {
       setState(() {
@@ -87,7 +91,8 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     // TODO 인증번호 재발송 처리
     setState(() {
       // TODO 인증번호 받은 것으로 교체해야함
-      receivePinCode = '12121';
+
+      receivePinCode = '121212';
     });
     // XXX: duration 설정한 이유: if 조건문에 따라 인증번호 위젯이 생기는데, [인증번호 받기] 버튼 클릭과 동시에 인증번호 입력 위젯에 focus를 주게되면 focus가 위젯이 렌더링 되기 전(혹은 바로 동시에)에 작동해서 focus가 제대로 안 먹힘 -> 의도적으로 위젯 렌더링 후 focus 주는 시점을 delay해서 인증번호 입력 위젯이 생기고 난 뒤에 포커스 설정
     Future.delayed(const Duration(milliseconds: 10), () {

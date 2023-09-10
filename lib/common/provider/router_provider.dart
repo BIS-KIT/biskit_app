@@ -8,6 +8,7 @@ import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/login_screen.dart';
+import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
 import 'package:biskit_app/user/view/sign_up_pin_code_screen.dart';
@@ -94,10 +95,27 @@ class RouteProvider extends ChangeNotifier {
           name: SignUpScreen.routeName,
           builder: (_, __) => const SignUpScreen(),
         ),
+        // GoRoute(
+        //   path: '/findPassword',
+        //   name: FindPasswordScreen.routeName,
+        //   builder: (_, __) => const FindPasswordScreen(),
+        // ),
+        // GoRoute(
+        //   path: '/setPassword',
+        //   name: SetPasswordScreen.routeName,
+        //   builder: (context, state) => const SetPasswordScreen(),
+        // ),
         GoRoute(
           path: '/findPassword',
           name: FindPasswordScreen.routeName,
           builder: (_, __) => const FindPasswordScreen(),
+          routes: [
+            GoRoute(
+              path: 'setPassword',
+              name: SetPasswordScreen.routeName,
+              builder: (context, state) => const SetPasswordScreen(),
+            ),
+          ],
         ),
         GoRoute(
           path: '/',
@@ -135,6 +153,7 @@ class RouteProvider extends ChangeNotifier {
             '/test',
             '/photoManager',
           ].contains(state.matchedLocation) ||
+          state.matchedLocation.indexOf('/findPassword') == 0 ||
           state.matchedLocation.indexOf('/login') == 0) {
         return null;
       }
