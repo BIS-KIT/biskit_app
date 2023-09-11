@@ -4,5 +4,8 @@
     "title": "Email Login",
     "email": "Email",
     "password": "Password"
+  },
+  "findPasswordScreen": {
+    "title": "Reset Password"
   }
 }
