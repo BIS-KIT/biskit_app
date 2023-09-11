@@ -68,10 +68,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           pinCodeError = '인증번호가 일치하지 않아요';
         });
       } else {
-        // TODO 비밀번호 재설정 페이지로 이동
-        context.pushReplacementNamed(SetPasswordScreen.routeName);
-
-        // context.pushNamed(SetPasswordScreen.routeName);
+        context.pushNamed(SetPasswordScreen.routeName);
       }
     } else {
       setState(() {
