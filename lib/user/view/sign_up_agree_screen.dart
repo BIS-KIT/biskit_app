@@ -185,6 +185,8 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
           ),
           child: SvgPicture.asset(
             'assets/icons/check.svg',
+            width: 16,
+            height: 12,
             colorFilter: ColorFilter.mode(
               value ? kColorYellow5 : kColorGray4,
               BlendMode.srcIn,

@@ -30,6 +30,8 @@ class CheckboxWidget extends StatelessWidget {
       child: value
           ? SvgPicture.asset(
               'assets/icons/check.svg',
+              width: 16,
+              height: 12,
               colorFilter: const ColorFilter.mode(
                 kColorGray9,
                 BlendMode.srcIn,
