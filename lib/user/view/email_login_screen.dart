@@ -74,6 +74,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   }
 
   login() {
+    FocusScope.of(context).unfocus();
     checkEmail();
     showSnackBar(
       context: context,
@@ -182,6 +183,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 // signup button
                 GestureDetector(
                   onTap: () {
+                    FocusScope.of(context).unfocus();
                     context.pushReplacementNamed(SignUpAgreeScreen.routeName);
                   },
                   child: const FilledButtonWidget(
