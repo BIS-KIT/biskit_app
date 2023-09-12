@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 const kEn = 'en';
 TextStyle getTsHeading24(BuildContext context) {
   return context.locale.languageCode == kEn
-      ? kTsEnHeading24Eb
+      ? kTsEnHeading24Bd
       : kTsKrHeading24Bd;
 }
 
 TextStyle getTsHeading20(BuildContext context) {
   return context.locale.languageCode == kEn
-      ? kTsEnHeading20Eb
+      ? kTsEnHeading20Bd
       : kTsKrHeading20Bd;
 }
 
 TextStyle getTsHeading18(BuildContext context) {
   return context.locale.languageCode == kEn
-      ? kTsEnHeading18Eb
+      ? kTsEnHeading18Bd
       : kTsKrHeading18Bd;
 }
 
@@ -57,7 +57,7 @@ TextStyle getTsCaption11Md(BuildContext context) {
 // 국문
 const TextStyle kTsKrHeading24Bd = TextStyle(
   color: Color(0xFF292C45),
-  fontFamily: 'Suite',
+  fontFamily: 'Pretendard',
   fontSize: 24,
   fontWeight: FontWeight.w700,
   height: 1.4,
@@ -65,7 +65,7 @@ const TextStyle kTsKrHeading24Bd = TextStyle(
 
 const TextStyle kTsKrHeading20Bd = TextStyle(
   color: Color(0xFF292C45),
-  fontFamily: 'Suite',
+  fontFamily: 'Pretendard',
   fontSize: 20,
   fontWeight: FontWeight.w700,
   height: 1.4,
@@ -73,7 +73,7 @@ const TextStyle kTsKrHeading20Bd = TextStyle(
 
 const TextStyle kTsKrHeading18Bd = TextStyle(
   color: Color(0xFF292C45),
-  fontFamily: 'Suite',
+  fontFamily: 'Pretendard',
   fontSize: 18,
   fontWeight: FontWeight.w700,
   height: 1.4,
@@ -136,29 +136,29 @@ const TextStyle kTsKrCaption11Md = TextStyle(
 );
 
 // 영문
-const TextStyle kTsEnHeading24Eb = TextStyle(
+const TextStyle kTsEnHeading24Bd = TextStyle(
   color: Color(0xFF292C45),
-  fontFamily: 'Suite',
+  fontFamily: 'Pretendard',
   fontSize: 24,
-  fontWeight: FontWeight.w800,
+  fontWeight: FontWeight.w700,
   height: 1.3,
   letterSpacing: -0.24,
 );
 
-const TextStyle kTsEnHeading20Eb = TextStyle(
+const TextStyle kTsEnHeading20Bd = TextStyle(
   color: Color(0xFF292C45),
-  fontFamily: 'Suite',
+  fontFamily: 'Pretendard',
   fontSize: 20,
-  fontWeight: FontWeight.w800,
+  fontWeight: FontWeight.w700,
   height: 1.3,
   letterSpacing: -0.20,
 );
 
-const TextStyle kTsEnHeading18Eb = TextStyle(
+const TextStyle kTsEnHeading18Bd = TextStyle(
   color: Color(0xFF292C45),
-  fontFamily: 'Suite',
+  fontFamily: 'Pretendard',
   fontSize: 18,
-  fontWeight: FontWeight.w800,
+  fontWeight: FontWeight.w700,
   height: 1.3,
   letterSpacing: -0.18,
 );
@@ -194,23 +194,6 @@ const TextStyle kTsEnBody14Rg = TextStyle(
   fontWeight: FontWeight.w400,
   height: 1.4,
 );
-
-const TextStyle kTsEnBody12Sb = TextStyle(
-  color: Color(0xFF292C45),
-  fontFamily: 'Pretendard',
-  fontSize: 12,
-  fontWeight: FontWeight.w600,
-  height: 1.4,
-);
-
-const TextStyle kTsEnBody12Rg = TextStyle(
-  color: Color(0xFF292C45),
-  fontFamily: 'Pretendard',
-  fontSize: 12,
-  fontWeight: FontWeight.w400,
-  height: 1.4,
-);
-
 const TextStyle kTsEnCaption12Sb = TextStyle(
   color: Color(0xFF292C45),
   fontFamily: 'Pretendard',
