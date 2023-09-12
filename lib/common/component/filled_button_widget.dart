@@ -49,7 +49,6 @@ class FilledButtonWidget extends StatelessWidget {
                   height: 24,
                   child: SvgPicture.asset(
                     leftIconPath!,
-                    // color: isEnable ? kColorGray9 : kColorGray5,
                     colorFilter: ColorFilter.mode(
                       isEnable ? kColorGray9 : kColorGray5,
                       BlendMode.srcIn,

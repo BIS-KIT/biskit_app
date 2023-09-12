@@ -17,7 +17,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'Login Screen',
       child: SafeArea(
         child: Center(
           child: Column(

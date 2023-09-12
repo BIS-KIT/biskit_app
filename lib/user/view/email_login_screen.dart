@@ -2,6 +2,7 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:biskit_app/common/component/filled_button_widget.dart';
@@ -126,19 +127,37 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     inputCheck();
                   },
                   obscureText: obscureText,
-                  suffixIcon: IconButton(
-                    onPressed: () {
+                  suffixIcon: GestureDetector(
+                    onTap: () {
                       setState(() {
                         obscureText = !obscureText;
                       });
                     },
-                    icon: Icon(
+                    child: SvgPicture.asset(
                       obscureText
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: kColorGray7,
+                          ? 'assets/icons/ic_visibility_off_line_24.svg'
+                          : 'assets/icons/ic_visibility_line_24.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        kColorGray7,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
+                  // IconButton(
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       obscureText = !obscureText;
+                  //     });
+                  //   },
+                  //   icon: Icon(
+                  //     obscureText
+                  //         ? Icons.visibility_off_outlined
+                  //         : Icons.visibility_outlined,
+                  //     color: kColorGray7,
+                  //   ),
+                  // ),
                 ),
 
                 const SizedBox(

@@ -82,9 +82,22 @@ class CustomTextFormField extends StatelessWidget {
         //         ),
         //       )
         //     : null,
-        suffixIcon: suffixIcon,
-        suffix: const SizedBox(
-          width: 16,
+        suffixIcon: suffixIcon == null
+            ? null
+            : Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: suffixIcon,
+              ),
+        suffixIconConstraints: suffixIcon == null
+            ? null
+            : const BoxConstraints(
+                maxHeight: 24,
+                maxWidth: 24 + 16,
+                minHeight: 24,
+                minWidth: 24,
+              ),
+        suffix: SizedBox(
+          width: suffixIcon == null ? 16 : 8,
         ),
         fillColor: kColorGray1,
         filled: true,
