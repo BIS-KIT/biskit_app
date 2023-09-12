@@ -1,6 +1,8 @@
 import 'package:biskit_app/common/component/checkbox_widget.dart';
 import 'package:biskit_app/common/component/filled_button_widget.dart';
+import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/component/outlined_button_widget.dart';
+import 'package:biskit_app/common/component/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
@@ -19,6 +21,7 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
+  SelectWidgetValueType selectWidgetValueType = SelectWidgetValueType.none;
   opTapkakaoLogin() async {
     logger.d(await KakaoSdk.origin);
     if (await kakao.isKakaoTalkInstalled()) {
@@ -121,6 +124,13 @@ class _TestScreenState extends State<TestScreen> {
             const SizedBox(
               height: 10,
             ),
+            const FullBleedButtonWidget(
+              text: '다음',
+              isEnable: true,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: OutlinedButtonWidget(
@@ -133,6 +143,25 @@ class _TestScreenState extends State<TestScreen> {
             ),
             const CheckboxWidget(
               value: true,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // Select Component
+            SelectWidget(
+              leftText: 'text',
+              rightText: 'text',
+              value: selectWidgetValueType,
+              onTapLeft: () {
+                setState(() {
+                  selectWidgetValueType = SelectWidgetValueType.left;
+                });
+              },
+              onTapRight: () {
+                setState(() {
+                  selectWidgetValueType = SelectWidgetValueType.right;
+                });
+              },
             ),
           ],
         ),

@@ -173,6 +173,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         }
                       : null,
                   child: OutlinedButtonWidget(
+                    height: 52,
                     text: '로그인',
                     isEnable: isLoginButtonEnable,
                   ),
@@ -187,6 +188,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     context.pushReplacementNamed(SignUpAgreeScreen.routeName);
                   },
                   child: const FilledButtonWidget(
+                    height: 52,
                     text: '회원가입',
                     isEnable: true,
                   ),

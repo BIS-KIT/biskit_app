@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../const/colors.dart';
 import '../const/fonts.dart';
@@ -16,6 +17,7 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLength;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
   const CustomTextFormField({
     Key? key,
     this.initialValue,
@@ -30,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLength,
     this.controller,
     this.focusNode,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -57,6 +60,7 @@ class CustomTextFormField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: obscureText,
       maxLength: maxLength,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         counterText: '',
         isDense: true,
