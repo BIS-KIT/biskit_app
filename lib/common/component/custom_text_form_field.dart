@@ -59,10 +59,10 @@ class CustomTextFormField extends StatelessWidget {
       maxLength: maxLength,
       decoration: InputDecoration(
         counterText: '',
-        isDense: false,
+        isDense: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 0,
-          vertical: 4,
+          vertical: 14,
         ),
         prefix: const SizedBox(
           width: 16,
