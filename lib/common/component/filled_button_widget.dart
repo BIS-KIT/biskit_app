@@ -25,6 +25,10 @@ class FilledButtonWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: isEnable ? kColorYellow3 : kColorGray2,
+        border: Border.all(
+          width: 0.5,
+          color: isEnable ? kColorYellow3 : kColorGray2,
+        ),
         borderRadius: const BorderRadius.all(
           Radius.circular(6),
         ),
