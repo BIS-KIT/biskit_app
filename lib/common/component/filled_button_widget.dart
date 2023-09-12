@@ -9,26 +9,29 @@ class FilledButtonWidget extends StatelessWidget {
   final String text;
   final bool isEnable;
   final String? leftIconPath;
+  final double height;
   const FilledButtonWidget({
     Key? key,
     required this.text,
     required this.isEnable,
     this.leftIconPath,
+    this.height = 56,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       padding: const EdgeInsets.symmetric(
-        vertical: 14,
+        // vertical: 14,
         horizontal: 16,
       ),
       decoration: BoxDecoration(
         color: isEnable ? kColorYellow3 : kColorGray2,
-        border: Border.all(
-          width: 0.5,
-          color: isEnable ? kColorYellow3 : kColorGray2,
-        ),
+        // border: Border.all(
+        //   width: 0.5,
+        //   color: isEnable ? kColorYellow3 : kColorGray2,
+        // ),
         borderRadius: const BorderRadius.all(
           Radius.circular(6),
         ),

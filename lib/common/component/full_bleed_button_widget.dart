@@ -5,35 +5,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../const/colors.dart';
 import '../const/fonts.dart';
 
-class OutlinedButtonWidget extends StatelessWidget {
+class FullBleedButtonWidget extends StatelessWidget {
   final String text;
   final bool isEnable;
   final String? leftIconPath;
-  final double height;
-  const OutlinedButtonWidget({
+  const FullBleedButtonWidget({
     Key? key,
     required this.text,
     required this.isEnable,
     this.leftIconPath,
-    this.height = 56,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
+      height: 56,
       padding: const EdgeInsets.symmetric(
         // vertical: 14,
         horizontal: 16,
       ),
       decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: kColorGray4,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(6),
-        ),
+        color: isEnable ? kColorYellow3 : kColorGray2,
       ),
       alignment: Alignment.center,
       child: leftIconPath == null
@@ -51,7 +43,6 @@ class OutlinedButtonWidget extends StatelessWidget {
                   height: 24,
                   child: SvgPicture.asset(
                     leftIconPath!,
-                    // color: isEnable ? kColorGray9 : kColorGray5,
                     colorFilter: ColorFilter.mode(
                       isEnable ? kColorGray9 : kColorGray5,
                       BlendMode.srcIn,
@@ -63,7 +54,7 @@ class OutlinedButtonWidget extends StatelessWidget {
                 ),
                 Text(
                   text,
-                  style: getTsBody16Sb(context).copyWith(
+                  style: getTsHeading18(context).copyWith(
                     color: isEnable ? kColorGray9 : kColorGray5,
                   ),
                 ),

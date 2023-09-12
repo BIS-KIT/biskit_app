@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../const/colors.dart';
 import '../const/fonts.dart';
@@ -19,6 +20,7 @@ class TextInputWidget extends StatelessWidget {
   final int? maxLength;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
   const TextInputWidget({
     Key? key,
     required this.title,
@@ -34,6 +36,7 @@ class TextInputWidget extends StatelessWidget {
     this.maxLength,
     this.controller,
     this.focusNode,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -63,6 +66,7 @@ class TextInputWidget extends StatelessWidget {
           maxLength: maxLength,
           controller: controller,
           focusNode: focusNode,
+          inputFormatters: inputFormatters,
         ),
       ],
     );

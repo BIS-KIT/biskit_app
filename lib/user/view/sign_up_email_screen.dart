@@ -9,6 +9,7 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
@@ -227,6 +228,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                             ? GestureDetector(
                                 onTap: onTapFirstPinCode,
                                 child: FilledButtonWidget(
+                                  height: 52,
                                   text: '인증번호 받기',
                                   isEnable: isButtonEnable,
                                 ),
@@ -234,6 +236,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                             : GestureDetector(
                                 onTap: onTapRePinCodeRecive,
                                 child: const OutlinedButtonWidget(
+                                  height: 52,
                                   text: '인증번호 다시 받기',
                                   isEnable: true,
                                 ),
@@ -253,6 +256,10 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                                 focusNode: pinFocusNode,
                                 errorText: pinCodeError,
                                 readOnly: recivePinCode.isEmpty,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp('[0-9]')),
+                                ],
                                 onChanged: (value) {
                                   checkPinCode();
                                 },
