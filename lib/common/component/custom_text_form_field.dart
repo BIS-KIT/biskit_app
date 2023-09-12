@@ -67,21 +67,6 @@ class CustomTextFormField extends StatelessWidget {
         prefix: const SizedBox(
           width: 16,
         ),
-        // suffixIcon: obscureButton
-        //     ? IconButton(
-        //         onPressed: () {
-        //           setState(() {
-        //             obscureText = !obscureText;
-        //           });
-        //         },
-        //         icon: Icon(
-        //           obscureText
-        //               ? Icons.visibility_off_outlined
-        //               : Icons.visibility_outlined,
-        //           color: kColorGray7,
-        //         ),
-        //       )
-        //     : null,
         suffixIcon: suffixIcon == null
             ? null
             : Padding(
@@ -92,7 +77,7 @@ class CustomTextFormField extends StatelessWidget {
             ? null
             : const BoxConstraints(
                 maxHeight: 24,
-                maxWidth: 24 + 16,
+                // maxWidth: 24 + 16,
                 minHeight: 24,
                 minWidth: 24,
               ),
