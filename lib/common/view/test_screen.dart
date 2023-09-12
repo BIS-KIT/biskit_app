@@ -2,6 +2,7 @@ import 'package:biskit_app/common/component/checkbox_widget.dart';
 import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/component/outlined_button_widget.dart';
+import 'package:biskit_app/common/component/search_bar_widget.dart';
 import 'package:biskit_app/common/component/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
@@ -64,106 +65,132 @@ class _TestScreenState extends State<TestScreen> {
     return DefaultLayout(
       title: 'Test Screen',
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(tr('hello')),
-            ElevatedButton(
-              onPressed: () async {
-                await context.setLocale(const Locale('ko', 'KR'));
-                logger.d(tr('hello'));
-              },
-              child: const Text(
-                'ko',
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(tr('hello')),
+              ElevatedButton(
+                onPressed: () async {
+                  await context.setLocale(const Locale('ko', 'KR'));
+                  logger.d(tr('hello'));
+                },
+                child: const Text(
+                  'ko',
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await context.setLocale(const Locale('en', 'US'));
-                logger.d(tr('hello'));
-              },
-              child: const Text(
-                'en',
+              ElevatedButton(
+                onPressed: () async {
+                  await context.setLocale(const Locale('en', 'US'));
+                  logger.d(tr('hello'));
+                },
+                child: const Text(
+                  'en',
+                ),
               ),
-            ),
-            const Divider(),
-            ElevatedButton(
-              onPressed: () {
-                opTapkakaoLogin();
-              },
-              child: const Text(
-                '카카오로그인',
+              const Divider(),
+              ElevatedButton(
+                onPressed: () {
+                  opTapkakaoLogin();
+                },
+                child: const Text(
+                  '카카오로그인',
+                ),
               ),
-            ),
-            const Divider(),
-            const Text(
-              '사진첩 테스트',
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PhotoManagerScreen(
-                        isCamera: true,
-                      ),
-                    ));
-              },
-              child: const Text(
-                '갤러리',
+              const Divider(),
+              const Text(
+                '사진첩 테스트',
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: FilledButtonWidget(
-                text: '회원가입',
-                isEnable: true,
-                leftIconPath: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PhotoManagerScreen(
+                          isCamera: true,
+                        ),
+                      ));
+                },
+                child: const Text(
+                  '갤러리',
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const FullBleedButtonWidget(
-              text: '다음',
-              isEnable: true,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: OutlinedButtonWidget(
-                text: '회원가입',
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: FilledButtonWidget(
+                  text: '회원가입',
+                  isEnable: true,
+                  leftIconPath: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const FullBleedButtonWidget(
+                text: '다음',
                 isEnable: true,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const CheckboxWidget(
-              value: true,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            // Select Component
-            SelectWidget(
-              leftText: 'text',
-              rightText: 'text',
-              value: selectWidgetValueType,
-              onTapLeft: () {
-                setState(() {
-                  selectWidgetValueType = SelectWidgetValueType.left;
-                });
-              },
-              onTapRight: () {
-                setState(() {
-                  selectWidgetValueType = SelectWidgetValueType.right;
-                });
-              },
-            ),
-          ],
+              const SizedBox(
+                height: 10,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: OutlinedButtonWidget(
+                  text: '회원가입',
+                  isEnable: true,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const CheckboxWidget(
+                value: true,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              // Select Component
+              SelectWidget(
+                leftText: 'text',
+                rightText: 'text',
+                value: selectWidgetValueType,
+                onTapLeft: () {
+                  setState(() {
+                    selectWidgetValueType = SelectWidgetValueType.left;
+                  });
+                },
+                onTapRight: () {
+                  setState(() {
+                    selectWidgetValueType = SelectWidgetValueType.right;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SearchBarWidget(
+                  controller: TextEditingController(),
+                  onChanged: (value) {
+                    logger.d('onChanged:$value');
+                  },
+                  onFieldSubmitted: (p0) {
+                    logger.d('onFieldSubmitted:$p0');
+                  },
+                  hintText: 'Placeholder',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              const SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
         ),
       ),
     );
