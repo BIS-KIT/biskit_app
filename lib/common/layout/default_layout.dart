@@ -48,16 +48,22 @@ class DefaultLayout extends StatelessWidget {
           ),
         ),
         foregroundColor: kColorGray9,
+        leadingWidth: 44,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Container(
-            width: 44,
-            height: 44,
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(10),
+            constraints: const BoxConstraints(),
             child: SvgPicture.asset(
               'assets/icons/ic_arrow_back_ios_line_24.svg',
+              width: 24,
+              height: 24,
+              colorFilter: const ColorFilter.mode(
+                kColorGray9,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         ),
