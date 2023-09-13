@@ -7,6 +7,7 @@ import 'package:biskit_app/common/component/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,9 +128,18 @@ class _TestScreenState extends State<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              const FullBleedButtonWidget(
-                text: '다음',
-                isEnable: true,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SingleNationalFlagScreen(),
+                      ));
+                },
+                child: const FullBleedButtonWidget(
+                  text: '다음(국적)',
+                  isEnable: true,
+                ),
               ),
               const SizedBox(
                 height: 10,
