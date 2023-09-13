@@ -36,14 +36,21 @@ showDefaultModal({
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        buttonPadding: EdgeInsets.zero,
         backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         titlePadding: const EdgeInsets.only(
           top: 32,
           left: 20,
           right: 20,
-          bottom: 8,
+          bottom: 0,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+        contentPadding: EdgeInsets.only(
+          top: content.isEmpty ? 0 : 8,
+          left: content.isEmpty ? 0 : 20,
+          right: content.isEmpty ? 0 : 20,
+        ),
         actionsPadding: const EdgeInsets.only(
           left: 20,
           right: 20,
@@ -65,13 +72,15 @@ showDefaultModal({
             color: kColorGray9,
           ),
         ),
-        content: Text(
-          content,
-          textAlign: TextAlign.center,
-          style: getTsBody16Rg(context).copyWith(
-            color: kColorGray7,
-          ),
-        ),
+        content: content.isEmpty
+            ? null
+            : Text(
+                content,
+                textAlign: TextAlign.center,
+                style: getTsBody16Rg(context).copyWith(
+                  color: kColorGray7,
+                ),
+              ),
         actions: [
           GestureDetector(
             onTap: () {

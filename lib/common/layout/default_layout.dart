@@ -1,7 +1,5 @@
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -33,12 +31,13 @@ class DefaultLayout extends StatelessWidget {
   }
 
   AppBar? renderAppBar(BuildContext context) {
-    logger.d(context.locale.languageCode);
+    // logger.d(context.locale.languageCode);
     if (title == null) {
       return null;
     } else {
       return AppBar(
         backgroundColor: backgroundColor ?? Colors.white,
+        surfaceTintColor: backgroundColor ?? Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -48,12 +47,15 @@ class DefaultLayout extends StatelessWidget {
           ),
         ),
         foregroundColor: kColorGray9,
-        leadingWidth: 44,
+        leadingWidth: 54,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Container(
+            margin: const EdgeInsets.only(
+              left: 10,
+            ),
             padding: const EdgeInsets.all(10),
             constraints: const BoxConstraints(),
             child: SvgPicture.asset(
