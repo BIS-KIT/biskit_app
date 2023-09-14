@@ -39,7 +39,13 @@ class RouteProvider extends ChangeNotifier {
   final Ref ref;
   RouteProvider({
     required this.ref,
-  });
+  }) {
+    ref.listen<UserModelBase?>(userMeProvider, (previous, next) {
+      if (previous != next) {
+        notifyListeners();
+      }
+    });
+  }
 
   List<GoRoute> get routes => [
         GoRoute(

@@ -8,21 +8,25 @@ import 'package:biskit_app/common/dio/dio.dart';
 
 final usersRepositoryProvider = Provider<UsersRepository>((ref) {
   return UsersRepository(
-    dio: ref.watch(dioProvider),
+    ref: ref,
     baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion/users',
   );
 });
 
 class UsersRepository {
-  final Dio dio;
+  final Ref ref;
   final String baseUrl;
+  late final Dio dio;
   UsersRepository({
-    required this.dio,
+    required this.ref,
     required this.baseUrl,
-  });
+  }) {
+    dio = ref.watch(dioProvider);
+  }
 
   Future<UserModel?> getMe(String token) async {
     UserModel? userModel;
+
     final res = await dio.get(
       '$baseUrl/me',
       options: Options(
