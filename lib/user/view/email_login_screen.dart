@@ -1,5 +1,8 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +16,7 @@ import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/component/outlined_button_widget.dart';
 import '../../common/component/text_input_widget.dart';
@@ -40,6 +44,8 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
 
   bool obscureText = true;
 
+  UserModelBase? state;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +55,11 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   init() {
     logger.d('widget.email:${widget.email}');
     email = widget.email ?? '';
+    if (kDebugMode) {
+      email = 'test_user@gmail.com';
+      password = 'xxx123';
+      isLoginButtonEnable = true;
+    }
   }
 
   void inputCheck() {
@@ -61,29 +72,45 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
     });
   }
 
-  checkEmail() {
+  bool checkEmail() {
     if (!email.isValidEmailFormat()) {
       setState(() {
         emailError = '이메일 형식을 확인해주세요';
       });
+      return false;
     } else {
       setState(() {
         emailError = null;
       });
+      return true;
     }
   }
 
-  login() {
+  login() async {
     FocusScope.of(context).unfocus();
-    checkEmail();
-    showSnackBar(
-      context: context,
-      text: '이메일 또는 비밀번호가 일치하지 않아요',
-    );
+    if (checkEmail()) {
+      context.loaderOverlay.show();
+      UserModelBase? userModelBase =
+          await ref.read(userMeProvider.notifier).login(
+                email: email,
+                password: password,
+              );
+
+      // logger.d(state);
+      if (!mounted) return;
+      context.loaderOverlay.hide();
+      if (userModelBase is UserModelError) {
+        showSnackBar(
+          context: context,
+          text: (userModelBase).message,
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    state = ref.watch(userMeProvider);
     return DefaultLayout(
       title: 'emailScreen.title'.tr(),
       child: SafeArea(
@@ -104,7 +131,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     }
                   },
                   child: TextInputWidget(
-                    initialValue: widget.email,
+                    initialValue: email,
                     title: 'emailScreen.email'.tr(),
                     hintText: '이메일을 입력해주세요',
                     keyboardType: TextInputType.emailAddress,
@@ -123,6 +150,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 TextInputWidget(
                   title: 'emailScreen.password'.tr(),
                   hintText: '비밀번호를 입력해주세요',
+                  initialValue: password,
                   onChanged: (value) {
                     password = value;
                     inputCheck();

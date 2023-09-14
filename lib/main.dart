@@ -1,8 +1,10 @@
-import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/component/custom_loading.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import 'common/const/keys.dart';
 import 'common/provider/router_provider.dart';
@@ -40,17 +42,23 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    logger.d(context.locale.toString());
-    return MaterialApp.router(
-      title: 'BISKIT',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    // logger.d(context.locale.toString());
+    return GlobalLoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const CustomLoading(),
+      overlayColor: Colors.transparent,
+      overlayOpacity: 0.2,
+      child: MaterialApp.router(
+        title: 'BISKIT',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: kColorBiskitNavy),
+          useMaterial3: true,
+        ),
+        locale: context.locale,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        routerConfig: router,
       ),
-      localizationsDelegates: context.localizationDelegates,
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      routerConfig: router,
     );
   }
 }
