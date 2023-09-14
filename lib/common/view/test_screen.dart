@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class TestScreen extends StatefulWidget {
   static String get routeName => 'test';
@@ -117,12 +118,18 @@ class _TestScreenState extends State<TestScreen> {
                   '갤러리',
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: FilledButtonWidget(
-                  text: '회원가입',
-                  isEnable: true,
-                  leftIconPath: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GestureDetector(
+                  onTap: () async {
+                    context.loaderOverlay.show();
+                    await Future.delayed(const Duration(seconds: 2));
+                    context.loaderOverlay.hide();
+                  },
+                  child: const FilledButtonWidget(
+                    text: '로딩',
+                    isEnable: true,
+                  ),
                 ),
               ),
               const SizedBox(

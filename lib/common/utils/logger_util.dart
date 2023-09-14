@@ -6,7 +6,7 @@ var logger = Logger(
     // errorMethodCount: 8,
     // lineLength: 120,
     colors: true,
-    printEmojis: false,
+    printEmojis: true,
     printTime: true,
   ),
 );
