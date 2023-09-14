@@ -1,6 +1,9 @@
 import 'package:biskit_app/common/component/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -18,6 +21,13 @@ final supportedLocales = [
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  // firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((value) {
+    logger.d('Firebase.initalizeApp()');
+  });
 
   // kakao
   KakaoSdk.init(

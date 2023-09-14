@@ -29,8 +29,8 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     required this.repository,
     required this.storage,
   }) : super(UserModelLoading()) {
-    // TODO delete
-    state = null;
+    // 내 정보 가져오기
+    getMe();
     //
     // bool isAutoLogin = prefs.getBool(kSpAutoLogin) ?? false;
     // if (isAutoLogin) {
@@ -39,6 +39,24 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     // } else {
     //   state = null;
     // }
+  }
+
+  Future<void> getMe() async {
+    try {
+      final String? accessToken = await storage.read(key: kACCESS_TOKEN_KEY);
+
+      if (accessToken == null) {
+        state = null;
+        return;
+      }
+
+      final UserModel? userModel = await repository.getMe(accessToken);
+
+      state = userModel;
+    } catch (e) {
+      logger.e(e.toString());
+      state = null;
+    }
   }
 
   Future<UserModelBase> login({
