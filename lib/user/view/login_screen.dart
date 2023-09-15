@@ -1,4 +1,5 @@
-import 'package:biskit_app/common/component/outlined_button_widget.dart';
+import 'dart:io';
+
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -68,65 +69,230 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: kakaoLogin,
-                          child: Container(
-                            width: 56,
-                            height: 56,
-                            padding: const EdgeInsets.all(19),
-                            decoration: const BoxDecoration(
-                              color: Color(0xffFEE500),
-                              shape: BoxShape.circle,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: SvgPicture.asset(
-                              'assets/icons/symbol_kakao.svg',
-                              width: 18,
-                              height: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 32,
+              GestureDetector(
+                onTap: () {},
+                child: _buildGoogle(context),
               ),
+              GestureDetector(
+                onTap: kakaoLogin,
+                child: _buildKakao(context),
+              ),
+              if (Platform.isIOS)
+                GestureDetector(
+                  onTap: () {},
+                  child: _buildApple(context),
+                ),
               GestureDetector(
                 onTap: () {
                   context.goNamed(EmailLoginScreen.routeName);
                 },
-                child: const OutlinedButtonWidget(
-                  text: '이메일로 시작하기',
-                  isEnable: true,
-                  height: 52,
-                ),
+                child: _buildEmail(context),
               ),
               const SizedBox(
                 height: 40,
               ),
-              // if (kDebugMode)
-              //   ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) => const TestScreen(),
-              //           ));
-              //     },
-              //     child: const Text(
-              //       'Test Screen',
-              //     ),
-              //   ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildApple(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 52,
+          padding: const EdgeInsets.symmetric(
+            // vertical: 14,
+            horizontal: 16,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 2,
+                  left: 2,
+                  bottom: 3,
+                  right: 3,
+                ),
+                child: SvgPicture.asset(
+                  'assets/icons/symbol_apple.svg',
+                  width: 19,
+                  height: 19,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Apple로 로그인',
+                  textAlign: TextAlign.center,
+                  style: getTsBody16Sb(context).copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+      ],
+    );
+  }
+
+  Container _buildEmail(BuildContext context) {
+    return Container(
+      height: 52,
+      padding: const EdgeInsets.symmetric(
+        // vertical: 14,
+        horizontal: 16,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: kColorGray3,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(6),
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            'assets/icons/ic_mail_line_24.svg',
+            width: 24,
+            height: 24,
+            colorFilter: const ColorFilter.mode(
+              kColorGray9,
+              BlendMode.srcIn,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              '이메일로 로그인',
+              textAlign: TextAlign.center,
+              style: getTsBody16Sb(context).copyWith(
+                color: kColorGray8,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKakao(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 52,
+          padding: const EdgeInsets.symmetric(
+            // vertical: 14,
+            horizontal: 16,
+          ),
+          decoration: const BoxDecoration(
+            color: Color(0xffFEE500),
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 3,
+                  vertical: 3.5,
+                ),
+                child: SvgPicture.asset(
+                  'assets/icons/symbol_kakao.svg',
+                  width: 18,
+                  height: 17,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  '카카오로 로그인',
+                  textAlign: TextAlign.center,
+                  style: getTsBody16Sb(context).copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGoogle(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 52,
+          padding: const EdgeInsets.symmetric(
+            // vertical: 14,
+            horizontal: 16,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: kColorGray4,
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(6),
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 3,
+                  vertical: 3,
+                ),
+                child: SvgPicture.asset(
+                  'assets/icons/symbol_google.svg',
+                  width: 18,
+                  height: 18,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Google로 로그인',
+                  textAlign: TextAlign.center,
+                  style: getTsBody16Sb(context).copyWith(
+                    color: kColorGray8,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+      ],
     );
   }
 }
