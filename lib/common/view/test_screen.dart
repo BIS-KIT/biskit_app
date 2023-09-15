@@ -6,6 +6,7 @@ import 'package:biskit_app/common/component/search_bar_widget.dart';
 import 'package:biskit_app/common/component/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -201,6 +202,17 @@ class _TestScreenState extends State<TestScreen> {
               ),
               const SizedBox(
                 height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  showDefaultModalBottomSheet(
+                    context: context,
+                    title: '소속 확인',
+                    titleLeftButton: true,
+                    titleRightButton: true,
+                  );
+                },
+                child: const Text('BottomSheet'),
               ),
 
               const SizedBox(

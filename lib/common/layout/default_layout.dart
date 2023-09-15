@@ -36,6 +36,7 @@ class DefaultLayout extends StatelessWidget {
       return null;
     } else {
       return AppBar(
+        toolbarHeight: 48,
         backgroundColor: backgroundColor ?? Colors.white,
         surfaceTintColor: backgroundColor ?? Colors.white,
         elevation: 0,
