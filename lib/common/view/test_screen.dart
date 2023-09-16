@@ -6,6 +6,7 @@ import 'package:biskit_app/common/component/search_bar_widget.dart';
 import 'package:biskit_app/common/component/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -145,6 +146,22 @@ class _TestScreenState extends State<TestScreen> {
                 },
                 child: const FullBleedButtonWidget(
                   text: '다음(국적)',
+                  isEnable: true,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NameBirthGenderScreen(),
+                      ));
+                },
+                child: const FullBleedButtonWidget(
+                  text: '다음(이름생일성별)',
                   isEnable: true,
                 ),
               ),
