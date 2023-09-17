@@ -16,7 +16,6 @@ import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/component/outlined_button_widget.dart';
 import '../../common/component/text_input_widget.dart';
@@ -89,7 +88,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   login() async {
     FocusScope.of(context).unfocus();
     if (checkEmail()) {
-      context.loaderOverlay.show();
+      // context.loaderOverlay.show();
       UserModelBase? userModelBase =
           await ref.read(userMeProvider.notifier).login(
                 email: email,
@@ -98,7 +97,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
 
       // logger.d(state);
       if (!mounted) return;
-      context.loaderOverlay.hide();
+      // context.loaderOverlay.hide();
       if (userModelBase is UserModelError) {
         showSnackBar(
           context: context,

@@ -44,13 +44,14 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
   Future<void> getMe() async {
     try {
       final String? accessToken = await storage.read(key: kACCESS_TOKEN_KEY);
+      final String? refreshToken = await storage.read(key: kREFRESH_TOKEN_KEY);
 
-      if (accessToken == null) {
+      if (accessToken == null || refreshToken == null) {
         state = null;
         return;
       }
 
-      final UserModel? userModel = await repository.getMe(accessToken);
+      final UserModel? userModel = await repository.getMe();
 
       state = userModel;
     } catch (e) {
@@ -63,8 +64,9 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     required String email,
     required String password,
   }) async {
+    UserModelBase? userModelBase;
     try {
-      state = UserModelLoading();
+      // state = UserModelLoading();
 
       final resp = await authRepository.login(
         email: email,
@@ -73,23 +75,31 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
 
       logger.d(resp);
 
-      // await storage.write(key: REFRESH_TOKEN_KEY, value: resp.refreshToken);
       await storage.write(key: kACCESS_TOKEN_KEY, value: resp.access_token);
+      await storage.write(key: kREFRESH_TOKEN_KEY, value: resp.refresh_token);
 
-      final UserModel? userResp = await repository.getMe(resp.access_token);
+      userModelBase = await repository.getMe();
 
-      state = userResp;
-
-      return UserModelError(message: '로그인에 실패했습니다.');
+      state = userModelBase;
     } on DioException catch (e) {
       logger.e(e.toString());
       if (e.response != null) {
         if (e.response!.statusCode == 400) {
-          state = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
+          userModelBase = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
         }
       }
-
-      return Future.value(state);
     }
+    return Future.value(userModelBase);
+  }
+
+  Future<void> logout() async {
+    state = null;
+
+    await Future.wait(
+      [
+        storage.delete(key: kREFRESH_TOKEN_KEY),
+        storage.delete(key: kACCESS_TOKEN_KEY),
+      ],
+    );
   }
 }
