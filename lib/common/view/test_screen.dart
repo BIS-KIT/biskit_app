@@ -28,6 +28,7 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   SelectWidgetValueType selectWidgetValueType = SelectWidgetValueType.none;
+  bool isChecked = false;
   opTapkakaoLogin() async {
     logger.d(await KakaoSdk.origin);
     if (await kakao.isKakaoTalkInstalled()) {
@@ -180,8 +181,13 @@ class _TestScreenState extends State<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              const CheckboxWidget(
-                value: true,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isChecked = !isChecked;
+                  });
+                },
+                child: CheckboxWidget(value: isChecked),
               ),
               const SizedBox(
                 height: 10,
