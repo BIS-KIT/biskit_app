@@ -19,25 +19,17 @@ class CheckboxWidget extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: value ? kColorYellow3 : null,
-        border: value
-            ? null
-            : Border.all(
-                width: 2,
-                color: kColorGray4,
-              ),
+        color: value ? kColorYellow3 : kColorGray3,
       ),
-      child: value
-          ? SvgPicture.asset(
-              'assets/icons/check.svg',
-              width: 16,
-              height: 12,
-              colorFilter: const ColorFilter.mode(
-                kColorGray9,
-                BlendMode.srcIn,
-              ),
-            )
-          : null,
+      child: SvgPicture.asset(
+        'assets/icons/check.svg',
+        width: 16,
+        height: 12,
+        colorFilter: ColorFilter.mode(
+          value ? kColorGray9 : kColorWhite,
+          BlendMode.srcIn,
+        ),
+      ),
     );
   }
 }
