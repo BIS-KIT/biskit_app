@@ -6,6 +6,7 @@ import 'package:biskit_app/common/component/text_input_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/const/colors.dart';
 import '../../common/const/fonts.dart';
@@ -28,6 +30,7 @@ class SignUpEmailScreen extends ConsumerStatefulWidget {
 class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
   String email = '';
   String? emailError;
+  bool isCheckEmailLoading = false;
   bool isButtonEnable = false;
   bool isPinCodeMode = false;
 
@@ -47,6 +50,9 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     super.initState();
     pinController = TextEditingController();
     pinFocusNode = FocusNode();
+    // if (kDebugMode) {
+    //   email = 'test_user@gmail.com';
+    // }
   }
 
   @override
@@ -88,7 +94,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     });
   }
 
-  checkEmail() {
+  checkValueEmail() {
     if (email.isEmpty) {
       setState(() {
         emailError = '이메일을 입력해주세요';
@@ -107,34 +113,62 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     }
   }
 
-  onTapFirstPinCode() {
-    if (checkEmail()) {
-      // TODO 이미 가입한 계정이면 로그인 화면으로 이동
-      if (email == 'a@a.a') {
-        showDefaultModal(
-          context: context,
-          title: '이미 가입된 계정이 있어요',
-          content: '$email\n계정으로 로그인해주세요',
-          function: () {
-            context.goNamed(
-              EmailLoginScreen.routeName,
-              queryParameters: {
-                'email': email,
-              },
-            );
-          },
+  checkEmailExist() async {
+    bool isExist = false;
+    setState(() {
+      isCheckEmailLoading = true;
+    });
+    isExist = await ref.read(authRepositoryProvider).checkEmail(
+          email: email,
         );
-      } else {
-        // TODO 인증번호 요청 처리
-        FocusScope.of(context).requestFocus(pinFocusNode);
-        setState(() {
-          // TODO 인증번호 받은 것으로 교체해야함
-          startTimer();
-          isTimerView = true;
-          recivePinCode = '111111';
-          isPinCodeMode = true;
-        });
+    setState(() {
+      isCheckEmailLoading = false;
+    });
+
+    return isExist;
+  }
+
+  onTapFirstPinCode() async {
+    context.loaderOverlay.show();
+    try {
+      if (checkValueEmail()) {
+        if (await checkEmailExist()) {
+          if (!mounted) return;
+          showDefaultModal(
+            context: context,
+            title: '이미 가입된 계정이 있어요',
+            content: '$email\n계정으로 로그인해주세요',
+            function: () {
+              context.goNamed(
+                EmailLoginScreen.routeName,
+                queryParameters: {
+                  'email': email,
+                },
+              );
+            },
+          );
+        } else {
+          // 인증번호 요청 처리
+          Map<String, String>? res =
+              await ref.read(authRepositoryProvider).certificate(email: email);
+          if (res != null &&
+              res['result'] == 'success' &&
+              (res['certification'] != null &&
+                  res['certification']!.length == 6)) {
+            setState(() {
+              // 인증번호 받은 것으로 교체해야함
+              startTimer();
+              isTimerView = true;
+              recivePinCode = res['certification']!;
+              isPinCodeMode = true;
+            });
+            if (!mounted) return;
+            FocusScope.of(context).requestFocus(pinFocusNode);
+          }
+        }
       }
+    } finally {
+      context.loaderOverlay.hide();
     }
   }
 
@@ -205,16 +239,17 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                           onFocusChange: (value) {
                             if (!value) {
                               // 포커스 아웃시 처리
-                              checkEmail();
+                              checkValueEmail();
                             }
                           },
                           child: TextInputWidget(
                             title: 'emailScreen.email'.tr(),
                             hintText: '이메일을 입력해주세요',
+                            initialValue: email,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             errorText: emailError,
-                            readOnly: isPinCodeMode,
+                            readOnly: isPinCodeMode || isCheckEmailLoading,
                             onChanged: (value) {
                               email = value;
                               inputCheck();
@@ -226,7 +261,9 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                         ),
                         !isPinCodeMode
                             ? GestureDetector(
-                                onTap: onTapFirstPinCode,
+                                onTap: isCheckEmailLoading
+                                    ? null
+                                    : onTapFirstPinCode,
                                 child: FilledButtonWidget(
                                   height: 52,
                                   text: '인증번호 받기',

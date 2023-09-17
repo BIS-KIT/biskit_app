@@ -81,5 +81,7 @@ class CustomInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     logger.d('[ERR] [${err.requestOptions.method}] ${err.requestOptions.uri}');
     // TODO 리프레시 토큰 처리
+
+    return handler.reject(err);
   }
 }
