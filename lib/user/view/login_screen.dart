@@ -32,6 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   alignment: Alignment(
                       Alignment.bottomRight.x, Alignment.bottomRight.y - 0.2),
                   child: FloatingActionButton(
+                    heroTag: 'test1',
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -47,6 +48,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: FloatingActionButton(
+                    heroTag: 'test2',
                     onPressed: () {
                       Navigator.push(
                           context,
