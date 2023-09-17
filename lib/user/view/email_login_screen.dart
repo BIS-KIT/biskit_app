@@ -2,7 +2,6 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,11 +53,11 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   init() {
     logger.d('widget.email:${widget.email}');
     email = widget.email ?? '';
-    if (kDebugMode) {
-      email = 'test_user@gmail.com';
-      password = 'xxx123';
-      isLoginButtonEnable = true;
-    }
+    // if (kDebugMode) {
+    //   email = 'test_user@gmail.com';
+    //   password = 'xxx123';
+    //   isLoginButtonEnable = true;
+    // }
   }
 
   void inputCheck() {
