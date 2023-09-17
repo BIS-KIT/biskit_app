@@ -5,6 +5,7 @@ import '../const/colors.dart';
 import '../const/fonts.dart';
 
 class CustomTextFormField extends StatelessWidget {
+  final TextAlign textAlign;
   final String? initialValue;
   final String? hintText;
   final String? errorText;
@@ -20,6 +21,7 @@ class CustomTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   const CustomTextFormField({
     Key? key,
+    this.textAlign = TextAlign.start,
     this.initialValue,
     this.hintText,
     this.errorText,
@@ -47,6 +49,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
     );
     return TextFormField(
+      textAlign: textAlign,
       controller: controller,
       focusNode: focusNode,
       initialValue: initialValue,

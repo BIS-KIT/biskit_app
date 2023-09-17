@@ -16,6 +16,8 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import 'name_birth_gender_screen.dart';
+
 class TestScreen extends StatefulWidget {
   static String get routeName => 'test';
   const TestScreen({super.key});
@@ -146,6 +148,22 @@ class _TestScreenState extends State<TestScreen> {
                 },
                 child: const FullBleedButtonWidget(
                   text: '다음(국적)',
+                  isEnable: true,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NameBirthGenderScreen(),
+                      ));
+                },
+                child: const FullBleedButtonWidget(
+                  text: '다음(이름생일성별)',
                   isEnable: true,
                 ),
               ),
