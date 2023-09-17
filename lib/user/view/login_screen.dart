@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/view/test2_screen.dart';
 import 'package:biskit_app/common/view/test_screen.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -25,16 +26,51 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       floatingActionButton: kDebugMode
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const TestScreen(),
-                    ));
-              },
-              child: const Text('Test'),
+          ? Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment(
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.2),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TestScreen(),
+                          ));
+                    },
+                    child: const Text(
+                      'Test1',
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Test2Screen(),
+                          ));
+                    },
+                    child: const Text(
+                      'Test2',
+                    ),
+                  ),
+                ),
+              ],
             )
+          // FloatingActionButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const TestScreen(),
+          //           ));
+          //     },
+          //     child: const Text('Test'),
+          //   )
           : null,
       child: SafeArea(
         child: Padding(

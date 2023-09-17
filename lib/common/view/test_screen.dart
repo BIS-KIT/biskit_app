@@ -69,7 +69,7 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'Test Screen',
+      title: 'Test1 Screen',
       child: Center(
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
