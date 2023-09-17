@@ -1,10 +1,12 @@
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/common/dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final usersRepositoryProvider = Provider<UsersRepository>((ref) {
   return UsersRepository(
@@ -17,14 +19,16 @@ class UsersRepository {
   final Ref ref;
   final String baseUrl;
   late final Dio dio;
+  late final FlutterSecureStorage storage;
   UsersRepository({
     required this.ref,
     required this.baseUrl,
   }) {
     dio = ref.watch(dioProvider);
+    storage = ref.watch(secureStorageProvider);
   }
 
-  Future<UserModel?> getMe(String token) async {
+  Future<UserModel?> getMe() async {
     UserModel? userModel;
 
     final res = await dio.get(
@@ -33,14 +37,13 @@ class UsersRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
-      queryParameters: {
-        'token': token,
-      },
     );
 
     logger.d(res.toString());
+    userModel = UserModel.fromMap(res.data);
 
     return userModel;
   }
