@@ -110,14 +110,17 @@ class _TestScreenState extends State<TestScreen> {
                 '사진첩 테스트',
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PhotoManagerScreen(
-                          isCamera: true,
-                        ),
-                      ));
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PhotoManagerScreen(
+                        isCamera: true,
+                        isSingle: true,
+                      ),
+                    ),
+                  );
+                  logger.d(result);
                 },
                 child: const Text(
                   '갤러리',

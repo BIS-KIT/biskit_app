@@ -10,9 +10,11 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 class PhotoManagerScreen extends StatefulWidget {
   static String get routeName => 'photoManager';
   final bool isCamera;
+  final bool isSingle;
   const PhotoManagerScreen({
     Key? key,
     this.isCamera = false,
+    this.isSingle = false,
   }) : super(key: key);
 
   @override
@@ -184,6 +186,17 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 }
               }).toList();
             });
+            if (widget.isSingle &&
+                _images
+                        .where((element) => element.isSelected)
+                        .toList()
+                        .length ==
+                    1) {
+              Navigator.pop(
+                context,
+                _images.where((element) => element.isSelected).toList(),
+              );
+            }
           },
           child: Container(
             decoration: BoxDecoration(
@@ -296,16 +309,24 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
               const SizedBox(
                 width: 10,
               ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                // color: Colors.amber,
-                child: const Text(
-                  '완료',
-                  style: TextStyle(
-                    fontSize: 16,
-                    height: 1.6,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(
+                    context,
+                    _images.where((element) => element.isSelected).toList(),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  // color: Colors.amber,
+                  child: const Text(
+                    '완료',
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.6,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
