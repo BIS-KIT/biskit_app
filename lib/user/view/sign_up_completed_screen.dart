@@ -2,6 +2,7 @@ import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/view/sign_up_profile_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -54,19 +55,29 @@ class SignUpCompletedScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Column(
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 20,
                       right: 20,
                       bottom: 34,
                     ),
-                    child: FilledButtonWidget(
-                      text: '프로필 완성하기',
-                      isEnable: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const SignUpProfileEditScreen(),
+                            ));
+                      },
+                      child: const FilledButtonWidget(
+                        text: '프로필 완성하기',
+                        isEnable: true,
+                      ),
                     ),
                   ),
                 ],
