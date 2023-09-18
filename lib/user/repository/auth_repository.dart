@@ -97,7 +97,11 @@ class AuthRepository {
 
       logger.d(res);
       if (res.statusCode == 200) {
-        map = res.data;
+        map = {
+          'result': res.data['result'] ?? '',
+          'email': res.data['email'] ?? '',
+          'certification': res.data['certification'] ?? '',
+        };
       }
     } on DioException catch (e) {
       logger.e(e.toString());

@@ -129,6 +129,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
   }
 
   onTapFirstPinCode() async {
+    FocusScope.of(context).unfocus();
     context.loaderOverlay.show();
     try {
       if (checkValueEmail()) {
