@@ -9,6 +9,7 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
+import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -237,6 +238,19 @@ class _TestScreenState extends State<TestScreen> {
                   );
                 },
                 child: const Text('BottomSheet'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpCompletedScreen(),
+                      ));
+                },
+                child: const Text('회원가입 완료 화면'),
               ),
 
               const SizedBox(
