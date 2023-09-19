@@ -40,7 +40,6 @@ class _UniversityScreenState extends State<UniversityScreen> {
     final List data = await readJson(
       jsonPath: 'assets/jsons/university.json',
     );
-    logger.d(data);
 
     if (!mounted) return;
     if (context.locale.languageCode == kEn) {
@@ -88,6 +87,22 @@ class _UniversityScreenState extends State<UniversityScreen> {
     });
   }
 
+  onChanged(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        tempList = [];
+      });
+    } else {
+      List<UniversityModel> searchList = univerisyList
+          .where((n) => '${n.ename.toLowerCase()} ${n.kname.toLowerCase()}'
+              .contains(value.toLowerCase()))
+          .toList();
+      setState(() {
+        tempList = searchList;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -126,21 +141,20 @@ class _UniversityScreenState extends State<UniversityScreen> {
                 GestureDetector(
                   onTap: () {
                     showDefaultModalBottomSheet(
-                        context: context,
-                        title: '학교 선택',
-                        titleLeftButton: true,
-                        titleRightButton: true,
-                        contentWidget: Column(
+                      context: context,
+                      title: '학교 선택',
+                      titleLeftButton: true,
+                      titleRightButton: true,
+                      contentWidget: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
                           children: [
                             SearchBarWidget(
                               controller: textEditingController,
-                              onChanged: (value) {
-                                logger.d(value);
-                              },
+                              onChanged: onChanged,
                               hintText: '학교 검색',
                             ),
-                            
-                            Flexible(
+                            Expanded(
                                 child: isLoading
                                     ? const CircularProgressIndicator()
                                     : SingleChildScrollView(
@@ -168,9 +182,21 @@ class _UniversityScreenState extends State<UniversityScreen> {
                                                       ))
                                                   .toList(),
                                         ),
-                                      ))
+                                      )),
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                top: 16,
+                                bottom: 34,
+                              ),
+                              child: FilledButtonWidget(
+                                text: '다음',
+                                isEnable: false,
+                              ),
+                            ),
                           ],
-                        ));
+                        ),
+                      ),
+                    );
                   },
                   child: const OutlinedButtonWidget(
                     isEnable: true,
@@ -180,19 +206,16 @@ class _UniversityScreenState extends State<UniversityScreen> {
                 ),
               ],
             )),
-            Positioned(
-              top: 100,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 34,
-                ),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const FilledButtonWidget(text: '다음', isEnable: false),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 34,
               ),
-            )
+              child: GestureDetector(
+                onTap: () {},
+                child: const FilledButtonWidget(text: '다음', isEnable: false),
+              ),
+            ),
           ],
         ),
       )),
