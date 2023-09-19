@@ -1,7 +1,8 @@
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
@@ -9,15 +10,17 @@ class DefaultLayout extends StatelessWidget {
   final String? title;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
+  final List<Widget>? actions;
 
   const DefaultLayout({
-    super.key,
-    required this.child,
+    Key? key,
     this.backgroundColor,
+    required this.child,
     this.title,
     this.bottomNavigationBar,
     this.floatingActionButton,
-  });
+    this.actions,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +73,7 @@ class DefaultLayout extends StatelessWidget {
             ),
           ),
         ),
+        actions: actions,
       );
     }
   }

@@ -145,7 +145,10 @@ class RouteProvider extends ChangeNotifier {
 
     final UserModelBase? user = ref.read(userMeProvider);
 
-    final bool logginIn = state.matchedLocation == '/login';
+    final bool logginIn = [
+      '/login',
+      '/login/emailLogin',
+    ].contains(state.matchedLocation);
 
     // 유저 정보가 없는데
     // 로그인중이면 그대로 로그인 페이지에 두고

@@ -47,4 +47,66 @@ class AuthRepository {
     logger.d(res);
     return LoginResponse.fromMap(res.data);
   }
+
+  Future<bool> checkEmail({
+    required String email,
+  }) async {
+    bool isExist = true;
+    try {
+      final res = await dio.post(
+        '$baseUrl/check-email/',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        queryParameters: {
+          'email': email.trim(),
+        },
+      );
+
+      logger.d(res);
+      if (res.statusCode == 200) {
+        isExist = false;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+
+    return isExist;
+  }
+
+  Future<Map<String, String>?> certificate({
+    required String email,
+  }) async {
+    Map<String, String>? map;
+    try {
+      final res = await dio.post(
+        '$baseUrl/certificate/',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        data: json.encode({
+          'email': email,
+        }),
+      );
+
+      logger.d(res);
+      if (res.statusCode == 200) {
+        map = {
+          'result': res.data['result'] ?? '',
+          'email': res.data['email'] ?? '',
+          'certification': res.data['certification'] ?? '',
+        };
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+
+    return map;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -73,7 +74,19 @@ class _RootTabState extends ConsumerState<RootTab>
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          Container(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(userMeProvider.notifier).logout();
+                },
+                child: const Text(
+                  'Logout',
+                ),
+              ),
+            ],
+          ),
           Container(),
           Container(),
         ],

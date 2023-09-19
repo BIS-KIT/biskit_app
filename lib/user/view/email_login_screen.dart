@@ -2,7 +2,6 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +15,6 @@ import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/component/outlined_button_widget.dart';
 import '../../common/component/text_input_widget.dart';
@@ -55,11 +53,11 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   init() {
     logger.d('widget.email:${widget.email}');
     email = widget.email ?? '';
-    if (kDebugMode) {
-      email = 'test_user@gmail.com';
-      password = 'xxx123';
-      isLoginButtonEnable = true;
-    }
+    // if (kDebugMode) {
+    //   email = 'test_user@gmail.com';
+    //   password = 'xxx123';
+    //   isLoginButtonEnable = true;
+    // }
   }
 
   void inputCheck() {
@@ -89,7 +87,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   login() async {
     FocusScope.of(context).unfocus();
     if (checkEmail()) {
-      context.loaderOverlay.show();
+      // context.loaderOverlay.show();
       UserModelBase? userModelBase =
           await ref.read(userMeProvider.notifier).login(
                 email: email,
@@ -98,7 +96,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
 
       // logger.d(state);
       if (!mounted) return;
-      context.loaderOverlay.hide();
+      // context.loaderOverlay.hide();
       if (userModelBase is UserModelError) {
         showSnackBar(
           context: context,
