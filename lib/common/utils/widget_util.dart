@@ -41,15 +41,21 @@ showDefaultModalBottomSheet({
               ),
               child: Row(
                 children: [
-                  if (titleLeftButton)
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_arrow_back_ios_line_24.svg',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
+                  // if (titleLeftButton)
+                  titleLeftButton
+                      ? Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SvgPicture.asset(
+                            'assets/icons/ic_arrow_back_ios_line_24.svg',
+                            width: 24,
+                            height: 24,
+                          ),
+                        )
+                      : const SizedBox(
+                          width: 44,
+                          height: 44,
+                        ),
+
                   const SizedBox(
                     width: 9,
                   ),
@@ -57,7 +63,7 @@ showDefaultModalBottomSheet({
                     child: Text(
                       title,
                       textAlign: TextAlign.center,
-                      style: getTsHeading20(context).copyWith(
+                      style: getTsHeading18(context).copyWith(
                         color: kColorGray9,
                       ),
                     ),
@@ -65,23 +71,28 @@ showDefaultModalBottomSheet({
                   const SizedBox(
                     width: 9,
                   ),
-                  if (titleRightButton)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          'assets/icons/ic_cancel_line_24.svg',
-                          width: 24,
-                          height: 24,
+                  titleRightButton
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_cancel_line_24.svg',
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(
+                          width: 44,
+                          height: 44,
                         ),
-                      ),
-                    ),
                 ],
               ),
             ),
+            Expanded(child: contentWidget ?? Container()),
           ],
         ),
       );
