@@ -1,4 +1,4 @@
-package com.example.biskit_app
+package com.teambiskit.biskit
 
 import io.flutter.embedding.android.FlutterActivity
 
