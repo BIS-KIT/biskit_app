@@ -1,4 +1,6 @@
 import 'package:biskit_app/common/component/filled_button_widget.dart';
+import 'package:biskit_app/common/component/list_tile_level_widget.dart';
+import 'package:biskit_app/common/component/list_tile_univ_department_widget.dart';
 import 'package:biskit_app/common/component/list_tile_widget.dart';
 import 'package:biskit_app/common/component/outlined_button_widget.dart';
 import 'package:biskit_app/common/component/search_bar_widget.dart';
@@ -11,6 +13,7 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class UniversityScreen extends StatefulWidget {
   static String get routeName => 'universityScreen';
@@ -183,14 +186,130 @@ class _UniversityScreenState extends State<UniversityScreen> {
                                                   .toList(),
                                         ),
                                       )),
-                            const Padding(
-                              padding: EdgeInsets.only(
+                            Padding(
+                              padding: const EdgeInsets.only(
                                 top: 16,
                                 bottom: 34,
                               ),
-                              child: FilledButtonWidget(
-                                text: '다음',
-                                isEnable: false,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  showDefaultModalBottomSheet(
+                                    context: context,
+                                    title: '소속 선택',
+                                    titleLeftButton: true,
+                                    titleRightButton: true, height: 388,
+                                    // MediaQuery.of(context)
+                                    //         .size
+                                    //         .height -
+                                    //     MediaQuery.of(context).padding.top -
+                                    //     424,
+                                    contentWidget: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Column(
+                                        children: [
+                                          const Expanded(
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  ListTileUnivDepartmentWidget(
+                                                    isCheck: true,
+                                                    department: '학부',
+                                                  ),
+                                                  ListTileUnivDepartmentWidget(
+                                                    isCheck: false,
+                                                    department: '대학원',
+                                                  ),
+                                                  ListTileUnivDepartmentWidget(
+                                                    isCheck: false,
+                                                    department: '교환학생',
+                                                  ),
+                                                  ListTileUnivDepartmentWidget(
+                                                    isCheck: false,
+                                                    department: '어학당',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              showDefaultModalBottomSheet(
+                                                context: context,
+                                                title: '학적상태 선택',
+                                                titleLeftButton: true,
+                                                titleRightButton: true,
+                                                height: 332,
+                                                contentWidget: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20),
+                                                  child: Column(
+                                                    children: [
+                                                      const Expanded(
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          child: Column(
+                                                            children: [
+                                                              ListTileUnivDepartmentWidget(
+                                                                isCheck: true,
+                                                                department:
+                                                                    '재학',
+                                                              ),
+                                                              ListTileUnivDepartmentWidget(
+                                                                isCheck: false,
+                                                                department:
+                                                                    '수료',
+                                                              ),
+                                                              ListTileUnivDepartmentWidget(
+                                                                isCheck: false,
+                                                                department:
+                                                                    '졸업',
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {},
+                                                        child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            top: 16,
+                                                            bottom: 34,
+                                                          ),
+                                                          child:
+                                                              FilledButtonWidget(
+                                                            text: '완료',
+                                                            isEnable: false,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: const Padding(
+                                              padding: EdgeInsets.only(
+                                                top: 16,
+                                                bottom: 34,
+                                              ),
+                                              child: FilledButtonWidget(
+                                                text: '다음',
+                                                isEnable: false,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const FilledButtonWidget(
+                                    text: '다음', isEnable: true),
                               ),
                             ),
                           ],
@@ -213,7 +332,7 @@ class _UniversityScreenState extends State<UniversityScreen> {
               ),
               child: GestureDetector(
                 onTap: () {},
-                child: const FilledButtonWidget(text: '다음', isEnable: false),
+                child: const FilledButtonWidget(text: '다음', isEnable: true),
               ),
             ),
           ],
