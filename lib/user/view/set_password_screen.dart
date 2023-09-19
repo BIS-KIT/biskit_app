@@ -63,7 +63,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                         Focus(
                           onFocusChange: (value) {
                             if (!value && password.isNotEmpty) {
-                              if (!isValidPassword(password)) {
+                              if (!password.isValidPassword()) {
                                 setState(() {
                                   passwordError = '8자 이상으로 입력해주세요';
                                 });

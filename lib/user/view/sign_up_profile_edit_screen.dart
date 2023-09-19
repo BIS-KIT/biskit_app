@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/component/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +23,79 @@ class SignUpProfileEditScreen extends StatefulWidget {
 }
 
 class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
-  final TextEditingController controller = TextEditingController();
-
   PhotoModel? selectedPhotoModel;
+
+  late final TextEditingController controller;
+  String nickName = '';
+  String? nickNameError;
+  bool isNickNameOk = false;
+
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController()
+      ..addListener(() {
+        onSearchChanged(controller.text);
+      });
+  }
 
   @override
   void dispose() {
     super.dispose();
     controller.dispose();
+    _debounce?.cancel();
+  }
+
+  onSearchChanged(String value) {
+    setState(() {
+      nickNameError = null;
+      isNickNameOk = false;
+    });
+    if (value.isEmpty) {
+      return;
+    }
+    if (_debounce?.isActive ?? false) {
+      _debounce!.cancel();
+    }
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      // logger.d('$value : ${value.isNickName()}');
+      if (value.isNickName()) {
+        // TODO 서버 닉네임 가능 여부 확인
+        await Future.delayed(const Duration(seconds: 1));
+        // TODO 닉네임이 사용하지 못할때
+        if (value == '12') {
+          // 이미 사용중일 때
+          setState(() {
+            nickNameError = '이미 사용중인 닉네임이에요';
+            isNickNameOk = false;
+          });
+        } else {
+          // 정상
+          setState(() {
+            nickNameError = null;
+            isNickNameOk = true;
+          });
+          return;
+        }
+      } else {
+        if (value.length < 2) {
+          setState(() {
+            nickNameError = '2자 이상 입력해주세요';
+            isNickNameOk = false;
+          });
+          return;
+        } else {
+          setState(() {
+            nickNameError = '한글/영문/숫자만 사용가능해요';
+            isNickNameOk = false;
+          });
+          return;
+        }
+      }
+    });
   }
 
   @override
@@ -136,9 +204,9 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
                         controller: controller,
                         title: '닉네임',
                         hintText: '닉네임을 입력해주세요',
-                        onChanged: (value) {
-                          setState(() {});
-                        },
+                        maxLength: 12,
+                        // onChanged: onSearchChanged,
+                        errorText: nickNameError,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                               RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9]'))
@@ -146,7 +214,7 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
                         suffixIcon: controller.text.isNotEmpty
                             ? GestureDetector(
                                 onTap: () {
-                                  controller.text = '';
+                                  controller.clear();
                                 },
                                 child: SvgPicture.asset(
                                   'assets/icons/ic_cancel_fill_16.svg',
@@ -160,15 +228,16 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
                               )
                             : null,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          '한글/영문/숫자 2자 이상',
-                          style: getTsCaption12Rg(context).copyWith(
-                            color: kColorGray6,
+                      if (nickNameError == null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            isNickNameOk ? '사용 가능한 닉네임이에요' : '한글/영문/숫자 2자 이상',
+                            style: getTsCaption12Rg(context).copyWith(
+                              color: isNickNameOk ? kColorSuccess : kColorGray6,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ],
@@ -176,20 +245,20 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
             ),
           ),
           MediaQuery.of(context).viewInsets.bottom == 0
-              ? const Padding(
-                  padding: EdgeInsets.only(
+              ? Padding(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     right: 20,
                     bottom: 34,
                   ),
                   child: FilledButtonWidget(
                     text: '다음',
-                    isEnable: false,
+                    isEnable: isNickNameOk,
                   ),
                 )
-              : const FullBleedButtonWidget(
+              : FullBleedButtonWidget(
                   text: '다음',
-                  isEnable: false,
+                  isEnable: isNickNameOk,
                 ),
         ],
       ),
