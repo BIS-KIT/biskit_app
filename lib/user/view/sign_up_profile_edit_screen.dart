@@ -9,6 +9,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/user/view/sign_up_language_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -96,6 +97,17 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
         }
       }
     });
+  }
+
+  onTapNext() {
+    FocusScope.of(context).unfocus();
+    if (isNickNameOk) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignUpLanguageScreen(),
+          ));
+    }
   }
 
   @override
@@ -251,14 +263,20 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
                     right: 20,
                     bottom: 34,
                   ),
-                  child: FilledButtonWidget(
+                  child: GestureDetector(
+                    onTap: onTapNext,
+                    child: FilledButtonWidget(
+                      text: '다음',
+                      isEnable: isNickNameOk,
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: onTapNext,
+                  child: FullBleedButtonWidget(
                     text: '다음',
                     isEnable: isNickNameOk,
                   ),
-                )
-              : FullBleedButtonWidget(
-                  text: '다음',
-                  isEnable: isNickNameOk,
                 ),
         ],
       ),

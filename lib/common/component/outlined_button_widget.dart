@@ -40,7 +40,7 @@ class OutlinedButtonWidget extends StatelessWidget {
           ? Text(
               text,
               style: getTsBody16Sb(context).copyWith(
-                color: isEnable ? kColorGray9 : kColorGray5,
+                color: isEnable ? kColorGray8 : kColorGray4,
               ),
             )
           : Row(
@@ -51,9 +51,9 @@ class OutlinedButtonWidget extends StatelessWidget {
                   height: 24,
                   child: SvgPicture.asset(
                     leftIconPath!,
-                    // color: isEnable ? kColorGray9 : kColorGray5,
+                    // color: isEnable ? kColorGray8 : kColorGray4,
                     colorFilter: ColorFilter.mode(
-                      isEnable ? kColorGray9 : kColorGray5,
+                      isEnable ? kColorGray8 : kColorGray4,
                       BlendMode.srcIn,
                     ),
                   ),
@@ -64,7 +64,7 @@ class OutlinedButtonWidget extends StatelessWidget {
                 Text(
                   text,
                   style: getTsBody16Sb(context).copyWith(
-                    color: isEnable ? kColorGray9 : kColorGray5,
+                    color: isEnable ? kColorGray8 : kColorGray4,
                   ),
                 ),
               ],
