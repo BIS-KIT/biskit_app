@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDHHn--eFECoTeuVne05S2oo1ezfLyEw7A',
-    appId: '1:713106577735:android:20b1f25d63e2aedf6d9462',
+    appId: '1:713106577735:android:85903d1b69e1db546d9462',
     messagingSenderId: '713106577735',
     projectId: 'biskit-prod',
     storageBucket: 'biskit-prod.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDieoqdIpEWohfhgflcbOcPYOT3I3oWI1c',
-    appId: '1:713106577735:ios:7c09d065e181c59a6d9462',
+    appId: '1:713106577735:ios:1c7d6d1e0a5052ed6d9462',
     messagingSenderId: '713106577735',
     projectId: 'biskit-prod',
     storageBucket: 'biskit-prod.appspot.com',
-    iosClientId: '713106577735-2upvrcmlqj1rgvoh6d7salkr3c97cgak.apps.googleusercontent.com',
-    iosBundleId: 'com.example.biskitApp',
+    iosClientId: '713106577735-hvtofqf29eovgp8rpm9uqveb046dt92p.apps.googleusercontent.com',
+    iosBundleId: 'com.teambiskit.biskit',
   );
 }
