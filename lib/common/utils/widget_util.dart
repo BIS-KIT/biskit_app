@@ -161,11 +161,14 @@ showDefaultModal({
             ),
           ),
         ),
-        title: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: getTsHeading20(context).copyWith(
-            color: kColorGray9,
+        title: SizedBox(
+          width: 287,
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: getTsHeading18(context).copyWith(
+              color: kColorGray9,
+            ),
           ),
         ),
         content: content.isEmpty
@@ -185,6 +188,7 @@ showDefaultModal({
             child: FilledButtonWidget(
               text: buttonText,
               isEnable: true,
+              height: 44,
             ),
           ),
         ],
