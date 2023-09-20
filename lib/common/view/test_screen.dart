@@ -116,7 +116,7 @@ class _TestScreenState extends State<TestScreen> {
                     MaterialPageRoute(
                       builder: (context) => const PhotoManagerScreen(
                         isCamera: true,
-                        isSingle: true,
+                        maxCnt: 30,
                       ),
                     ),
                   );
