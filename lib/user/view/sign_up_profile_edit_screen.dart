@@ -160,7 +160,7 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
                               MaterialPageRoute(
                                 builder: (context) => const PhotoManagerScreen(
                                   isCamera: true,
-                                  isSingle: true,
+                                  maxCnt: 1,
                                 ),
                               ),
                             ) ??

@@ -1,20 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 
 class PhotoManagerScreen extends StatefulWidget {
   static String get routeName => 'photoManager';
   final bool isCamera;
-  final bool isSingle;
+  final int maxCnt;
   const PhotoManagerScreen({
     Key? key,
     this.isCamera = false,
-    this.isSingle = false,
+    this.maxCnt = 30,
   }) : super(key: key);
 
   @override
@@ -23,6 +26,7 @@ class PhotoManagerScreen extends StatefulWidget {
 
 class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
   bool isLoading = false;
+  final List<PhotoModel> _selectedPhoto = []; // 모든 파일 정보
   List<AssetPathEntity>? _paths; // 모든 파일 정보
   List<Album> _albums = []; // 드롭다운 앨범 목록
   List<PhotoModel> _images = []; // 앨범의 이미지 목록
@@ -111,6 +115,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     setState(() {
       if (albumChange) {
         _images = loadImages.map((e) => PhotoModel(assetEntity: e)).toList();
+        logger.d(_images.map((e) => e.assetEntity.id).toList().toString());
       } else {
         _images
             .addAll(loadImages.map((e) => PhotoModel(assetEntity: e)).toList());
@@ -138,17 +143,17 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              crossAxisSpacing: 2,
-                              mainAxisSpacing: 2,
+                              crossAxisSpacing: 3,
+                              mainAxisSpacing: 3,
                             ),
                             children: [
                               if (widget.isCamera)
                                 Container(
-                                  color: Colors.grey,
+                                  color: kColorGray3,
                                   child: const Icon(
                                     Icons.camera_alt_rounded,
                                     size: 40,
-                                    color: Colors.black,
+                                    color: kColorGray6,
                                   ),
                                 ),
                               ..._images.map(
@@ -165,48 +170,96 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
 
   Stack _buildPhoto(PhotoModel e) {
     return Stack(
-      fit: StackFit.expand,
+      // fit: StackFit.expand,
       children: [
-        AssetEntityImage(
-          e.assetEntity,
-          isOriginal: false,
-          fit: BoxFit.cover,
+        SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: AssetEntityImage(
+            e.assetEntity,
+            isOriginal: false,
+            fit: BoxFit.cover,
+          ),
         ),
         GestureDetector(
           onTap: () {
-            logger.d('onTap Container Image:$e');
-            setState(() {
-              _images = _images.map((i) {
-                if (e == i) {
-                  return e.copyWith(
-                    isSelected: !e.isSelected,
-                  );
-                } else {
-                  return i;
-                }
-              }).toList();
-            });
-            if (widget.isSingle &&
-                _images
-                        .where((element) => element.isSelected)
-                        .toList()
-                        .length ==
-                    1) {
-              Navigator.pop(
-                context,
-                _images.where((element) => element.isSelected).toList(),
-              );
+            // logger.d('onTap Container Image:${e.assetEntity.id}');
+            // logger.d('onTap Container Image:$_selectedPhoto');
+            if (_selectedPhoto.length >= widget.maxCnt &&
+                _selectedPhoto
+                    .where(
+                        (element) => element.assetEntity.id == e.assetEntity.id)
+                    .isEmpty) {
+              return;
+            }
+            if (_selectedPhoto
+                .where((element) => element.assetEntity.id == e.assetEntity.id)
+                .isEmpty) {
+              setState(() {
+                _selectedPhoto.add(e);
+              });
+            } else {
+              setState(() {
+                _selectedPhoto.removeWhere(
+                    (element) => element.assetEntity.id == e.assetEntity.id);
+              });
             }
           },
           child: Container(
             decoration: BoxDecoration(
-              border: e.isSelected
+              border: _selectedPhoto
+                      .where((element) =>
+                          element.assetEntity.id == e.assetEntity.id)
+                      .isNotEmpty
                   ? Border.all(
-                      width: 4,
-                      color: Colors.amber.withOpacity(0.9),
+                      width: 3,
+                      color: kColorYellow4,
                     )
                   : null,
             ),
+          ),
+        ),
+        Positioned(
+          right: 8,
+          top: 8,
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: _selectedPhoto
+                      .where((element) =>
+                          element.assetEntity.id == e.assetEntity.id)
+                      .isNotEmpty
+                  ? kColorYellow4
+                  : Colors.white.withOpacity(0.4),
+              border: Border.all(
+                width: 2,
+                color: _selectedPhoto
+                        .where((element) =>
+                            element.assetEntity.id == e.assetEntity.id)
+                        .isNotEmpty
+                    ? kColorYellow4
+                    : Colors.black.withOpacity(0.4),
+              ),
+              shape: BoxShape.circle,
+            ),
+            child: _selectedPhoto
+                    .where(
+                        (element) => element.assetEntity.id == e.assetEntity.id)
+                    .isNotEmpty
+                ? Text(
+                    (_selectedPhoto
+                                .map((e) => e.assetEntity.id)
+                                .toList()
+                                .indexOf(e.assetEntity.id) +
+                            1)
+                        .toString(),
+                    textAlign: TextAlign.center,
+                    style: getTsBody14Sb(context).copyWith(
+                      color: kColorGray9,
+                    ),
+                  )
+                : null,
           ),
         ),
         Positioned(
@@ -235,102 +288,128 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     );
   }
 
-  Padding _buildTop(BuildContext context) {
-    return Padding(
+  Widget _buildTop(BuildContext context) {
+    return Container(
+      height: 48,
       padding: const EdgeInsets.only(
-        right: 16,
+        left: 10,
+        right: 10,
+      ),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: kColorGray3,
+          ),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.close_rounded,
-                  color: Colors.black,
-                ),
-              ),
-              Container(
-                child: _albums.isNotEmpty
-                    ? DropdownButton(
-                        value: _currentAlbum,
-                        items: _albums
-                            .map(
-                              (e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e.name,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (Album? value) {
-                          getPhotos(
-                            value!,
-                            albumChange: true,
-                          );
-                        },
-                        elevation: 0,
-                        isDense: false,
-                        underline: Container(),
-                      )
-                    : const SizedBox(),
-              ),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                ),
-                child: Text(
-                  _images
-                      .where((element) => element.isSelected)
-                      .toList()
-                      .length
-                      .toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(
-                    context,
-                    _images.where((element) => element.isSelected).toList(),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  // color: Colors.amber,
-                  child: const Text(
-                    '완료',
-                    style: TextStyle(
-                      fontSize: 16,
-                      height: 1.6,
-                      fontWeight: FontWeight.bold,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const SizedBox(
+                    width: 44,
+                    height: 44,
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: 24,
                       color: Colors.black,
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: _albums.isNotEmpty
+                      ? DropdownButton(
+                          value: _currentAlbum,
+                          items: _albums
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e.name,
+                                    style: getTsHeading18(context).copyWith(
+                                      color: kColorGray9,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (Album? value) {
+                            getPhotos(
+                              value!,
+                              albumChange: true,
+                            );
+                          },
+                          iconEnabledColor: kColorGray9,
+                          elevation: 0,
+                          isDense: false,
+                          underline: Container(),
+                        )
+                      : const SizedBox(),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  height: 44,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (_selectedPhoto.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            _selectedPhoto.length.toString(),
+                            style: getTsBody16Rg(context).copyWith(
+                              color: kColorYellow6,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(
+                            context,
+                            _selectedPhoto,
+                          );
+                        },
+                        child: Text(
+                          '완료',
+                          style: getTsBody16Sb(context).copyWith(
+                            color: _selectedPhoto.isEmpty
+                                ? kColorGray5
+                                : kColorGray9,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -379,19 +458,15 @@ class Album {
 
 class PhotoModel {
   final AssetEntity assetEntity;
-  bool isSelected;
   PhotoModel({
     required this.assetEntity,
-    this.isSelected = false,
   });
 
   PhotoModel copyWith({
     AssetEntity? assetEntity,
-    bool? isSelected,
   }) {
     return PhotoModel(
       assetEntity: assetEntity ?? this.assetEntity,
-      isSelected: isSelected ?? this.isSelected,
     );
   }
 }
