@@ -183,22 +183,27 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
         ),
         GestureDetector(
           onTap: () {
-            // logger.d('onTap Container Image:${e.assetEntity.id}');
-            // logger.d('onTap Container Image:$_selectedPhoto');
-            if (_selectedPhoto.length >= widget.maxCnt &&
-                _selectedPhoto
-                    .where(
-                        (element) => element.assetEntity.id == e.assetEntity.id)
-                    .isEmpty) {
-              return;
-            }
             if (_selectedPhoto
                 .where((element) => element.assetEntity.id == e.assetEntity.id)
                 .isEmpty) {
-              setState(() {
-                _selectedPhoto.add(e);
-              });
+              // 비활성화 상태를 선택한 경우
+              if (_selectedPhoto.length >= widget.maxCnt) {
+                // 이미 최대 수량을 선택한 경우
+                if (widget.maxCnt == 1) {
+                  // 만약 최대 수량이 1개인 경우는 선택한 사진으로 변경
+                  setState(() {
+                    _selectedPhoto.clear();
+                    _selectedPhoto.add(e);
+                  });
+                }
+                return;
+              } else {
+                setState(() {
+                  _selectedPhoto.add(e);
+                });
+              }
             } else {
+              // 활성화 상태를 선택한 경우
               setState(() {
                 _selectedPhoto.removeWhere(
                     (element) => element.assetEntity.id == e.assetEntity.id);
