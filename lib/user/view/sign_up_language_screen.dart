@@ -3,6 +3,7 @@ import 'package:biskit_app/common/component/lang_list_widget.dart';
 import 'package:biskit_app/common/component/level_bar_widget.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
+import 'package:biskit_app/user/view/sign_up_id_confirm_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/component/filled_button_widget.dart';
@@ -146,6 +147,14 @@ class _SignUpLanguageScreenState extends ConsumerState<SignUpLanguageScreen> {
               bottom: 34,
             ),
             child: GestureDetector(
+              onTap: () {
+                if (selectedList.isEmpty) return;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpIdConfirmScreen(),
+                    ));
+              },
               child: FilledButtonWidget(
                 text: '다음',
                 isEnable: selectedList.isNotEmpty,
