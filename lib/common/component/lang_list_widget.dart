@@ -22,12 +22,18 @@ class LangListWidget extends ConsumerStatefulWidget {
 
 class _LangListWidgetState extends ConsumerState<LangListWidget> {
   late TextEditingController searchBarController;
+  String searchText = '';
   final int maxLang = 5;
 
   @override
   void initState() {
     super.initState();
-    searchBarController = TextEditingController();
+    searchBarController = TextEditingController()
+      ..addListener(() {
+        setState(() {
+          searchText = searchBarController.text;
+        });
+      });
   }
 
   @override
@@ -77,50 +83,37 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                 : SingleChildScrollView(
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
-                    child: Column(
-                      children: [
-                        ...state
-                            .map(
-                              (e) => GestureDetector(
-                                onTap: () {
-                                  // true 체크 할때 5개 제한
-                                  if (state
-                                              .where((element) =>
-                                                  element.isChecked)
-                                              .length >=
-                                          maxLang &&
-                                      e.isChecked == false) {
-                                    showDefaultModal(
-                                      context: context,
-                                      title: '$maxLang개까지 선택할 수 있어요',
-                                      buttonText: '확인',
-                                      function: () {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                    return;
-                                  }
-                                  ref
-                                      .read(useLanguageProvider.notifier)
-                                      .toggleLang(e);
-                                  if (!e.isChecked) {
-                                    onTapSelectedLevel(e);
-                                  }
-                                },
-                                child: ListTileCheckWidget(
-                                  text: e.langName,
-                                  isChkecked: e.isChecked,
-                                  isLevelView: true,
-                                  level: e.level,
-                                  onTapLevel: () {
-                                    onTapSelectedLevel(e);
+                    child: Builder(builder: (context) {
+                      final List<UseLanguage> viewList = searchText.isEmpty
+                          ? state
+                          : state
+                              .where((element) => element.langName
+                                  .toLowerCase()
+                                  .contains(searchText.toLowerCase()))
+                              .toList();
+                      return Column(
+                        children: [
+                          ...viewList
+                              .map(
+                                (e) => GestureDetector(
+                                  onTap: () {
+                                    onTapLang(e);
                                   },
+                                  child: ListTileCheckWidget(
+                                    text: e.langName,
+                                    isChkecked: e.isChecked,
+                                    isLevelView: true,
+                                    level: e.level,
+                                    onTapLevel: () {
+                                      onTapSelectedLevel(e);
+                                    },
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                      ],
-                    ),
+                              )
+                              .toList(),
+                        ],
+                      );
+                    }),
                   ),
           ),
           Padding(
@@ -164,5 +157,26 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
         ],
       ),
     );
+  }
+
+  onTapLang(UseLanguage e) {
+    final state = ref.watch(useLanguageProvider);
+    // true 체크 할때 5개 제한
+    if (state!.where((element) => element.isChecked).length >= maxLang &&
+        e.isChecked == false) {
+      showDefaultModal(
+        context: context,
+        title: '$maxLang개까지 선택할 수 있어요',
+        buttonText: '확인',
+        function: () {
+          Navigator.pop(context);
+        },
+      );
+      return;
+    }
+    ref.read(useLanguageProvider.notifier).toggleLang(e);
+    if (!e.isChecked) {
+      onTapSelectedLevel(e);
+    }
   }
 }
