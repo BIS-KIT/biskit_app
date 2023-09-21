@@ -9,25 +9,28 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/user/view/sign_up_language_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class SignUpProfileEditScreen extends StatefulWidget {
+class SignUpProfileEditScreen extends ConsumerStatefulWidget {
   const SignUpProfileEditScreen({super.key});
 
   @override
-  State<SignUpProfileEditScreen> createState() =>
+  ConsumerState<SignUpProfileEditScreen> createState() =>
       _SignUpProfileEditScreenState();
 }
 
-class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
+class _SignUpProfileEditScreenState
+    extends ConsumerState<SignUpProfileEditScreen> {
   PhotoModel? selectedPhotoModel;
 
   late final TextEditingController controller;
-  String nickName = '';
+  // String nickName = '';
   String? nickNameError;
   bool isNickNameOk = false;
 
@@ -41,6 +44,17 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
       ..addListener(() {
         onSearchChanged(controller.text);
       });
+
+    init();
+  }
+
+  init() async {
+    final res = await ref.read(profileRepositoryProvider).getRandomNickname();
+    if (res != null) {
+      String temp = res.data['kr_nick_name'] ?? '';
+
+      controller.text = temp.replaceAll(' ', '');
+    }
   }
 
   @override
@@ -61,13 +75,12 @@ class _SignUpProfileEditScreenState extends State<SignUpProfileEditScreen> {
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel();
     }
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
+    _debounce = Timer(const Duration(milliseconds: 300), () async {
       // logger.d('$value : ${value.isNickName()}');
       if (value.isNickName()) {
-        // TODO 서버 닉네임 가능 여부 확인
-        await Future.delayed(const Duration(seconds: 1));
-        // TODO 닉네임이 사용하지 못할때
-        if (value == '12') {
+        if (!await ref
+            .read(profileRepositoryProvider)
+            .getCheckNickName(value)) {
           // 이미 사용중일 때
           setState(() {
             nickNameError = '이미 사용중인 닉네임이에요';
