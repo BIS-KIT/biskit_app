@@ -234,7 +234,7 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguage>?> {
   }
 
   getList() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     logger.d('getList');
     state = [
       UseLanguage(langName: '한국어', level: 0, isChecked: false),
