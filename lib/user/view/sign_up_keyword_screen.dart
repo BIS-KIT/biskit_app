@@ -189,11 +189,12 @@ class _SignUpKeywordScreenState extends State<SignUpKeywordScreen> {
             height: 16,
           ),
           Expanded(
-            child: Text(
-              keywordList[index - 1].reason,
-              style: getTsBody14Rg(context).copyWith(
-                color: kColorGray1,
-                overflow: TextOverflow.fade,
+            child: SingleChildScrollView(
+              child: Text(
+                keywordList[index - 1].reason,
+                style: getTsBody14Rg(context).copyWith(
+                  color: kColorGray1,
+                ),
               ),
             ),
           ),
