@@ -5,6 +5,106 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../component/filled_button_widget.dart';
 import '../const/colors.dart';
 
+showBiskitBottomSheet({
+  required BuildContext context,
+  required String title,
+  double? height,
+  String? leftIcon,
+  String? rightIcon,
+  Function()? onLeftTap,
+  Function()? onRightTap,
+  bool isDismissible = true,
+  Widget? contentWidget,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    isDismissible: isDismissible,
+    backgroundColor: Colors.white,
+    clipBehavior: Clip.hardEdge,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(20),
+      ),
+    ),
+    isScrollControlled: true,
+    useSafeArea: true,
+    barrierColor: Colors.black.withOpacity(0.5),
+    builder: (context) {
+      return Material(
+        child: Container(
+          height: height,
+          color: Colors.white,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 9,
+                  horizontal: 12,
+                ),
+                child: Row(
+                  children: [
+                    // if (leftIcon)
+                    leftIcon != null
+                        ? GestureDetector(
+                            onTap: onLeftTap,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: SvgPicture.asset(
+                                leftIcon,
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(
+                            width: 44,
+                            height: 44,
+                          ),
+
+                    const SizedBox(
+                      width: 9,
+                    ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: getTsHeading18(context).copyWith(
+                          color: kColorGray9,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 9,
+                    ),
+                    rightIcon != null
+                        ? GestureDetector(
+                            onTap: onRightTap,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: SvgPicture.asset(
+                                'assets/icons/ic_cancel_line_24.svg',
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(
+                            width: 44,
+                            height: 44,
+                          ),
+                  ],
+                ),
+              ),
+              contentWidget ?? Container(),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+// TODO 문제가 많아 삭제 예정
 showDefaultModalBottomSheet({
   required BuildContext context,
   required String title,
