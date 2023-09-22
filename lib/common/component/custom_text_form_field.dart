@@ -13,12 +13,14 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final bool obscureText;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onFieldSubmitted;
   final bool readOnly;
   final Widget? suffixIcon;
   final int? maxLength;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
+  final int? maxLines;
   const CustomTextFormField({
     Key? key,
     this.textAlign = TextAlign.start,
@@ -29,12 +31,14 @@ class CustomTextFormField extends StatelessWidget {
     this.textInputAction,
     this.obscureText = false,
     required this.onChanged,
+    this.onFieldSubmitted,
     this.readOnly = false,
     this.suffixIcon,
     this.maxLength,
     this.controller,
     this.focusNode,
     this.inputFormatters,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -49,6 +53,8 @@ class CustomTextFormField extends StatelessWidget {
       ),
     );
     return TextFormField(
+      maxLines: maxLines,
+      onFieldSubmitted: onFieldSubmitted,
       textAlign: textAlign,
       controller: controller,
       focusNode: focusNode,
