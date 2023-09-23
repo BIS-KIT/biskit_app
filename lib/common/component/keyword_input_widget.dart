@@ -67,7 +67,6 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(MediaQuery.of(context).viewInsets.bottom);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -152,28 +151,17 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     ),
                   )
                 : const Spacer(),
-            // TODO 오버플로우 에러 잡아야함
-            // if (MediaQuery.of(context).viewInsets.bottom != 0)
-            // AnimatedPadding(
-            //   padding: EdgeInsets.only(
-            //     bottom: MediaQuery.of(context).viewInsets.bottom -
-            //         (16 + 34 + 52) +
-            //         20,
-            //   ),
-            //   duration: const Duration(
-            //     milliseconds: 1000,
-            //   ),
-            // ),
-            // Column(
-            //   mainAxisSize: MainAxisSize.min,
-            //   children: [
-            //     SizedBox(
-            //       height: MediaQuery.of(context).viewInsets.bottom -
-            //           (16 + 34 + 52) +
-            //           20,
-            //     ),
-            //   ],
-            // ),
+            if (MediaQuery.of(context).viewInsets.bottom > 150)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).viewInsets.bottom -
+                        (16 + 34 + 52) +
+                        20,
+                  ),
+                ],
+              ),
             Padding(
               padding: const EdgeInsets.only(
                 top: 16,
