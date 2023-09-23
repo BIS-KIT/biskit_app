@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -152,15 +153,28 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
             // 사진들
             isAlbumView
                 ? Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
-                      child: Column(
-                        children: _albums
-                            .map((e) => _buildAlbum(e, context))
-                            .toList(),
-                      ),
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                          ),
+                          child: Column(
+                            children: _albums
+                                .map((e) => _buildAlbum(e, context))
+                                .toList(),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                        ).animate().scaleY(
+                              begin: 1,
+                              end: 0,
+                              alignment: Alignment.bottomCenter,
+                              curve: Curves.easeOut,
+                              duration: 300.ms,
+                            ),
+                      ],
                     ),
                   )
                 : _buildPhotos(),

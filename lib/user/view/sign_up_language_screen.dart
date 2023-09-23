@@ -249,6 +249,7 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguage>?> {
   }
 
   getList() async {
+    // TODO 언어가져오기 확인
     final result = await utilRepository.getLanguages();
     // await Future.delayed(const Duration(seconds: 1));
     // logger.d('getList');
