@@ -1,4 +1,4 @@
-import 'package:biskit_app/common/model/university_model.dart';
+import 'package:biskit_app/common/model/university_student_status_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -6,14 +6,12 @@ import 'package:biskit_app/common/component/checkbox_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 
-class ListTileUnivDepartmentWidget extends StatelessWidget {
-  final bool isCheck;
+class ListTileUnivStudentStatusWidget extends StatelessWidget {
+  final UniversityStudentStatusModel model;
   final Function()? onTap;
-  final String department;
-  const ListTileUnivDepartmentWidget({
+  const ListTileUnivStudentStatusWidget({
     Key? key,
-    required this.isCheck,
-    required this.department,
+    required this.model,
     this.onTap,
   }) : super(key: key);
 
@@ -34,14 +32,14 @@ class ListTileUnivDepartmentWidget extends StatelessWidget {
         child: Row(
           children: [
             CheckboxWidget(
-              value: isCheck,
+              value: model.isCheck,
             ),
             const SizedBox(
               width: 12,
             ),
             Expanded(
               child: Text(
-                department,
+                context.locale.countryCode == 'KR' ? model.kname : model.ename,
                 style: getTsBody16Rg(context).copyWith(
                   color: kColorGray8,
                 ),

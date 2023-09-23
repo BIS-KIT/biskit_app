@@ -4,10 +4,7 @@ import 'package:biskit_app/common/component/univ_list_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/model/university_model.dart';
-import 'package:biskit_app/common/utils/json_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class UniversityScreen extends StatefulWidget {
@@ -19,93 +16,15 @@ class UniversityScreen extends StatefulWidget {
 }
 
 class _UniversityScreenState extends State<UniversityScreen> {
-  List<UniversityModel> univerisyList = [];
-  List<UniversityModel> tempList = [];
-  UniversityModel? selectedModel;
-  final TextEditingController textEditingController = TextEditingController();
-  bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
-    init();
-  }
-
-  init() async {
-    setState(() {
-      isLoading = true;
-    });
-    final List data = await readJson(
-      jsonPath: 'assets/jsons/university.json',
-    );
-
-    if (!mounted) return;
-    if (context.locale.languageCode == kEn) {
-      // 영문
-      setState(() {
-        univerisyList = data
-            .map((d) => UniversityModel(
-                code: d['code'], ename: d['ename'], kname: d['kname']))
-            .toList();
-        univerisyList.sort((a, b) {
-          return a.ename.toLowerCase().compareTo(b.ename.toLowerCase());
-        });
-      });
-    } else {
-      // 국문
-      setState(() {
-        univerisyList = data
-            .map((d) => UniversityModel(
-                code: d['code'], ename: d['ename'], kname: d['kname']))
-            .toList();
-      });
-    }
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    textEditingController.dispose();
-    super.dispose();
-  }
-
-  void onTapTile(UniversityModel model) {
-    setState(() {
-      univerisyList = univerisyList.map((n) {
-        if (n.ename == model.ename) {
-          selectedModel = model;
-          return model.copyWith(isCheck: true);
-        } else {
-          return n.copyWith(isCheck: false);
-        }
-      }).toList();
-    });
-  }
-
-  onChanged(String value) {
-    if (value.isEmpty) {
-      setState(() {
-        tempList = [];
-      });
-    } else {
-      List<UniversityModel> searchList = univerisyList
-          .where((n) => '${n.ename.toLowerCase()} ${n.kname.toLowerCase()}'
-              .contains(value.toLowerCase()))
-          .toList();
-      setState(() {
-        tempList = searchList;
-      });
-    }
   }
 
   onTapSelectedUniv() {
     showDefaultModalBottomSheet(
       context: context,
       title: '학교 선택',
-      titleLeftButton: true,
       titleRightButton: true,
       contentWidget: const UnivListWidget(),
     );
@@ -163,7 +82,7 @@ class _UniversityScreenState extends State<UniversityScreen> {
               ),
               child: GestureDetector(
                 onTap: () {},
-                child: const FilledButtonWidget(text: '다음', isEnable: true),
+                child: const FilledButtonWidget(text: '다음', isEnable: false),
               ),
             ),
           ],
