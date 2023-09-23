@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
@@ -28,12 +29,15 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
   bool isLoading = false;
   final List<PhotoModel> _selectedPhoto = []; // 모든 파일 정보
   List<AssetPathEntity>? _paths; // 모든 파일 정보
-  List<Album> _albums = []; // 드롭다운 앨범 목록
+  final List<Album> _albums = []; // 드롭다운 앨범 목록
   List<PhotoModel> _images = []; // 앨범의 이미지 목록
   int _currentPage = 0; // 현재 페이지
   late Album _currentAlbum; // 드롭다운 선택된 앨범
 
-  PhotoModel? viewPhoto;
+  // 미리보기용 사진
+  // PhotoModel? viewPhoto;
+
+  bool isAlbumView = false;
 
   ScrollController scrollController = ScrollController();
 
@@ -83,13 +87,26 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
       type: RequestType.image,
     );
 
-    _albums = _paths!.map((e) {
-      // logger.d(e);
-      return Album(
-        id: e.id,
-        name: e.isAll ? '모든 사진' : e.name,
+    for (var path in _paths!) {
+      _albums.add(
+        Album(
+          id: path.id,
+          name: path.isAll ? '최근 항목' : path.name,
+          count: await path.assetCountAsync,
+          thumbnail: (await path.getAssetListRange(start: 0, end: 1))[0],
+        ),
       );
-    }).toList();
+    }
+
+    // _albums = _paths!.map((e) {
+    //   // logger.d(e);
+
+    //   return Album(
+    //     id: e.id,
+    //     name: e.isAll ? '모든 사진' : e.name,
+    //     count: await e.assetCountAsync,
+    //   );
+    // }).toList();
 
     await getPhotos(_albums[0], albumChange: true);
   }
@@ -128,43 +145,118 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       child: SafeArea(
-        child: viewPhoto != null
-            ? _buildPreview()
-            : Column(
-                children: [
-                  _buildTop(context),
+        child: Column(
+          children: [
+            _buildTop(context),
 
-                  // 사진들
-                  Expanded(
-                    child: isLoading
-                        ? const CircularProgressIndicator()
-                        : GridView(
-                            controller: scrollController,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 3,
-                              mainAxisSpacing: 3,
-                            ),
-                            children: [
-                              if (widget.isCamera)
-                                Container(
-                                  color: kColorGray3,
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    size: 40,
-                                    color: kColorGray6,
-                                  ),
-                                ),
-                              ..._images.map(
-                                (e) => _buildPhoto(e),
-                              ),
-                            ],
-                          ),
-                  ),
-                ],
-              ),
+            // 사진들
+            isAlbumView
+                ? Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: Column(
+                        children: _albums
+                            .map((e) => _buildAlbum(e, context))
+                            .toList(),
+                      ),
+                    ),
+                  )
+                : _buildPhotos(),
+          ],
+        ),
       ),
+    );
+  }
+
+  GestureDetector _buildAlbum(Album e, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        getPhotos(
+          e,
+          albumChange: true,
+        );
+        setState(() {
+          isAlbumView = !isAlbumView;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: kColorGray3,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              child: AssetEntityImage(
+                e.thumbnail,
+                width: 64,
+                height: 64,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  e.name,
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorGray8,
+                  ),
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  e.count.toString(),
+                  style: getTsCaption12Rg(context).copyWith(
+                    color: kColorGray6,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded _buildPhotos() {
+    return Expanded(
+      child: isLoading
+          ? const CircularProgressIndicator()
+          : GridView(
+              controller: scrollController,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 3,
+                mainAxisSpacing: 3,
+              ),
+              children: [
+                if (widget.isCamera)
+                  Container(
+                    color: kColorGray3,
+                    child: const Icon(
+                      Icons.camera_alt_rounded,
+                      size: 40,
+                      color: kColorGray6,
+                    ),
+                  ),
+                ..._images.map(
+                  (e) => _buildPhoto(e),
+                ),
+              ],
+            ),
     );
   }
 
@@ -267,28 +359,29 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 : null,
           ),
         ),
-        Positioned(
-          bottom: 0,
-          child: GestureDetector(
-            onTap: () {
-              // preview
-              logger.d('onTap fullscreen:${e.assetEntity}');
-              setState(() {
-                viewPhoto = e;
-              });
-            },
-            child: Container(
-              margin: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4),
-              ),
-              child: const Icon(
-                Icons.fullscreen_sharp,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
+        // preview button
+        // Positioned(
+        //   bottom: 0,
+        //   child: GestureDetector(
+        //     onTap: () {
+        //       // preview
+        //       logger.d('onTap fullscreen:${e.assetEntity}');
+        //       setState(() {
+        //         viewPhoto = e;
+        //       });
+        //     },
+        //     child: Container(
+        //       margin: const EdgeInsets.all(6),
+        //       decoration: BoxDecoration(
+        //         color: Colors.black.withOpacity(0.4),
+        //       ),
+        //       child: const Icon(
+        //         Icons.fullscreen_sharp,
+        //         color: Colors.white,
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -312,6 +405,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
+            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -333,43 +427,54 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  child: _albums.isNotEmpty
-                      ? DropdownButton(
-                          value: _currentAlbum,
-                          items: _albums
-                              .map(
-                                (e) => DropdownMenuItem(
-                                  value: e,
+                _albums.isNotEmpty
+                    ? Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isAlbumView = !isAlbumView;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 12,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
                                   child: Text(
-                                    e.name,
+                                    _currentAlbum.name,
+                                    overflow: TextOverflow.ellipsis,
                                     style: getTsHeading18(context).copyWith(
                                       color: kColorGray9,
                                     ),
                                   ),
                                 ),
-                              )
-                              .toList(),
-                          onChanged: (Album? value) {
-                            getPhotos(
-                              value!,
-                              albumChange: true,
-                            );
-                          },
-                          iconEnabledColor: kColorGray9,
-                          elevation: 0,
-                          isDense: false,
-                          underline: Container(),
-                        )
-                      : const SizedBox(),
-                ),
+                                SvgPicture.asset(
+                                  isAlbumView
+                                      ? 'assets/icons/ic_arrow_drop_up_fill_24.svg'
+                                      : 'assets/icons/ic_arrow_drop_down_fill_24.svg',
+                                  width: 24,
+                                  height: 24,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    // _buildDropdownButton(context)
+                    : const SizedBox(),
               ],
             ),
           ),
           Expanded(
+            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -421,43 +526,76 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     );
   }
 
-  Stack _buildPreview() {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            Expanded(
-              child: AssetEntityImage(
-                viewPhoto!.assetEntity,
-                isOriginal: true,
-                fit: BoxFit.contain,
+  // ignore: unused_element
+  DropdownButton<Album> _buildDropdownButton(BuildContext context) {
+    return DropdownButton(
+      value: _currentAlbum,
+      items: _albums
+          .map(
+            (e) => DropdownMenuItem(
+              value: e,
+              child: Text(
+                e.name,
+                style: getTsHeading18(context).copyWith(
+                  color: kColorGray9,
+                ),
               ),
             ),
-          ],
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              viewPhoto = null;
-            });
-          },
-          icon: const Icon(
-            Icons.close_rounded,
-            color: Colors.black,
-          ),
-        ),
-      ],
+          )
+          .toList(),
+      onChanged: (Album? value) {
+        getPhotos(
+          value!,
+          albumChange: true,
+        );
+      },
+      iconEnabledColor: kColorGray9,
+      elevation: 0,
+      isDense: false,
+      underline: Container(),
     );
   }
+
+  // Stack _buildPreview() {
+  //   return Stack(
+  //     children: [
+  //       Column(
+  //         children: [
+  //           Expanded(
+  //             child: AssetEntityImage(
+  //               viewPhoto!.assetEntity,
+  //               isOriginal: true,
+  //               fit: BoxFit.contain,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //       IconButton(
+  //         onPressed: () {
+  //           setState(() {
+  //             viewPhoto = null;
+  //           });
+  //         },
+  //         icon: const Icon(
+  //           Icons.close_rounded,
+  //           color: Colors.black,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
 
 class Album {
-  String id;
-  String name;
-
+  final String id;
+  final String name;
+  final int count;
+  final AssetEntity thumbnail;
   Album({
     required this.id,
     required this.name,
+    required this.count,
+    required this.thumbnail,
   });
 }
 
