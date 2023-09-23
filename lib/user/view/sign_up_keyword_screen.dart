@@ -20,6 +20,22 @@ class SignUpKeywordScreen extends StatefulWidget {
 class _SignUpKeywordScreenState extends State<SignUpKeywordScreen> {
   final List<KeywordModel> keywordList = [];
 
+  void onTapKeywordDelete(int index) {
+    showConfirmModal(
+      context: context,
+      leftCall: () {
+        Navigator.pop(context);
+      },
+      rightCall: () {
+        setState(() {
+          keywordList.removeAt(index - 1);
+        });
+        Navigator.pop(context);
+      },
+      title: '삭제하시겠어요?',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -162,9 +178,7 @@ class _SignUpKeywordScreenState extends State<SignUpKeywordScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    keywordList.removeAt(index - 1);
-                  });
+                  onTapKeywordDelete(index);
                 },
                 child: SvgPicture.asset(
                   'assets/icons/ic_cancel_line_24.svg',

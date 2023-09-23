@@ -10,6 +10,8 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
+import 'package:biskit_app/user/view/sign_up_keyword_screen.dart';
+import 'package:biskit_app/user/view/sign_up_language_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -254,6 +256,32 @@ class _TestScreenState extends State<TestScreen> {
                       ));
                 },
                 child: const Text('회원가입 완료 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpLanguageScreen(),
+                      ));
+                },
+                child: const Text('사용언어 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpKeywordScreen(),
+                      ));
+                },
+                child: const Text('키워드 화면'),
               ),
 
               const SizedBox(
