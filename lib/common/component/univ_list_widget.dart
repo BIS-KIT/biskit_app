@@ -5,16 +5,14 @@ import 'package:biskit_app/common/component/search_bar_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/utils/json_util.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class UnivListWidget extends StatefulWidget {
-  final Function() callback;
-
   const UnivListWidget({
     super.key,
-    required this.callback,
   });
 
   @override
@@ -26,18 +24,12 @@ class _UnivListWidgetState extends State<UnivListWidget> {
   List<UniversityModel> tempList = [];
   UniversityModel? selectedModel;
   bool isLoading = false;
-  late TextEditingController searchBarController;
+  final TextEditingController searchBarController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    searchBarController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    searchBarController.dispose();
+    init();
   }
 
   init() async {
@@ -75,20 +67,10 @@ class _UnivListWidgetState extends State<UnivListWidget> {
     });
   }
 
-  onChanged(String value) {
-    if (value.isEmpty) {
-      setState(() {
-        tempList = [];
-      });
-    } else {
-      List<UniversityModel> searchList = univerisyList
-          .where((n) => '${n.ename.toLowerCase()} ${n.kname.toLowerCase()}'
-              .contains(value.toLowerCase()))
-          .toList();
-      setState(() {
-        tempList = searchList;
-      });
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    searchBarController.dispose();
   }
 
   void onTapTile(UniversityModel model) {
@@ -102,6 +84,23 @@ class _UnivListWidgetState extends State<UnivListWidget> {
         }
       }).toList();
     });
+  }
+
+  onChanged(String value) {
+    logger.d(univerisyList);
+    if (value.isEmpty) {
+      setState(() {
+        tempList = [];
+      });
+    } else {
+      List<UniversityModel> searchList = univerisyList
+          .where((n) => '${n.ename.toLowerCase()} ${n.kname.toLowerCase()}'
+              .contains(value.toLowerCase()))
+          .toList();
+      setState(() {
+        tempList = searchList;
+      });
+    }
   }
 
   @override
@@ -149,17 +148,13 @@ class _UnivListWidgetState extends State<UnivListWidget> {
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 showDefaultModalBottomSheet(
                   context: context,
                   title: '소속 선택',
                   titleLeftButton: true,
-                  titleRightButton: true, height: 388,
-                  // MediaQuery.of(context)
-                  //         .size
-                  //         .height -
-                  //     MediaQuery.of(context).padding.top -
-                  //     424,
+                  titleRightButton: true,
+                  height: 388,
                   contentWidget: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -190,7 +185,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
                             showDefaultModalBottomSheet(
                               context: context,
                               title: '학적상태 선택',
@@ -247,7 +242,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                             ),
                             child: FilledButtonWidget(
                               text: '다음',
-                              isEnable: false,
+                              isEnable: true,
                             ),
                           ),
                         )
@@ -256,6 +251,10 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                   ),
                 );
               },
+              child: const FilledButtonWidget(
+                text: '완료',
+                isEnable: false,
+              ),
             ),
           ),
         ],
