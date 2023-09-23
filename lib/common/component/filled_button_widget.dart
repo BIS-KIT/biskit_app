@@ -10,12 +10,16 @@ class FilledButtonWidget extends StatelessWidget {
   final bool isEnable;
   final String? leftIconPath;
   final double height;
+  final Color backgroundColor;
+  final Color fontColor;
   const FilledButtonWidget({
     Key? key,
     required this.text,
     required this.isEnable,
     this.leftIconPath,
     this.height = 56,
+    this.backgroundColor = kColorYellow3,
+    this.fontColor = kColorGray9,
   }) : super(key: key);
 
   @override
@@ -27,7 +31,7 @@ class FilledButtonWidget extends StatelessWidget {
         horizontal: 16,
       ),
       decoration: BoxDecoration(
-        color: isEnable ? kColorYellow3 : kColorGray2,
+        color: isEnable ? backgroundColor : kColorGray2,
         // border: Border.all(
         //   width: 0.5,
         //   color: isEnable ? kColorYellow3 : kColorGray2,
@@ -41,7 +45,7 @@ class FilledButtonWidget extends StatelessWidget {
           ? Text(
               text,
               style: getTsBody16Sb(context).copyWith(
-                color: isEnable ? kColorGray9 : kColorGray5,
+                color: isEnable ? fontColor : kColorGray5,
               ),
             )
           : Row(
@@ -53,7 +57,7 @@ class FilledButtonWidget extends StatelessWidget {
                   child: SvgPicture.asset(
                     leftIconPath!,
                     colorFilter: ColorFilter.mode(
-                      isEnable ? kColorGray9 : kColorGray5,
+                      isEnable ? fontColor : kColorGray5,
                       BlendMode.srcIn,
                     ),
                   ),
@@ -64,7 +68,7 @@ class FilledButtonWidget extends StatelessWidget {
                 Text(
                   text,
                   style: getTsBody16Sb(context).copyWith(
-                    color: isEnable ? kColorGray9 : kColorGray5,
+                    color: isEnable ? fontColor : kColorGray5,
                   ),
                 ),
               ],

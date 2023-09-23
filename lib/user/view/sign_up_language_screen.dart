@@ -1,19 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/component/lang_level_list_widget.dart';
 import 'package:biskit_app/common/component/lang_list_widget.dart';
 import 'package:biskit_app/common/component/level_bar_widget.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/common/utils/string_util.dart';
-import 'package:biskit_app/user/view/sign_up_keyword_screen.dart';
-import 'package:flutter/material.dart';
-
-import 'package:biskit_app/common/component/filled_button_widget.dart';
 import 'package:biskit_app/common/component/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:biskit_app/user/view/sign_up_keyword_screen.dart';
 
 class SignUpLanguageScreen extends ConsumerStatefulWidget {
   const SignUpLanguageScreen({super.key});
@@ -233,34 +234,40 @@ class _SignUpLanguageScreenState extends ConsumerState<SignUpLanguageScreen> {
 
 final useLanguageProvider =
     StateNotifierProvider<UseLanguageStateNotifier, List<UseLanguage>?>((ref) {
-  return UseLanguageStateNotifier();
+  return UseLanguageStateNotifier(
+    utilRepository: ref.watch(utilRepositoryProvider),
+  );
 });
 
 // TODO 임시 클래스
 class UseLanguageStateNotifier extends StateNotifier<List<UseLanguage>?> {
-  UseLanguageStateNotifier() : super(null) {
+  final UtilRepository utilRepository;
+  UseLanguageStateNotifier({
+    required this.utilRepository,
+  }) : super(null) {
     getList();
   }
 
   getList() async {
-    await Future.delayed(const Duration(seconds: 1));
-    logger.d('getList');
-    state = [
-      UseLanguage(langName: '한국어', level: 0, isChecked: false),
-      UseLanguage(langName: '영어', level: 0, isChecked: false),
-      UseLanguage(langName: '중국어', level: 0, isChecked: false),
-      UseLanguage(langName: '일본어', level: 0, isChecked: false),
-      UseLanguage(langName: '스페인어', level: 0, isChecked: false),
-      UseLanguage(langName: '프랑스어', level: 0, isChecked: false),
-      UseLanguage(langName: '러시아어', level: 0, isChecked: false),
-      UseLanguage(langName: '아랍어', level: 0, isChecked: false),
-      UseLanguage(langName: '안녕어', level: 0, isChecked: false),
-      UseLanguage(langName: '유럽어', level: 0, isChecked: false),
-      UseLanguage(langName: '외계인어', level: 0, isChecked: false),
-      UseLanguage(langName: '애니어', level: 0, isChecked: false),
-      UseLanguage(langName: '밈어', level: 0, isChecked: false),
-      UseLanguage(langName: '껨어', level: 0, isChecked: false),
-    ];
+    final result = await utilRepository.getLanguages();
+    // await Future.delayed(const Duration(seconds: 1));
+    // logger.d('getList');
+    // state = [
+    //   UseLanguage(langName: '한국어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '영어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '중국어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '일본어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '스페인어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '프랑스어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '러시아어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '아랍어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '안녕어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '유럽어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '외계인어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '애니어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '밈어', level: 0, isChecked: false),
+    //   UseLanguage(langName: '껨어', level: 0, isChecked: false),
+    // ];
   }
 
   toggleLang(UseLanguage useLanguage) {

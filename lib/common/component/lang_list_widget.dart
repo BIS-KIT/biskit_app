@@ -63,6 +63,27 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
     );
   }
 
+  onTapLang(UseLanguage e) {
+    final state = ref.watch(useLanguageProvider);
+    // true 체크 할때 5개 제한
+    if (state!.where((element) => element.isChecked).length >= maxLang &&
+        e.isChecked == false) {
+      showDefaultModal(
+        context: context,
+        title: '$maxLang개까지 선택할 수 있어요',
+        buttonText: '확인',
+        function: () {
+          Navigator.pop(context);
+        },
+      );
+      return;
+    }
+    ref.read(useLanguageProvider.notifier).toggleLang(e);
+    if (!e.isChecked) {
+      onTapSelectedLevel(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(useLanguageProvider);
@@ -157,26 +178,5 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
         ],
       ),
     );
-  }
-
-  onTapLang(UseLanguage e) {
-    final state = ref.watch(useLanguageProvider);
-    // true 체크 할때 5개 제한
-    if (state!.where((element) => element.isChecked).length >= maxLang &&
-        e.isChecked == false) {
-      showDefaultModal(
-        context: context,
-        title: '$maxLang개까지 선택할 수 있어요',
-        buttonText: '확인',
-        function: () {
-          Navigator.pop(context);
-        },
-      );
-      return;
-    }
-    ref.read(useLanguageProvider.notifier).toggleLang(e);
-    if (!e.isChecked) {
-      onTapSelectedLevel(e);
-    }
   }
 }

@@ -152,17 +152,28 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     ),
                   )
                 : const Spacer(),
-            if (MediaQuery.of(context).viewInsets.bottom != 0)
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom -
-                        (16 + 34 + 52) +
-                        20,
-                  ),
-                ],
-              ),
+            // TODO 오버플로우 에러 잡아야함
+            // if (MediaQuery.of(context).viewInsets.bottom != 0)
+            // AnimatedPadding(
+            //   padding: EdgeInsets.only(
+            //     bottom: MediaQuery.of(context).viewInsets.bottom -
+            //         (16 + 34 + 52) +
+            //         20,
+            //   ),
+            //   duration: const Duration(
+            //     milliseconds: 1000,
+            //   ),
+            // ),
+            // Column(
+            //   mainAxisSize: MainAxisSize.min,
+            //   children: [
+            //     SizedBox(
+            //       height: MediaQuery.of(context).viewInsets.bottom -
+            //           (16 + 34 + 52) +
+            //           20,
+            //     ),
+            //   ],
+            // ),
             Padding(
               padding: const EdgeInsets.only(
                 top: 16,

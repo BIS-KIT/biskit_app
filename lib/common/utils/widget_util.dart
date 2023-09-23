@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/component/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -217,6 +218,110 @@ showSnackBar({
       backgroundColor: Colors.black,
       padding: const EdgeInsets.all(16),
     ),
+  );
+}
+
+showConfirmModal({
+  required BuildContext context,
+  String title = '',
+  String content = '',
+  String leftButton = '취소',
+  Color? leftColor,
+  String rightButton = '확인',
+  Color? rightColor,
+  required Function leftCall,
+  required Function rightCall,
+}) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        buttonPadding: EdgeInsets.zero,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        titlePadding: const EdgeInsets.only(
+          top: 32,
+          left: 20,
+          right: 20,
+          bottom: 0,
+        ),
+        contentPadding: EdgeInsets.only(
+          top: content.isEmpty ? 0 : 8,
+          left: content.isEmpty ? 0 : 20,
+          right: content.isEmpty ? 0 : 20,
+        ),
+        actionsPadding: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 24,
+          bottom: 20,
+        ),
+        alignment: Alignment.center,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              12,
+            ),
+          ),
+        ),
+        title: SizedBox(
+          width: 287,
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: getTsHeading18(context).copyWith(
+              color: kColorGray9,
+            ),
+          ),
+        ),
+        content: content.isEmpty
+            ? null
+            : Text(
+                content,
+                textAlign: TextAlign.center,
+                style: getTsBody16Rg(context).copyWith(
+                  color: kColorGray7,
+                ),
+              ),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    leftCall();
+                  },
+                  child: OutlinedButtonWidget(
+                    text: leftButton,
+                    isEnable: true,
+                    height: 44,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    rightCall();
+                  },
+                  child: FilledButtonWidget(
+                    text: rightButton,
+                    isEnable: true,
+                    backgroundColor: kColorDangerDark,
+                    fontColor: Colors.white,
+                    height: 44,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
   );
 }
 
