@@ -26,6 +26,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
   bool isLoading = false;
   bool isUnivSelected = false;
   final TextEditingController searchBarController = TextEditingController();
+  String selectedUniv = '';
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
       titleLeftButton: true,
       titleRightButton: true,
       height: 388,
-      contentWidget: const UnivStudentStatusListWidget(),
+      contentWidget: UnivStudentStatusListWidget(selectedUniv: selectedUniv),
     );
   }
 
@@ -142,6 +143,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                                         onTapTile(e);
                                         setState(() {
                                           isUnivSelected = true;
+                                          selectedUniv = e.kname;
                                         });
                                       },
                                     ))
@@ -153,6 +155,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                                         onTapTile(e);
                                         setState(() {
                                           isUnivSelected = true;
+                                          selectedUniv = e.kname;
                                         });
                                       },
                                     ))

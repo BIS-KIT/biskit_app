@@ -9,8 +9,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class UnivStudentStatusListWidget extends StatefulWidget {
+  final String? selectedUniv;
   const UnivStudentStatusListWidget({
     super.key,
+    this.selectedUniv,
   });
 
   @override
@@ -37,9 +39,12 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
       title: '학적상태 선택',
       titleLeftButton: true,
       titleRightButton: true,
-      height: 388,
-      contentWidget:
-          UnivGraduateStatusListWidget(selected: selectedStudentStatus),
+      height: selectedStudentStatus == '학부' || selectedStudentStatus == '대학원'
+          ? 332
+          : 276,
+      contentWidget: UnivGraduateStatusListWidget(
+          selectedUniv: widget.selectedUniv,
+          selectedStudentStatus: selectedStudentStatus),
     );
   }
 

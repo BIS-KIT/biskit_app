@@ -3,14 +3,17 @@ import 'package:biskit_app/common/component/list_tile_univ_graduate_status_widge
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/utils/json_util.dart';
+import 'package:biskit_app/user/view/sign_up_university_completed_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class UnivGraduateStatusListWidget extends StatefulWidget {
-  final String? selected;
+  final String? selectedStudentStatus;
+  final String? selectedUniv;
   const UnivGraduateStatusListWidget({
     super.key,
-    this.selected,
+    this.selectedStudentStatus,
+    this.selectedUniv,
   });
 
   @override
@@ -23,7 +26,8 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
   UniversityGraduateStatusModel? selectedModel;
   bool isLoading = false;
   bool isStudentGraduateSelected = false;
-
+  String selectedGraduateStatus = '';
+  List? data;
   @override
   void initState() {
     super.initState();
@@ -34,17 +38,22 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
     setState(() {
       isLoading = true;
     });
-    final List data =
-        // if(selected)
-        await readJson(
-      jsonPath: 'assets/jsons/university-graduate-status.json',
-    );
+    if (widget.selectedStudentStatus == "학부" ||
+        widget.selectedStudentStatus == "대학원") {
+      data = await readJson(
+        jsonPath: 'assets/jsons/university-graduate-status.json',
+      );
+    } else {
+      data = await readJson(
+        jsonPath: 'assets/jsons/university-graduate-foreign-status.json',
+      );
+    }
 
     if (!mounted) return;
     if (context.locale.languageCode == kEn) {
       // 영문
       setState(() {
-        univerisyGraduateStatusList = data
+        univerisyGraduateStatusList = data!
             .map((d) => UniversityGraduateStatusModel(
                 ename: d['ename'], kname: d['kname']))
             .toList();
@@ -55,7 +64,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
     } else {
       // 국문
       setState(() {
-        univerisyGraduateStatusList = data
+        univerisyGraduateStatusList = data!
             .map((d) => UniversityGraduateStatusModel(
                 ename: d['ename'], kname: d['kname']))
             .toList();
@@ -107,6 +116,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                                         onTapTile(e);
                                         setState(() {
                                           isStudentGraduateSelected = true;
+                                          selectedGraduateStatus = e.kname;
                                         });
                                       },
                                     ))
@@ -118,6 +128,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                                         onTapTile(e);
                                         setState(() {
                                           isStudentGraduateSelected = true;
+                                          selectedGraduateStatus = e.kname;
                                         });
                                       },
                                     ))
@@ -131,7 +142,14 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
             ),
             child: GestureDetector(
               onTap: () {
-                // Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UniversityCompletedScreen(
+                          selectedUniv: widget.selectedUniv,
+                          selectedStudentStatus: widget.selectedStudentStatus,
+                          selectedGraduateStatus: selectedGraduateStatus)),
+                );
               },
               child: FilledButtonWidget(
                 text: '완료',
