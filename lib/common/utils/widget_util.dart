@@ -144,14 +144,18 @@ showDefaultModalBottomSheet({
                 children: [
                   // if (titleLeftButton)
                   titleLeftButton
-                      ? Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SvgPicture.asset(
-                            'assets/icons/ic_arrow_back_ios_line_24.svg',
-                            width: 24,
-                            height: 24,
-                          ),
-                        )
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_arrow_back_ios_line_24.svg',
+                              width: 24,
+                              height: 24,
+                            ),
+                          ))
                       : const SizedBox(
                           width: 44,
                           height: 44,
