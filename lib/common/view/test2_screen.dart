@@ -2,7 +2,7 @@ import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
-import 'package:biskit_app/user/view/university_screen.dart';
+import 'package:biskit_app/user/view/sign_up_university_screen.dart';
 import 'package:flutter/material.dart';
 
 class Test2Screen extends StatefulWidget {
