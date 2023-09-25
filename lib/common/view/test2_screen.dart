@@ -2,6 +2,7 @@ import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_university_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,9 @@ class _Test2ScreenState extends State<Test2Screen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const NameBirthGenderScreen(),
+                        builder: (context) => NameBirthGenderScreen(
+                          signUpModel: SignUpModel(),
+                        ),
                       ));
                 },
                 child: const FullBleedButtonWidget(
@@ -45,7 +48,9 @@ class _Test2ScreenState extends State<Test2Screen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: ((context) => const UniversityScreen()),
+                        builder: ((context) => UniversityScreen(
+                              signUpModel: SignUpModel(),
+                            )),
                       ));
                 },
                 child:

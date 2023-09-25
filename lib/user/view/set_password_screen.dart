@@ -1,4 +1,4 @@
-import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,14 +10,19 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
+import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/set_password_completed_screen.dart';
 
 class SetPasswordScreen extends ConsumerStatefulWidget {
   static String get routeName => 'setPassword';
 
+  final SignUpModel? signUpModel;
+
   final String title;
   const SetPasswordScreen({
     super.key,
+    this.signUpModel,
     required this.title,
   });
 
@@ -187,7 +192,12 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                   onTap: () {
                     if (widget.title.isEmpty) {
                       // 회원가입시
-                      context.pushNamed(NameBirthGenderScreen.routeName);
+                      context.pushNamed(
+                        NameBirthGenderScreen.routeName,
+                        extra: widget.signUpModel!.copyWith(
+                          password: password,
+                        ),
+                      );
                     } else {
                       // 비밀번호 재설정
                       context.pushReplacementNamed(

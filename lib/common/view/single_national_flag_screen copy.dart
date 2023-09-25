@@ -1,3 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/list_tile_img_widget.dart';
@@ -7,17 +13,19 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
 import 'package:biskit_app/common/view/multi_national_flag_screen.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_university_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../repository/util_repository.dart';
 
 class SingleNationalFlagScreen extends ConsumerStatefulWidget {
   static String get routeName => 'singleNationalFlag';
-  const SingleNationalFlagScreen({super.key});
+
+  final SignUpModel signUpModel;
+  const SingleNationalFlagScreen({
+    super.key,
+    required this.signUpModel,
+  });
 
   @override
   ConsumerState<SingleNationalFlagScreen> createState() =>
@@ -190,8 +198,9 @@ class _SingleNationalFlagScreenState
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const MultiNationalFlagScreen(),
+                              builder: (context) => MultiNationalFlagScreen(
+                                signUpModel: widget.signUpModel,
+                              ),
                             ));
                       },
                       child: Text(

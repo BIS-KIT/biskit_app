@@ -1,3 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:biskit_app/common/components/custom_text_form_field.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
@@ -6,13 +12,16 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 
 class NameBirthGenderScreen extends StatefulWidget {
   static String get routeName => 'nameBirthGender';
-  const NameBirthGenderScreen({super.key});
+
+  final SignUpModel signUpModel;
+  const NameBirthGenderScreen({
+    Key? key,
+    required this.signUpModel,
+  }) : super(key: key);
 
   @override
   State<NameBirthGenderScreen> createState() => _NameBirthGenderScreenState();
@@ -38,6 +47,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   @override
   void initState() {
     super.initState();
+    logger.d(widget.signUpModel.toString());
     nameFocusNode = FocusNode();
     birthMonthFocusNode = FocusNode();
     birthDayFocusNode = FocusNode();
@@ -359,7 +369,16 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                 //     MaterialPageRoute(
                 //       builder: (context) => const SingleNationalFlagScreen(),
                 //     ));
-                context.pushNamed(SingleNationalFlagScreen.routeName);
+                context.pushNamed(
+                  SingleNationalFlagScreen.routeName,
+                  extra: widget.signUpModel.copyWith(
+                    name: name,
+                    birth: '2023-09-23',
+                    gender: selectGender == SelectWidgetValueType.left
+                        ? 'female'
+                        : 'male',
+                  ),
+                );
               },
               child: FullBleedButtonWidget(
                 text: '다음',

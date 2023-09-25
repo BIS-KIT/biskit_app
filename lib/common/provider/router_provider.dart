@@ -4,6 +4,7 @@ import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/root_tab.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
@@ -77,39 +78,51 @@ class RouteProvider extends ChangeNotifier {
                     GoRoute(
                       path: 'signUpEmail',
                       name: SignUpEmailScreen.routeName,
-                      builder: (_, __) => const SignUpEmailScreen(),
+                      builder: (_, state) {
+                        return SignUpEmailScreen(
+                          signUpModel: state.extra as SignUpModel,
+                        );
+                      },
                       routes: [
                         GoRoute(
                           path: 'signUpPassword',
                           name: SetPasswordScreen.routeName,
-                          builder: (_, state) => const SetPasswordScreen(
+                          builder: (_, state) => SetPasswordScreen(
                             title: '',
+                            signUpModel: state.extra as SignUpModel,
                           ),
                           routes: [
                             GoRoute(
                               path: 'nameBirthGender',
                               name: NameBirthGenderScreen.routeName,
-                              builder: (_, state) =>
-                                  const NameBirthGenderScreen(),
+                              builder: (_, state) => NameBirthGenderScreen(
+                                signUpModel: state.extra as SignUpModel,
+                              ),
                               routes: [
                                 GoRoute(
                                   path: 'singleNationalFlag',
                                   name: SingleNationalFlagScreen.routeName,
                                   builder: (_, state) =>
-                                      const SingleNationalFlagScreen(),
+                                      SingleNationalFlagScreen(
+                                    signUpModel: state.extra as SignUpModel,
+                                  ),
                                   routes: [
                                     GoRoute(
                                       path: 'universityScreen',
                                       name: UniversityScreen.routeName,
-                                      builder: (_, state) =>
-                                          const UniversityScreen(),
+                                      builder: (_, state) => UniversityScreen(
+                                        signUpModel: state.extra as SignUpModel,
+                                      ),
                                       routes: [
                                         GoRoute(
                                           path: 'universityCompleted',
                                           name: UniversityCompletedScreen
                                               .routeName,
                                           builder: (_, state) =>
-                                              const UniversityCompletedScreen(),
+                                              UniversityCompletedScreen(
+                                            signUpModel:
+                                                state.extra as SignUpModel,
+                                          ),
                                         ),
                                       ],
                                     ),

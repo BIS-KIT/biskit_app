@@ -3,6 +3,7 @@ import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -151,7 +152,14 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  context.pushNamed(SignUpEmailScreen.routeName);
+                  context.pushNamed(
+                    SignUpEmailScreen.routeName,
+                    extra: SignUpModel(
+                      terms_mandatory: isAgree1,
+                      terms_optional: isAgree2,
+                      terms_push: isAgree3,
+                    ),
+                  );
                 },
                 child: FilledButtonWidget(
                   text: '다음',
