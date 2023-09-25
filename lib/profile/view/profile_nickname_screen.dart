@@ -10,23 +10,22 @@ import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
-import 'package:biskit_app/user/view/sign_up_language_screen.dart';
+import 'package:biskit_app/profile/view/profile_language_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class SignUpProfileEditScreen extends ConsumerStatefulWidget {
-  const SignUpProfileEditScreen({super.key});
+class ProfileNicknameScreen extends ConsumerStatefulWidget {
+  const ProfileNicknameScreen({super.key});
 
   @override
-  ConsumerState<SignUpProfileEditScreen> createState() =>
-      _SignUpProfileEditScreenState();
+  ConsumerState<ProfileNicknameScreen> createState() =>
+      _ProfileNicknameScreenState();
 }
 
-class _SignUpProfileEditScreenState
-    extends ConsumerState<SignUpProfileEditScreen> {
+class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
   PhotoModel? selectedPhotoModel;
 
   late final TextEditingController controller;
@@ -118,7 +117,7 @@ class _SignUpProfileEditScreenState
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const SignUpLanguageScreen(),
+            builder: (context) => const ProfileLanguageScreen(),
           ));
     }
   }

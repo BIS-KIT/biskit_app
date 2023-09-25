@@ -14,17 +14,17 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/user/view/sign_up_keyword_screen.dart';
+import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 
-class SignUpLanguageScreen extends ConsumerStatefulWidget {
-  const SignUpLanguageScreen({super.key});
+class ProfileLanguageScreen extends ConsumerStatefulWidget {
+  const ProfileLanguageScreen({super.key});
 
   @override
-  ConsumerState<SignUpLanguageScreen> createState() =>
-      _SignUpLanguageScreenState();
+  ConsumerState<ProfileLanguageScreen> createState() =>
+      _ProfileLanguageScreenState();
 }
 
-class _SignUpLanguageScreenState extends ConsumerState<SignUpLanguageScreen> {
+class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
   List<UseLanguage> selectedList = [];
 
   @override
@@ -153,7 +153,7 @@ class _SignUpLanguageScreenState extends ConsumerState<SignUpLanguageScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SignUpKeywordScreen(),
+                      builder: (context) => const ProfileKeywordScreen(),
                     ));
               },
               child: FilledButtonWidget(

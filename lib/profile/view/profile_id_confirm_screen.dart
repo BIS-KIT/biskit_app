@@ -9,14 +9,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class SignUpIdConfirmScreen extends StatefulWidget {
-  const SignUpIdConfirmScreen({super.key});
+class ProfileIdConfirmScreen extends StatefulWidget {
+  const ProfileIdConfirmScreen({super.key});
 
   @override
-  State<SignUpIdConfirmScreen> createState() => _SignUpIdConfirmScreenState();
+  State<ProfileIdConfirmScreen> createState() => _ProfileIdConfirmScreenState();
 }
 
-class _SignUpIdConfirmScreenState extends State<SignUpIdConfirmScreen> {
+class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
   final JustTheController tooltipController = JustTheController();
 
   PhotoModel? selectedPhotoModel;
