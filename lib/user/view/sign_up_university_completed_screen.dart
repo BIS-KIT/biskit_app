@@ -1,25 +1,31 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/user/view/sign_up_university_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UniversityCompletedScreen extends StatelessWidget {
   static String get routeName => 'universityCompleted';
 
+  final SignUpModel signUpModel;
   final String? selectedStudentStatus;
   final String? selectedUniv;
   final String? selectedGraduateStatus;
 
   const UniversityCompletedScreen({
-    super.key,
+    Key? key,
+    required this.signUpModel,
     this.selectedStudentStatus,
     this.selectedUniv,
     this.selectedGraduateStatus,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -179,10 +185,10 @@ class UniversityCompletedScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UniversityScreen()));
+                    context.goNamed(
+                      UniversityScreen.routeName,
+                      extra: signUpModel,
+                    );
                   },
                   child: const OutlinedButtonWidget(
                     isEnable: true,

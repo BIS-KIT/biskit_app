@@ -1,14 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/outlined_button_widget.dart';
-import 'package:biskit_app/common/components/text_input_widget.dart';
-import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/utils/input_validate_util.dart';
-import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/user/repository/auth_repository.dart';
-import 'package:biskit_app/user/view/email_login_screen.dart';
-import 'package:biskit_app/user/view/set_password_screen.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,12 +10,27 @@ import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/text_input_widget.dart';
+import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/input_validate_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
+import 'package:biskit_app/user/view/email_login_screen.dart';
+import 'package:biskit_app/user/view/set_password_screen.dart';
+
 import '../../common/const/colors.dart';
 import '../../common/const/fonts.dart';
 
 class SignUpEmailScreen extends ConsumerStatefulWidget {
+  final SignUpModel signUpModel;
   static String get routeName => 'signUpEmail';
-  const SignUpEmailScreen({super.key});
+  const SignUpEmailScreen({
+    super.key,
+    required this.signUpModel,
+  });
 
   @override
   ConsumerState<SignUpEmailScreen> createState() => _SignUpEmailScreenState();
@@ -48,6 +56,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
 
   @override
   void initState() {
+    logger.d(widget.signUpModel.toString());
     super.initState();
     pinController = TextEditingController();
     pinFocusNode = FocusNode();
@@ -211,7 +220,10 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
         setState(() {
           isTimerView = false;
         });
-        context.pushNamed(SetPasswordScreen.routeName);
+        context.pushNamed(
+          SetPasswordScreen.routeName,
+          extra: widget.signUpModel.copyWith(email: email),
+        );
       }
     } else {
       setState(() {

@@ -9,6 +9,7 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
@@ -151,7 +152,9 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SingleNationalFlagScreen(),
+                        builder: (context) => SingleNationalFlagScreen(
+                          signUpModel: SignUpModel(),
+                        ),
                       ));
                 },
                 child: const FullBleedButtonWidget(
@@ -167,7 +170,9 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const NameBirthGenderScreen(),
+                        builder: (context) => NameBirthGenderScreen(
+                          signUpModel: SignUpModel(),
+                        ),
                       ));
                 },
                 child: const FullBleedButtonWidget(

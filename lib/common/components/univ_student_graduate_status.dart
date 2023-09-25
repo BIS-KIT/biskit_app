@@ -3,6 +3,7 @@ import 'package:biskit_app/common/components/list_tile_univ_graduate_status_widg
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/utils/json_util.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_university_completed_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -146,6 +147,9 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => UniversityCompletedScreen(
+
+                          // TODO 완료 처리시 pop 형식으로 변경 필요
+                          signUpModel: SignUpModel(),
                           selectedUniv: widget.selectedUniv,
                           selectedStudentStatus: widget.selectedStudentStatus,
                           selectedGraduateStatus: selectedGraduateStatus)),

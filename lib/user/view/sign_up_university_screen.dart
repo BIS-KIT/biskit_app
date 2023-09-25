@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/univ_list_widget.dart';
@@ -5,11 +8,16 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:flutter/material.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 
 class UniversityScreen extends StatefulWidget {
   static String get routeName => 'universityScreen';
-  const UniversityScreen({super.key});
+
+  final SignUpModel signUpModel;
+  const UniversityScreen({
+    Key? key,
+    required this.signUpModel,
+  }) : super(key: key);
 
   @override
   State<UniversityScreen> createState() => _UniversityScreenState();
