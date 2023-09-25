@@ -1,8 +1,9 @@
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/keyword_input_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/profile/components/keyword_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -134,7 +135,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SignUpIdConfirmScreen(),
+                        builder: (context) => const ProfileIdConfirmScreen(),
                       ));
                 }
               },

@@ -1,9 +1,9 @@
-import 'package:biskit_app/common/component/checkbox_widget.dart';
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
-import 'package:biskit_app/common/component/outlined_button_widget.dart';
-import 'package:biskit_app/common/component/search_bar_widget.dart';
-import 'package:biskit_app/common/component/select_widget.dart';
+import 'package:biskit_app/common/components/checkbox_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/search_bar_widget.dart';
+import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
