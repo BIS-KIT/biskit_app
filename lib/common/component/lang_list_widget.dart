@@ -7,7 +7,7 @@ import 'package:biskit_app/common/component/lang_level_list_widget.dart';
 import 'package:biskit_app/common/component/list_tile_check_widget.dart';
 import 'package:biskit_app/common/component/search_bar_widget.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/user/view/sign_up_language_screen.dart';
+import 'package:biskit_app/profile/view/profile_language_screen.dart';
 
 class LangListWidget extends ConsumerStatefulWidget {
   final Function() callback;
