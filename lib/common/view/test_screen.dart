@@ -5,7 +5,6 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/provider/language_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
@@ -85,7 +84,6 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               ElevatedButton(
                 onPressed: () async {
                   await context.setLocale(const Locale('ko', 'KR'));
-                  ref.read(languageProvider.notifier).update((state) => 'ko');
                   logger.d(tr('hello'));
                 },
                 child: const Text(
@@ -95,7 +93,6 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               ElevatedButton(
                 onPressed: () async {
                   await context.setLocale(const Locale('en', 'US'));
-                  ref.read(languageProvider.notifier).update((state) => 'en');
                   logger.d(tr('hello'));
                 },
                 child: const Text(

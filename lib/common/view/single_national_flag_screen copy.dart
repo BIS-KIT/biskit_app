@@ -6,9 +6,9 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
-import 'package:biskit_app/common/provider/language_provider.dart';
 import 'package:biskit_app/common/view/multi_national_flag_screen.dart';
 import 'package:biskit_app/user/view/sign_up_university_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,9 +47,10 @@ class _SingleNationalFlagScreenState
     });
 
     await Future.microtask(() => null);
+    if (!mounted) return;
     List<NationalFlagModel> list =
         await ref.read(utilRepositoryProvider).getNationality(
-              osLanguage: ref.watch(languageProvider),
+              osLanguage: context.locale.languageCode,
               search: '',
             );
     setState(() {
