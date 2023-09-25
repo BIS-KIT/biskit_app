@@ -8,10 +8,12 @@ import 'package:biskit_app/common/model/national_flag_model.dart';
 
 class ListTileImgWidget extends StatelessWidget {
   final NationalFlagModel model;
+  final bool isCheck;
   final Function()? onTap;
   const ListTileImgWidget({
     Key? key,
     required this.model,
+    required this.isCheck,
     this.onTap,
   }) : super(key: key);
 
@@ -42,7 +44,9 @@ class ListTileImgWidget extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                context.locale.countryCode == 'KR' ? model.kname : model.ename,
+                context.locale.languageCode == kEn
+                    ? model.en_name
+                    : model.kr_name,
                 style: getTsBody16Rg(context).copyWith(
                   color: kColorGray8,
                 ),
@@ -52,7 +56,7 @@ class ListTileImgWidget extends StatelessWidget {
               width: 12,
             ),
             CheckboxWidget(
-              value: model.isCheck,
+              value: isCheck,
             ),
           ],
         ),

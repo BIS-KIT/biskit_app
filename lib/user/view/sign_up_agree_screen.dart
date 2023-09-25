@@ -188,7 +188,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
             width: 16,
             height: 12,
             colorFilter: ColorFilter.mode(
-              value ? kColorYellow5 : kColorGray4,
+              value ? kColorYellow5 : kColorGray5,
               BlendMode.srcIn,
             ),
           ),

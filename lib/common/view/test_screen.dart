@@ -5,6 +5,7 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/provider/language_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
@@ -15,21 +16,22 @@ import 'package:biskit_app/profile/view/profile_language_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'name_birth_gender_screen.dart';
 
-class TestScreen extends StatefulWidget {
+class TestScreen extends ConsumerStatefulWidget {
   static String get routeName => 'test';
   const TestScreen({super.key});
 
   @override
-  State<TestScreen> createState() => _TestScreenState();
+  ConsumerState<TestScreen> createState() => _TestScreenState();
 }
 
-class _TestScreenState extends State<TestScreen> {
+class _TestScreenState extends ConsumerState<TestScreen> {
   SelectWidgetValueType selectWidgetValueType = SelectWidgetValueType.none;
   bool isChecked = false;
   opTapkakaoLogin() async {
@@ -83,6 +85,7 @@ class _TestScreenState extends State<TestScreen> {
               ElevatedButton(
                 onPressed: () async {
                   await context.setLocale(const Locale('ko', 'KR'));
+                  ref.read(languageProvider.notifier).update((state) => 'ko');
                   logger.d(tr('hello'));
                 },
                 child: const Text(
@@ -92,6 +95,7 @@ class _TestScreenState extends State<TestScreen> {
               ElevatedButton(
                 onPressed: () async {
                   await context.setLocale(const Locale('en', 'US'));
+                  ref.read(languageProvider.notifier).update((state) => 'en');
                   logger.d(tr('hello'));
                 },
                 child: const Text(

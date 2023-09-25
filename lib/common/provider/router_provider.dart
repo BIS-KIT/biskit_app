@@ -1,6 +1,8 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/root_tab.dart';
+import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -11,9 +13,11 @@ import 'package:biskit_app/user/view/login_screen.dart';
 import 'package:biskit_app/user/view/set_password_completed_screen.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
+import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
-import 'package:biskit_app/user/view/sign_up_pin_code_screen.dart';
 import 'package:biskit_app/user/view/sign_up_screen.dart';
+import 'package:biskit_app/user/view/sign_up_university_completed_screen.dart';
+import 'package:biskit_app/user/view/sign_up_university_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -76,11 +80,44 @@ class RouteProvider extends ChangeNotifier {
                       builder: (_, __) => const SignUpEmailScreen(),
                       routes: [
                         GoRoute(
-                          path: 'signUpPinCode/:email',
-                          name: SignUpPinCodeScreen.routeName,
-                          builder: (_, state) => SignUpPinCodeScreen(
-                            email: state.pathParameters['email'] ?? '',
+                          path: 'signUpPassword',
+                          name: SetPasswordScreen.routeName,
+                          builder: (_, state) => const SetPasswordScreen(
+                            title: '',
                           ),
+                          routes: [
+                            GoRoute(
+                              path: 'nameBirthGender',
+                              name: NameBirthGenderScreen.routeName,
+                              builder: (_, state) =>
+                                  const NameBirthGenderScreen(),
+                              routes: [
+                                GoRoute(
+                                  path: 'singleNationalFlag',
+                                  name: SingleNationalFlagScreen.routeName,
+                                  builder: (_, state) =>
+                                      const SingleNationalFlagScreen(),
+                                  routes: [
+                                    GoRoute(
+                                      path: 'universityScreen',
+                                      name: UniversityScreen.routeName,
+                                      builder: (_, state) =>
+                                          const UniversityScreen(),
+                                      routes: [
+                                        GoRoute(
+                                          path: 'universityCompleted',
+                                          name: UniversityCompletedScreen
+                                              .routeName,
+                                          builder: (_, state) =>
+                                              const UniversityCompletedScreen(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -89,6 +126,11 @@ class RouteProvider extends ChangeNotifier {
               ],
             ),
           ],
+        ),
+        GoRoute(
+          path: '/signUpCompleted',
+          name: SignUpCompletedScreen.routeName,
+          builder: (_, __) => const SignUpCompletedScreen(),
         ),
         GoRoute(
           path: '/findId',
@@ -116,9 +158,10 @@ class RouteProvider extends ChangeNotifier {
           builder: (_, __) => const FindPasswordScreen(),
           routes: [
             GoRoute(
-              path: 'setPassword',
-              name: SetPasswordScreen.routeName,
-              builder: (context, state) => const SetPasswordScreen(),
+              path: 'resetPassword',
+              name: 'resetPassword',
+              builder: (context, state) =>
+                  const SetPasswordScreen(title: '비밀번호 재설정'),
             ),
           ],
         ),

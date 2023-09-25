@@ -223,8 +223,8 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         final result = await showBiskitBottomSheet(
           context: context,
           title: '키워드 작성',
-          leftIcon: 'assets/icons/ic_cancel_line_24.svg',
-          onLeftTap: () => Navigator.pop(context),
+          rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+          onRightTap: () => Navigator.pop(context),
           isDismissible: false,
           height: MediaQuery.of(context).size.height -
               MediaQuery.of(context).padding.top -
