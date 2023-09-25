@@ -31,7 +31,7 @@ class ListTileLevelWidget extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color: kColorGray3,
+              color: kColorBgElevation3,
             ),
           ),
         ),
@@ -55,7 +55,7 @@ class ListTileLevelWidget extends StatelessWidget {
                       Text(
                         getLevelTitle(level),
                         style: getTsBody16Rg(context).copyWith(
-                          color: kColorGray8,
+                          color: kColorContentWeak,
                         ),
                       ),
                       const SizedBox(
@@ -72,7 +72,7 @@ class ListTileLevelWidget extends StatelessWidget {
                   Text(
                     getLevelSubTitle(level),
                     style: getTsBody14Rg(context).copyWith(
-                      color: kColorGray6,
+                      color: kColorContentWeakest,
                     ),
                   ),
                 ],

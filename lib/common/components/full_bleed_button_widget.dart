@@ -25,14 +25,15 @@ class FullBleedButtonWidget extends StatelessWidget {
         horizontal: 16,
       ),
       decoration: BoxDecoration(
-        color: isEnable ? kColorYellow3 : kColorGray2,
+        color: isEnable ? kColorBgPrimary : kColorBgElevation2,
       ),
       alignment: Alignment.center,
       child: leftIconPath == null
           ? Text(
               text,
               style: getTsBody16Sb(context).copyWith(
-                color: isEnable ? kColorGray9 : kColorGray5,
+                color:
+                    isEnable ? kColorContentOnBgPrimary : kColorContentDisabled,
               ),
             )
           : Row(
@@ -44,7 +45,9 @@ class FullBleedButtonWidget extends StatelessWidget {
                   child: SvgPicture.asset(
                     leftIconPath!,
                     colorFilter: ColorFilter.mode(
-                      isEnable ? kColorGray9 : kColorGray5,
+                      isEnable
+                          ? kColorContentOnBgPrimary
+                          : kColorContentDisabled,
                       BlendMode.srcIn,
                     ),
                   ),
@@ -55,7 +58,9 @@ class FullBleedButtonWidget extends StatelessWidget {
                 Text(
                   text,
                   style: getTsHeading18(context).copyWith(
-                    color: isEnable ? kColorGray9 : kColorGray5,
+                    color: isEnable
+                        ? kColorContentOnBgPrimary
+                        : kColorContentDisabled,
                   ),
                 ),
               ],

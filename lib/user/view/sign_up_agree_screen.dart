@@ -56,7 +56,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               Text(
                 '회원가입 전\n이용약관 동의가 필요해요',
                 style: getTsHeading24(context).copyWith(
-                  color: kColorGray9,
+                  color: kColorContentDefault,
                 ),
               ),
               const SizedBox(
@@ -80,7 +80,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                     Text(
                       '전체 동의하기',
                       style: getTsHeading18(context).copyWith(
-                        color: kColorGray8,
+                        color: kColorContentWeak,
                       ),
                     ),
                   ],
@@ -91,7 +91,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
               const Divider(
                 thickness: 1,
-                color: kColorGray3,
+                color: kColorBgElevation3,
               ),
               const SizedBox(
                 height: 16,
@@ -188,7 +188,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
             width: 16,
             height: 12,
             colorFilter: ColorFilter.mode(
-              value ? kColorYellow5 : kColorGray5,
+              value ? kColorBorderPrimaryStrong : kColorContentDisabled,
               BlendMode.srcIn,
             ),
           ),
@@ -200,7 +200,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
           child: Text(
             text,
             style: getTsBody16Rg(context).copyWith(
-              color: kColorGray7,
+              color: kColorContentWeaker,
             ),
           ),
         ),
@@ -215,7 +215,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               width: 24,
               height: 24,
               colorFilter: const ColorFilter.mode(
-                kColorGray7,
+                kColorContentWeaker,
                 BlendMode.srcIn,
               ),
             ),

@@ -46,7 +46,7 @@ class CustomTextFormField extends StatelessWidget {
     OutlineInputBorder baseBorder = const OutlineInputBorder(
       borderSide: BorderSide(
         width: 1,
-        color: kColorGray3,
+        color: kColorBgElevation3,
       ),
       borderRadius: BorderRadius.all(
         Radius.circular(6),
@@ -60,10 +60,10 @@ class CustomTextFormField extends StatelessWidget {
       focusNode: focusNode,
       initialValue: initialValue,
       style: kTsEnBody16Rg.copyWith(
-        color: kColorGray8,
+        color: kColorContentWeak,
       ),
       readOnly: readOnly,
-      cursorColor: kColorGray8,
+      cursorColor: kColorContentWeak,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       onChanged: onChanged,
@@ -97,34 +97,34 @@ class CustomTextFormField extends StatelessWidget {
         suffix: SizedBox(
           width: suffixIcon == null ? 16 : 8,
         ),
-        fillColor: kColorGray1,
+        fillColor: kColorBgElevation1,
         filled: true,
         hintText: hintText,
         hintStyle: getTsBody16Rg(context).copyWith(
-          color: kColorGray5,
+          color: kColorContentPlaceholder,
         ),
         border: baseBorder,
         enabledBorder: baseBorder,
         focusedBorder: baseBorder.copyWith(
           borderSide: const BorderSide(
             width: 1,
-            color: kColorGray7,
+            color: kColorBorderStronger,
           ),
         ),
         errorText: errorText,
         errorStyle: getTsCaption12Rg(context).copyWith(
-          color: kColorDangerDark,
+          color: kColorContentError,
         ),
         errorBorder: baseBorder.copyWith(
           borderSide: const BorderSide(
             width: 1,
-            color: kColorDangerDark,
+            color: kColorBorderError,
           ),
         ),
         focusedErrorBorder: baseBorder.copyWith(
           borderSide: const BorderSide(
             width: 1,
-            color: kColorDangerDark,
+            color: kColorBorderError,
           ),
         ),
       ),

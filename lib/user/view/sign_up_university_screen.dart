@@ -50,7 +50,7 @@ class _UniversityScreenState extends State<UniversityScreen> {
                 Text(
                   '학교를 선택해주세요',
                   style: getTsHeading24(context).copyWith(
-                    color: kColorGray9,
+                    color: kColorContentDefault,
                   ),
                 ),
                 const SizedBox(
@@ -59,7 +59,7 @@ class _UniversityScreenState extends State<UniversityScreen> {
                 Text(
                   '같은 학교의 친구들을 만날 수 있어요',
                   style: getTsBody16Rg(context).copyWith(
-                    color: kColorGray7,
+                    color: kColorContentWeaker,
                   ),
                 ),
                 const SizedBox(

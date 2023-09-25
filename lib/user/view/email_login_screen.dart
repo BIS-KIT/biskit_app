@@ -167,7 +167,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       width: 24,
                       height: 24,
                       colorFilter: const ColorFilter.mode(
-                        kColorGray7,
+                        kColorContentWeaker,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -182,7 +182,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   //     obscureText
                   //         ? Icons.visibility_off_outlined
                   //         : Icons.visibility_outlined,
-                  //     color: kColorGray7,
+                  //     color: kColorContentWeaker,
                   //   ),
                   // ),
                 ),
@@ -234,7 +234,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       child: Text(
                         '아이디 찾기',
                         style: getTsBody14Rg(context).copyWith(
-                          color: kColorGray7,
+                          color: kColorContentWeaker,
                         ),
                       ),
                     ),
@@ -244,7 +244,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     Text(
                       '|',
                       style: getTsBody14Rg(context).copyWith(
-                        color: kColorGray3,
+                        color: kColorBgElevation3,
                       ),
                     ),
                     const SizedBox(
@@ -257,7 +257,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       child: Text(
                         '비밀번호 재설정',
                         style: getTsBody14Rg(context).copyWith(
-                          color: kColorGray7,
+                          color: kColorContentWeaker,
                         ),
                       ),
                     ),

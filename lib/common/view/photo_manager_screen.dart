@@ -166,7 +166,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                           ),
                         ),
                         Container(
-                          color: Colors.white,
+                          color: kColorBgDefault,
                         ).animate().scaleY(
                               begin: 1,
                               end: 0,
@@ -201,7 +201,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color: kColorGray3,
+              color: kColorBgElevation3,
             ),
           ),
         ),
@@ -225,7 +225,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 Text(
                   e.name,
                   style: getTsBody16Rg(context).copyWith(
-                    color: kColorGray8,
+                    color: kColorContentWeak,
                   ),
                 ),
                 const SizedBox(
@@ -234,7 +234,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 Text(
                   e.count.toString(),
                   style: getTsCaption12Rg(context).copyWith(
-                    color: kColorGray6,
+                    color: kColorContentWeakest,
                   ),
                 ),
               ],
@@ -259,11 +259,11 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
               children: [
                 if (widget.isCamera)
                   Container(
-                    color: kColorGray3,
+                    color: kColorBgElevation3,
                     child: const Icon(
                       Icons.camera_alt_rounded,
                       size: 40,
-                      color: kColorGray6,
+                      color: kColorContentWeakest,
                     ),
                   ),
                 ..._images.map(
@@ -324,7 +324,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                       .isNotEmpty
                   ? Border.all(
                       width: 3,
-                      color: kColorYellow4,
+                      color: kColorBgPrimaryStrong,
                     )
                   : null,
             ),
@@ -341,15 +341,15 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                       .where((element) =>
                           element.assetEntity.id == e.assetEntity.id)
                       .isNotEmpty
-                  ? kColorYellow4
-                  : Colors.white.withOpacity(0.4),
+                  ? kColorBgPrimaryStrong
+                  : kColorBgDefault.withOpacity(0.4),
               border: Border.all(
                 width: 2,
                 color: _selectedPhoto
                         .where((element) =>
                             element.assetEntity.id == e.assetEntity.id)
                         .isNotEmpty
-                    ? kColorYellow4
+                    ? kColorBgPrimaryStrong
                     : Colors.black.withOpacity(0.4),
               ),
               shape: BoxShape.circle,
@@ -367,7 +367,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                         .toString(),
                     textAlign: TextAlign.center,
                     style: getTsBody14Sb(context).copyWith(
-                      color: kColorGray9,
+                      color: kColorContentDefault,
                     ),
                   )
                 : null,
@@ -391,7 +391,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
         //       ),
         //       child: const Icon(
         //         Icons.fullscreen_sharp,
-        //         color: Colors.white,
+        //         color: kColorBgDefault,
         //       ),
         //     ),
         //   ),
@@ -411,7 +411,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
         border: Border(
           bottom: BorderSide(
             width: 1,
-            color: kColorGray3,
+            color: kColorBgElevation3,
           ),
         ),
       ),
@@ -466,7 +466,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                                     _currentAlbum.name,
                                     overflow: TextOverflow.ellipsis,
                                     style: getTsHeading18(context).copyWith(
-                                      color: kColorGray9,
+                                      color: kColorContentDefault,
                                     ),
                                   ),
                                 ),
@@ -506,7 +506,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                           child: Text(
                             _selectedPhoto.length.toString(),
                             style: getTsBody16Rg(context).copyWith(
-                              color: kColorYellow6,
+                              color: kColorContentPrimary,
                             ),
                           ),
                         ),
@@ -524,8 +524,8 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                           '완료',
                           style: getTsBody16Sb(context).copyWith(
                             color: _selectedPhoto.isEmpty
-                                ? kColorGray5
-                                : kColorGray9,
+                                ? kColorContentDisabled
+                                : kColorContentDefault,
                           ),
                         ),
                       ),
@@ -551,7 +551,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
               child: Text(
                 e.name,
                 style: getTsHeading18(context).copyWith(
-                  color: kColorGray9,
+                  color: kColorContentDefault,
                 ),
               ),
             ),
@@ -563,7 +563,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
           albumChange: true,
         );
       },
-      iconEnabledColor: kColorGray9,
+      iconEnabledColor: kColorContentDefault,
       elevation: 0,
       isDense: false,
       underline: Container(),

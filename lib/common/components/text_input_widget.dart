@@ -47,7 +47,7 @@ class TextInputWidget extends StatelessWidget {
         Text(
           title,
           style: getTsBody14Sb(context).copyWith(
-            color: kColorGray8,
+            color: kColorContentWeak,
           ),
         ),
         const SizedBox(

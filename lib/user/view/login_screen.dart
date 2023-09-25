@@ -93,7 +93,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Text(
                           '타이틀',
                           style: getTsHeading24(context).copyWith(
-                            color: kColorGray9,
+                            color: kColorContentDefault,
                           ),
                         ),
                         const SizedBox(
@@ -102,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Text(
                           '서비스 설명 텍스트',
                           style: getTsBody16Rg(context).copyWith(
-                            color: kColorGray7,
+                            color: kColorContentWeaker,
                           ),
                         ),
                       ],
@@ -175,7 +175,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   'Apple로 로그인',
                   textAlign: TextAlign.center,
                   style: getTsBody16Sb(context).copyWith(
-                    color: Colors.white,
+                    color: kColorBgDefault,
                   ),
                 ),
               ),
@@ -199,7 +199,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       decoration: BoxDecoration(
         border: Border.all(
           width: 1,
-          color: kColorGray3,
+          color: kColorBgElevation3,
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(6),
@@ -213,7 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             width: 24,
             height: 24,
             colorFilter: const ColorFilter.mode(
-              kColorGray9,
+              kColorContentWeak,
               BlendMode.srcIn,
             ),
           ),
@@ -222,7 +222,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               '이메일로 로그인',
               textAlign: TextAlign.center,
               style: getTsBody16Sb(context).copyWith(
-                color: kColorGray8,
+                color: kColorContentWeak,
               ),
             ),
           ),
@@ -295,7 +295,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           decoration: BoxDecoration(
             border: Border.all(
               width: 1,
-              color: kColorGray4,
+              color: kColorBorderStrong,
             ),
             borderRadius: const BorderRadius.all(
               Radius.circular(6),
@@ -320,7 +320,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   'Google로 로그인',
                   textAlign: TextAlign.center,
                   style: getTsBody16Sb(context).copyWith(
-                    color: kColorGray8,
+                    color: kColorContentWeak,
                   ),
                 ),
               ),

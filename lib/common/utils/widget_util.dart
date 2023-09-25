@@ -20,7 +20,7 @@ showBiskitBottomSheet({
   return showModalBottomSheet(
     context: context,
     isDismissible: isDismissible,
-    backgroundColor: Colors.white,
+    backgroundColor: kColorBgDefault,
     clipBehavior: Clip.hardEdge,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -34,7 +34,7 @@ showBiskitBottomSheet({
       return Material(
         child: Container(
           height: height,
-          color: Colors.white,
+          color: kColorBgDefault,
           child: Column(
             children: [
               Padding(
@@ -70,7 +70,7 @@ showBiskitBottomSheet({
                         title,
                         textAlign: TextAlign.center,
                         style: getTsHeading18(context).copyWith(
-                          color: kColorGray9,
+                          color: kColorContentDefault,
                         ),
                       ),
                     ),
@@ -116,7 +116,7 @@ showDefaultModalBottomSheet({
 }) {
   showModalBottomSheet(
     context: context,
-    backgroundColor: Colors.white,
+    backgroundColor: kColorBgDefault,
     clipBehavior: Clip.hardEdge,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -132,7 +132,7 @@ showDefaultModalBottomSheet({
             MediaQuery.of(context).size.height -
                 MediaQuery.of(context).padding.top -
                 70,
-        color: Colors.white,
+        color: kColorBgDefault,
         child: Column(
           children: [
             Padding(
@@ -169,7 +169,7 @@ showDefaultModalBottomSheet({
                       title,
                       textAlign: TextAlign.center,
                       style: getTsHeading18(context).copyWith(
-                        color: kColorGray9,
+                        color: kColorContentDefault,
                       ),
                     ),
                   ),
@@ -216,7 +216,7 @@ showSnackBar({
       content: Text(
         text,
         style: kTsKrBody14Sb.copyWith(
-          color: Colors.white,
+          color: kColorBgDefault,
         ),
       ),
       backgroundColor: Colors.black,
@@ -243,8 +243,8 @@ showConfirmModal({
       return AlertDialog(
         insetPadding: EdgeInsets.zero,
         buttonPadding: EdgeInsets.zero,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: kColorBgDefault,
+        surfaceTintColor: kColorBgDefault,
         titlePadding: const EdgeInsets.only(
           top: 32,
           left: 20,
@@ -276,7 +276,7 @@ showConfirmModal({
             title,
             textAlign: TextAlign.center,
             style: getTsHeading18(context).copyWith(
-              color: kColorGray9,
+              color: kColorContentDefault,
             ),
           ),
         ),
@@ -286,7 +286,7 @@ showConfirmModal({
                 content,
                 textAlign: TextAlign.center,
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray7,
+                  color: kColorContentWeaker,
                 ),
               ),
         actions: [
@@ -315,8 +315,8 @@ showConfirmModal({
                   child: FilledButtonWidget(
                     text: rightButton,
                     isEnable: true,
-                    backgroundColor: kColorDangerDark,
-                    fontColor: Colors.white,
+                    backgroundColor: kColorContentError,
+                    fontColor: kColorBgDefault,
                     height: 44,
                   ),
                 ),
@@ -343,8 +343,8 @@ showDefaultModal({
       return AlertDialog(
         insetPadding: EdgeInsets.zero,
         buttonPadding: EdgeInsets.zero,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: kColorBgDefault,
+        surfaceTintColor: kColorBgDefault,
         titlePadding: const EdgeInsets.only(
           top: 32,
           left: 20,
@@ -376,7 +376,7 @@ showDefaultModal({
             title,
             textAlign: TextAlign.center,
             style: getTsHeading18(context).copyWith(
-              color: kColorGray9,
+              color: kColorContentDefault,
             ),
           ),
         ),
@@ -386,7 +386,7 @@ showDefaultModal({
                 content,
                 textAlign: TextAlign.center,
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray7,
+                  color: kColorContentWeaker,
                 ),
               ),
         actions: [

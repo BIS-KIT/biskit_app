@@ -41,7 +41,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                 Text(
                   '학교를 선택해주세요',
                   style: getTsHeading24(context).copyWith(
-                    color: kColorGray9,
+                    color: kColorContentDefault,
                   ),
                 ),
                 const SizedBox(
@@ -50,7 +50,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                 Text(
                   '같은 학교의 친구들을 만날 수 있어요',
                   style: getTsBody16Rg(context).copyWith(
-                    color: kColorGray7,
+                    color: kColorContentWeaker,
                   ),
                 ),
                 const SizedBox(
@@ -60,7 +60,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   decoration: ShapeDecoration(
-                    color: kColorGray1,
+                    color: kColorBgElevation1,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
@@ -79,7 +79,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                             Text(
                               '학교',
                               style: getTsBody16Sb(context)
-                                  .copyWith(color: kColorGray8),
+                                  .copyWith(color: kColorContentWeak),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -87,7 +87,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                                 child: Text(
                                   selectedUniv!,
                                   style: getTsBody16Rg(context)
-                                      .copyWith(color: kColorGray8),
+                                      .copyWith(color: kColorContentWeak),
                                 ),
                               ),
                             ),
@@ -102,7 +102,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                             side: BorderSide(
                               width: 0.5,
                               strokeAlign: BorderSide.strokeAlignCenter,
-                              color: kColorGray3,
+                              color: kColorBgElevation3,
                             ),
                           ),
                         ),
@@ -118,7 +118,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                             Text(
                               '소속',
                               style: getTsBody16Sb(context)
-                                  .copyWith(color: kColorGray8),
+                                  .copyWith(color: kColorContentWeak),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -126,7 +126,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                                 child: Text(
                                   selectedStudentStatus!,
                                   style: getTsBody16Rg(context)
-                                      .copyWith(color: kColorGray8),
+                                      .copyWith(color: kColorContentWeak),
                                 ),
                               ),
                             ),
@@ -141,7 +141,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                               side: BorderSide(
                             width: 0.5,
                             strokeAlign: BorderSide.strokeAlignCenter,
-                            color: kColorGray3,
+                            color: kColorBgElevation3,
                           )),
                         ),
                       ),
@@ -156,7 +156,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                             Text(
                               '학적상태',
                               style: getTsBody16Sb(context)
-                                  .copyWith(color: kColorGray8),
+                                  .copyWith(color: kColorContentWeak),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -164,7 +164,7 @@ class UniversityCompletedScreen extends StatelessWidget {
                                 child: Text(
                                   selectedGraduateStatus!,
                                   style: getTsBody16Rg(context)
-                                      .copyWith(color: kColorGray8),
+                                      .copyWith(color: kColorContentWeak),
                                 ),
                               ),
                             ),

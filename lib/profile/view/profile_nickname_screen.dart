@@ -136,7 +136,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
             child: Text(
               '1 / 4',
               style: getTsBody14Rg(context).copyWith(
-                color: kColorGray6,
+                color: kColorContentWeakest,
               ),
             ),
           ),
@@ -157,7 +157,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                   Text(
                     '사진과 닉네임을\n등록해주세요',
                     style: getTsHeading24(context).copyWith(
-                      color: kColorGray9,
+                      color: kColorContentDefault,
                     ),
                   ),
                   const SizedBox(
@@ -204,7 +204,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                             child: Container(
                               padding: const EdgeInsets.all(4),
                               decoration: const BoxDecoration(
-                                color: kColorGray8,
+                                color: kColorBgInverseWeak,
                                 shape: BoxShape.circle,
                               ),
                               child: SvgPicture.asset(
@@ -245,7 +245,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                                   width: 16,
                                   height: 16,
                                   colorFilter: const ColorFilter.mode(
-                                    kColorGray5,
+                                    kColorContentDisabled,
                                     BlendMode.srcIn,
                                   ),
                                 ),
@@ -258,7 +258,9 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                           child: Text(
                             isNickNameOk ? '사용 가능한 닉네임이에요' : '한글/영문/숫자 2자 이상',
                             style: getTsCaption12Rg(context).copyWith(
-                              color: isNickNameOk ? kColorSuccess : kColorGray6,
+                              color: isNickNameOk
+                                  ? kColorContentSeccess
+                                  : kColorContentWeakest,
                             ),
                           ),
                         ),

@@ -123,7 +123,7 @@ class _MultiNationalFlagScreenState
               Text(
                 '국적을 선택해주세요',
                 style: getTsHeading24(context).copyWith(
-                  color: kColorGray9,
+                  color: kColorContentDefault,
                 ),
               ),
               const SizedBox(
@@ -132,7 +132,7 @@ class _MultiNationalFlagScreenState
               Text(
                 '변경할 수 없으니 정확히 선택해주세요',
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray7,
+                  color: kColorContentWeaker,
                 ),
               ),
               const SizedBox(

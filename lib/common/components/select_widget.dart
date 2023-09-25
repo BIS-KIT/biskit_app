@@ -38,13 +38,13 @@ class SelectWidget extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: value == SelectWidgetValueType.left
-                    ? kColorYellow1
+                    ? kColorBgPrimaryWeak
                     : Colors.transparent,
                 border: Border.all(
                   width: 1,
                   color: value == SelectWidgetValueType.left
-                      ? kColorYellow5
-                      : kColorGray4,
+                      ? kColorBorderPrimaryStrong
+                      : kColorBorderStrong,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
               ),
@@ -53,10 +53,10 @@ class SelectWidget extends StatelessWidget {
                 leftText,
                 style: value == SelectWidgetValueType.left
                     ? getTsBody16Sb(context).copyWith(
-                        color: kColorGray8,
+                        color: kColorContentWeak,
                       )
                     : getTsBody16Rg(context).copyWith(
-                        color: kColorGray8,
+                        color: kColorContentWeak,
                       ),
               ),
             ),
@@ -75,13 +75,13 @@ class SelectWidget extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: value == SelectWidgetValueType.right
-                    ? kColorYellow1
+                    ? kColorBgPrimaryWeak
                     : Colors.transparent,
                 border: Border.all(
                   width: 1,
                   color: value == SelectWidgetValueType.right
-                      ? kColorYellow5
-                      : kColorGray4,
+                      ? kColorBorderPrimaryStrong
+                      : kColorBorderStrong,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
               ),
@@ -90,10 +90,10 @@ class SelectWidget extends StatelessWidget {
                 rightText,
                 style: value == SelectWidgetValueType.right
                     ? getTsBody16Sb(context).copyWith(
-                        color: kColorGray8,
+                        color: kColorContentWeak,
                       )
                     : getTsBody16Rg(context).copyWith(
-                        color: kColorGray8,
+                        color: kColorContentWeak,
                       ),
               ),
             ),
