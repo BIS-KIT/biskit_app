@@ -1,4 +1,4 @@
-import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';

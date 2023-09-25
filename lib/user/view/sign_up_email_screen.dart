@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/outlined_button_widget.dart';
-import 'package:biskit_app/common/component/text_input_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';

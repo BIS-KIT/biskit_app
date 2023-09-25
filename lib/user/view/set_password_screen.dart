@@ -1,5 +1,5 @@
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/text_input_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';

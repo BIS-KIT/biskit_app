@@ -1,9 +1,9 @@
-import 'package:biskit_app/common/component/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../component/filled_button_widget.dart';
+import '../components/filled_button_widget.dart';
 import '../const/colors.dart';
 
 showBiskitBottomSheet({

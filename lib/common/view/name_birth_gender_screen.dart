@@ -1,8 +1,7 @@
-import 'package:biskit_app/common/component/custom_text_form_field.dart';
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/full_bleed_button_widget.dart';
-import 'package:biskit_app/common/component/select_widget.dart';
-import 'package:biskit_app/common/component/text_input_widget.dart';
+import 'package:biskit_app/common/components/custom_text_form_field.dart';
+import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/components/select_widget.dart';
+import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';

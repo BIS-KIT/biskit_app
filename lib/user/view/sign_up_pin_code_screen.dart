@@ -1,5 +1,5 @@
-import 'package:biskit_app/common/component/outlined_button_widget.dart';
-import 'package:biskit_app/common/component/text_input_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
