@@ -33,7 +33,7 @@ class ListTileCheckWidget extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color: kColorGray3,
+              color: kColorBgElevation3,
             ),
           ),
         ),
@@ -52,7 +52,7 @@ class ListTileCheckWidget extends StatelessWidget {
               child: Text(
                 text,
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray8,
+                  color: kColorContentWeak,
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class ListTileCheckWidget extends StatelessWidget {
                             Text(
                               getLevelTitle(level),
                               style: getTsBody16Rg(context).copyWith(
-                                color: kColorGray7,
+                                color: kColorContentWeaker,
                               ),
                             ),
                             SvgPicture.asset(

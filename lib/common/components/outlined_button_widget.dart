@@ -29,7 +29,7 @@ class OutlinedButtonWidget extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           width: 1,
-          color: kColorGray4,
+          color: kColorBorderStrong,
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(6),
@@ -40,7 +40,7 @@ class OutlinedButtonWidget extends StatelessWidget {
           ? Text(
               text,
               style: getTsBody16Sb(context).copyWith(
-                color: isEnable ? kColorGray8 : kColorGray4,
+                color: isEnable ? kColorContentWeak : kColorBorderStrong,
               ),
             )
           : Row(
@@ -51,9 +51,9 @@ class OutlinedButtonWidget extends StatelessWidget {
                   height: 24,
                   child: SvgPicture.asset(
                     leftIconPath!,
-                    // color: isEnable ? kColorGray8 : kColorGray4,
+                    // color: isEnable ? kColorContentWeak : kColorBorderStrong,
                     colorFilter: ColorFilter.mode(
-                      isEnable ? kColorGray8 : kColorGray4,
+                      isEnable ? kColorContentWeak : kColorBorderStrong,
                       BlendMode.srcIn,
                     ),
                   ),
@@ -64,7 +64,7 @@ class OutlinedButtonWidget extends StatelessWidget {
                 Text(
                   text,
                   style: getTsBody16Sb(context).copyWith(
-                    color: isEnable ? kColorGray8 : kColorGray4,
+                    color: isEnable ? kColorContentWeak : kColorBorderStrong,
                   ),
                 ),
               ],

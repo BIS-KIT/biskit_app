@@ -38,7 +38,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                       Text(
                         '가입을 축하드려요!',
                         style: getTsHeading24(context).copyWith(
-                          color: kColorGray9,
+                          color: kColorContentDefault,
                         ),
                       ),
                       const SizedBox(
@@ -48,7 +48,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                         '서로가 편하고 즐거운 모임을 위해\n프로필 작성이 필요해요',
                         textAlign: TextAlign.center,
                         style: getTsBody16Rg(context).copyWith(
-                          color: kColorGray7,
+                          color: kColorContentWeaker,
                         ),
                       ),
                     ],

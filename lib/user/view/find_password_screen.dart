@@ -197,11 +197,11 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                                     format: CountDownTimerFormat.minutesSeconds,
                                     timeTextStyle:
                                         getTsCaption12Rg(context).copyWith(
-                                      color: kColorDangerDark,
+                                      color: kColorContentError,
                                     ),
                                     colonsTextStyle:
                                         getTsCaption12Rg(context).copyWith(
-                                      color: kColorDangerDark,
+                                      color: kColorContentError,
                                     ),
                                     onEnd: () {
                                       setState(() {
@@ -228,7 +228,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                     child: Text(
                       '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
                       style: getTsBody14Sb(context).copyWith(
-                        color: Colors.white,
+                        color: kColorBgDefault,
                       ),
                     ),
                   ),
@@ -251,8 +251,8 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                       },
                       child: Text(
                         '메일을 받지 못하셨나요?',
-                        style:
-                            getTsBody16Rg(context).copyWith(color: kColorGray6),
+                        style: getTsBody16Rg(context)
+                            .copyWith(color: kColorContentWeakest),
                       ),
                     ),
                   ),

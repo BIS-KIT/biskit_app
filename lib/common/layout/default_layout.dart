@@ -25,7 +25,7 @@ class DefaultLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor ?? Colors.white,
+      backgroundColor: backgroundColor ?? kColorBgDefault,
       body: child,
       appBar: renderAppBar(context),
       bottomNavigationBar: bottomNavigationBar,
@@ -40,17 +40,17 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         toolbarHeight: 48,
-        backgroundColor: backgroundColor ?? Colors.white,
-        surfaceTintColor: backgroundColor ?? Colors.white,
+        backgroundColor: backgroundColor ?? kColorBgDefault,
+        surfaceTintColor: backgroundColor ?? kColorBgDefault,
         elevation: 0,
         centerTitle: true,
         title: Text(
           title!,
           style: getTsHeading18(context).copyWith(
-            color: kColorGray9,
+            color: kColorContentDefault,
           ),
         ),
-        foregroundColor: kColorGray9,
+        foregroundColor: kColorContentDefault,
         leadingWidth: 54,
         leading: GestureDetector(
           onTap: () {
@@ -67,7 +67,7 @@ class DefaultLayout extends StatelessWidget {
               width: 24,
               height: 24,
               colorFilter: const ColorFilter.mode(
-                kColorGray9,
+                kColorContentDefault,
                 BlendMode.srcIn,
               ),
             ),

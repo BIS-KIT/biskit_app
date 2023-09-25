@@ -198,7 +198,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   Text(
                     '생년월일',
                     style: getTsBody14Sb(context).copyWith(
-                      color: kColorGray8,
+                      color: kColorContentWeak,
                     ),
                   ),
                   const SizedBox(
@@ -324,7 +324,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   Text(
                     '성별',
                     style: getTsBody14Sb(context).copyWith(
-                      color: kColorGray8,
+                      color: kColorContentWeak,
                     ),
                   ),
                   const SizedBox(

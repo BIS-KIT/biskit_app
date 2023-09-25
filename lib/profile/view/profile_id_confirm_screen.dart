@@ -46,7 +46,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
             child: Text(
               '4 / 4',
               style: getTsBody14Rg(context).copyWith(
-                color: kColorGray6,
+                color: kColorContentWeakest,
               ),
             ),
           ),
@@ -87,7 +87,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 1,
-                    color: kColorGray3,
+                    color: kColorBgElevation3,
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
@@ -102,7 +102,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                               ),
-                              color: kColorYellow3,
+                              color: kColorBgPrimary,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -111,7 +111,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                                     width: 40,
                                     height: 40,
                                     colorFilter: const ColorFilter.mode(
-                                      kColorGray9,
+                                      kColorContentOnBgPrimary,
                                       BlendMode.srcIn,
                                     ),
                                   ),
@@ -121,7 +121,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                                   Text(
                                     '학생증 올리기',
                                     style: getTsHeading18(context).copyWith(
-                                      color: kColorGray9,
+                                      color: kColorContentOnBgPrimary,
                                     ),
                                   ),
                                   const SizedBox(
@@ -130,7 +130,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                                   Text(
                                     '(모바일)학생증 또는 학적증명자료',
                                     style: getTsBody14Rg(context).copyWith(
-                                      color: kColorGray9,
+                                      color: kColorContentOnBgPrimary,
                                     ),
                                   ),
                                 ],
@@ -145,13 +145,13 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                                 Text(
                                   '실명, 학교, 학과, 학번',
                                   style: getTsBody14Sb(context).copyWith(
-                                    color: kColorGray7,
+                                    color: kColorContentWeaker,
                                   ),
                                 ),
                                 Text(
                                   '이 정확히 나오도록 올려주세요',
                                   style: getTsBody14Rg(context).copyWith(
-                                    color: kColorGray7,
+                                    color: kColorContentWeaker,
                                   ),
                                 ),
                               ],
@@ -180,7 +180,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                       Text(
                         '다음에 할게요',
                         style: getTsBody14Rg(context).copyWith(
-                          color: kColorGray4,
+                          color: kColorBorderStrong,
                         ),
                       ),
                     ],
@@ -211,7 +211,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
         Text(
           '학생 인증을 하면\n모임에 참여할 수 있어요',
           style: getTsHeading24(context).copyWith(
-            color: kColorGray9,
+            color: kColorContentDefault,
           ),
         ),
         const SizedBox(
@@ -235,7 +235,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
               child: Text(
                 '비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 학생인증 용도 외 다른 어떠한 용도로도 사용되지 않으며, 인증이 끝난 즉시 파기됩니다. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다.',
                 style: getTsBody14Rg(context).copyWith(
-                  color: Colors.white,
+                  color: kColorBgDefault,
                 ),
               ),
             ),
@@ -259,7 +259,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                   width: 24,
                   height: 24,
                   colorFilter: const ColorFilter.mode(
-                    kColorGray7,
+                    kColorContentWeaker,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -269,7 +269,7 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                 Text(
                   '학생인증이 왜 필요한가요?',
                   style: getTsBody14Rg(context).copyWith(
-                    color: kColorGray7,
+                    color: kColorContentWeaker,
                   ),
                 ),
               ],

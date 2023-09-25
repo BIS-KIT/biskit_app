@@ -72,13 +72,13 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         right: 16,
       ),
       decoration: BoxDecoration(
-        color: kColorGray1,
+        color: kColorBgElevation1,
         border: Border.all(
           width: 1,
           color: status == SearchBarStatus.defaultType ||
                   status == SearchBarStatus.completed
-              ? kColorGray3
-              : kColorGray7,
+              ? kColorBgElevation3
+              : kColorBorderStronger,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(6)),
       ),
@@ -89,7 +89,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             width: 24,
             height: 24,
             colorFilter: ColorFilter.mode(
-              status == SearchBarStatus.defaultType ? kColorGray5 : kColorGray7,
+              status == SearchBarStatus.defaultType
+                  ? kColorContentDisabled
+                  : kColorContentWeaker,
               BlendMode.srcIn,
             ),
           ),
@@ -109,16 +111,16 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 },
                 onFieldSubmitted: widget.onFieldSubmitted,
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray8,
+                  color: kColorContentWeak,
                 ),
-                cursorColor: kColorGray8,
+                cursorColor: kColorContentWeak,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
                   border: InputBorder.none,
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
                   hintStyle: getTsBody16Rg(context).copyWith(
-                    color: kColorGray5,
+                    color: kColorContentPlaceholder,
                   ),
                 ),
               ),
@@ -134,7 +136,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 width: 16,
                 height: 16,
                 colorFilter: const ColorFilter.mode(
-                  kColorGray5,
+                  kColorContentPlaceholder,
                   BlendMode.srcIn,
                 ),
               ),

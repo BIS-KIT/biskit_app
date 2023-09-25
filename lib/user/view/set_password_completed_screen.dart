@@ -38,7 +38,7 @@ class _SetPasswordCompletedScreenState
                       width: 88,
                       height: 88,
                       decoration: ShapeDecoration(
-                        color: kColorGray2,
+                        color: kColorBgElevation2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(44),
                         ),
@@ -60,7 +60,7 @@ class _SetPasswordCompletedScreenState
                                 width: 40,
                                 height: 40,
                                 colorFilter: const ColorFilter.mode(
-                                  kColorGray8,
+                                  kColorContentWeak,
                                   BlendMode.srcIn,
                                 ),
                               )
@@ -73,14 +73,14 @@ class _SetPasswordCompletedScreenState
                     Text(
                       '비밀번호가 변경되었어요',
                       style: getTsHeading24(context).copyWith(
-                        color: kColorGray9,
+                        color: kColorContentDefault,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       '새로운 비밀번호로 로그인해주세요',
                       style: getTsBody16Rg(context).copyWith(
-                        color: kColorGray7,
+                        color: kColorContentWeaker,
                       ),
                     ),
                     const SizedBox(height: 80),

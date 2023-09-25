@@ -50,7 +50,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
             child: Text(
               '3 / 4',
               style: getTsBody14Rg(context).copyWith(
-                color: kColorGray6,
+                color: kColorContentWeakest,
               ),
             ),
           ),
@@ -71,7 +71,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                 Text(
                   '딱딱한비스킷님,\n좋아하는 것을 알려주세요',
                   style: getTsHeading24(context).copyWith(
-                    color: kColorGray9,
+                    color: kColorContentDefault,
                   ),
                 ),
                 const SizedBox(
@@ -80,7 +80,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                 Text(
                   '비슷한 취향을 가진 친구를 만날 수 있어요',
                   style: getTsBody16Rg(context).copyWith(
-                    color: kColorGray7,
+                    color: kColorContentWeaker,
                   ),
                 ),
               ],
@@ -156,7 +156,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
       height: 360,
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
-        color: kColorGray9,
+        color: kColorBgInverse,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: Column(
@@ -169,7 +169,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                 child: Text(
                   keywordList[index - 1].keyword,
                   style: getTsBody16Sb(context).copyWith(
-                    color: Colors.white,
+                    color: kColorBgDefault,
                   ),
                 ),
               ),
@@ -185,7 +185,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   width: 24,
                   height: 24,
                   colorFilter: const ColorFilter.mode(
-                    kColorGray7,
+                    kColorContentWeaker,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -197,7 +197,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
           ),
           const Divider(
             thickness: 1,
-            color: kColorGray8,
+            color: kColorBorderOnBgInverse,
           ),
           const SizedBox(
             height: 16,
@@ -207,7 +207,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
               child: Text(
                 keywordList[index - 1].reason,
                 style: getTsBody14Rg(context).copyWith(
-                  color: kColorGray1,
+                  color: kColorBgElevation1,
                 ),
               ),
             ),
@@ -246,11 +246,11 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         width: 270,
         height: 360,
         decoration: BoxDecoration(
-          color: kColorGray1,
+          color: kColorBgElevation1,
           borderRadius: const BorderRadius.all(Radius.circular(12)),
           border: Border.all(
             width: 1,
-            color: kColorGray3,
+            color: kColorBgElevation3,
           ),
         ),
         alignment: Alignment.center,
@@ -262,7 +262,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
               width: 40,
               height: 40,
               colorFilter: const ColorFilter.mode(
-                kColorGray5,
+                kColorContentDisabled,
                 BlendMode.srcIn,
               ),
             ),

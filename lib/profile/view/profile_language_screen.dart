@@ -90,7 +90,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
             child: Text(
               '2 / 4',
               style: getTsBody14Rg(context).copyWith(
-                color: kColorGray6,
+                color: kColorContentWeakest,
               ),
             ),
           ),
@@ -111,7 +111,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
                   Text(
                     '사용가능한 언어를\n알려주세요',
                     style: getTsHeading24(context).copyWith(
-                      color: kColorGray9,
+                      color: kColorContentDefault,
                     ),
                   ),
                   const SizedBox(
@@ -180,7 +180,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
       ),
       height: 52,
       decoration: const BoxDecoration(
-        color: kColorGray1,
+        color: kColorBgElevation1,
         borderRadius: BorderRadius.all(Radius.circular(6)),
       ),
       child: Row(
@@ -188,7 +188,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
           Text(
             e.langName,
             style: getTsBody16Sb(context).copyWith(
-              color: kColorGray8,
+              color: kColorContentWeak,
             ),
           ),
           const SizedBox(
@@ -197,7 +197,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
           Text(
             getLevelTitle(e.level),
             style: getTsBody16Sb(context).copyWith(
-              color: kColorBlue3,
+              color: kColorContentSecondary,
             ),
           ),
           const SizedBox(
@@ -219,7 +219,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
                 width: 24,
                 height: 24,
                 colorFilter: const ColorFilter.mode(
-                  kColorGray6,
+                  kColorContentWeakest,
                   BlendMode.srcIn,
                 ),
                 fit: BoxFit.fitWidth,

@@ -92,7 +92,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                         width: 16,
                         height: 16,
                         colorFilter: const ColorFilter.mode(
-                          kColorGray5,
+                          kColorContentDisabled,
                           BlendMode.srcIn,
                         ),
                       ),
@@ -109,12 +109,12 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                             margin: const EdgeInsets.only(top: 12),
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: kColorGray1,
+                              color: kColorBgElevation1,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(6)),
                               border: Border.all(
                                 width: 1,
-                                color: kColorGray3,
+                                color: kColorBgElevation3,
                               ),
                             ),
                             child: TextFormField(
@@ -132,7 +132,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                 isDense: true,
                                 contentPadding: EdgeInsets.zero,
                                 hintStyle: getTsBody16Rg(context).copyWith(
-                                  color: kColorGray5,
+                                  color: kColorContentPlaceholder,
                                 ),
                               ),
                             ),
@@ -144,7 +144,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                         Text(
                           '${reasonController.text.length}/300',
                           style: getTsCaption12Rg(context).copyWith(
-                            color: kColorGray6,
+                            color: kColorContentWeakest,
                           ),
                         ),
                       ],

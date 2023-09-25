@@ -14,7 +14,7 @@ class LevelBarWidget extends StatelessWidget {
       width: 20,
       height: 4,
       decoration: const BoxDecoration(
-        color: kColorGray3,
+        color: kColorBgElevation3,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
@@ -31,7 +31,7 @@ class LevelBarWidget extends StatelessWidget {
         width: 4,
         height: 4,
         decoration: const BoxDecoration(
-          color: kColorBlue3,
+          color: kColorContentSecondary,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomLeft: Radius.circular(10),
@@ -43,7 +43,7 @@ class LevelBarWidget extends StatelessWidget {
         width: 8,
         height: 4,
         decoration: const BoxDecoration(
-          color: kColorBlue3,
+          color: kColorContentSecondary,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomLeft: Radius.circular(10),
@@ -55,7 +55,7 @@ class LevelBarWidget extends StatelessWidget {
         width: 12,
         height: 4,
         decoration: const BoxDecoration(
-          color: kColorBlue3,
+          color: kColorContentSecondary,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomLeft: Radius.circular(10),
@@ -67,7 +67,7 @@ class LevelBarWidget extends StatelessWidget {
         width: 16,
         height: 4,
         decoration: const BoxDecoration(
-          color: kColorBlue3,
+          color: kColorContentSecondary,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             bottomLeft: Radius.circular(10),
@@ -79,7 +79,7 @@ class LevelBarWidget extends StatelessWidget {
         width: 20,
         height: 4,
         decoration: const BoxDecoration(
-          color: kColorBlue3,
+          color: kColorContentSecondary,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
       );

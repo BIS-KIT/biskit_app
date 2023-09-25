@@ -25,7 +25,7 @@ class ListTileUnivStudentStatusWidget extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color: kColorGray3,
+              color: kColorBgElevation3,
             ),
           ),
         ),
@@ -41,7 +41,7 @@ class ListTileUnivStudentStatusWidget extends StatelessWidget {
               child: Text(
                 context.locale.countryCode == 'KR' ? model.kname : model.ename,
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray8,
+                  color: kColorContentWeak,
                 ),
               ),
             ),

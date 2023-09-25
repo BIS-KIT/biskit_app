@@ -27,7 +27,7 @@ class ListTileImgWidget extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color: kColorGray3,
+              color: kColorBgElevation3,
             ),
           ),
         ),
@@ -48,7 +48,7 @@ class ListTileImgWidget extends StatelessWidget {
                     ? model.en_name
                     : model.kr_name,
                 style: getTsBody16Rg(context).copyWith(
-                  color: kColorGray8,
+                  color: kColorContentWeak,
                 ),
               ),
             ),

@@ -108,7 +108,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                                 width: 24,
                                 height: 24,
                                 colorFilter: const ColorFilter.mode(
-                                  kColorGray7,
+                                  kColorContentWeaker,
                                   BlendMode.srcIn,
                                 ),
                               ),
@@ -122,7 +122,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           Text(
                             '8자 이상으로 입력해주세요',
                             style: getTsCaption12Rg(context).copyWith(
-                              color: kColorGray6,
+                              color: kColorContentWeakest,
                             ),
                           ),
                         const SizedBox(
@@ -160,7 +160,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                               width: 24,
                               height: 24,
                               colorFilter: const ColorFilter.mode(
-                                kColorGray7,
+                                kColorContentWeaker,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -173,7 +173,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           Text(
                             '비밀번호가 일치해요',
                             style: getTsCaption12Rg(context).copyWith(
-                              color: kColorSuccess,
+                              color: kColorContentSeccess,
                             ),
                           ),
                       ],

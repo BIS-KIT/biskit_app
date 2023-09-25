@@ -318,7 +318,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                                             textAlign: TextAlign.center,
                                             style: getTsCaption12Rg(context)
                                                 .copyWith(
-                                              color: kColorDangerDark,
+                                              color: kColorContentError,
                                             ),
                                           ),
                                         ],
@@ -343,7 +343,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                     child: Text(
                       '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
                       style: getTsBody14Sb(context).copyWith(
-                        color: Colors.white,
+                        color: kColorBgDefault,
                       ),
                     ),
                   ),
@@ -366,7 +366,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                     child: Text(
                       '메일을 받지 못하셨나요?',
                       style: getTsBody16Rg(context).copyWith(
-                        color: kColorGray6,
+                        color: kColorContentWeakest,
                       ),
                     ),
                   ),
