@@ -8,6 +8,7 @@ import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
+import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -173,7 +174,8 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     }
   }
 
-  onTapRePinCodeRecive() {
+  onTapRePinCodeRecive() async {
+    FocusScope.of(context).unfocus();
     pinController.text = '';
 
     // 받은 인증번호 초기화
@@ -181,15 +183,19 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
       pinCodeError = null;
       recivePinCode = '';
     });
-    // TODO 인증번호 재발송 처리
-    setState(() {
-      // TODO 인증번호 받은 것으로 교체해야함
-      recivePinCode = '222222';
-      startTimer();
-      isTimerView = true;
-    });
-
-    FocusScope.of(context).requestFocus(pinFocusNode);
+    Map<String, String>? res =
+        await ref.read(authRepositoryProvider).certificate(email: email);
+    if (res != null &&
+        res['result'] == 'success' &&
+        (res['certification'] != null && res['certification']!.length == 6)) {
+      setState(() {
+        recivePinCode = res['certification']!;
+        startTimer();
+        isTimerView = true;
+      });
+      if (!mounted) return;
+      FocusScope.of(context).requestFocus(pinFocusNode);
+    }
   }
 
   checkPinCode() {
@@ -205,7 +211,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
         setState(() {
           isTimerView = false;
         });
-        // TODO 다음페이지로 이동
+        context.pushNamed(SetPasswordScreen.routeName);
       }
     } else {
       setState(() {

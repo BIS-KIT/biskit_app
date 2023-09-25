@@ -8,6 +8,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class NameBirthGenderScreen extends StatefulWidget {
   static String get routeName => 'nameBirthGender';
@@ -353,11 +354,12 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
             padding: const EdgeInsets.only(bottom: 0),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SingleNationalFlagScreen(),
-                    ));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const SingleNationalFlagScreen(),
+                //     ));
+                context.pushNamed(SingleNationalFlagScreen.routeName);
               },
               child: FullBleedButtonWidget(
                 text: '다음',

@@ -1,16 +1,25 @@
+import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/view/set_password_completed_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class SetPasswordScreen extends ConsumerStatefulWidget {
   static String get routeName => 'setPassword';
-  const SetPasswordScreen({super.key});
+
+  final String title;
+  const SetPasswordScreen({
+    super.key,
+    required this.title,
+  });
 
   @override
   ConsumerState<SetPasswordScreen> createState() => _SetPasswordScreenState();
@@ -18,7 +27,7 @@ class SetPasswordScreen extends ConsumerStatefulWidget {
 
 class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
   String password = '';
-  String confirmPassword = '';
+  // String confirmPassword = '';
   bool obscureText = true;
   bool confirmObscureText = true;
   String? passwordError;
@@ -46,7 +55,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-        title: '비밀번호 재설정',
+        title: widget.title,
         child: SafeArea(
           child: Column(
             children: [
@@ -79,25 +88,43 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                             hintText: '비밀번호를 입력해주세요',
                             errorText: passwordError,
                             onChanged: (value) {
-                              password = value;
+                              setState(() {
+                                password = value;
+                              });
                             },
                             obscureText: obscureText,
                             focusNode: passwordFocusNode,
-                            suffixIcon: IconButton(
-                              onPressed: () {
+                            textInputAction: TextInputAction.next,
+                            suffixIcon: GestureDetector(
+                              onTap: () {
                                 setState(() {
                                   obscureText = !obscureText;
                                 });
                               },
-                              icon: Icon(
+                              child: SvgPicture.asset(
                                 obscureText
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: kColorGray7,
+                                    ? 'assets/icons/ic_visibility_off_line_24.svg'
+                                    : 'assets/icons/ic_visibility_line_24.svg',
+                                width: 24,
+                                height: 24,
+                                colorFilter: const ColorFilter.mode(
+                                  kColorGray7,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        if (password.isEmpty)
+                          Text(
+                            '8자 이상으로 입력해주세요',
+                            style: getTsCaption12Rg(context).copyWith(
+                              color: kColorGray6,
+                            ),
+                          ),
                         const SizedBox(
                           height: 24,
                         ),
@@ -106,40 +133,49 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           hintText: '다시 한번 입력해주세요',
                           focusNode: confirmPasswordFocusNode,
                           onChanged: (value) {
-                            confirmPassword = value;
-                            if (value.length == password.length) {
-                              if (value != password) {
-                                setState(() {
-                                  confirmPasswordError = '비밀번호가 일치하지 않아요';
-                                });
-                              } else if (value == password) {
-                                setState(() {
-                                  isActiveConfirmButton = true;
-                                  confirmPasswordError = null;
-                                });
-                              }
-                            } else if (value.length > password.length) {
+                            if (value != password) {
                               setState(() {
+                                isActiveConfirmButton = false;
                                 confirmPasswordError = '비밀번호가 일치하지 않아요';
+                              });
+                            } else if (value == password) {
+                              setState(() {
+                                isActiveConfirmButton = true;
+                                confirmPasswordError = null;
                               });
                             }
                           },
                           obscureText: confirmObscureText,
                           errorText: confirmPasswordError,
-                          suffixIcon: IconButton(
-                            onPressed: () {
+                          suffixIcon: GestureDetector(
+                            onTap: () {
                               setState(() {
                                 confirmObscureText = !confirmObscureText;
                               });
                             },
-                            icon: Icon(
+                            child: SvgPicture.asset(
                               confirmObscureText
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              color: kColorGray7,
+                                  ? 'assets/icons/ic_visibility_off_line_24.svg'
+                                  : 'assets/icons/ic_visibility_line_24.svg',
+                              width: 24,
+                              height: 24,
+                              colorFilter: const ColorFilter.mode(
+                                kColorGray7,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        if (isActiveConfirmButton)
+                          Text(
+                            '비밀번호가 일치해요',
+                            style: getTsCaption12Rg(context).copyWith(
+                              color: kColorSuccess,
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -149,11 +185,17 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                 padding: const EdgeInsets.only(bottom: 0),
                 child: GestureDetector(
                   onTap: () {
-                    context.pushReplacementNamed(
-                        SetPasswordCompletedScreen.routeName);
+                    if (widget.title.isEmpty) {
+                      // 회원가입시
+                      context.pushNamed(NameBirthGenderScreen.routeName);
+                    } else {
+                      // 비밀번호 재설정
+                      context.pushReplacementNamed(
+                          SetPasswordCompletedScreen.routeName);
+                    }
                   },
                   child: FilledButtonWidget(
-                    text: '완료',
+                    text: widget.title.isEmpty ? '다음' : '완료',
                     isEnable: isActiveConfirmButton,
                   ),
                 ),

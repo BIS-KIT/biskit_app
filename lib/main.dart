@@ -52,7 +52,8 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    // logger.d(context.locale.toString());
+
+    logger.d('Main Locale : ${context.locale.toString()}');
     return GlobalLoaderOverlay(
       useDefaultLoading: false,
       overlayWidget: const CustomLoading(),

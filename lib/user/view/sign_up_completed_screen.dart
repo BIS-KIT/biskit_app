@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SignUpCompletedScreen extends StatelessWidget {
+  static String get routeName => 'signUpCompleted';
   const SignUpCompletedScreen({super.key});
 
   @override

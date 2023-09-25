@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/list_tile_img_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
@@ -5,22 +6,25 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
-import 'package:biskit_app/common/utils/json_util.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/user/view/sign_up_university_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class MultiNationalFlagScreen extends StatefulWidget {
+class MultiNationalFlagScreen extends ConsumerStatefulWidget {
   static String get routeName => 'multiNationalFlag';
   const MultiNationalFlagScreen({super.key});
 
   @override
-  State<MultiNationalFlagScreen> createState() =>
+  ConsumerState<MultiNationalFlagScreen> createState() =>
       _MultiNationalFlagScreenState();
 }
 
-class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
+class _MultiNationalFlagScreenState
+    extends ConsumerState<MultiNationalFlagScreen> {
   List<NationalFlagModel> nationalList = [];
   List<NationalFlagModel> tempList = [];
   List<NationalFlagModel> selectedModelList = [];
@@ -31,40 +35,26 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
   void initState() {
     super.initState();
     init();
+    textEditingController.addListener(() {
+      onChanged(textEditingController.text);
+    });
   }
 
   init() async {
     setState(() {
       isLoading = true;
     });
-    final List data = await readJson(
-      jsonPath: 'assets/jsons/national-flag.json',
-    );
-    // logger.d(data);
-    if (!mounted) return;
-    if (context.locale.languageCode == kEn) {
-      // 영문
-      setState(() {
-        nationalList = data
-            .map((d) => NationalFlagModel(
-                code: d['code'], ename: d['ename'], kname: d['kname']))
-            .toList();
-        nationalList.sort((a, b) {
-          return a.ename.toLowerCase().compareTo(b.ename.toLowerCase());
-        });
-      });
-    } else {
-      // 국문
-      setState(() {
-        nationalList = data
-            .map((d) => NationalFlagModel(
-                code: d['code'], ename: d['ename'], kname: d['kname']))
-            .toList();
-      });
-    }
 
+    await Future.microtask(() => null);
+    if (!mounted) return;
+    List<NationalFlagModel> list =
+        await ref.read(utilRepositoryProvider).getNationality(
+              osLanguage: context.locale.languageCode,
+              search: '',
+            );
     setState(() {
       isLoading = false;
+      nationalList = list;
     });
   }
 
@@ -75,7 +65,9 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
   }
 
   void onTapTile(NationalFlagModel model) {
-    if (!model.isCheck && selectedModelList.length >= 3) {
+    if (selectedModelList.where((element) => model.id == element.id).isEmpty &&
+        selectedModelList.length >= 3) {
+      // 4개째에 새로운 것을 선택시
       showDefaultModal(
         context: context,
         function: () {
@@ -87,21 +79,13 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
       return;
     }
     setState(() {
-      // check
-      nationalList = nationalList.map((n) {
-        if (n == model) {
-          NationalFlagModel m = model.copyWith(isCheck: !model.isCheck);
-          if (m.isCheck) {
-            selectedModelList.add(m);
-          } else {
-            selectedModelList =
-                selectedModelList.where((element) => element != model).toList();
-          }
-          return m;
-        } else {
-          return n;
-        }
-      }).toList();
+      if (selectedModelList.where((element) => model == element).isNotEmpty) {
+        // 이미 선택한 경우
+        selectedModelList.removeWhere((element) => model == element);
+      } else {
+        // 새로운 것을 선택한 경우
+        selectedModelList.add(model);
+      }
     });
   }
 
@@ -112,7 +96,7 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
       });
     } else {
       List<NationalFlagModel> searchList = nationalList
-          .where((n) => '${n.ename.toLowerCase()} ${n.kname.toLowerCase()}'
+          .where((n) => '${n.en_name.toLowerCase()} ${n.kr_name.toLowerCase()}'
               .contains(value.toLowerCase()))
           .toList();
       setState(() {
@@ -156,12 +140,14 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
               ),
               SearchBarWidget(
                 controller: textEditingController,
-                onChanged: onChanged,
+                onChanged: (value) {},
                 hintText: '국적 검색',
               ),
               Expanded(
                 child: isLoading
-                    ? const CircularProgressIndicator()
+                    ? const Center(
+                        child: CustomLoading(),
+                      )
                     : SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(
                           vertical: 8,
@@ -173,6 +159,13 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
                               ? nationalList
                                   .map((e) => ListTileImgWidget(
                                         model: e,
+                                        isCheck: selectedModelList.isNotEmpty &&
+                                                selectedModelList
+                                                    .where((element) =>
+                                                        e.id == element.id)
+                                                    .isNotEmpty
+                                            ? true
+                                            : false,
                                         onTap: () {
                                           onTapTile(e);
                                         },
@@ -181,6 +174,13 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
                               : tempList
                                   .map((e) => ListTileImgWidget(
                                         model: e,
+                                        isCheck: selectedModelList.isNotEmpty &&
+                                                selectedModelList
+                                                    .where((element) =>
+                                                        e.id == element.id)
+                                                    .isNotEmpty
+                                            ? true
+                                            : false,
                                         onTap: () {
                                           onTapTile(e);
                                         },
@@ -194,10 +194,17 @@ class _MultiNationalFlagScreenState extends State<MultiNationalFlagScreen> {
                   top: 16,
                   bottom: 34,
                 ),
-                child: FilledButtonWidget(
-                  text: '다음',
-                  isEnable: selectedModelList.length >= 2,
-                  height: 56,
+                child: GestureDetector(
+                  onTap: () {
+                    if (selectedModelList.length >= 2) {
+                      context.goNamed(UniversityScreen.routeName);
+                    }
+                  },
+                  child: FilledButtonWidget(
+                    text: '다음',
+                    isEnable: selectedModelList.length >= 2,
+                    height: 56,
+                  ),
                 ),
               ),
             ],
