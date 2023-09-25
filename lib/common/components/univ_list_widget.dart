@@ -1,7 +1,7 @@
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/list_tile_univ_widget.dart';
-import 'package:biskit_app/common/component/search_bar_widget.dart';
-import 'package:biskit_app/common/component/univ_student_status_list_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/list_tile_univ_widget.dart';
+import 'package:biskit_app/common/components/search_bar_widget.dart';
+import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/utils/json_util.dart';

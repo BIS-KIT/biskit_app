@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:biskit_app/common/component/custom_loading.dart';
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/lang_level_list_widget.dart';
-import 'package:biskit_app/common/component/list_tile_check_widget.dart';
-import 'package:biskit_app/common/component/search_bar_widget.dart';
+import 'package:biskit_app/common/components/custom_loading.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
+import 'package:biskit_app/common/components/list_tile_check_widget.dart';
+import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/user/view/sign_up_language_screen.dart';
+import 'package:biskit_app/profile/view/profile_language_screen.dart';
 
 class LangListWidget extends ConsumerStatefulWidget {
   final Function() callback;

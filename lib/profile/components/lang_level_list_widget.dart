@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/list_tile_level_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/list_tile_level_widget.dart';
 
 class LangLevelListWidget extends StatefulWidget {
   final int level;

@@ -1,15 +1,15 @@
-import 'package:biskit_app/common/model/university_model.dart';
+import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:biskit_app/common/component/checkbox_widget.dart';
+import 'package:biskit_app/common/components/checkbox_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 
-class ListTileWidget extends StatelessWidget {
-  final UniversityModel model;
+class ListTileUnivGraduateStatusWidget extends StatelessWidget {
+  final UniversityGraduateStatusModel model;
   final Function()? onTap;
-  const ListTileWidget({
+  const ListTileUnivGraduateStatusWidget({
     Key? key,
     required this.model,
     this.onTap,

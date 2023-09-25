@@ -1,15 +1,15 @@
-import 'package:biskit_app/common/model/university_student_status_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:biskit_app/common/component/checkbox_widget.dart';
+import 'package:biskit_app/common/components/checkbox_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/model/national_flag_model.dart';
 
-class ListTileUnivStudentStatusWidget extends StatelessWidget {
-  final UniversityStudentStatusModel model;
+class ListTileImgWidget extends StatelessWidget {
+  final NationalFlagModel model;
   final Function()? onTap;
-  const ListTileUnivStudentStatusWidget({
+  const ListTileImgWidget({
     Key? key,
     required this.model,
     this.onTap,
@@ -31,8 +31,11 @@ class ListTileUnivStudentStatusWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            CheckboxWidget(
-              value: model.isCheck,
+            // TODO 국기 이미지 추가
+            Container(
+              width: 32,
+              height: 24,
+              color: Colors.amber,
             ),
             const SizedBox(
               width: 12,
@@ -44,6 +47,12 @@ class ListTileUnivStudentStatusWidget extends StatelessWidget {
                   color: kColorGray8,
                 ),
               ),
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            CheckboxWidget(
+              value: model.isCheck,
             ),
           ],
         ),

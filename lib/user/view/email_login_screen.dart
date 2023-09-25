@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:biskit_app/common/component/filled_button_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -16,8 +16,8 @@ import 'package:biskit_app/user/view/find_id_screen.dart';
 import 'package:biskit_app/user/view/find_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 
-import '../../common/component/outlined_button_widget.dart';
-import '../../common/component/text_input_widget.dart';
+import '../../common/components/outlined_button_widget.dart';
+import '../../common/components/text_input_widget.dart';
 import '../../common/utils/widget_util.dart';
 
 class EmailLoginScreen extends ConsumerStatefulWidget {

@@ -2,7 +2,7 @@ import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:biskit_app/common/component/checkbox_widget.dart';
+import 'package:biskit_app/common/components/checkbox_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 

@@ -1,23 +1,23 @@
-import 'package:biskit_app/user/view/sign_up_id_confirm_screen.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/keyword_input_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/profile/components/keyword_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 
-class SignUpKeywordScreen extends StatefulWidget {
-  const SignUpKeywordScreen({super.key});
+class ProfileKeywordScreen extends StatefulWidget {
+  const ProfileKeywordScreen({super.key});
 
   @override
-  State<SignUpKeywordScreen> createState() => _SignUpKeywordScreenState();
+  State<ProfileKeywordScreen> createState() => _ProfileKeywordScreenState();
 }
 
-class _SignUpKeywordScreenState extends State<SignUpKeywordScreen> {
+class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   final List<KeywordModel> keywordList = [];
 
   void onTapKeywordDelete(int index) {
@@ -135,7 +135,7 @@ class _SignUpKeywordScreenState extends State<SignUpKeywordScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SignUpIdConfirmScreen(),
+                        builder: (context) => const ProfileIdConfirmScreen(),
                       ));
                 }
               },

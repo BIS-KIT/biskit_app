@@ -3,28 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:biskit_app/common/component/filled_button_widget.dart';
-import 'package:biskit_app/common/component/lang_level_list_widget.dart';
-import 'package:biskit_app/common/component/lang_list_widget.dart';
-import 'package:biskit_app/common/component/level_bar_widget.dart';
-import 'package:biskit_app/common/component/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
+import 'package:biskit_app/profile/components/lang_list_widget.dart';
+import 'package:biskit_app/common/components/level_bar_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/user/view/sign_up_keyword_screen.dart';
+import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 
-class SignUpLanguageScreen extends ConsumerStatefulWidget {
-  const SignUpLanguageScreen({super.key});
+class ProfileLanguageScreen extends ConsumerStatefulWidget {
+  const ProfileLanguageScreen({super.key});
 
   @override
-  ConsumerState<SignUpLanguageScreen> createState() =>
-      _SignUpLanguageScreenState();
+  ConsumerState<ProfileLanguageScreen> createState() =>
+      _ProfileLanguageScreenState();
 }
 
-class _SignUpLanguageScreenState extends ConsumerState<SignUpLanguageScreen> {
+class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
   List<UseLanguage> selectedList = [];
 
   @override
@@ -153,7 +153,7 @@ class _SignUpLanguageScreenState extends ConsumerState<SignUpLanguageScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SignUpKeywordScreen(),
+                      builder: (context) => const ProfileKeywordScreen(),
                     ));
               },
               child: FilledButtonWidget(
