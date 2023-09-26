@@ -174,7 +174,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
               isPinCodeMode = true;
             });
             if (!mounted) return;
-            FocusScope.of(context).requestFocus(pinFocusNode);
+            // FocusScope.of(context).requestFocus(pinFocusNode);
           }
         }
       }

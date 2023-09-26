@@ -78,6 +78,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
   }
 
   onTapPinCodeRecive() {
+    FocusScope.of(context).unfocus();
     pinController.text = '';
 
     // 받은 인증번호 초기화
@@ -93,7 +94,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     });
     // XXX: duration 설정한 이유: if 조건문에 따라 인증번호 위젯이 생기는데, [인증번호 받기] 버튼 클릭과 동시에 인증번호 입력 위젯에 focus를 주게되면 focus가 위젯이 렌더링 되기 전(혹은 바로 동시에)에 작동해서 focus가 제대로 안 먹힘 -> 의도적으로 위젯 렌더링 후 focus 주는 시점을 delay해서 인증번호 입력 위젯이 생기고 난 뒤에 포커스 설정
     Future.delayed(const Duration(milliseconds: 10), () {
-      FocusScope.of(context).requestFocus(pinFocusNode);
+      // FocusScope.of(context).requestFocus(pinFocusNode);
     });
   }
 
@@ -113,7 +114,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(
-                        height: 40,
+                        height: 16,
                       ),
                       Focus(
                           onFocusChange: (value) {
