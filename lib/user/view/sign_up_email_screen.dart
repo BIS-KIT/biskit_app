@@ -378,7 +378,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                       },
                       child: Text(
                         '메일을 받지 못하셨나요?',
-                        style: getTsBody16Rg(context).copyWith(
+                        style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeakest,
                         ),
                       ),
