@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/model/api_res_model.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,18 +12,15 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
-    ref: ref,
     dio: ref.watch(dioProvider),
     baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
   );
 });
 
 class AuthRepository {
-  final Ref ref;
   final Dio dio;
   final String baseUrl;
   AuthRepository({
-    required this.ref,
     required this.dio,
     required this.baseUrl,
   });
@@ -108,5 +107,41 @@ class AuthRepository {
     }
 
     return map;
+  }
+
+  signUpEmail(SignUpModel signUpModel) async {
+    logger.d('signUpMemail : ${signUpModel.toJson()}');
+    ApiResModel apiResModel = ApiResModel(isOk: false);
+    try {
+      final res = await dio.post(
+        '$baseUrl/register/',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        data: signUpModel.toJson(),
+      );
+
+      logger.d(res);
+      if (res.statusCode == 200) {
+        apiResModel = apiResModel.copyWith(
+          isOk: true,
+          data: res.data,
+        );
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+      if (e.response != null) {
+        if (e.response!.statusCode == 409) {
+          apiResModel = apiResModel.copyWith(
+            isOk: false,
+            message: '이미 가입된 계정이 있어요',
+          );
+        }
+      }
+    }
+    return apiResModel;
   }
 }

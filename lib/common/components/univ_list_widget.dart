@@ -35,17 +35,6 @@ class _UnivListWidgetState extends State<UnivListWidget> {
     });
   }
 
-  // onTapSelectUnivStudentStatus() {
-  //   showDefaultModalBottomSheet(
-  //     context: context,
-  //     title: '소속상태 선택',
-  //     titleLeftButton: true,
-  //     titleRightButton: true,
-  //     height: 388,
-  //     contentWidget: UnivStudentStatusListWidget(selectedUniv: selectedUniv),
-  //   );
-  // }
-
   init() async {
     setState(() {
       isLoading = true;
@@ -112,16 +101,6 @@ class _UnivListWidgetState extends State<UnivListWidget> {
       selectedModel = model;
     });
     FocusScope.of(context).unfocus();
-    // setState(() {
-    //   univerisyList = univerisyList.map((n) {
-    //     if (n.ename == model.ename) {
-    //       selectedModel = model;
-    //       return model.copyWith(isCheck: true);
-    //     } else {
-    //       return n.copyWith(isCheck: false);
-    //     }
-    //   }).toList();
-    // });
   }
 
   onChanged(String value) {

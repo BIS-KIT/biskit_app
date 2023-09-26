@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
 import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
+import 'package:biskit_app/common/model/api_res_model.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -14,10 +16,12 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/model/university_student_status_model.dart';
 
-class UniversityScreen extends StatefulWidget {
+class UniversityScreen extends ConsumerStatefulWidget {
   static String get routeName => 'universityScreen';
 
   final SignUpModel signUpModel;
@@ -27,15 +31,17 @@ class UniversityScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<UniversityScreen> createState() => _UniversityScreenState();
+  ConsumerState<UniversityScreen> createState() => _UniversityScreenState();
 }
 
-class _UniversityScreenState extends State<UniversityScreen> {
+class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   UniversityModel? selectedUnivModel;
   UniversityStudentStatusModel? selectedStudentStatusModel;
   UniversityGraduateStatusModel? selectedGraduateStatusModel;
 
   int startBottomSheetIndex = 0;
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -166,22 +172,34 @@ class _UniversityScreenState extends State<UniversityScreen> {
         break;
       default:
     }
+  }
 
-    // selectedUnivModel = await getUniv().then((r) {
-    //   startBottomSheetIndex = 1;
-    // });
-    // if (selectedUnivModel != null) {
-    //   logger.d(selectedUnivModel.toString());
-    //   // 받아온 학교로 소속 시트 생성
-    //   selectedStudentStatusModel = await getStudentStatus();
+  onTapSignUp() async {
+    if (selectedUnivModel != null &&
+        selectedStudentStatusModel != null &&
+        selectedGraduateStatusModel != null) {
+      ApiResModel apiResModel;
+      context.loaderOverlay.show();
 
-    //   if (selectedStudentStatusModel != null) {
-    //     logger.d(selectedStudentStatusModel.toString());
-    //     // 학적상태 선택 시트 생성
-    //     if (!mounted) return;
-    //     selectedGraduateStatusModel = await getGraduateStatus();
-    //   }
-    // }
+      // Sign up
+      apiResModel = await ref
+          .read(authRepositoryProvider)
+          .signUpEmail(widget.signUpModel.copyWith(
+            university_id: 11,
+            department: selectedStudentStatusModel!.kname,
+            education_status: selectedGraduateStatusModel!.kname,
+          ));
+      if (!mounted) return;
+      context.loaderOverlay.hide();
+      if (apiResModel.isOk) {
+        // 성공시
+      } else {
+        showSnackBar(
+          context: context,
+          text: apiResModel.message ?? '',
+        );
+      }
+    }
   }
 
   @override
@@ -357,7 +375,7 @@ class _UniversityScreenState extends State<UniversityScreen> {
                   bottom: 34,
                 ),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: onTapSignUp,
                   child: FilledButtonWidget(
                     text: '가입하기',
                     isEnable: startBottomSheetIndex == 3,

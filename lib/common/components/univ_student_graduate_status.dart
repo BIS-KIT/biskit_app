@@ -62,28 +62,6 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
       }
     });
 
-    // if (!mounted) return;
-    // if (context.locale.languageCode == kEn) {
-    //   // 영문
-    //   setState(() {
-    //     univerisyGraduateStatusList = data!
-    //         .map((d) => UniversityGraduateStatusModel(
-    //             ename: d['ename'], kname: d['kname']))
-    //         .toList();
-    //     univerisyGraduateStatusList.sort((a, b) {
-    //       return a.ename.toLowerCase().compareTo(b.ename.toLowerCase());
-    //     });
-    //   });
-    // } else {
-    //   // 국문
-    //   setState(() {
-    //     univerisyGraduateStatusList = data!
-    //         .map((d) => UniversityGraduateStatusModel(
-    //             ename: d['ename'], kname: d['kname']))
-    //         .toList();
-    //   });
-    // }
-
     setState(() {
       isLoading = false;
     });
