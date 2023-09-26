@@ -1,19 +1,16 @@
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_tile_univ_student_status_widget.dart';
-import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/model/university_student_status_model.dart';
-import 'package:biskit_app/common/utils/json_util.dart';
-import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:biskit_app/common/components/custom_loading.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/list_tile_check_widget.dart';
+import 'package:biskit_app/common/model/university_student_status_model.dart';
+
 class UnivStudentStatusListWidget extends StatefulWidget {
-  final String? selectedUniv;
+  final UniversityStudentStatusModel? selectedUnivStudentStatusModel;
   const UnivStudentStatusListWidget({
-    super.key,
-    this.selectedUniv,
-  });
+    Key? key,
+    this.selectedUnivStudentStatusModel,
+  }) : super(key: key);
 
   @override
   State<UnivStudentStatusListWidget> createState() => _UnivListWidgetState();
@@ -21,11 +18,8 @@ class UnivStudentStatusListWidget extends StatefulWidget {
 
 class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
   List<UniversityStudentStatusModel> univerisyStudentStatusList = [];
-  List<UniversityStudentStatusModel> tempList = [];
   UniversityStudentStatusModel? selectedModel;
   bool isLoading = false;
-  bool isUnivStudentStatusSelected = false;
-  String selectedStudentStatus = '';
 
   @override
   void initState() {
@@ -33,51 +27,47 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
     init();
   }
 
-  onTapSelectUnivGraduateStatus() {
-    showDefaultModalBottomSheet(
-      context: context,
-      title: '학적상태 선택',
-      titleLeftButton: true,
-      titleRightButton: true,
-      height: selectedStudentStatus == '학부' || selectedStudentStatus == '대학원'
-          ? 332
-          : 276,
-      contentWidget: UnivGraduateStatusListWidget(
-          selectedUniv: widget.selectedUniv,
-          selectedStudentStatus: selectedStudentStatus),
-    );
-  }
+  // onTapSelectUnivGraduateStatus() {
+  //   showDefaultModalBottomSheet(
+  //     context: context,
+  //     title: '학적상태 선택',
+  //     titleLeftButton: true,
+  //     titleRightButton: true,
+  //     height: selectedStudentStatus == '학부' || selectedStudentStatus == '대학원'
+  //         ? 332
+  //         : 276,
+  //     contentWidget: UnivGraduateStatusListWidget(
+  //         selectedUniv: '', selectedStudentStatus: selectedStudentStatus),
+  //   );
+  // }
 
   init() async {
     setState(() {
       isLoading = true;
     });
-    final List data = await readJson(
-      jsonPath: 'assets/jsons/university-student-status.json',
-    );
-
-    if (!mounted) return;
-    if (context.locale.languageCode == kEn) {
-      // 영문
-      setState(() {
-        univerisyStudentStatusList = data
-            .map((d) => UniversityStudentStatusModel(
-                ename: d['ename'], kname: d['kname']))
-            .toList();
-        univerisyStudentStatusList.sort((a, b) {
-          return a.ename.toLowerCase().compareTo(b.ename.toLowerCase());
-        });
-      });
-    } else {
-      // 국문
-      setState(() {
-        univerisyStudentStatusList = data
-            .map((d) => UniversityStudentStatusModel(
-                ename: d['ename'], kname: d['kname']))
-            .toList();
-      });
-    }
-
+    setState(() {
+      univerisyStudentStatusList = [
+        UniversityStudentStatusModel(
+          ename: '학부',
+          kname: '학부',
+        ),
+        UniversityStudentStatusModel(
+          ename: '학부',
+          kname: '대학원',
+        ),
+        UniversityStudentStatusModel(
+          ename: '학부',
+          kname: '교환학생',
+        ),
+        UniversityStudentStatusModel(
+          ename: '학부',
+          kname: '어학당',
+        ),
+      ];
+    });
+    setState(() {
+      selectedModel = widget.selectedUnivStudentStatusModel;
+    });
     setState(() {
       isLoading = false;
     });
@@ -107,41 +97,23 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          Expanded(
-              child: isLoading
-                  ? const CircularProgressIndicator()
-                  : SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      child: Column(
-                        children: tempList.isEmpty
-                            ? univerisyStudentStatusList
-                                .map((e) => ListTileUnivStudentStatusWidget(
-                                      model: e,
-                                      onTap: () {
-                                        onTapTile(e);
-                                        setState(() {
-                                          isUnivStudentStatusSelected = true;
-                                          selectedStudentStatus = e.kname;
-                                        });
-                                      },
-                                    ))
-                                .toList()
-                            : tempList
-                                .map((e) => ListTileUnivStudentStatusWidget(
-                                      model: e,
-                                      onTap: () {
-                                        onTapTile(e);
-                                        setState(() {
-                                          isUnivStudentStatusSelected = true;
-                                          selectedStudentStatus = e.kname;
-                                        });
-                                      },
-                                    ))
-                                .toList(),
-                      ),
-                    )),
+          isLoading
+              ? const Center(
+                  child: CustomLoading(),
+                )
+              : Column(
+                  children: univerisyStudentStatusList
+                      .map((e) => ListTileCheckWidget(
+                            text: e.kname,
+                            isChkecked: e == selectedModel ? true : false,
+                            isLevelView: false,
+                            onTap: () {
+                              setState(() {
+                                selectedModel = e;
+                              });
+                            },
+                          ))
+                      .toList()),
           Padding(
             padding: const EdgeInsets.only(
               top: 16,
@@ -149,12 +121,13 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
             ),
             child: GestureDetector(
               onTap: () {
-                // Navigator.pop(context);
-                onTapSelectUnivGraduateStatus();
+                if (selectedModel != null) {
+                  Navigator.pop(context, selectedModel);
+                }
               },
               child: FilledButtonWidget(
                 text: '다음',
-                isEnable: isUnivStudentStatusSelected,
+                isEnable: selectedModel != null,
               ),
             ),
           ),
