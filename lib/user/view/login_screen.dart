@@ -197,6 +197,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         horizontal: 16,
       ),
       decoration: BoxDecoration(
+        color: kColorBgElevation1,
         border: Border.all(
           width: 1,
           color: kColorBgElevation3,
