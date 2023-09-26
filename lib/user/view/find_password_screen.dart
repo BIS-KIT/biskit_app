@@ -103,118 +103,119 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       title: 'findPasswordScreen.title'.tr(),
       child: SafeArea(
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        Focus(
-                            onFocusChange: (value) {
-                              if (!value && email.isEmpty) {
-                                setState(() {
-                                  emailError = "이메일을 입력해주세요";
-                                });
-                              } else if (email.isNotEmpty &&
-                                  !email.isValidEmailFormat()) {
-                                setState(() {
-                                  emailError = '이메일 양식이 올바르지 않아요';
-                                });
-                              } else {
-                                setState(() {
-                                  emailError = null;
-                                });
-                              }
-                            },
-                            child: TextInputWidget(
-                              title: 'emailScreen.email'.tr(),
-                              hintText: '가입한 이메일을 입력해주세요',
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              errorText: emailError,
-                              onChanged: (value) {
-                                email = value;
-                                inputCheck();
-                              },
-                            )),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        if (isFirsthAuthNumRequest)
-                          GestureDetector(
-                            onTap: () {
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Focus(
+                          onFocusChange: (value) {
+                            if (!value && email.isEmpty) {
                               setState(() {
-                                isFirsthAuthNumRequest = false;
-                                isShowAuthNumBox = true;
+                                emailError = "이메일을 입력해주세요";
                               });
-                              onTapPinCodeRecive();
-                            },
-                            child: FilledButtonWidget(
-                                text: '인증번호 받기', isEnable: isPinCodeButton),
-                          )
-                        else
-                          GestureDetector(
-                            onTap: () {
-                              onTapPinCodeRecive();
-                            },
-                            child: const OutlinedButtonWidget(
-                              text: '인증번호 다시 받기',
-                              isEnable: true,
-                            ),
-                          ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        if (isShowAuthNumBox)
-                          TextInputWidget(
-                            title: '인증번호',
-                            hintText: '인증번호를 입력해주세요',
-                            keyboardType: TextInputType.number,
-                            maxLength: 6,
-                            controller: pinController,
-                            focusNode: pinFocusNode,
-                            errorText: pinCodeError,
+                            } else if (email.isNotEmpty &&
+                                !email.isValidEmailFormat()) {
+                              setState(() {
+                                emailError = '이메일 양식이 올바르지 않아요';
+                              });
+                            } else {
+                              setState(() {
+                                emailError = null;
+                              });
+                            }
+                          },
+                          child: TextInputWidget(
+                            title: 'emailScreen.email'.tr(),
+                            hintText: '가입한 이메일을 입력해주세요',
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            errorText: emailError,
                             onChanged: (value) {
-                              checkPinCode();
+                              email = value;
+                              inputCheck();
                             },
-                            suffixIcon: receivePinCode.isEmpty
-                                ? null
-                                : TimerCountdown(
-                                    endTime: DateTime.now().add(
-                                      const Duration(
-                                        minutes: 5,
-                                        // seconds: 4,
-                                      ),
+                          )),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      if (isFirsthAuthNumRequest)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isFirsthAuthNumRequest = false;
+                              isShowAuthNumBox = true;
+                            });
+                            onTapPinCodeRecive();
+                          },
+                          child: FilledButtonWidget(
+                              text: '인증번호 받기', isEnable: isPinCodeButton),
+                        )
+                      else
+                        GestureDetector(
+                          onTap: () {
+                            onTapPinCodeRecive();
+                          },
+                          child: const OutlinedButtonWidget(
+                            text: '인증번호 다시 받기',
+                            isEnable: true,
+                          ),
+                        ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      if (isShowAuthNumBox)
+                        TextInputWidget(
+                          title: '인증번호',
+                          hintText: '인증번호를 입력해주세요',
+                          keyboardType: TextInputType.number,
+                          maxLength: 6,
+                          controller: pinController,
+                          focusNode: pinFocusNode,
+                          errorText: pinCodeError,
+                          onChanged: (value) {
+                            checkPinCode();
+                          },
+                          suffixIcon: receivePinCode.isEmpty
+                              ? null
+                              : TimerCountdown(
+                                  endTime: DateTime.now().add(
+                                    const Duration(
+                                      minutes: 5,
+                                      // seconds: 4,
                                     ),
-                                    enableDescriptions: false,
-                                    spacerWidth: 0,
-                                    format: CountDownTimerFormat.minutesSeconds,
-                                    timeTextStyle:
-                                        getTsCaption12Rg(context).copyWith(
-                                      color: kColorContentError,
-                                    ),
-                                    colonsTextStyle:
-                                        getTsCaption12Rg(context).copyWith(
-                                      color: kColorContentError,
-                                    ),
-                                    onEnd: () {
-                                      setState(() {
-                                        receivePinCode = '';
-                                        pinCodeError = '인증번호를 다시 보내주세요';
-                                      });
-                                    },
                                   ),
-                          )
-                      ],
-                    ),
+                                  enableDescriptions: false,
+                                  spacerWidth: 0,
+                                  format: CountDownTimerFormat.minutesSeconds,
+                                  timeTextStyle:
+                                      getTsCaption12Rg(context).copyWith(
+                                    color: kColorContentError,
+                                  ),
+                                  colonsTextStyle:
+                                      getTsCaption12Rg(context).copyWith(
+                                    color: kColorContentError,
+                                  ),
+                                  onEnd: () {
+                                    setState(() {
+                                      receivePinCode = '';
+                                      pinCodeError = '인증번호를 다시 보내주세요';
+                                    });
+                                  },
+                                ),
+                        )
+                    ],
                   ),
                 ),
+              ),
+              if (!isFirsthAuthNumRequest)
                 JustTheTooltip(
                   controller: tooltipController,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
@@ -243,22 +244,23 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                       ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
                       ..close();
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        tooltipController.showTooltip();
-                      },
-                      child: Text(
-                        '메일을 받지 못하셨나요?',
-                        style: getTsBody16Rg(context)
-                            .copyWith(color: kColorContentWeakest),
-                      ),
+                  child: GestureDetector(
+                    onTap: () {
+                      tooltipController.showTooltip();
+                    },
+                    child: Text(
+                      '메일을 받지 못하셨나요?',
+                      style: getTsBody14Rg(context)
+                          .copyWith(color: kColorContentWeakest),
                     ),
                   ),
-                )
-              ],
-            )),
+                ),
+              SizedBox(
+                height: MediaQuery.of(context).viewInsets.bottom != 0 ? 16 : 34,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
