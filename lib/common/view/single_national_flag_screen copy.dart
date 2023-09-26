@@ -85,6 +85,7 @@ class _SingleNationalFlagScreenState
       //   }
       // }).toList();
     });
+    FocusScope.of(context).unfocus();
   }
 
   onChanged(String value) {
@@ -181,53 +182,54 @@ class _SingleNationalFlagScreenState
                         ),
                       ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 34,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          // check
-                          selectedModel = null;
-                        });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MultiNationalFlagScreen(
-                                signUpModel: widget.signUpModel,
-                              ),
-                            ));
-                      },
-                      child: Text(
-                        '복수국적인가요?',
-                        style: getTsBody14Rg(context).copyWith(
-                          color: kColorContentWeakest,
+              if (MediaQuery.of(context).viewInsets.bottom <= 100)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    bottom: 34,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            // check
+                            selectedModel = null;
+                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MultiNationalFlagScreen(
+                                  signUpModel: widget.signUpModel,
+                                ),
+                              ));
+                        },
+                        child: Text(
+                          '복수국적인가요?',
+                          style: getTsBody14Rg(context).copyWith(
+                            color: kColorContentWeakest,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (selectedModel != null) {
-                          context.goNamed(UniversityScreen.routeName);
-                        }
-                      },
-                      child: FilledButtonWidget(
-                        text: '다음',
-                        isEnable: selectedModel != null,
-                        height: 56,
+                      const SizedBox(
+                        height: 16,
                       ),
-                    ),
-                  ],
+                      GestureDetector(
+                        onTap: () {
+                          if (selectedModel != null) {
+                            context.goNamed(UniversityScreen.routeName);
+                          }
+                        },
+                        child: FilledButtonWidget(
+                          text: '다음',
+                          isEnable: selectedModel != null,
+                          height: 56,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
