@@ -59,4 +59,30 @@ class UtilRepository {
     }
     return list;
   }
+
+  getUniversty({
+    required String languageCode,
+    required String search,
+  }) async {
+    List<NationalFlagModel> list = [];
+    final res = await dio.get(
+      '$baseUrl/universty',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+      queryParameters: {
+        'os_language': languageCode == kEn ? 'english' : 'korean',
+        'search': search,
+      },
+    );
+    logger.d(res.toString());
+    if (res.data != null) {
+      // list = List<NationalFlagModel>.from(
+      //     res.data.map((e) => NationalFlagModel.fromMap(e)).toList());
+    }
+    return list;
+  }
 }

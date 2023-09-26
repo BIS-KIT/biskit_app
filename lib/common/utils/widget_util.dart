@@ -36,6 +36,7 @@ showBiskitBottomSheet({
           height: height,
           color: kColorBgDefault,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -83,7 +84,7 @@ showBiskitBottomSheet({
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: SvgPicture.asset(
-                                'assets/icons/ic_cancel_line_24.svg',
+                                rightIcon,
                                 width: 24,
                                 height: 24,
                               ),
