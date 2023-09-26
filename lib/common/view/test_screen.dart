@@ -7,6 +7,7 @@ import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/common/view/error_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
@@ -288,6 +289,20 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                       ));
                 },
                 child: const Text('키워드 화면'),
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ErrorScreen(),
+                      ));
+                },
+                child: const Text('error 화면'),
               ),
 
               const SizedBox(
