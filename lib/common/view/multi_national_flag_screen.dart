@@ -129,7 +129,7 @@ class _MultiNationalFlagScreenState
                 height: 8,
               ),
               Text(
-                '국적을 선택해주세요',
+                '국적을 모두 선택해주세요',
                 style: getTsHeading24(context).copyWith(
                   color: kColorContentDefault,
                 ),
