@@ -342,47 +342,48 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                     ),
                   ),
                 ),
-                JustTheTooltip(
-                  controller: tooltipController,
-                  borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  backgroundColor: Colors.black.withOpacity(0.7),
-                  elevation: 0,
-                  tailBaseWidth: 20,
-                  tailLength: 6,
-                  preferredDirection: AxisDirection.up,
-                  content: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
-                      style: getTsBody14Sb(context).copyWith(
-                        color: kColorBgDefault,
+                if (isPinCodeMode)
+                  JustTheTooltip(
+                    controller: tooltipController,
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
+                    backgroundColor: Colors.black.withOpacity(0.7),
+                    elevation: 0,
+                    tailBaseWidth: 20,
+                    tailLength: 6,
+                    preferredDirection: AxisDirection.up,
+                    content: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text(
+                        '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
+                        style: getTsBody14Sb(context).copyWith(
+                          color: kColorBgDefault,
+                        ),
                       ),
                     ),
-                  ),
-                  offset: 8,
-                  tailBuilder: (tip, point2, point3) {
-                    return Path()
-                      ..moveTo(tip.dx - (tip.dx * 0.5), tip.dy)
-                      ..lineTo(point2.dx - (point2.dx * 0.5), point2.dy)
-                      ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
-                      ..close();
-                  },
-                  // showDuration: const Duration(seconds: 3),
-                  // isModal: true,
-
-                  // waitDuration: const Duration(seconds: 3),
-                  child: GestureDetector(
-                    onTap: () {
-                      tooltipController.showTooltip();
+                    offset: 8,
+                    tailBuilder: (tip, point2, point3) {
+                      return Path()
+                        ..moveTo(tip.dx - (tip.dx * 0.5), tip.dy)
+                        ..lineTo(point2.dx - (point2.dx * 0.5), point2.dy)
+                        ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
+                        ..close();
                     },
-                    child: Text(
-                      '메일을 받지 못하셨나요?',
-                      style: getTsBody16Rg(context).copyWith(
-                        color: kColorContentWeakest,
+                    // showDuration: const Duration(seconds: 3),
+                    // isModal: true,
+
+                    // waitDuration: const Duration(seconds: 3),
+                    child: GestureDetector(
+                      onTap: () {
+                        tooltipController.showTooltip();
+                      },
+                      child: Text(
+                        '메일을 받지 못하셨나요?',
+                        style: getTsBody16Rg(context).copyWith(
+                          color: kColorContentWeakest,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 SizedBox(
                   height:
                       MediaQuery.of(context).viewInsets.bottom != 0 ? 16 : 34,
