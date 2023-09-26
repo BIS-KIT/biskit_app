@@ -27,20 +27,6 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
     init();
   }
 
-  // onTapSelectUnivGraduateStatus() {
-  //   showDefaultModalBottomSheet(
-  //     context: context,
-  //     title: '학적상태 선택',
-  //     titleLeftButton: true,
-  //     titleRightButton: true,
-  //     height: selectedStudentStatus == '학부' || selectedStudentStatus == '대학원'
-  //         ? 332
-  //         : 276,
-  //     contentWidget: UnivGraduateStatusListWidget(
-  //         selectedUniv: '', selectedStudentStatus: selectedStudentStatus),
-  //   );
-  // }
-
   init() async {
     setState(() {
       isLoading = true;
