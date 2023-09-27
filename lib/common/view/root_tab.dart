@@ -82,6 +82,14 @@ class _RootTabState extends ConsumerState<RootTab>
                   ref.read(userMeProvider.notifier).logout();
                 },
                 child: const Text(
+                  'Delete User',
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(userMeProvider.notifier).logout();
+                },
+                child: const Text(
                   'Logout',
                 ),
               ),

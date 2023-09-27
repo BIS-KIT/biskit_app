@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/profile/model/use_language_model.dart';
+import 'package:biskit_app/profile/provider/use_language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,7 +13,6 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
@@ -26,7 +26,7 @@ class ProfileLanguageScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
-  List<UseLanguage> selectedList = [];
+  List<UseLanguageModel> selectedList = [];
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
   }
 
   // 레벨선택
-  onTapSelectedLevel(UseLanguage useLanguage) {
+  onTapSelectedLevel(UseLanguageModel useLanguage) {
     FocusScope.of(context).unfocus();
     showDefaultModalBottomSheet(
       context: context,
@@ -66,7 +66,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
       title: '언어 선택',
       titleRightButton: true,
       contentWidget: LangListWidget(callback: () {
-        List<UseLanguage> tempList =
+        List<UseLanguageModel> tempList =
             ref.read(useLanguageProvider.notifier).getSelectedList();
 
         setState(() {
@@ -168,7 +168,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
     );
   }
 
-  Container _buildLangTile(UseLanguage e, BuildContext context) {
+  Container _buildLangTile(UseLanguageModel e, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
         bottom: 12,
@@ -187,7 +187,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
       child: Row(
         children: [
           Text(
-            e.langName,
+            e.languageModel.kr_name,
             style: getTsBody16Sb(context).copyWith(
               color: kColorContentWeak,
             ),
@@ -229,116 +229,6 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-final useLanguageProvider =
-    StateNotifierProvider<UseLanguageStateNotifier, List<UseLanguage>?>((ref) {
-  return UseLanguageStateNotifier(
-    utilRepository: ref.watch(utilRepositoryProvider),
-  );
-});
-
-// TODO 임시 클래스
-class UseLanguageStateNotifier extends StateNotifier<List<UseLanguage>?> {
-  final UtilRepository utilRepository;
-  UseLanguageStateNotifier({
-    required this.utilRepository,
-  }) : super(null) {
-    getList();
-  }
-
-  getList() async {
-    // TODO 언어가져오기 확인
-    // final result = await utilRepository.getLanguages();
-    await Future.delayed(const Duration(seconds: 1));
-    logger.d('getList');
-    state = [
-      UseLanguage(langName: '한국어', level: 0, isChecked: false),
-      UseLanguage(langName: '영어', level: 0, isChecked: false),
-      UseLanguage(langName: '중국어', level: 0, isChecked: false),
-      UseLanguage(langName: '일본어', level: 0, isChecked: false),
-      UseLanguage(langName: '스페인어', level: 0, isChecked: false),
-      UseLanguage(langName: '프랑스어', level: 0, isChecked: false),
-      UseLanguage(langName: '러시아어', level: 0, isChecked: false),
-      UseLanguage(langName: '아랍어', level: 0, isChecked: false),
-      UseLanguage(langName: '안녕어', level: 0, isChecked: false),
-      UseLanguage(langName: '유럽어', level: 0, isChecked: false),
-      UseLanguage(langName: '외계인어', level: 0, isChecked: false),
-      UseLanguage(langName: '애니어', level: 0, isChecked: false),
-      UseLanguage(langName: '밈어', level: 0, isChecked: false),
-      UseLanguage(langName: '껨어', level: 0, isChecked: false),
-    ];
-  }
-
-  toggleLang(UseLanguage useLanguage) {
-    if (state != null) {
-      state = state!
-          .map((e) => e == useLanguage
-              ? e.copyWith(
-                  isChecked: !e.isChecked,
-                  level: e.isChecked ? 0 : e.level,
-                )
-              : e)
-          .toList();
-    }
-  }
-
-  setLevel({
-    required UseLanguage useLanguage,
-    required int level,
-  }) {
-    if (state != null) {
-      state = state!
-          .map((e) => e.langName == useLanguage.langName
-              ? e.copyWith(
-                  level: level,
-                )
-              : e)
-          .toList();
-    }
-  }
-
-  List<UseLanguage> getSelectedList() {
-    return state != null
-        ? state!.where((element) => element.isChecked).toList()
-        : [];
-  }
-
-  void deleteLang(UseLanguage useLanguage) {
-    if (state != null) {
-      state = state!
-          .map((e) => e == useLanguage
-              ? e.copyWith(
-                  isChecked: false,
-                  level: 0,
-                )
-              : e)
-          .toList();
-    }
-  }
-}
-
-class UseLanguage {
-  final String langName;
-  final int level;
-  final bool isChecked;
-  UseLanguage({
-    required this.langName,
-    required this.level,
-    required this.isChecked,
-  });
-
-  UseLanguage copyWith({
-    String? langName,
-    int? level,
-    bool? isChecked,
-  }) {
-    return UseLanguage(
-      langName: langName ?? this.langName,
-      level: level ?? this.level,
-      isChecked: isChecked ?? this.isChecked,
     );
   }
 }

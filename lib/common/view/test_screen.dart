@@ -348,7 +348,17 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => UniversityScreen(
-                          signUpModel: SignUpModel(),
+                          signUpModel: SignUpModel(
+                            email: 'test00@gmail.com',
+                            password: 'qwer1234',
+                            birth: '1990-01-06',
+                            gender: 'male',
+                            name: '테스터',
+                            terms_mandatory: true,
+                            terms_optional: true,
+                            terms_push: true,
+                            nationality_ids: [1],
+                          ),
                         ),
                       ));
                 },

@@ -4,6 +4,9 @@ import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
+import 'package:biskit_app/profile/model/use_language_model.dart';
+import 'package:biskit_app/profile/provider/use_language_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +15,6 @@ import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/profile/view/profile_language_screen.dart';
 
 class LangListWidget extends ConsumerStatefulWidget {
   final Function() callback;
@@ -48,7 +50,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
   }
 
   // 레벨선택
-  onTapSelectedLevel(UseLanguage useLanguage) {
+  onTapSelectedLevel(UseLanguageModel useLanguage) {
     FocusScope.of(context).unfocus();
     showDefaultModalBottomSheet(
       context: context,
@@ -60,15 +62,16 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
       contentWidget: LangLevelListWidget(
         level: useLanguage.level,
         callback: (level) {
-          ref
-              .read(useLanguageProvider.notifier)
-              .setLevel(useLanguage: useLanguage, level: level);
+          ref.read(useLanguageProvider.notifier).setLevel(
+                useLanguage: useLanguage,
+                level: level,
+              );
         },
       ),
     );
   }
 
-  onTapLang(UseLanguage e) {
+  onTapLang(UseLanguageModel e) {
     final state = ref.watch(useLanguageProvider);
     // true 체크 할때 5개 제한
     if (state!.where((element) => element.isChecked).length >= maxLang &&
@@ -110,12 +113,13 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Builder(builder: (context) {
-                      final List<UseLanguage> viewList = searchText.isEmpty
+                      final List<UseLanguageModel> viewList = searchText.isEmpty
                           ? state
                           : state
-                              .where((element) => element.langName
-                                  .toLowerCase()
-                                  .contains(searchText.toLowerCase()))
+                              .where((element) =>
+                                  '${element.languageModel.kr_name} ${element.languageModel.en_name}'
+                                      .toLowerCase()
+                                      .contains(searchText.toLowerCase()))
                               .toList();
                       return Column(
                         children: [
@@ -130,7 +134,9 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                                     onTapLang(e);
                                   },
                                   centerWidget: Text(
-                                    e.langName,
+                                    context.locale.languageCode == kEn
+                                        ? e.languageModel.en_name
+                                        : e.languageModel.kr_name,
                                     style: getTsBody16Rg(context).copyWith(
                                       color: kColorContentWeak,
                                     ),
@@ -170,14 +176,6 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                                 .length)) {
                   // 등록 처리
                   widget.callback();
-                  // List<UseLanguage> tempList = ref
-                  //     .read(useLanguageProvider.notifier)
-                  //     .getSelectedList();
-
-                  // setState(() {
-                  //   selectedList = tempList;
-                  // });
-                  // Navigator.pop(context);
                 }
               },
               child: FilledButtonWidget(

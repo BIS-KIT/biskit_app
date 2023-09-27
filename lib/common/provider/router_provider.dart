@@ -142,16 +142,6 @@ class RouteProvider extends ChangeNotifier {
           name: SignUpScreen.routeName,
           builder: (_, __) => const SignUpScreen(),
         ),
-        // GoRoute(
-        //   path: '/findPassword',
-        //   name: FindPasswordScreen.routeName,
-        //   builder: (_, __) => const FindPasswordScreen(),
-        // ),
-        // GoRoute(
-        //   path: '/setPassword',
-        //   name: SetPasswordScreen.routeName,
-        //   builder: (context, state) => const SetPasswordScreen(),
-        // ),
         GoRoute(
           path: '/findPassword',
           name: FindPasswordScreen.routeName,
@@ -170,7 +160,6 @@ class RouteProvider extends ChangeNotifier {
           name: SetPasswordCompletedScreen.routeName,
           builder: (context, state) => const SetPasswordCompletedScreen(),
         ),
-
         GoRoute(
           path: '/',
           name: RootTab.routeName,
@@ -218,6 +207,9 @@ class RouteProvider extends ChangeNotifier {
     // 로그인 중이거나 현재 위치가 SplashScreen이면
     // 홈으로 이동
     if (user is UserModel) {
+      if (user.profile == null) {
+        return '/signUpCompleted';
+      }
       return logginIn || state.matchedLocation == '/splash' ? '/' : null;
     }
 
