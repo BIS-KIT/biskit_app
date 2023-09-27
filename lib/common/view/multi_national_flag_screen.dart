@@ -63,6 +63,7 @@ class _MultiNationalFlagScreenState
     setState(() {
       isLoading = false;
       nationalList = list;
+      tempList = nationalList;
     });
   }
 
@@ -100,7 +101,7 @@ class _MultiNationalFlagScreenState
   onChanged(String value) {
     if (value.isEmpty) {
       setState(() {
-        tempList = [];
+        tempList = nationalList;
       });
     } else {
       List<NationalFlagModel> searchList = nationalList
@@ -163,58 +164,43 @@ class _MultiNationalFlagScreenState
                         keyboardDismissBehavior:
                             ScrollViewKeyboardDismissBehavior.onDrag,
                         child: Column(
-                          children: tempList.isEmpty
-                              ? nationalList
-                                  .map((e) => ListTileImgWidget(
-                                        model: e,
-                                        isCheck: selectedModelList.isNotEmpty &&
-                                                selectedModelList
-                                                    .where((element) =>
-                                                        e.id == element.id)
-                                                    .isNotEmpty
-                                            ? true
-                                            : false,
-                                        onTap: () {
-                                          onTapTile(e);
-                                        },
-                                      ))
-                                  .toList()
-                              : tempList
-                                  .map((e) => ListTileImgWidget(
-                                        model: e,
-                                        isCheck: selectedModelList.isNotEmpty &&
-                                                selectedModelList
-                                                    .where((element) =>
-                                                        e.id == element.id)
-                                                    .isNotEmpty
-                                            ? true
-                                            : false,
-                                        onTap: () {
-                                          onTapTile(e);
-                                        },
-                                      ))
-                                  .toList(),
+                          children: tempList
+                              .map((e) => ListTileImgWidget(
+                                    model: e,
+                                    isCheck: selectedModelList.isNotEmpty &&
+                                            selectedModelList
+                                                .where((element) =>
+                                                    e.id == element.id)
+                                                .isNotEmpty
+                                        ? true
+                                        : false,
+                                    onTap: () {
+                                      onTapTile(e);
+                                    },
+                                  ))
+                              .toList(),
                         ),
                       ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 34,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    if (selectedModelList.length >= 2) {
-                      context.goNamed(UniversityScreen.routeName);
-                    }
-                  },
-                  child: FilledButtonWidget(
-                    text: '다음',
-                    isEnable: selectedModelList.length >= 2,
-                    height: 56,
+              if (MediaQuery.of(context).viewInsets.bottom <= 100)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    bottom: 34,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (selectedModelList.length >= 2) {
+                        context.goNamed(UniversityScreen.routeName);
+                      }
+                    },
+                    child: FilledButtonWidget(
+                      text: '다음',
+                      isEnable: selectedModelList.length >= 2,
+                      height: 56,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

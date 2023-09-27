@@ -167,7 +167,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       width: 24,
                       height: 24,
                       colorFilter: const ColorFilter.mode(
-                        kColorContentWeaker,
+                        kColorContentWeakest,
                         BlendMode.srcIn,
                       ),
                     ),

@@ -1,5 +1,8 @@
-import 'package:biskit_app/common/components/checkbox_widget.dart';
+import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/check_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -7,7 +10,6 @@ import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpAgreeScreen extends ConsumerStatefulWidget {
@@ -65,28 +67,20 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
 
               // 약관
-              GestureDetector(
+              ListWidget(
+                height: 40,
                 onTap: onTapAll,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CheckboxWidget(
-                        value: isAll,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      '전체 동의하기',
-                      style: getTsHeading18(context).copyWith(
-                        color: kColorContentWeak,
-                      ),
-                    ),
-                  ],
+                touchWidget: CheckCircleWidget(
+                  value: isAll,
+                ),
+                text: Text(
+                  '전체 동의하기',
+                  style: getTsHeading18(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
                 ),
               ),
+
               const SizedBox(
                 height: 16,
               ),
@@ -97,56 +91,97 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               const SizedBox(
                 height: 16,
               ),
-              GestureDetector(
+              ListWidget(
+                height: 40,
+                touchWidget: CheckWidget(
+                  value: isAgree1,
+                ),
                 onTap: () {
                   setState(() {
                     isAgree1 = !isAgree1;
                   });
                   checkAll();
                 },
-                child: _buildRow(
-                  context: context,
-                  text: '[필수] 서비스 이용약관',
-                  value: isAgree1,
+                text: Text(
+                  '[필수] 서비스 이용약관',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
+                ),
+                rightWidget: SelectWidget(
+                  text: '',
+                  iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
+                  onTap: () {},
                 ),
               ),
-              GestureDetector(
+              ListWidget(
+                height: 40,
+                touchWidget: CheckWidget(
+                  value: isAgree2,
+                ),
                 onTap: () {
                   setState(() {
                     isAgree2 = !isAgree2;
                   });
                   checkAll();
                 },
-                child: _buildRow(
-                  context: context,
-                  text: '[필수] 개인정보 처리방침',
-                  value: isAgree2,
+                text: Text(
+                  '[필수] 개인정보 처리방침',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
+                ),
+                rightWidget: SelectWidget(
+                  text: '',
+                  iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
+                  onTap: () {},
                 ),
               ),
-              GestureDetector(
+
+              ListWidget(
+                height: 40,
+                touchWidget: CheckWidget(
+                  value: isAgree3,
+                ),
                 onTap: () {
                   setState(() {
                     isAgree3 = !isAgree3;
                   });
                   checkAll();
                 },
-                child: _buildRow(
-                  context: context,
-                  text: '[필수] 위치기반 서비스 이용약관',
-                  value: isAgree3,
+                text: Text(
+                  '[필수] 위치기반 서비스 이용약관',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
+                ),
+                rightWidget: SelectWidget(
+                  text: '',
+                  iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
+                  onTap: () {},
                 ),
               ),
-              GestureDetector(
+              ListWidget(
+                height: 40,
+                touchWidget: CheckWidget(
+                  value: isAgree4,
+                ),
                 onTap: () {
                   setState(() {
                     isAgree4 = !isAgree4;
                   });
                   checkAll();
                 },
-                child: _buildRow(
-                  context: context,
-                  text: '[선택] 마케팅 정보 활용',
-                  value: isAgree4,
+                text: Text(
+                  '[선택] 마케팅 정보 활용',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
+                ),
+                rightWidget: SelectWidget(
+                  text: '',
+                  iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
+                  onTap: () {},
                 ),
               ),
               const Spacer(),
@@ -163,6 +198,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 },
                 child: FilledButtonWidget(
                   text: '다음',
+                  height: 56,
                   isEnable: isAgree1 && isAgree2 && isAgree3,
                 ),
               ),
@@ -173,63 +209,6 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Row _buildRow({
-    required BuildContext context,
-    required String text,
-    required bool value,
-  }) {
-    return Row(
-      children: [
-        Container(
-          width: 24,
-          height: 24,
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.symmetric(
-            vertical: 6,
-            horizontal: 4,
-          ),
-          child: SvgPicture.asset(
-            'assets/icons/check.svg',
-            width: 16,
-            height: 12,
-            colorFilter: ColorFilter.mode(
-              value ? kColorBorderPrimaryStrong : kColorContentDisabled,
-              BlendMode.srcIn,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Expanded(
-          child: Text(
-            text,
-            style: getTsBody16Rg(context).copyWith(
-              color: kColorContentWeaker,
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            // TODO 내용 상세보기
-          },
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(
-              'assets/icons/ic_chevron_right_line_24.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentWeaker,
-                BlendMode.srcIn,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

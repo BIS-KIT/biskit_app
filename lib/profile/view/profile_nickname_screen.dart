@@ -245,7 +245,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                                   width: 16,
                                   height: 16,
                                   colorFilter: const ColorFilter.mode(
-                                    kColorContentDisabled,
+                                    kColorContentWeakest,
                                     BlendMode.srcIn,
                                   ),
                                 ),

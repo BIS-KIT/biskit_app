@@ -1,9 +1,12 @@
-import 'package:biskit_app/common/components/checkbox_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
+import 'package:biskit_app/common/components/radio_widget.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -22,6 +25,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import '../components/check_circle.dart';
 import 'name_birth_gender_screen.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
@@ -33,7 +37,7 @@ class TestScreen extends ConsumerStatefulWidget {
 }
 
 class _TestScreenState extends ConsumerState<TestScreen> {
-  SelectWidgetValueType selectWidgetValueType = SelectWidgetValueType.none;
+  RadioWidgetValueType radioWidgetValueType = RadioWidgetValueType.none;
   bool isChecked = false;
   opTapkakaoLogin() async {
     logger.d(await KakaoSdk.origin);
@@ -81,6 +85,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(tr('hello')),
               ElevatedButton(
@@ -194,30 +199,19 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isChecked = !isChecked;
-                  });
-                },
-                child: CheckboxWidget(value: isChecked),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               // Select Component
-              SelectWidget(
+              RadioWidget(
                 leftText: 'text',
                 rightText: 'text',
-                value: selectWidgetValueType,
+                value: radioWidgetValueType,
                 onTapLeft: () {
                   setState(() {
-                    selectWidgetValueType = SelectWidgetValueType.left;
+                    radioWidgetValueType = RadioWidgetValueType.left;
                   });
                 },
                 onTapRight: () {
                   setState(() {
-                    selectWidgetValueType = SelectWidgetValueType.right;
+                    radioWidgetValueType = RadioWidgetValueType.right;
                   });
                 },
               ),
@@ -236,6 +230,55 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   },
                   hintText: 'Placeholder',
                 ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ListWidget(
+                touchWidget: const CheckCircleWidget(
+                  value: true,
+                ),
+                text: Text(
+                  'Text',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
+                ),
+                rightWidget: const SelectWidget(
+                  text: 'Label',
+                  iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CheckCircleWidget(
+                value: isChecked,
+                onTap: () {
+                  setState(() {
+                    isChecked = !isChecked;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SelectWidget(
+                    text: 'Label',
+                    isDisable: true,
+                    iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  SelectWidget(
+                    text: 'Label',
+                    iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
