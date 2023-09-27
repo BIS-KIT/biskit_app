@@ -14,6 +14,7 @@ import 'package:biskit_app/common/view/error_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
@@ -293,6 +294,21 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   );
                 },
                 child: const Text('BottomSheet'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SetPasswordScreen(
+                          title: '',
+                        ),
+                      ));
+                },
+                child: const Text('비밀번호 화면'),
               ),
               const SizedBox(
                 height: 10,
