@@ -7,6 +7,7 @@ class ListWidget extends StatelessWidget {
   final Widget touchWidget;
   final Widget text;
   final Widget? rightWidget;
+  final Color borderColor;
   final Function()? onTap;
   const ListWidget({
     Key? key,
@@ -14,6 +15,7 @@ class ListWidget extends StatelessWidget {
     required this.touchWidget,
     required this.text,
     this.rightWidget,
+    this.borderColor = kColorBorderDefalut,
     this.onTap,
   }) : super(key: key);
 
@@ -21,8 +23,16 @@ class ListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      color: kColorBgDefault,
       padding: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        color: kColorBgDefault,
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+      ),
       child: Row(
         children: [
           GestureDetector(

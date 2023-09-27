@@ -18,6 +18,7 @@ import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
+import 'package:biskit_app/user/view/sign_up_university_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -322,6 +323,36 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                       ));
                 },
                 child: const Text('회원가입 완료 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SingleNationalFlagScreen(
+                          signUpModel: SignUpModel(),
+                        ),
+                      ));
+                },
+                child: const Text('국적 선택 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UniversityScreen(
+                          signUpModel: SignUpModel(),
+                        ),
+                      ));
+                },
+                child: const Text('학교 선택 화면'),
               ),
               const SizedBox(
                 height: 10,

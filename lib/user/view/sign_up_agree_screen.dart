@@ -69,6 +69,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               // 약관
               ListWidget(
                 height: 40,
+                borderColor: kColorBgDefault,
                 onTap: onTapAll,
                 touchWidget: CheckCircleWidget(
                   value: isAll,
@@ -93,6 +94,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
               ListWidget(
                 height: 40,
+                borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
                   value: isAgree1,
                 ),
@@ -116,6 +118,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
               ListWidget(
                 height: 40,
+                borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
                   value: isAgree2,
                 ),
@@ -140,6 +143,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
 
               ListWidget(
                 height: 40,
+                borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
                   value: isAgree3,
                 ),
@@ -163,6 +167,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
               ListWidget(
                 height: 40,
+                borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
                   value: isAgree4,
                 ),
