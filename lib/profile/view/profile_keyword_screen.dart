@@ -1,17 +1,26 @@
-import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/profile/model/Introduction_create_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/profile/components/keyword_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/profile/components/keyword_input_widget.dart';
+import 'package:biskit_app/profile/model/profile_create_model.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileKeywordScreen extends StatefulWidget {
-  const ProfileKeywordScreen({super.key});
+  static String get routeName => 'profileKeyword';
+  final ProfileCreateModel? profileCreateModel;
+  const ProfileKeywordScreen({
+    Key? key,
+    this.profileCreateModel,
+  }) : super(key: key);
 
   @override
   State<ProfileKeywordScreen> createState() => _ProfileKeywordScreenState();
@@ -34,6 +43,23 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
       },
       title: '삭제하시겠어요?',
     );
+  }
+
+  onTapNext() {
+    if (keywordList.isNotEmpty) {
+      context.pushNamed(
+        ProfileIdConfirmScreen.routeName,
+        extra: widget.profileCreateModel!.copyWith(
+            introductions: List.from(
+          keywordList.map(
+            (e) => IntroductionCreateModel(
+              keyword: e.keyword,
+              context: e.reason,
+            ),
+          ),
+        )),
+      );
+    }
   }
 
   @override
@@ -130,15 +156,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
               bottom: 34,
             ),
             child: GestureDetector(
-              onTap: () {
-                if (keywordList.isNotEmpty) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileIdConfirmScreen(),
-                      ));
-                }
-              },
+              onTap: onTapNext,
               child: FilledButtonWidget(
                 text: '다음',
                 isEnable: keywordList.isNotEmpty,

@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class _RootTabState extends ConsumerState<RootTab>
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userMeProvider);
     return DefaultLayout(
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.deepPurple,
@@ -77,6 +79,8 @@ class _RootTabState extends ConsumerState<RootTab>
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text('email : ${(userState as UserModel).email}'),
+              Text('nickname : ${(userState).profile!.nick_name}'),
               ElevatedButton(
                 onPressed: () {
                   ref.read(userMeProvider.notifier).logout();
