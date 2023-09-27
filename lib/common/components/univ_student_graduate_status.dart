@@ -114,7 +114,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                               selectedModel = e;
                             });
                           },
-                          text: Text(
+                          centerWidget: Text(
                             e.kname,
                             style: getTsBody16Rg(context).copyWith(
                               color: kColorContentWeak,

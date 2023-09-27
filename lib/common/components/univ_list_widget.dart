@@ -158,7 +158,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                                   onTap: () {
                                     onTapTile(e);
                                   },
-                                  text: Text(
+                                  centerWidget: Text(
                                     e.kname,
                                     style: getTsBody16Rg(context).copyWith(
                                       color: kColorContentWeak,

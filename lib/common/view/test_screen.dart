@@ -240,7 +240,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                 touchWidget: const CheckCircleWidget(
                   value: true,
                 ),
-                text: Text(
+                centerWidget: Text(
                   'Text',
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,

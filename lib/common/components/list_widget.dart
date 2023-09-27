@@ -1,21 +1,24 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
 
 class ListWidget extends StatelessWidget {
-  final double height;
+  final double? height;
   final Widget touchWidget;
-  final Widget text;
+  final Widget centerWidget;
   final Widget? rightWidget;
   final Color borderColor;
+  final bool isSubComponent;
   final Function()? onTap;
   const ListWidget({
     Key? key,
-    this.height = 56,
+    this.height,
     required this.touchWidget,
-    required this.text,
+    required this.centerWidget,
     this.rightWidget,
     this.borderColor = kColorBorderDefalut,
+    this.isSubComponent = false,
     this.onTap,
   }) : super(key: key);
 
@@ -23,7 +26,13 @@ class ListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      padding: const EdgeInsets.only(right: 8),
+      padding: isSubComponent
+          ? const EdgeInsets.only(
+              top: 16,
+              bottom: 16,
+              right: 8,
+            )
+          : const EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
         color: kColorBgDefault,
         border: Border(
@@ -47,7 +56,7 @@ class ListWidget extends StatelessWidget {
             width: 4,
           ),
           Expanded(
-            child: text,
+            child: centerWidget,
           ),
           const SizedBox(
             width: 4,

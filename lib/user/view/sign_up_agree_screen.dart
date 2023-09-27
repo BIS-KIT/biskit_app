@@ -74,7 +74,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 touchWidget: CheckCircleWidget(
                   value: isAll,
                 ),
-                text: Text(
+                centerWidget: Text(
                   '전체 동의하기',
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentWeak,
@@ -104,7 +104,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   });
                   checkAll();
                 },
-                text: Text(
+                centerWidget: Text(
                   '[필수] 서비스 이용약관',
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
@@ -128,7 +128,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   });
                   checkAll();
                 },
-                text: Text(
+                centerWidget: Text(
                   '[필수] 개인정보 처리방침',
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
@@ -153,7 +153,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   });
                   checkAll();
                 },
-                text: Text(
+                centerWidget: Text(
                   '[필수] 위치기반 서비스 이용약관',
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
@@ -177,7 +177,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   });
                   checkAll();
                 },
-                text: Text(
+                centerWidget: Text(
                   '[선택] 마케팅 정보 활용',
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
