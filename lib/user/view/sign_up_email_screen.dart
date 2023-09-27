@@ -74,7 +74,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
   }
 
   void startTimer() {
-    pinDuration = const Duration(minutes: 5);
+    pinDuration = const Duration(seconds: 5);
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -82,6 +82,11 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
           final seconds = pinDuration.inSeconds - 1;
           if (seconds < 0) {
             timer.cancel();
+
+            // 시간 오버인 경우
+            setState(() {
+              pinCodeError = '인증번호를 다시 보내주세요';
+            });
           } else {
             pinDuration = Duration(seconds: seconds);
           }
@@ -102,6 +107,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
         isButtonEnable = false;
       }
     });
+    checkValueEmail();
   }
 
   checkValueEmail() {
@@ -263,7 +269,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                           },
                           child: TextInputWidget(
                             title: 'emailScreen.email'.tr(),
-                            hintText: '이메일을 입력해주세요',
+                            hintText: 'example@email.com',
                             initialValue: email,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
