@@ -88,10 +88,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             'assets/icons/ic_search_line_24.svg',
             width: 24,
             height: 24,
-            colorFilter: ColorFilter.mode(
-              status == SearchBarStatus.defaultType
-                  ? kColorContentDisabled
-                  : kColorContentWeaker,
+            colorFilter: const ColorFilter.mode(
+              kColorContentWeaker,
               BlendMode.srcIn,
             ),
           ),
@@ -136,7 +134,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 width: 16,
                 height: 16,
                 colorFilter: const ColorFilter.mode(
-                  kColorContentPlaceholder,
+                  kColorContentWeakest,
                   BlendMode.srcIn,
                 ),
               ),

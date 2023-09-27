@@ -64,6 +64,7 @@ class _SingleNationalFlagScreenState
     setState(() {
       isLoading = false;
       nationalList = list;
+      tempList = list;
     });
   }
 
@@ -91,7 +92,7 @@ class _SingleNationalFlagScreenState
   onChanged(String value) {
     if (value.isEmpty) {
       setState(() {
-        tempList = [];
+        tempList = nationalList;
       });
     } else {
       List<NationalFlagModel> searchList = nationalList
@@ -154,31 +155,18 @@ class _SingleNationalFlagScreenState
                         keyboardDismissBehavior:
                             ScrollViewKeyboardDismissBehavior.onDrag,
                         child: Column(
-                          children: tempList.isEmpty
-                              ? nationalList
-                                  .map((e) => ListTileImgWidget(
-                                        model: e,
-                                        isCheck: selectedModel != null &&
-                                                selectedModel!.id == e.id
-                                            ? true
-                                            : false,
-                                        onTap: () {
-                                          onTapTile(e);
-                                        },
-                                      ))
-                                  .toList()
-                              : tempList
-                                  .map((e) => ListTileImgWidget(
-                                        model: e,
-                                        isCheck: selectedModel != null &&
-                                                selectedModel!.id == e.id
-                                            ? true
-                                            : false,
-                                        onTap: () {
-                                          onTapTile(e);
-                                        },
-                                      ))
-                                  .toList(),
+                          children: tempList
+                              .map((e) => ListTileImgWidget(
+                                    model: e,
+                                    isCheck: selectedModel != null &&
+                                            selectedModel!.id == e.id
+                                        ? true
+                                        : false,
+                                    onTap: () {
+                                      onTapTile(e);
+                                    },
+                                  ))
+                              .toList(),
                         ),
                       ),
               ),

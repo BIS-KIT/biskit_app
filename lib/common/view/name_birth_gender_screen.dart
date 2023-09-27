@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:biskit_app/common/components/custom_text_form_field.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
-import 'package:biskit_app/common/components/select_widget.dart';
+import 'package:biskit_app/common/components/radio_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -42,7 +42,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   late FocusNode birthMonthFocusNode;
   late FocusNode birthDayFocusNode;
   late FocusNode nameFocusNode;
-  SelectWidgetValueType selectGender = SelectWidgetValueType.none;
+  RadioWidgetValueType selectGender = RadioWidgetValueType.none;
 
   @override
   void initState() {
@@ -340,19 +340,19 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   const SizedBox(
                     height: 8,
                   ),
-                  SelectWidget(
+                  RadioWidget(
                       leftText: '여성',
                       rightText: '남성',
                       value: selectGender,
                       onTapLeft: () {
                         setState(() {
-                          selectGender = SelectWidgetValueType.left;
+                          selectGender = RadioWidgetValueType.left;
                           isValidGender = true;
                         });
                       },
                       onTapRight: () {
                         setState(() {
-                          selectGender = SelectWidgetValueType.right;
+                          selectGender = RadioWidgetValueType.right;
                           isValidGender = true;
                         });
                       })
@@ -374,7 +374,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   extra: widget.signUpModel.copyWith(
                     name: name,
                     birth: '2023-09-23',
-                    gender: selectGender == SelectWidgetValueType.left
+                    gender: selectGender == RadioWidgetValueType.left
                         ? 'female'
                         : 'male',
                   ),
