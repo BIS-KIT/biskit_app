@@ -5,6 +5,7 @@ import 'package:biskit_app/common/model/api_res_model.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -185,7 +186,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       apiResModel = await ref
           .read(authRepositoryProvider)
           .signUpEmail(widget.signUpModel.copyWith(
-            university_id: 11,
+            university_id: 1,
             department: selectedStudentStatusModel!.kname,
             education_status: selectedGraduateStatusModel!.kname,
           ));
@@ -193,6 +194,12 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       context.loaderOverlay.hide();
       if (apiResModel.isOk) {
         // 성공시
+        if (apiResModel.data != null) {
+          ref.read(userMeProvider.notifier).signUpGetMe(
+                accessToken: apiResModel.data!['token'],
+                refreshToken: apiResModel.data!['refresh_token'],
+              );
+        }
       } else {
         showSnackBar(
           context: context,

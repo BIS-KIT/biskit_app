@@ -3,6 +3,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,7 +22,8 @@ class UtilRepository {
     required this.baseUrl,
   });
 
-  getLanguages() async {
+  Future<List<LanguageModel>> getLanguages() async {
+    List<LanguageModel> list = [];
     final res = await dio.get(
       '$baseUrl/languages',
       options: Options(
@@ -33,7 +35,9 @@ class UtilRepository {
     );
 
     logger.d(res.toString());
-    return res;
+    list = List.from((res.data as List).map((e) => LanguageModel.fromMap(e)));
+
+    return list;
   }
 
   Future<List<NationalFlagModel>> getNationality(

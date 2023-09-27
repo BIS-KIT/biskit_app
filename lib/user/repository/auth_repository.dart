@@ -144,4 +144,23 @@ class AuthRepository {
     }
     return apiResModel;
   }
+
+  deleteUser(int userId) async {
+    bool isOk = false;
+    final res = await dio.delete(
+      '$baseUrl/user/$userId',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    logger.d('DELETE USER: $res');
+    if (res.statusCode == 200) {
+      isOk = true;
+    }
+    return isOk;
+  }
 }
