@@ -1,7 +1,12 @@
+import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/level_bar_widget.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_tile_level_widget.dart';
 
 class LangLevelListWidget extends StatefulWidget {
   final int level;
@@ -84,13 +89,46 @@ class _LangLevelListWidgetState extends State<LangLevelListWidget> {
                 children: [
                   ...levelList
                       .map(
-                        (e) => GestureDetector(
+                        (e) => ListWidget(
+                          touchWidget: CheckCircleWidget(
+                            value: e.isChecked,
+                          ),
                           onTap: () {
                             onTapLevel(e);
                           },
-                          child: ListTileLevelWidget(
-                            isChkecked: e.isChecked,
-                            level: e.level,
+                          isSubComponent: true,
+                          borderColor: e == levelList.last
+                              ? kColorBgDefault
+                              : kColorBorderDefalut,
+                          centerWidget: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    getLevelTitle(e.level),
+                                    style: getTsBody16Sb(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  LevelBarWidget(
+                                    level: e.level,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              Text(
+                                getLevelSubTitle(e.level),
+                                style: getTsBody14Rg(context).copyWith(
+                                  color: kColorContentWeakest,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       )

@@ -1,8 +1,11 @@
+import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_tile_check_widget.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
 
 class UnivStudentStatusListWidget extends StatefulWidget {
@@ -89,17 +92,30 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
                 )
               : Column(
                   children: univerisyStudentStatusList
-                      .map((e) => ListTileCheckWidget(
-                            text: e.kname,
-                            isChkecked: e == selectedModel ? true : false,
-                            isLevelView: false,
-                            onTap: () {
-                              setState(() {
-                                selectedModel = e;
-                              });
-                            },
-                          ))
-                      .toList()),
+                      .map(
+                        (e) => ListWidget(
+                          height: 56,
+                          borderColor: e == univerisyStudentStatusList.last
+                              ? kColorBgDefault
+                              : kColorBorderDefalut,
+                          touchWidget: CheckCircleWidget(
+                            value: e == selectedModel,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              selectedModel = e;
+                            });
+                          },
+                          centerWidget: Text(
+                            e.kname,
+                            style: getTsBody16Rg(context).copyWith(
+                              color: kColorContentWeak,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
           Padding(
             padding: const EdgeInsets.only(
               top: 16,

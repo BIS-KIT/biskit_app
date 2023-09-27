@@ -1,10 +1,15 @@
+import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/select_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
-import 'package:biskit_app/common/components/list_tile_check_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
@@ -116,19 +121,31 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                         children: [
                           ...viewList
                               .map(
-                                (e) => GestureDetector(
+                                (e) => ListWidget(
+                                  height: 56,
+                                  touchWidget: CheckCircleWidget(
+                                    value: e.isChecked,
+                                  ),
                                   onTap: () {
                                     onTapLang(e);
                                   },
-                                  child: ListTileCheckWidget(
-                                    text: e.langName,
-                                    isChkecked: e.isChecked,
-                                    isLevelView: true,
-                                    level: e.level,
-                                    onTapLevel: () {
-                                      onTapSelectedLevel(e);
-                                    },
+                                  centerWidget: Text(
+                                    e.langName,
+                                    style: getTsBody16Rg(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
                                   ),
+                                  rightWidget: e.isChecked
+                                      ? SelectWidget(
+                                          text: getLevelTitle(e.level),
+                                          iconPath:
+                                              'assets/icons/ic_chevron_down_line_24.svg',
+                                          isDisable: true,
+                                          onTap: () {
+                                            onTapSelectedLevel(e);
+                                          },
+                                        )
+                                      : null,
                                 ),
                               )
                               .toList(),
