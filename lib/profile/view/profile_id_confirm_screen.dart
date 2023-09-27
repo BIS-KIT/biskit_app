@@ -1,22 +1,34 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:photo_manager/photo_manager.dart';
+
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:biskit_app/profile/model/profile_create_model.dart';
 
-class ProfileIdConfirmScreen extends StatefulWidget {
-  const ProfileIdConfirmScreen({super.key});
+class ProfileIdConfirmScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'profileIdConfirm';
+  final ProfileCreateModel? profileCreateModel;
+  const ProfileIdConfirmScreen({
+    Key? key,
+    this.profileCreateModel,
+  }) : super(key: key);
 
   @override
-  State<ProfileIdConfirmScreen> createState() => _ProfileIdConfirmScreenState();
+  ConsumerState<ProfileIdConfirmScreen> createState() =>
+      _ProfileIdConfirmScreenState();
 }
 
-class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
+class _ProfileIdConfirmScreenState
+    extends ConsumerState<ProfileIdConfirmScreen> {
   final JustTheController tooltipController = JustTheController();
 
   PhotoModel? selectedPhotoModel;
@@ -29,6 +41,17 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  submit() async {
+    // TODO 학생증 처리
+    // String? studentCardPath;
+    if (widget.profileCreateModel != null) {
+      logger.d(widget.profileCreateModel!.toJson());
+      await ref.read(profileRepositoryProvider).createProfile(
+            profileCreateModel: widget.profileCreateModel!,
+          );
+    }
   }
 
   @override
@@ -177,10 +200,15 @@ class _ProfileIdConfirmScreenState extends State<ProfileIdConfirmScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        '다음에 할게요',
-                        style: getTsBody14Rg(context).copyWith(
-                          color: kColorBorderStrong,
+                      GestureDetector(
+                        onTap: () {
+                          submit();
+                        },
+                        child: Text(
+                          '다음에 할게요',
+                          style: getTsBody14Rg(context).copyWith(
+                            color: kColorBorderStrong,
+                          ),
                         ),
                       ),
                     ],

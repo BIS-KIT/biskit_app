@@ -1,13 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/profile/model/use_language_model.dart';
-import 'package:biskit_app/profile/provider/use_language_provider.dart';
+import 'package:biskit_app/profile/model/available_language_create_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
-import 'package:biskit_app/profile/components/lang_list_widget.dart';
 import 'package:biskit_app/common/components/level_bar_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -15,10 +12,22 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
+import 'package:biskit_app/profile/components/lang_list_widget.dart';
+import 'package:biskit_app/profile/model/profile_create_model.dart';
+import 'package:biskit_app/profile/model/use_language_model.dart';
+import 'package:biskit_app/profile/provider/use_language_provider.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileLanguageScreen extends ConsumerStatefulWidget {
-  const ProfileLanguageScreen({super.key});
+  static String get routeName => 'profileLanguage';
+
+  final ProfileCreateModel? profileCreateModel;
+  const ProfileLanguageScreen({
+    super.key,
+    this.profileCreateModel,
+  });
 
   @override
   ConsumerState<ProfileLanguageScreen> createState() =>
@@ -74,6 +83,23 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
         });
         Navigator.pop(context);
       }),
+    );
+  }
+
+  onTapNext() {
+    if (selectedList.isEmpty || widget.profileCreateModel == null) return;
+
+    context.pushNamed(
+      ProfileKeywordScreen.routeName,
+      extra: widget.profileCreateModel!.copyWith(
+          available_languages: List.from(
+        selectedList.map(
+          (e) => AvailableLanguageCreateModel(
+            level: getLevelServerValue(e.level),
+            language_id: e.languageModel.id,
+          ),
+        ),
+      )),
     );
   }
 
@@ -149,14 +175,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
               bottom: 34,
             ),
             child: GestureDetector(
-              onTap: () {
-                if (selectedList.isEmpty) return;
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileKeywordScreen(),
-                    ));
-              },
+              onTap: onTapNext,
               child: FilledButtonWidget(
                 text: '다음',
                 isEnable: selectedList.isNotEmpty,

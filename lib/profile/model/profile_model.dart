@@ -4,19 +4,22 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:biskit_app/profile/model/available_language_model.dart';
+import 'package:biskit_app/profile/model/introduction_model.dart';
 
 class ProfileModel {
   final int id;
   final int user_id;
   final String nick_name;
-  final String profile_photo;
+  final String? profile_photo;
   final List<AvailableLanguageModel> available_languages;
+  final List<IntroductionModel> introductions;
   ProfileModel({
     required this.id,
     required this.user_id,
     required this.nick_name,
     required this.profile_photo,
     required this.available_languages,
+    required this.introductions,
   });
 
   ProfileModel copyWith({
@@ -25,6 +28,7 @@ class ProfileModel {
     String? nick_name,
     String? profile_photo,
     List<AvailableLanguageModel>? available_languages,
+    List<IntroductionModel>? introductions,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -32,6 +36,7 @@ class ProfileModel {
       nick_name: nick_name ?? this.nick_name,
       profile_photo: profile_photo ?? this.profile_photo,
       available_languages: available_languages ?? this.available_languages,
+      introductions: introductions ?? this.introductions,
     );
   }
 
@@ -42,6 +47,7 @@ class ProfileModel {
       'nick_name': nick_name,
       'profile_photo': profile_photo,
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
+      'introductions': introductions.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -50,10 +56,16 @@ class ProfileModel {
       id: map['id'] as int,
       user_id: map['user_id'] as int,
       nick_name: map['nick_name'] as String,
-      profile_photo: map['profile_photo'] as String,
+      profile_photo:
+          map['profile_photo'] != null ? map['profile_photo'] as String : null,
       available_languages: List<AvailableLanguageModel>.from(
-        (map['available_languages'] as List<int>).map<AvailableLanguageModel>(
+        (map['available_languages'] as List).map<AvailableLanguageModel>(
           (x) => AvailableLanguageModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+      introductions: List<IntroductionModel>.from(
+        (map['introductions'] as List).map<IntroductionModel>(
+          (x) => IntroductionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );
@@ -66,7 +78,7 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages)';
+    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions)';
   }
 
   @override
@@ -77,7 +89,8 @@ class ProfileModel {
         other.user_id == user_id &&
         other.nick_name == nick_name &&
         other.profile_photo == profile_photo &&
-        listEquals(other.available_languages, available_languages);
+        listEquals(other.available_languages, available_languages) &&
+        listEquals(other.introductions, introductions);
   }
 
   @override
@@ -86,6 +99,7 @@ class ProfileModel {
         user_id.hashCode ^
         nick_name.hashCode ^
         profile_photo.hashCode ^
-        available_languages.hashCode;
+        available_languages.hashCode ^
+        introductions.hashCode;
   }
 }
