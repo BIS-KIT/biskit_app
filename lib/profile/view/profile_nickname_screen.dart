@@ -9,15 +9,19 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ProfileNicknameScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'profileNickname';
   const ProfileNicknameScreen({super.key});
 
   @override
@@ -111,14 +115,40 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
     });
   }
 
-  onTapNext() {
+  onTapNext() async {
     FocusScope.of(context).unfocus();
     if (isNickNameOk) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ProfileLanguageScreen(),
-          ));
+      // ProfileResponseModel profileResponseModel =
+      //     await ref.read(profileRepositoryProvider).createProfile(
+      //           nickName: controller.text,
+      //           profilePhoto: selectedPhotoModel,
+      //         );
+      // logger.d(profileResponseModel.toJson());
+
+      // 사진이 있는 경우 바로 업로드 처리 후 프로필 사진 패스 전달
+      String? profilePhoto;
+      if (selectedPhotoModel != null) {
+        context.loaderOverlay.show();
+        try {
+          profilePhoto =
+              await ref.read(profileRepositoryProvider).postProfilePhoto(
+                    profilePhoto: selectedPhotoModel!,
+                  );
+        } finally {
+          context.loaderOverlay.hide();
+        }
+        logger.d('uploadFilePath : $profilePhoto');
+      }
+      if (!mounted) return;
+      context.pushNamed(
+        ProfileLanguageScreen.routeName,
+        extra: ProfileCreateModel(
+          nick_name: controller.text,
+          profile_photo: profilePhoto,
+          available_languages: [],
+          introductions: [],
+        ),
+      );
     }
   }
 
@@ -245,7 +275,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                                   width: 16,
                                   height: 16,
                                   colorFilter: const ColorFilter.mode(
-                                    kColorContentDisabled,
+                                    kColorContentWeakest,
                                     BlendMode.srcIn,
                                   ),
                                 ),

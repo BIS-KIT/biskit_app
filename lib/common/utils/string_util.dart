@@ -15,6 +15,23 @@ String getLevelTitle(int level) {
   }
 }
 
+String getLevelServerValue(int level) {
+  switch (level) {
+    case 5:
+      return 'PROFICIENT';
+    case 4:
+      return 'ADVANCED';
+    case 3:
+      return 'INTERMEDIATE';
+    case 2:
+      return 'BASIC';
+    case 1:
+      return 'BEGINNER';
+    default:
+      return '';
+  }
+}
+
 String getLevelSubTitle(int level) {
   switch (level) {
     case 5:

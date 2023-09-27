@@ -60,6 +60,15 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     }
   }
 
+  Future<void> signUpGetMe({
+    required String accessToken,
+    required String refreshToken,
+  }) async {
+    await storage.write(key: kACCESS_TOKEN_KEY, value: accessToken);
+    await storage.write(key: kREFRESH_TOKEN_KEY, value: refreshToken);
+    await getMe();
+  }
+
   Future<UserModelBase> login({
     required String email,
     required String password,
@@ -101,5 +110,12 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
         storage.delete(key: kACCESS_TOKEN_KEY),
       ],
     );
+  }
+
+  Future<void> deleteUser() async {
+    if (state is UserModel) {
+      await authRepository.deleteUser((state as UserModel).id);
+      state = null;
+    }
   }
 }

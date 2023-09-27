@@ -1,9 +1,12 @@
-import 'package:biskit_app/common/components/checkbox_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
+import 'package:biskit_app/common/components/radio_widget.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -11,9 +14,11 @@ import 'package:biskit_app/common/view/error_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
+import 'package:biskit_app/user/view/sign_up_university_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +27,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import '../components/check_circle.dart';
 import 'name_birth_gender_screen.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
@@ -33,7 +39,7 @@ class TestScreen extends ConsumerStatefulWidget {
 }
 
 class _TestScreenState extends ConsumerState<TestScreen> {
-  SelectWidgetValueType selectWidgetValueType = SelectWidgetValueType.none;
+  RadioWidgetValueType radioWidgetValueType = RadioWidgetValueType.none;
   bool isChecked = false;
   opTapkakaoLogin() async {
     logger.d(await KakaoSdk.origin);
@@ -81,6 +87,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(tr('hello')),
               ElevatedButton(
@@ -194,30 +201,19 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isChecked = !isChecked;
-                  });
-                },
-                child: CheckboxWidget(value: isChecked),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               // Select Component
-              SelectWidget(
+              RadioWidget(
                 leftText: 'text',
                 rightText: 'text',
-                value: selectWidgetValueType,
+                value: radioWidgetValueType,
                 onTapLeft: () {
                   setState(() {
-                    selectWidgetValueType = SelectWidgetValueType.left;
+                    radioWidgetValueType = RadioWidgetValueType.left;
                   });
                 },
                 onTapRight: () {
                   setState(() {
-                    selectWidgetValueType = SelectWidgetValueType.right;
+                    radioWidgetValueType = RadioWidgetValueType.right;
                   });
                 },
               ),
@@ -236,6 +232,55 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   },
                   hintText: 'Placeholder',
                 ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ListWidget(
+                touchWidget: const CheckCircleWidget(
+                  value: true,
+                ),
+                centerWidget: Text(
+                  'Text',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
+                ),
+                rightWidget: const SelectWidget(
+                  text: 'Label',
+                  iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CheckCircleWidget(
+                value: isChecked,
+                onTap: () {
+                  setState(() {
+                    isChecked = !isChecked;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SelectWidget(
+                    text: 'Label',
+                    isDisable: true,
+                    iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  SelectWidget(
+                    text: 'Label',
+                    iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
@@ -259,10 +304,65 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
+                        builder: (context) => const SetPasswordScreen(
+                          title: '',
+                        ),
+                      ));
+                },
+                child: const Text('비밀번호 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => const SignUpCompletedScreen(),
                       ));
                 },
                 child: const Text('회원가입 완료 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SingleNationalFlagScreen(
+                          signUpModel: SignUpModel(),
+                        ),
+                      ));
+                },
+                child: const Text('국적 선택 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UniversityScreen(
+                          signUpModel: SignUpModel(
+                            email: 'test00@gmail.com',
+                            password: 'qwer1234',
+                            birth: '1990-01-06',
+                            gender: 'male',
+                            name: '테스터',
+                            terms_mandatory: true,
+                            terms_optional: true,
+                            terms_push: true,
+                            nationality_ids: [1],
+                          ),
+                        ),
+                      ));
+                },
+                child: const Text('학교 선택 화면'),
               ),
               const SizedBox(
                 height: 10,

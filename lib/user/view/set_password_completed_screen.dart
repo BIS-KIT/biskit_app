@@ -56,7 +56,7 @@ class _SetPasswordCompletedScreenState
                             child: Stack(children: [
                               // TODO: icon 너비, 색상 안 맞아서 수정해야 함
                               SvgPicture.asset(
-                                'assets/icons/check.svg',
+                                'assets/icons/ic_check_line_24.svg',
                                 width: 40,
                                 height: 40,
                                 colorFilter: const ColorFilter.mode(

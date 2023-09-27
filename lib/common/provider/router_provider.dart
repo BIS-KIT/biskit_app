@@ -4,6 +4,11 @@ import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/root_tab.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
+import 'package:biskit_app/profile/model/profile_create_model.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:biskit_app/profile/view/profile_language_screen.dart';
+import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -131,6 +136,41 @@ class RouteProvider extends ChangeNotifier {
           path: '/signUpCompleted',
           name: SignUpCompletedScreen.routeName,
           builder: (_, __) => const SignUpCompletedScreen(),
+          routes: [
+            GoRoute(
+              path: 'profileNickname',
+              name: ProfileNicknameScreen.routeName,
+              builder: (_, __) => const ProfileNicknameScreen(),
+              routes: [
+                GoRoute(
+                  path: 'profileLanguage',
+                  name: ProfileLanguageScreen.routeName,
+                  builder: (_, state) => ProfileLanguageScreen(
+                    profileCreateModel: state.extra as ProfileCreateModel,
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'profileKeyword',
+                      name: ProfileKeywordScreen.routeName,
+                      builder: (_, state) => ProfileKeywordScreen(
+                        profileCreateModel: state.extra as ProfileCreateModel,
+                      ),
+                      routes: [
+                        GoRoute(
+                          path: 'profileIdConfirm',
+                          name: ProfileIdConfirmScreen.routeName,
+                          builder: (_, state) => ProfileIdConfirmScreen(
+                            profileCreateModel:
+                                state.extra as ProfileCreateModel,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: '/findId',
@@ -142,16 +182,6 @@ class RouteProvider extends ChangeNotifier {
           name: SignUpScreen.routeName,
           builder: (_, __) => const SignUpScreen(),
         ),
-        // GoRoute(
-        //   path: '/findPassword',
-        //   name: FindPasswordScreen.routeName,
-        //   builder: (_, __) => const FindPasswordScreen(),
-        // ),
-        // GoRoute(
-        //   path: '/setPassword',
-        //   name: SetPasswordScreen.routeName,
-        //   builder: (context, state) => const SetPasswordScreen(),
-        // ),
         GoRoute(
           path: '/findPassword',
           name: FindPasswordScreen.routeName,
@@ -170,7 +200,6 @@ class RouteProvider extends ChangeNotifier {
           name: SetPasswordCompletedScreen.routeName,
           builder: (context, state) => const SetPasswordCompletedScreen(),
         ),
-
         GoRoute(
           path: '/',
           name: RootTab.routeName,
@@ -218,7 +247,19 @@ class RouteProvider extends ChangeNotifier {
     // 로그인 중이거나 현재 위치가 SplashScreen이면
     // 홈으로 이동
     if (user is UserModel) {
-      return logginIn || state.matchedLocation == '/splash' ? '/' : null;
+      if (user.profile == null ||
+          user.profile!.available_languages.isEmpty ||
+          user.profile!.introductions.isEmpty) {
+        // 만약 프로필 정보가 없다면
+        return state.matchedLocation.contains('/signUpCompleted')
+            ? null
+            : '/signUpCompleted';
+      } else {
+        return logginIn ||
+                ['/splash', '/signUpCompleted'].contains(state.matchedLocation)
+            ? '/'
+            : null;
+      }
     }
 
     // UserModelError

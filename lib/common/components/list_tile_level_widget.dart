@@ -1,7 +1,7 @@
+import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:flutter/material.dart';
 
-import 'package:biskit_app/common/components/checkbox_widget.dart';
 import 'package:biskit_app/common/components/level_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -39,7 +39,7 @@ class ListTileLevelWidget extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CheckboxWidget(
+              child: CheckCircleWidget(
                 value: isChkecked,
               ),
             ),

@@ -1,4 +1,9 @@
-import 'package:biskit_app/common/components/list_tile_check_widget.dart';
+import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +12,8 @@ import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/utils/json_util.dart';
+
+import '../const/colors.dart';
 
 class UnivListWidget extends StatefulWidget {
   final UniversityModel? selectedUnivModel;
@@ -41,16 +48,16 @@ class _UnivListWidgetState extends State<UnivListWidget> {
     });
 
     // TODO 학교 데이터 가져오는 부분
-    // final UtilRepository utilRepository = UtilRepository(
-    //   dio: Dio(),
-    //   baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
-    // );
-    // await Future.microtask(() => null);
-    // List univList = await utilRepository.getUniversty(
-    //   languageCode: context.locale.languageCode,
-    //   search: '',
-    // );
-    // logger.d(univList);
+    final UtilRepository utilRepository = UtilRepository(
+      dio: Dio(),
+      baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
+    );
+    await Future.microtask(() => null);
+    List univList = await utilRepository.getUniversty(
+      languageCode: context.locale.languageCode,
+      search: '',
+    );
+    logger.d(univList);
 
     await getUnivList();
     setState(() {
@@ -88,6 +95,9 @@ class _UnivListWidgetState extends State<UnivListWidget> {
             .toList();
       });
     }
+    setState(() {
+      tempList = univerisyList;
+    });
   }
 
   @override
@@ -106,7 +116,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
   onChanged(String value) {
     if (value.isEmpty) {
       setState(() {
-        tempList = [];
+        tempList = univerisyList;
       });
     } else {
       List<UniversityModel> searchList = univerisyList
@@ -139,29 +149,28 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                         keyboardDismissBehavior:
                             ScrollViewKeyboardDismissBehavior.onDrag,
                         child: Column(
-                          children: tempList.isEmpty
-                              ? univerisyList
-                                  .map((e) => ListTileCheckWidget(
-                                        text: e.kname,
-                                        isChkecked:
-                                            e == selectedModel ? true : false,
-                                        isLevelView: false,
-                                        onTap: () {
-                                          onTapTile(e);
-                                        },
-                                      ))
-                                  .toList()
-                              : tempList
-                                  .map((e) => ListTileCheckWidget(
-                                        text: e.kname,
-                                        isChkecked:
-                                            e == selectedModel ? true : false,
-                                        isLevelView: false,
-                                        onTap: () {
-                                          onTapTile(e);
-                                        },
-                                      ))
-                                  .toList(),
+                          children: tempList
+                              .map(
+                                (e) => ListWidget(
+                                  height: 56,
+                                  borderColor: e == tempList.last
+                                      ? kColorBgDefault
+                                      : kColorBorderDefalut,
+                                  touchWidget: CheckCircleWidget(
+                                    value: e == selectedModel ? true : false,
+                                  ),
+                                  onTap: () {
+                                    onTapTile(e);
+                                  },
+                                  centerWidget: Text(
+                                    e.kname,
+                                    style: getTsBody16Rg(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         ),
                       )),
             Padding(

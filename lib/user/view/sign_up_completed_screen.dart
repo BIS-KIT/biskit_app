@@ -5,10 +5,15 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpCompletedScreen extends StatelessWidget {
   static String get routeName => 'signUpCompleted';
   const SignUpCompletedScreen({super.key});
+
+  onTap(BuildContext context) {
+    context.pushNamed(ProfileNicknameScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +73,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProfileNicknameScreen(),
-                            ));
+                        onTap(context);
                       },
                       child: const FilledButtonWidget(
                         text: '프로필 완성하기',

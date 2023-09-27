@@ -1,105 +1,57 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../const/colors.dart';
-import '../const/fonts.dart';
-
-enum SelectWidgetValueType {
-  none,
-  left,
-  right,
-}
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 
 class SelectWidget extends StatelessWidget {
-  final String leftText;
-  final String rightText;
-  final SelectWidgetValueType value;
-  final Function()? onTapLeft;
-  final Function()? onTapRight;
+  final bool isDisable;
+  final String text;
+  final String iconPath;
+  final Function()? onTap;
   const SelectWidget({
     Key? key,
-    this.leftText = '',
-    this.rightText = '',
-    required this.value,
-    required this.onTapLeft,
-    required this.onTapRight,
+    this.isDisable = false,
+    required this.text,
+    required this.iconPath,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: onTapLeft,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: value == SelectWidgetValueType.left
-                    ? kColorBgPrimaryWeak
-                    : Colors.transparent,
-                border: Border.all(
-                  width: 1,
-                  color: value == SelectWidgetValueType.left
-                      ? kColorBorderPrimaryStrong
-                      : kColorBorderStrong,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(6)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                leftText,
-                style: value == SelectWidgetValueType.left
-                    ? getTsBody16Sb(context).copyWith(
-                        color: kColorContentWeak,
-                      )
-                    : getTsBody16Rg(context).copyWith(
-                        color: kColorContentWeak,
-                      ),
-              ),
-            ),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: isDisable
+                ? getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeaker,
+                  )
+                : getTsHeading18(context).copyWith(
+                    color: kColorContentDefault,
+                  ),
           ),
-        ),
-        const SizedBox(
-          width: 14,
-        ),
-        Expanded(
-          child: GestureDetector(
-            onTap: onTapRight,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: value == SelectWidgetValueType.right
-                    ? kColorBgPrimaryWeak
-                    : Colors.transparent,
-                border: Border.all(
-                  width: 1,
-                  color: value == SelectWidgetValueType.right
-                      ? kColorBorderPrimaryStrong
-                      : kColorBorderStrong,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                iconPath,
+                width: 24,
+                height: 24,
+                colorFilter: ColorFilter.mode(
+                  isDisable ? kColorContentPlaceholder : kColorContentDefault,
+                  BlendMode.srcIn,
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(6)),
               ),
-              alignment: Alignment.center,
-              child: Text(
-                rightText,
-                style: value == SelectWidgetValueType.right
-                    ? getTsBody16Sb(context).copyWith(
-                        color: kColorContentWeak,
-                      )
-                    : getTsBody16Rg(context).copyWith(
-                        color: kColorContentWeak,
-                      ),
-              ),
-            ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
