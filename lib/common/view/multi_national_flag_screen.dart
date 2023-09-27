@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_tile_img_widget.dart';
+import 'package:biskit_app/common/components/list_flag_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -165,7 +165,7 @@ class _MultiNationalFlagScreenState
                             ScrollViewKeyboardDismissBehavior.onDrag,
                         child: Column(
                           children: tempList
-                              .map((e) => ListTileImgWidget(
+                              .map((e) => ListFlagWidget(
                                     model: e,
                                     isCheck: selectedModelList.isNotEmpty &&
                                             selectedModelList
