@@ -21,6 +21,7 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
+  final Color borderColor;
   const CustomTextFormField({
     Key? key,
     this.textAlign = TextAlign.start,
@@ -39,16 +40,17 @@ class CustomTextFormField extends StatelessWidget {
     this.focusNode,
     this.inputFormatters,
     this.maxLines = 1,
+    this.borderColor = kColorBgElevation3,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder baseBorder = const OutlineInputBorder(
+    OutlineInputBorder baseBorder = OutlineInputBorder(
       borderSide: BorderSide(
         width: 1,
-        color: kColorBgElevation3,
+        color: borderColor,
       ),
-      borderRadius: BorderRadius.all(
+      borderRadius: const BorderRadius.all(
         Radius.circular(6),
       ),
     );

@@ -1,9 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:biskit_app/common/components/custom_text_form_field.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
@@ -39,6 +36,9 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   bool isValidName = false;
   bool isValidBirth = false;
   bool isValidGender = false;
+  Color yearBorderColor = kColorBorderDefalut;
+  Color monthBorderColor = kColorBorderDefalut;
+  Color dayBorderColor = kColorBorderDefalut;
   late FocusNode birthMonthFocusNode;
   late FocusNode birthDayFocusNode;
   late FocusNode nameFocusNode;
@@ -47,7 +47,6 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   @override
   void initState() {
     super.initState();
-    logger.d(widget.signUpModel.toString());
     nameFocusNode = FocusNode();
     birthMonthFocusNode = FocusNode();
     birthDayFocusNode = FocusNode();
@@ -105,13 +104,18 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
     if (birthYear.length > 1 && int.parse(birthYear.substring(0, 2)) < 19) {
       setState(() {
         birthYearError = '';
+        yearBorderColor = kColorBorderError;
       });
     } else if (birthYear.length == 4) {
-      birthYearError = null;
-      FocusScope.of(context).requestFocus(birthMonthFocusNode);
+      setState(() {
+        birthYearError = null;
+        FocusScope.of(context).requestFocus(birthMonthFocusNode);
+        yearBorderColor = kColorBorderDefalut;
+      });
     } else {
       setState(() {
         birthYearError = null;
+        yearBorderColor = kColorBorderStronger;
       });
     }
   }
@@ -121,20 +125,28 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
         (int.parse(birthMonth) < 01 || int.parse(birthMonth) > 12)) {
       setState(() {
         birthMonthError = '';
+        monthBorderColor = kColorBorderError;
       });
     } else if (birthMonth.length == 2) {
-      birthMonthError = null;
-      FocusScope.of(context).requestFocus(birthDayFocusNode);
+      setState(() {
+        birthMonthError = null;
+        monthBorderColor = kColorBorderDefalut;
+        FocusScope.of(context).requestFocus(birthDayFocusNode);
+      });
     } else {
       setState(() {
         birthMonthError = null;
+        monthBorderColor = kColorBorderDefalut;
       });
     }
   }
 
   checkDay() {
     if (birthMonth == '02' && birthDay == '30') {
-      birthDayError = '';
+      setState(() {
+        birthDayError = '';
+        dayBorderColor = kColorBorderError;
+      });
     } else if (birthDay == '31' &&
         (birthMonth == '02' ||
             birthMonth == '04' ||
@@ -142,20 +154,28 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
             birthMonth == '08' ||
             birthMonth == '09' ||
             birthMonth == '11')) {
-      birthDayError = '';
+      setState(() {
+        birthDayError = '';
+        dayBorderColor = kColorBorderError;
+      });
     } else if (birthDay.length > 1 &&
         (int.parse(birthDay) < 1 || int.parse(birthDay) > 31)) {
       setState(() {
         birthDayError = '';
+        dayBorderColor = kColorBorderError;
       });
     } else {
-      birthDayError = null;
+      setState(() {
+        birthDayError = null;
+        dayBorderColor = kColorBorderDefalut;
+      });
     }
   }
 
   checkDate() {
     if (birthMonth == '02' && birthDay == '30') {
       birthDayError = '';
+      dayBorderColor = kColorBorderError;
     } else if (birthDay == '31' &&
         (birthMonth == '02' ||
             birthMonth == '04' ||
@@ -164,8 +184,10 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
             birthMonth == '09' ||
             birthMonth == '11')) {
       birthDayError = '';
+      dayBorderColor = kColorBorderError;
     } else {
       birthDayError = null;
+      dayBorderColor = kColorBorderDefalut;
     }
   }
 
@@ -223,13 +245,14 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                               if (!value && birthYear.length != 4) {
                                 setState(() {
                                   birthYearError = '';
+                                  yearBorderColor = kColorBorderError;
                                 });
                               }
                             },
                             child: CustomTextFormField(
                               textAlign: TextAlign.center,
                               maxLength: 4,
-                              errorText: birthYearError,
+                              borderColor: yearBorderColor,
                               keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.next,
                               hintText: 'YYYY',
@@ -258,12 +281,14 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                                         birthMonth.length != 2) {
                                       setState(() {
                                         birthMonthError = '';
+                                        monthBorderColor = kColorBorderError;
                                       });
                                     }
                                   },
                                   child: CustomTextFormField(
                                     textAlign: TextAlign.center,
                                     maxLength: 2,
+                                    borderColor: monthBorderColor,
                                     keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
                                     hintText: 'MM',
@@ -272,7 +297,6 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                                     inputFormatters: [
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
-                                    errorText: birthMonthError,
                                     focusNode: birthMonthFocusNode,
                                     onChanged: (value) {
                                       setState(() {
@@ -294,12 +318,14 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                                         birthDay.length != 2) {
                                       setState(() {
                                         birthDayError = '';
+                                        dayBorderColor = kColorBorderError;
                                       });
                                     }
                                   },
                                   child: CustomTextFormField(
                                     textAlign: TextAlign.center,
                                     maxLength: 2,
+                                    borderColor: dayBorderColor,
                                     keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
                                     hintText: 'DD',
@@ -308,7 +334,6 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                                     inputFormatters: [
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
-                                    errorText: birthDayError,
                                     focusNode: birthDayFocusNode,
                                     onChanged: (value) {
                                       setState(() {
@@ -364,16 +389,11 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
             padding: const EdgeInsets.only(bottom: 0),
             child: GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => const SingleNationalFlagScreen(),
-                //     ));
                 context.pushNamed(
                   SingleNationalFlagScreen.routeName,
                   extra: widget.signUpModel.copyWith(
                     name: name,
-                    birth: '2023-09-23',
+                    birth: '$birthYear-$birthMonth-$birthDay',
                     gender: selectGender == SelectWidgetValueType.left
                         ? 'female'
                         : 'male',
