@@ -394,7 +394,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   extra: widget.signUpModel.copyWith(
                     name: name,
                     birth: '$birthYear-$birthMonth-$birthDay',
-                    gender: selectGender == SelectWidgetValueType.left
+                    gender: selectGender == RadioWidgetValueType.left
                         ? 'female'
                         : 'male',
                   ),
