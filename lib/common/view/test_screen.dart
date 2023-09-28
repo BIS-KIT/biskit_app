@@ -237,6 +237,9 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                 height: 10,
               ),
               ListWidget(
+                onTap: () {
+                  logger.d('onTap');
+                },
                 touchWidget: const CheckCircleWidget(
                   value: true,
                 ),
@@ -246,9 +249,29 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                     color: kColorContentWeak,
                   ),
                 ),
-                rightWidget: const SelectWidget(
+                rightWidget: SelectWidget(
+                  onTap: () {
+                    logger.d('rightWidget onTap');
+                  },
                   text: 'Label',
                   iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ListWidget(
+                onTap: () {
+                  logger.d('onTap');
+                },
+                touchWidget: const CheckCircleWidget(
+                  value: true,
+                ),
+                centerWidget: Text(
+                  'Text',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentWeak,
+                  ),
                 ),
               ),
               const SizedBox(

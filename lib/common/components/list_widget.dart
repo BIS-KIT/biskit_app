@@ -44,19 +44,25 @@ class ListWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: onTap,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: touchWidget,
-            ),
-          ),
-          const SizedBox(
-            width: 4,
-          ),
           Expanded(
-            child: centerWidget,
+            child: GestureDetector(
+              onTap: onTap,
+              behavior: HitTestBehavior.opaque,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: touchWidget,
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Expanded(
+                    child: centerWidget,
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(
             width: 4,
