@@ -206,7 +206,12 @@ class _SingleNationalFlagScreenState
                       GestureDetector(
                         onTap: () {
                           if (selectedModel != null) {
-                            context.goNamed(UniversityScreen.routeName);
+                            context.goNamed(
+                              UniversityScreen.routeName,
+                              extra: widget.signUpModel.copyWith(
+                                nationality_ids: [selectedModel!.id],
+                              ),
+                            );
                           }
                         },
                         child: FilledButtonWidget(

@@ -191,7 +191,13 @@ class _MultiNationalFlagScreenState
                   child: GestureDetector(
                     onTap: () {
                       if (selectedModelList.length >= 2) {
-                        context.goNamed(UniversityScreen.routeName);
+                        context.goNamed(
+                          UniversityScreen.routeName,
+                          extra: widget.signUpModel.copyWith(
+                            nationality_ids:
+                                selectedModelList.map((e) => e.id).toList(),
+                          ),
+                        );
                       }
                     },
                     child: FilledButtonWidget(
