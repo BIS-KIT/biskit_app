@@ -31,7 +31,7 @@ class FullBleedButtonWidget extends StatelessWidget {
       child: leftIconPath == null
           ? Text(
               text,
-              style: getTsBody16Sb(context).copyWith(
+              style: getTsHeading18(context).copyWith(
                 color:
                     isEnable ? kColorContentOnBgPrimary : kColorContentDisabled,
               ),
