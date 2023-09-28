@@ -25,59 +25,59 @@ class ListFlagWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 1,
-            color: kColorBgElevation3,
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: height,
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: kColorBgElevation3,
+            ),
           ),
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: kColorBorderStrong,
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                  color: kColorBorderStrong,
+                ),
+              ),
+              child: SvgPicture.network(
+                '$kS3Url$kS3Flag43Path/${model.code}.svg',
+                width: 32,
+                height: 24,
+                fit: BoxFit.contain,
               ),
             ),
-            child: SvgPicture.network(
-              '$kS3Url$kS3Flag43Path/${model.code}.svg',
-              width: 32,
-              height: 24,
-              fit: BoxFit.contain,
+            const SizedBox(
+              width: 12,
             ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          Expanded(
-            child: Text(
-              context.locale.languageCode == kEn
-                  ? model.en_name
-                  : model.kr_name,
-              style: getTsBody16Rg(context).copyWith(
-                color: kColorContentWeak,
+            Expanded(
+              child: Text(
+                context.locale.languageCode == kEn
+                    ? model.en_name
+                    : model.kr_name,
+                style: getTsBody16Rg(context).copyWith(
+                  color: kColorContentWeak,
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          GestureDetector(
-            onTap: onTap,
-            behavior: HitTestBehavior.opaque,
-            child: Padding(
+            const SizedBox(
+              width: 12,
+            ),
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: CheckCircleWidget(
                 value: isCheck,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     // GestureDetector(
