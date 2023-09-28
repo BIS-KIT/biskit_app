@@ -64,6 +64,7 @@ class MyApp extends ConsumerWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: kColorBiskitNavy),
           useMaterial3: true,
+          fontFamily: "Pretendard",
         ),
         locale: context.locale,
         localizationsDelegates: context.localizationDelegates,
