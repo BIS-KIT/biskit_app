@@ -74,7 +74,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
   }
 
   void startTimer() {
-    pinDuration = const Duration(seconds: 5);
+    pinDuration = const Duration(minutes: 5);
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -86,6 +86,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
             // 시간 오버인 경우
             setState(() {
               pinCodeError = '인증번호를 다시 보내주세요';
+              recivePinCode = '';
             });
           } else {
             pinDuration = Duration(seconds: seconds);
