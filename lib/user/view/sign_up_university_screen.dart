@@ -213,184 +213,175 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '',
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    // 상단 타이틀 부분
-                    _buildTitleArea(context),
-                    const SizedBox(
-                      height: 32,
-                    ),
-
-                    // 선택 버튼
-                    startBottomSheetIndex == 3
-                        ? Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20,
-                                  horizontal: 16,
-                                ),
-                                decoration: const BoxDecoration(
-                                  color: kColorBgElevation1,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '학교',
-                                          style:
-                                              getTsBody16Sb(context).copyWith(
-                                            color: kColorContentWeak,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          selectedUnivModel!.kname,
-                                          style:
-                                              getTsBody16Rg(context).copyWith(
-                                            color: kColorContentWeak,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    const Divider(
-                                      thickness: 1,
-                                      color: kColorBorderDefalut,
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '소속',
-                                          style:
-                                              getTsBody16Sb(context).copyWith(
-                                            color: kColorContentWeak,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          selectedStudentStatusModel!.kname,
-                                          style:
-                                              getTsBody16Rg(context).copyWith(
-                                            color: kColorContentWeak,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    const Divider(
-                                      thickness: 1,
-                                      color: kColorBorderDefalut,
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '학적상태',
-                                          style:
-                                              getTsBody16Sb(context).copyWith(
-                                            color: kColorContentWeak,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          selectedGraduateStatusModel!.kname,
-                                          style:
-                                              getTsBody16Rg(context).copyWith(
-                                            color: kColorContentWeak,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    startBottomSheetIndex = 0;
-                                    selectedUnivModel = null;
-                                    selectedStudentStatusModel = null;
-                                    selectedGraduateStatusModel = null;
-                                  });
-                                  onTapStartSelectedUniv();
-                                },
-                                child: const OutlinedButtonWidget(
-                                  isEnable: true,
-                                  text: '다시 선택하기',
-                                  height: 52,
-                                ),
-                              ),
-                            ],
-                          )
-                        : GestureDetector(
-                            onTap: onTapStartSelectedUniv,
-                            child: const OutlinedButtonWidget(
-                              isEnable: true,
-                              text: '학교 선택',
-                              height: 52,
-                            ),
-                          ),
-                  ],
-                ),
-              ),
-
-              // 하단 버튼
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 34,
-                ),
-                child: GestureDetector(
-                  onTap: onTapSignUp,
-                  child: FilledButtonWidget(
-                    text: '가입하기',
-                    isEnable: startBottomSheetIndex == 3,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(
+                    height: 8,
                   ),
+                  // 상단 타이틀 부분
+                  _buildTitleArea(context),
+                  const SizedBox(
+                    height: 32,
+                  ),
+
+                  // 선택 버튼
+                  startBottomSheetIndex == 3
+                      ? Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                                horizontal: 16,
+                              ),
+                              decoration: const BoxDecoration(
+                                color: kColorBgElevation1,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '학교',
+                                        style: getTsBody16Sb(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        selectedUnivModel!.kname,
+                                        style: getTsBody16Rg(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  const Divider(
+                                    thickness: 1,
+                                    color: kColorBorderDefalut,
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '소속',
+                                        style: getTsBody16Sb(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        selectedStudentStatusModel!.kname,
+                                        style: getTsBody16Rg(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  const Divider(
+                                    thickness: 1,
+                                    color: kColorBorderDefalut,
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '학적상태',
+                                        style: getTsBody16Sb(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        selectedGraduateStatusModel!.kname,
+                                        style: getTsBody16Rg(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  startBottomSheetIndex = 0;
+                                  selectedUnivModel = null;
+                                  selectedStudentStatusModel = null;
+                                  selectedGraduateStatusModel = null;
+                                });
+                                onTapStartSelectedUniv();
+                              },
+                              child: const OutlinedButtonWidget(
+                                isEnable: true,
+                                text: '다시 선택하기',
+                                height: 52,
+                              ),
+                            ),
+                          ],
+                        )
+                      : GestureDetector(
+                          onTap: onTapStartSelectedUniv,
+                          child: const OutlinedButtonWidget(
+                            isEnable: true,
+                            text: '학교 선택',
+                            height: 52,
+                          ),
+                        ),
+                ],
+              ),
+            ),
+
+            // 하단 버튼
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                bottom: 34,
+              ),
+              child: GestureDetector(
+                onTap: onTapSignUp,
+                child: FilledButtonWidget(
+                  text: '가입하기',
+                  isEnable: startBottomSheetIndex == 3,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

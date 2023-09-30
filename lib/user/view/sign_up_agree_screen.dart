@@ -48,6 +48,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
     return DefaultLayout(
       title: '',
       child: SafeArea(
+        bottom: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(

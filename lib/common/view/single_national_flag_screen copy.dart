@@ -109,122 +109,120 @@ class _SingleNationalFlagScreenState
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '',
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 8,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              '국적을 선택해주세요',
+              style: getTsHeading24(context).copyWith(
+                color: kColorContentDefault,
               ),
-              Text(
-                '국적을 선택해주세요',
-                style: getTsHeading24(context).copyWith(
-                  color: kColorContentDefault,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              '변경할 수 없으니 정확히 선택해주세요',
+              style: getTsBody16Rg(context).copyWith(
+                color: kColorContentWeaker,
+              ),
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            SearchBarWidget(
+              controller: textEditingController,
+              onChanged: (value) {},
+              hintText: '국적 검색',
+            ),
+            Expanded(
+              child: isLoading
+                  ? const Center(
+                      child: CustomLoading(),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: Column(
+                        children: tempList
+                            .map((e) => ListFlagWidget(
+                                  model: e,
+                                  isCheck: selectedModel != null &&
+                                          selectedModel!.id == e.id
+                                      ? true
+                                      : false,
+                                  onTap: () {
+                                    onTapTile(e);
+                                  },
+                                ))
+                            .toList(),
+                      ),
+                    ),
+            ),
+            if (MediaQuery.of(context).viewInsets.bottom <= 100)
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 34,
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                '변경할 수 없으니 정확히 선택해주세요',
-                style: getTsBody16Rg(context).copyWith(
-                  color: kColorContentWeaker,
-                ),
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              SearchBarWidget(
-                controller: textEditingController,
-                onChanged: (value) {},
-                hintText: '국적 검색',
-              ),
-              Expanded(
-                child: isLoading
-                    ? const Center(
-                        child: CustomLoading(),
-                      )
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                        ),
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        child: Column(
-                          children: tempList
-                              .map((e) => ListFlagWidget(
-                                    model: e,
-                                    isCheck: selectedModel != null &&
-                                            selectedModel!.id == e.id
-                                        ? true
-                                        : false,
-                                    onTap: () {
-                                      onTapTile(e);
-                                    },
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-              ),
-              if (MediaQuery.of(context).viewInsets.bottom <= 100)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
-                    bottom: 34,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            // check
-                            selectedModel = null;
-                          });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MultiNationalFlagScreen(
-                                  signUpModel: widget.signUpModel,
-                                ),
-                              ));
-                        },
-                        child: Text(
-                          '복수국적인가요?',
-                          style: getTsBody14Rg(context).copyWith(
-                            color: kColorContentWeakest,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (selectedModel != null) {
-                            context.goNamed(
-                              UniversityScreen.routeName,
-                              extra: widget.signUpModel.copyWith(
-                                nationality_ids: [selectedModel!.id],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          // check
+                          selectedModel = null;
+                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MultiNationalFlagScreen(
+                                signUpModel: widget.signUpModel,
                               ),
-                            );
-                          }
-                        },
-                        child: FilledButtonWidget(
-                          text: '다음',
-                          isEnable: selectedModel != null,
-                          height: 56,
+                            ));
+                      },
+                      child: Text(
+                        '복수국적인가요?',
+                        style: getTsBody14Rg(context).copyWith(
+                          color: kColorContentWeakest,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (selectedModel != null) {
+                          context.goNamed(
+                            UniversityScreen.routeName,
+                            extra: widget.signUpModel.copyWith(
+                              nationality_ids: [selectedModel!.id],
+                            ),
+                          );
+                        }
+                      },
+                      child: FilledButtonWidget(
+                        text: '다음',
+                        isEnable: selectedModel != null,
+                        height: 56,
+                      ),
+                    ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
