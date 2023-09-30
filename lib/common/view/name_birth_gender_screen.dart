@@ -340,6 +340,9 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                                         birthDay = value;
                                       });
                                       checkDay();
+                                      if (birthDay.length == 2) {
+                                        FocusScope.of(context).unfocus();
+                                      }
                                     },
                                   )),
                             ),
