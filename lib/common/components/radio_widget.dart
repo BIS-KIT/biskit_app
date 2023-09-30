@@ -12,6 +12,7 @@ enum RadioWidgetValueType {
 class RadioWidget extends StatelessWidget {
   final String leftText;
   final String rightText;
+  final double? radioBtnGap;
   final RadioWidgetValueType value;
   final Function()? onTapLeft;
   final Function()? onTapRight;
@@ -19,6 +20,7 @@ class RadioWidget extends StatelessWidget {
     Key? key,
     this.leftText = '',
     this.rightText = '',
+    this.radioBtnGap = 14,
     required this.value,
     required this.onTapLeft,
     required this.onTapRight,
@@ -60,8 +62,8 @@ class RadioWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(
-          width: 14,
+        SizedBox(
+          width: radioBtnGap,
         ),
         Expanded(
           child: GestureDetector(

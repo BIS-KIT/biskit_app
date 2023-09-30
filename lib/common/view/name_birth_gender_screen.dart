@@ -369,6 +369,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                       leftText: '여성',
                       rightText: '남성',
                       value: selectGender,
+                      radioBtnGap: 8,
                       onTapLeft: () {
                         setState(() {
                           selectGender = RadioWidgetValueType.left;
