@@ -253,6 +253,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   onTap: () {
                     logger.d('rightWidget onTap');
                   },
+                  usageType: 'title',
                   text: 'Label',
                   iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
                 ),
@@ -293,7 +294,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                 children: [
                   SelectWidget(
                     text: 'Label',
-                    isDisable: true,
+                    usageType: 'body',
                     iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
                   ),
                   SizedBox(
@@ -301,6 +302,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   ),
                   SelectWidget(
                     text: 'Label',
+                    usageType: 'title',
                     iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
                   ),
                 ],

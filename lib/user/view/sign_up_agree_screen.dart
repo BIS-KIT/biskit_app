@@ -113,6 +113,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 ),
                 rightWidget: SelectWidget(
                   text: '',
+                  usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
                   onTap: () {},
                 ),
@@ -137,6 +138,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 ),
                 rightWidget: SelectWidget(
                   text: '',
+                  usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
                   onTap: () {},
                 ),
@@ -162,6 +164,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 ),
                 rightWidget: SelectWidget(
                   text: '',
+                  usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
                   onTap: () {},
                 ),
@@ -186,6 +189,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 ),
                 rightWidget: SelectWidget(
                   text: '',
+                  usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
                   onTap: () {},
                 ),
