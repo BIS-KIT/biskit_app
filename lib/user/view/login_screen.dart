@@ -317,12 +317,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               Expanded(
-                child: Text(
-                  'Google로 로그인',
-                  textAlign: TextAlign.center,
-                  style: getTsBody16Sb(context).copyWith(
-                    color: kColorContentWeak,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Google',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xff465063),
+                        fontFamily: 'Roboto',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.4,
+                      ),
+                    ),
+                    Text(
+                      '로 로그인',
+                      textAlign: TextAlign.center,
+                      style: getTsBody16Sb(context).copyWith(
+                        color: kColorContentWeak,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
