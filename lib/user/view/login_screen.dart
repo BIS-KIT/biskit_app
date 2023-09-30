@@ -259,10 +259,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   'assets/icons/symbol_kakao.svg',
                   width: 18,
                   height: 17,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.black,
-                    BlendMode.srcIn,
-                  ),
                 ),
               ),
               Expanded(
