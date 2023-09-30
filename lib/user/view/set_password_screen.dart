@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -204,12 +205,20 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           SetPasswordCompletedScreen.routeName);
                     }
                   },
-                  child: FilledButtonWidget(
-                    text: widget.title.isEmpty ? '다음' : '완료',
-                    isEnable: isActiveConfirmButton,
-                  ),
+                  child: MediaQuery.of(context).viewInsets.bottom != 0
+                      ? FullBleedButtonWidget(
+                          text: widget.title.isEmpty ? '다음' : '완료',
+                          isEnable: isActiveConfirmButton,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 34),
+                          child: FilledButtonWidget(
+                              text: widget.title.isEmpty ? '다음' : '완료',
+                              isEnable: isActiveConfirmButton),
+                        ),
                 ),
-              )
+              ),
             ],
           ),
         ));
