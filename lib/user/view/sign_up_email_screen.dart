@@ -289,7 +289,10 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                             ? GestureDetector(
                                 onTap: isCheckEmailLoading
                                     ? null
-                                    : onTapFirstPinCode,
+                                    : () {
+                                        onTapFirstPinCode();
+                                        pinFocusNode.requestFocus();
+                                      },
                                 child: FilledButtonWidget(
                                   height: 52,
                                   text: '인증번호 받기',
@@ -297,7 +300,10 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                                 ),
                               )
                             : GestureDetector(
-                                onTap: onTapRePinCodeRecive,
+                                onTap: () {
+                                  onTapRePinCodeRecive();
+                                  pinFocusNode.requestFocus();
+                                },
                                 child: const OutlinedButtonWidget(
                                   height: 52,
                                   text: '인증번호 다시 받기',

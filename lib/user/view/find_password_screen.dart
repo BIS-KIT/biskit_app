@@ -155,6 +155,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                               isShowAuthNumBox = true;
                             });
                             onTapPinCodeRecive();
+                            pinFocusNode.requestFocus();
                           },
                           child: FilledButtonWidget(
                               text: '인증번호 받기', isEnable: isPinCodeButton),
@@ -163,6 +164,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                         GestureDetector(
                           onTap: () {
                             onTapPinCodeRecive();
+                            pinFocusNode.requestFocus();
                           },
                           child: const OutlinedButtonWidget(
                             text: '인증번호 다시 받기',
