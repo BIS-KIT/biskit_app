@@ -251,7 +251,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: SingleChildScrollView(
@@ -360,6 +360,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                     controller: tooltipController,
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     backgroundColor: Colors.black.withOpacity(0.7),
+                    margin: const EdgeInsets.only(left: 20),
                     elevation: 0,
                     tailBaseWidth: 20,
                     tailLength: 6,
