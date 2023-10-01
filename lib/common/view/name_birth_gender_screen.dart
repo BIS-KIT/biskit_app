@@ -1,8 +1,8 @@
+import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:biskit_app/common/components/custom_text_form_field.dart';
-import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/radio_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -194,200 +194,199 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
+      resizeToAvoidBottomInset: false,
       title: '',
       child: SafeArea(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-                child: Column(children: [
-              const SizedBox(
-                height: 16,
-              ),
-              //  이름
-              TextInputWidget(
-                title: "이름",
-                hintText: '실명을 입력해주세요',
-                keyboardType: TextInputType.name,
-                errorText: nameError,
-                textInputAction: TextInputAction.next,
-                focusNode: nameFocusNode,
-                onChanged: (value) {
-                  name = value;
-                  checkName();
-                },
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              // 생년월일
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    '생년월일',
-                    style: getTsBody14Sb(context).copyWith(
-                      color: kColorContentWeak,
-                    ),
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            const SizedBox(
+              height: 16,
+            ),
+            //  이름
+            TextInputWidget(
+              title: "이름",
+              hintText: '실명을 입력해주세요',
+              keyboardType: TextInputType.name,
+              errorText: nameError,
+              textInputAction: TextInputAction.next,
+              focusNode: nameFocusNode,
+              onChanged: (value) {
+                name = value;
+                checkName();
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            // 생년월일
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '생년월일',
+                  style: getTsBody14Sb(context).copyWith(
+                    color: kColorContentWeak,
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Focus(
-                            onFocusChange: (value) {
-                              if (!value && birthYear.length != 4) {
-                                setState(() {
-                                  birthYearError = '';
-                                  yearBorderColor = kColorBorderError;
-                                });
-                              }
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Focus(
+                          onFocusChange: (value) {
+                            if (!value && birthYear.length != 4) {
+                              setState(() {
+                                birthYearError = '';
+                                yearBorderColor = kColorBorderError;
+                              });
+                            }
+                          },
+                          child: CustomTextFormField(
+                            textAlign: TextAlign.center,
+                            maxLength: 4,
+                            borderColor: yearBorderColor,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            hintText: 'YYYY',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                birthYear = value;
+                              });
+                              checkYear();
                             },
-                            child: CustomTextFormField(
-                              textAlign: TextAlign.center,
-                              maxLength: 4,
-                              borderColor: yearBorderColor,
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
-                              hintText: 'YYYY',
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  birthYear = value;
-                                });
-                                checkYear();
-                              },
-                            )),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Focus(
-                                  onFocusChange: (value) {
-                                    if (!value &&
-                                        birthMonth.isNotEmpty &&
-                                        birthMonth.length != 2) {
-                                      setState(() {
-                                        birthMonthError = '';
-                                        monthBorderColor = kColorBorderError;
-                                      });
-                                    }
-                                  },
-                                  child: CustomTextFormField(
-                                    textAlign: TextAlign.center,
-                                    maxLength: 2,
-                                    borderColor: monthBorderColor,
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.next,
-                                    hintText: 'MM',
-                                    readOnly: birthYear.isEmpty ||
-                                        birthYearError != null,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    focusNode: birthMonthFocusNode,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        birthMonth = value;
-                                      });
-                                      checkMonth();
-                                      checkDate();
-                                    },
-                                  )),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Flexible(
-                              child: Focus(
-                                  onFocusChange: (value) {
-                                    if (!value &&
-                                        birthDay.isNotEmpty &&
-                                        birthDay.length != 2) {
-                                      setState(() {
-                                        birthDayError = '';
-                                        dayBorderColor = kColorBorderError;
-                                      });
-                                    }
-                                  },
-                                  child: CustomTextFormField(
-                                    textAlign: TextAlign.center,
-                                    maxLength: 2,
-                                    borderColor: dayBorderColor,
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.next,
-                                    hintText: 'DD',
-                                    readOnly: birthMonth.isEmpty ||
-                                        birthMonthError != null,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    focusNode: birthDayFocusNode,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        birthDay = value;
-                                      });
-                                      checkDay();
-                                    },
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    '성별',
-                    style: getTsBody14Sb(context).copyWith(
-                      color: kColorContentWeak,
+                          )),
                     ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Focus(
+                                onFocusChange: (value) {
+                                  if (!value &&
+                                      birthMonth.isNotEmpty &&
+                                      birthMonth.length != 2) {
+                                    setState(() {
+                                      birthMonthError = '';
+                                      monthBorderColor = kColorBorderError;
+                                    });
+                                  }
+                                },
+                                child: CustomTextFormField(
+                                  textAlign: TextAlign.center,
+                                  maxLength: 2,
+                                  borderColor: monthBorderColor,
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  hintText: 'MM',
+                                  readOnly: birthYear.isEmpty ||
+                                      birthYearError != null,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  focusNode: birthMonthFocusNode,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      birthMonth = value;
+                                    });
+                                    checkMonth();
+                                    checkDate();
+                                  },
+                                )),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Flexible(
+                            child: Focus(
+                                onFocusChange: (value) {
+                                  if (!value &&
+                                      birthDay.isNotEmpty &&
+                                      birthDay.length != 2) {
+                                    setState(() {
+                                      birthDayError = '';
+                                      dayBorderColor = kColorBorderError;
+                                    });
+                                  }
+                                },
+                                child: CustomTextFormField(
+                                  textAlign: TextAlign.center,
+                                  maxLength: 2,
+                                  borderColor: dayBorderColor,
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  hintText: 'DD',
+                                  readOnly: birthMonth.isEmpty ||
+                                      birthMonthError != null,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  focusNode: birthDayFocusNode,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      birthDay = value;
+                                    });
+                                    checkDay();
+                                    if (birthDay.length == 2) {
+                                      FocusScope.of(context).unfocus();
+                                    }
+                                  },
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '성별',
+                  style: getTsBody14Sb(context).copyWith(
+                    color: kColorContentWeak,
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  RadioWidget(
-                      leftText: '여성',
-                      rightText: '남성',
-                      value: selectGender,
-                      onTapLeft: () {
-                        setState(() {
-                          selectGender = RadioWidgetValueType.left;
-                          isValidGender = true;
-                        });
-                      },
-                      onTapRight: () {
-                        setState(() {
-                          selectGender = RadioWidgetValueType.right;
-                          isValidGender = true;
-                        });
-                      })
-                ],
-              )
-            ])),
-          )),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 0),
-            child: GestureDetector(
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                RadioWidget(
+                    leftText: '여성',
+                    rightText: '남성',
+                    value: selectGender,
+                    radioBtnGap: 8,
+                    onTapLeft: () {
+                      setState(() {
+                        selectGender = RadioWidgetValueType.left;
+                        isValidGender = true;
+                      });
+                    },
+                    onTapRight: () {
+                      setState(() {
+                        selectGender = RadioWidgetValueType.right;
+                        isValidGender = true;
+                      });
+                    })
+              ],
+            ),
+            const Spacer(),
+            GestureDetector(
               onTap: () {
                 context.pushNamed(
                   SingleNationalFlagScreen.routeName,
@@ -400,7 +399,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   ),
                 );
               },
-              child: FullBleedButtonWidget(
+              child: FilledButtonWidget(
                 text: '다음',
                 isEnable: isValidName &&
                     birthYear.isNotEmpty &&
@@ -412,9 +411,12 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                     isValidGender,
               ),
             ),
-          )
-        ],
-      )),
+            const SizedBox(
+              height: 34,
+            ),
+          ]),
+        ),
+      ),
     );
   }
 }

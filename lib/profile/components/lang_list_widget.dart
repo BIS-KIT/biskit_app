@@ -144,9 +144,9 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                                   rightWidget: e.isChecked
                                       ? SelectWidget(
                                           text: getLevelTitle(e.level),
+                                          usageType: 'body',
                                           iconPath:
                                               'assets/icons/ic_chevron_down_line_24.svg',
-                                          isDisable: true,
                                           onTap: () {
                                             onTapSelectedLevel(e);
                                           },

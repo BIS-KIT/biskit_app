@@ -11,6 +11,7 @@ class DefaultLayout extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final List<Widget>? actions;
+  final bool resizeToAvoidBottomInset;
 
   const DefaultLayout({
     Key? key,
@@ -20,11 +21,13 @@ class DefaultLayout extends StatelessWidget {
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.actions,
+    this.resizeToAvoidBottomInset = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: backgroundColor ?? kColorBgDefault,
       body: child,
       appBar: renderAppBar(context),

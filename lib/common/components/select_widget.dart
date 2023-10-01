@@ -6,13 +6,13 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 
 class SelectWidget extends StatelessWidget {
-  final bool isDisable;
+  final String usageType;
   final String text;
   final String iconPath;
   final Function()? onTap;
   const SelectWidget({
     Key? key,
-    this.isDisable = false,
+    required this.usageType,
     required this.text,
     required this.iconPath,
     this.onTap,
@@ -28,7 +28,7 @@ class SelectWidget extends StatelessWidget {
         children: [
           Text(
             text,
-            style: isDisable
+            style: usageType == 'body'
                 ? getTsBody16Rg(context).copyWith(
                     color: kColorContentWeaker,
                   )
@@ -44,7 +44,9 @@ class SelectWidget extends StatelessWidget {
                 width: 24,
                 height: 24,
                 colorFilter: ColorFilter.mode(
-                  isDisable ? kColorContentPlaceholder : kColorContentDefault,
+                  usageType == 'body'
+                      ? kColorContentWeakest
+                      : kColorContentDefault,
                   BlendMode.srcIn,
                 ),
               ),
