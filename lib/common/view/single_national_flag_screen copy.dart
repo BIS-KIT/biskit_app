@@ -15,6 +15,7 @@ import 'package:biskit_app/common/model/national_flag_model.dart';
 import 'package:biskit_app/common/view/multi_national_flag_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_university_screen.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../repository/util_repository.dart';
 
@@ -34,6 +35,11 @@ class SingleNationalFlagScreen extends ConsumerStatefulWidget {
 
 class _SingleNationalFlagScreenState
     extends ConsumerState<SingleNationalFlagScreen> {
+  final AutoScrollController autoScrollController = AutoScrollController();
+  int startScrollIndex = 0;
+  int nextStartIndex = 0;
+  final int pageMaxCount = 20;
+
   List<NationalFlagModel> nationalList = [];
   List<NationalFlagModel> tempList = [];
   NationalFlagModel? selectedModel;
@@ -43,10 +49,38 @@ class _SingleNationalFlagScreenState
   @override
   void initState() {
     super.initState();
-    init();
+    autoScrollController.scrollToIndex(
+      startScrollIndex,
+      preferPosition: AutoScrollPosition.begin,
+    );
+    autoScrollController.addListener(() {
+      if (autoScrollController.offset >
+          autoScrollController.position.maxScrollExtent - 300) {
+        if (nextStartIndex >= nationalList.length ||
+            textEditingController.text.isNotEmpty) {
+          return;
+        }
+
+        if (nextStartIndex + pageMaxCount > nationalList.length) {
+          setState(() {
+            tempList.addAll(
+                nationalList.getRange(nextStartIndex, nationalList.length));
+          });
+        } else {
+          setState(() {
+            tempList.addAll(nationalList.getRange(
+                nextStartIndex, nextStartIndex + pageMaxCount));
+          });
+        }
+        nextStartIndex = tempList.length;
+      }
+    });
     textEditingController.addListener(() {
+      // logger.d('textEditingController : ${textEditingController.text}');
+      autoScrollController.jumpTo(0);
       onChanged(textEditingController.text);
     });
+    init();
   }
 
   init() async {
@@ -61,10 +95,17 @@ class _SingleNationalFlagScreenState
               osLanguage: context.locale.languageCode,
               search: '',
             );
+    nationalList = list;
     setState(() {
+      setFirstData();
       isLoading = false;
-      nationalList = list;
-      tempList = list;
+    });
+  }
+
+  setFirstData() {
+    setState(() {
+      tempList = nationalList.getRange(0, pageMaxCount).toList();
+      nextStartIndex = tempList.length;
     });
   }
 
@@ -78,22 +119,13 @@ class _SingleNationalFlagScreenState
     setState(() {
       // check
       selectedModel = model;
-      // nationalList = nationalList.map((n) {
-      //   if (n == model) {
-      //     return model.copyWith(isCheck: true);
-      //   } else {
-      //     return n.copyWith(isCheck: false);
-      //   }
-      // }).toList();
     });
     FocusScope.of(context).unfocus();
   }
 
   onChanged(String value) {
     if (value.isEmpty) {
-      setState(() {
-        tempList = nationalList;
-      });
+      setFirstData();
     } else {
       List<NationalFlagModel> searchList = nationalList
           .where((n) => '${n.en_name.toLowerCase()} ${n.kr_name.toLowerCase()}'
@@ -103,6 +135,7 @@ class _SingleNationalFlagScreenState
         tempList = searchList;
       });
     }
+    // logger.d('tempList.length : ${tempList.length}');
   }
 
   @override
@@ -148,6 +181,7 @@ class _SingleNationalFlagScreenState
                       child: CustomLoading(),
                     )
                   : SingleChildScrollView(
+                      controller: autoScrollController,
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
                       ),
