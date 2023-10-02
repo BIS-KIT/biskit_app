@@ -275,7 +275,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             errorText: emailError,
-                            readOnly: isPinCodeMode || isCheckEmailLoading,
+                            readOnly: isCheckEmailLoading,
                             onChanged: (value) {
                               email = value;
                               inputCheck();
