@@ -1,25 +1,28 @@
-import 'package:biskit_app/common/components/check_circle.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
-import 'package:biskit_app/common/const/data.dart';
-import 'package:biskit_app/common/repository/util_repository.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/list_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_model.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/json_util.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 
 import '../const/colors.dart';
 
 class UnivListWidget extends StatefulWidget {
   final UniversityModel? selectedUnivModel;
+  final Function(UniversityModel) onTap;
   const UnivListWidget({
     Key? key,
     this.selectedUnivModel,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -110,6 +113,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
     setState(() {
       selectedModel = model;
     });
+    widget.onTap(model);
     FocusScope.of(context).unfocus();
   }
 
