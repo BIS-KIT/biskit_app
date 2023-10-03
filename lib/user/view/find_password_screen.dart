@@ -12,7 +12,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -60,20 +59,37 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     return '${pinDuration.inMinutes.remainder(60).toString().padLeft(2, '0')}:${pinDuration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
   }
 
-  void inputCheck() {
-    setState(() {
-      if (email.isNotEmpty && email.isValidEmailFormat()) {
-        emailError = null;
-        isButtonEnable = true;
+  checkEmailExist() async {
+    bool isExist = false;
+    isExist = await ref.read(authRepositoryProvider).checkEmail(
+          email: email,
+        );
+    return isExist;
+  }
+
+  void inputCheck() async {
+    if (email.isNotEmpty && email.isValidEmailFormat()) {
+      if (await checkEmailExist()) {
+        setState(() {
+          emailError = null;
+          isButtonEnable = true;
+        });
       } else {
-        isButtonEnable = false;
+        setState(() {
+          emailError = '등록된 이메일 주소가 아니에요';
+          isButtonEnable = false;
+        });
       }
-    });
+    } else {
+      setState(() {
+        isButtonEnable = false;
+        emailError = null;
+      });
+    }
   }
 
   checkPinCode() async {
     String pinCode = pinController.text.trim();
-
     if (pinCode.length == 6) {
       context.loaderOverlay.show();
       try {
@@ -87,8 +103,10 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
               isTimerView = false;
             });
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    const SetPasswordScreen(title: "비밀번호 재설정")));
+                builder: (BuildContext context) => SetPasswordScreen(
+                      title: "비밀번호 재설정",
+                      token: res['token'],
+                    )));
           } else {
             setState(() {
               pinCodeError = '인증번호가 일치하지 않아요';
