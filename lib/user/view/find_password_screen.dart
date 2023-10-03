@@ -1,18 +1,20 @@
+import 'dart:async';
+
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class FindPasswordScreen extends ConsumerStatefulWidget {
   static String get routeName => 'findPassword';
@@ -26,14 +28,19 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
   bool isPinCodeButton = false;
   String email = '';
   String? emailError;
-  bool isFirsthAuthNumRequest = true;
-  bool isShowAuthNumBox = false;
+  bool isButtonEnable = false;
+  bool isPinCodeMode = false;
+
   late TextEditingController pinController;
   late FocusNode pinFocusNode;
   final JustTheController tooltipController = JustTheController();
 
   String? pinCodeError;
-  String receivePinCode = '';
+
+  late Timer timer;
+  bool isTimerView = false;
+  Duration pinDuration = const Duration(minutes: 5);
+
   @override
   void initState() {
     super.initState();
@@ -48,27 +55,66 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     pinFocusNode.dispose();
   }
 
-  void inputCheck() {
-    setState(() {
-      if (email.isNotEmpty && email.isValidEmailFormat()) {
-        emailError = null;
-        isPinCodeButton = true;
-      } else {
-        isPinCodeButton = false;
-      }
-    });
+  String getTiemerText() {
+    return '${pinDuration.inMinutes.remainder(60).toString().padLeft(2, '0')}:${pinDuration.inSeconds.remainder(60).toString().padLeft(2, '0')}';
   }
 
-  checkPinCode() {
-    String pinCode = pinController.text.trim();
+  checkEmailExist() async {
+    bool isExist = false;
+    isExist = await ref.read(authRepositoryProvider).checkEmail(
+          email: email,
+        );
+    return isExist;
+  }
 
-    if (pinCode.length == 6) {
-      if (pinCode != receivePinCode) {
+  void inputCheck() async {
+    if (email.isNotEmpty && email.isValidEmailFormat()) {
+      if (await checkEmailExist()) {
         setState(() {
-          pinCodeError = '인증번호가 일치하지 않아요';
+          emailError = null;
+          isButtonEnable = true;
         });
       } else {
-        context.pushNamed(SetPasswordScreen.routeName);
+        setState(() {
+          emailError = '등록된 이메일 주소가 아니에요';
+          isButtonEnable = false;
+        });
+      }
+    } else {
+      setState(() {
+        isButtonEnable = false;
+        emailError = null;
+      });
+    }
+  }
+
+  checkPinCode() async {
+    String pinCode = pinController.text.trim();
+    if (pinCode.length == 6) {
+      context.loaderOverlay.show();
+      try {
+        Map<String, String>? res = await ref
+            .read(authRepositoryProvider)
+            .changePasswordCertificateCheck(email: email, pinCode: pinCode);
+        if (res != null) {
+          if (res['result'] == 'success' && res['token'] != "") {
+            timer.cancel();
+            setState(() {
+              isTimerView = false;
+            });
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => SetPasswordScreen(
+                      title: "비밀번호 재설정",
+                      token: res['token'],
+                    )));
+          } else {
+            setState(() {
+              pinCodeError = '인증번호가 일치하지 않아요';
+            });
+          }
+        }
+      } finally {
+        context.loaderOverlay.hide();
       }
     } else {
       setState(() {
@@ -77,21 +123,58 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     }
   }
 
-  onTapPinCodeRecive() {
+  void startTimer() {
+    pinDuration = const Duration(minutes: 5);
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        setState(() {
+          final seconds = pinDuration.inSeconds - 1;
+          if (seconds < 0) {
+            timer.cancel();
+
+            // 시간 오버인 경우
+            setState(() {
+              pinCodeError = '인증번호를 다시 보내주세요';
+              // receivePinCode = '';
+            });
+          } else {
+            pinDuration = Duration(seconds: seconds);
+          }
+        });
+      },
+    );
+  }
+
+  onTapPinCodeRecive({bool resend = false}) async {
     FocusScope.of(context).unfocus();
-    pinController.text = '';
+    context.loaderOverlay.show();
 
-    // 받은 인증번호 초기화
-    setState(() {
-      pinCodeError = null;
-      receivePinCode = '';
-    });
-    // TODO 인증번호 재발송 처리
-    setState(() {
-      // TODO 인증번호 받은 것으로 교체해야함
+    if (resend) {
+      setState(() {
+        timer.cancel();
+        pinCodeError = null;
+        pinController.text = '';
+      });
+    }
+    try {
+      Map<String, String>? res = await ref
+          .read(authRepositoryProvider)
+          .changePasswordCertificate(email: email);
+      if (res != null &&
+          res['result'] == 'success' &&
+          (res['certification'] != null && res['certification']!.length == 6)) {
+        startTimer();
+        setState(() {
+          isTimerView = true;
+          isPinCodeMode = true;
+        });
+        if (!mounted) return;
+      }
+    } finally {
+      context.loaderOverlay.hide();
+    }
 
-      receivePinCode = '121212';
-    });
     // XXX: duration 설정한 이유: if 조건문에 따라 인증번호 위젯이 생기는데, [인증번호 받기] 버튼 클릭과 동시에 인증번호 입력 위젯에 focus를 주게되면 focus가 위젯이 렌더링 되기 전(혹은 바로 동시에)에 작동해서 focus가 제대로 안 먹힘 -> 의도적으로 위젯 렌더링 후 focus 주는 시점을 delay해서 인증번호 입력 위젯이 생기고 난 뒤에 포커스 설정
     Future.delayed(const Duration(milliseconds: 10), () {
       // FocusScope.of(context).requestFocus(pinFocusNode);
@@ -147,34 +230,33 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      if (isFirsthAuthNumRequest)
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isFirsthAuthNumRequest = false;
-                              isShowAuthNumBox = true;
-                            });
-                            onTapPinCodeRecive();
-                            pinFocusNode.requestFocus();
-                          },
-                          child: FilledButtonWidget(
-                              text: '인증번호 받기', isEnable: isPinCodeButton),
-                        )
-                      else
-                        GestureDetector(
-                          onTap: () {
-                            onTapPinCodeRecive();
-                            pinFocusNode.requestFocus();
-                          },
-                          child: const OutlinedButtonWidget(
-                            text: '인증번호 다시 받기',
-                            isEnable: true,
-                          ),
-                        ),
+                      !isPinCodeMode
+                          ? GestureDetector(
+                              onTap: () {
+                                onTapPinCodeRecive();
+                                pinFocusNode.requestFocus();
+                              },
+                              child: FilledButtonWidget(
+                                height: 52,
+                                text: '인증번호 받기',
+                                isEnable: isButtonEnable,
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                onTapPinCodeRecive(resend: true);
+                                pinFocusNode.requestFocus();
+                              },
+                              child: const OutlinedButtonWidget(
+                                height: 52,
+                                text: '인증번호 다시 받기',
+                                isEnable: true,
+                              ),
+                            ),
                       const SizedBox(
                         height: 24,
                       ),
-                      if (isShowAuthNumBox)
+                      if (isPinCodeMode)
                         TextInputWidget(
                           title: '인증번호',
                           hintText: '인증번호를 입력해주세요',
@@ -186,39 +268,26 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                           onChanged: (value) {
                             checkPinCode();
                           },
-                          suffixIcon: receivePinCode.isEmpty
+                          suffixIcon: !isTimerView
                               ? null
-                              : TimerCountdown(
-                                  endTime: DateTime.now().add(
-                                    const Duration(
-                                      minutes: 5,
-                                      // seconds: 4,
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      getTiemerText(),
+                                      textAlign: TextAlign.center,
+                                      style: getTsCaption12Rg(context).copyWith(
+                                        color: kColorContentError,
+                                      ),
                                     ),
-                                  ),
-                                  enableDescriptions: false,
-                                  spacerWidth: 0,
-                                  format: CountDownTimerFormat.minutesSeconds,
-                                  timeTextStyle:
-                                      getTsCaption12Rg(context).copyWith(
-                                    color: kColorContentError,
-                                  ),
-                                  colonsTextStyle:
-                                      getTsCaption12Rg(context).copyWith(
-                                    color: kColorContentError,
-                                  ),
-                                  onEnd: () {
-                                    setState(() {
-                                      receivePinCode = '';
-                                      pinCodeError = '인증번호를 다시 보내주세요';
-                                    });
-                                  },
+                                  ],
                                 ),
                         )
                     ],
                   ),
                 ),
               ),
-              if (!isFirsthAuthNumRequest)
+              if (isPinCodeMode)
                 JustTheTooltip(
                   controller: tooltipController,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
