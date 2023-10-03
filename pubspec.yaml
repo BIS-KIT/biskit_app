@@ -45,7 +45,7 @@ dependencies:
   device_info_plus: ^9.0.3
   flutter_timer_countdown: ^1.0.5
   just_the_tooltip: ^0.0.12
-  kakao_flutter_sdk: ^1.5.0
+  kakao_flutter_sdk: ^1.6.0
   kakao_flutter_sdk_user: ^1.5.0
   dio: ^5.3.2
   flutter_secure_storage: ^9.0.0
