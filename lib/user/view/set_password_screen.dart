@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +15,7 @@ import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/set_password_completed_screen.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class SetPasswordScreen extends ConsumerStatefulWidget {
   static String get routeName => 'setPassword';
@@ -21,9 +23,11 @@ class SetPasswordScreen extends ConsumerStatefulWidget {
   final SignUpModel? signUpModel;
 
   final String title;
+  final String? token;
   const SetPasswordScreen({
     super.key,
     this.signUpModel,
+    this.token,
     required this.title,
   });
 
@@ -33,13 +37,11 @@ class SetPasswordScreen extends ConsumerStatefulWidget {
 
 class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
   String password = '';
-  // String confirmPassword = '';
   bool obscureText = true;
   bool confirmObscureText = true;
   String? passwordError;
   String? confirmPasswordError;
   bool isActiveConfirmButton = false;
-
   late FocusNode passwordFocusNode;
   late FocusNode confirmPasswordFocusNode;
 
@@ -56,6 +58,24 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
     super.dispose();
     passwordFocusNode.dispose();
     confirmPasswordFocusNode.dispose();
+  }
+
+  changePassword() async {
+    context.loaderOverlay.show();
+    try {
+      bool? res = await ref
+          .read(authRepositoryProvider)
+          .changePassword(token: widget.token, newPassword: password);
+      if (res) {
+        context.pushReplacementNamed(SetPasswordCompletedScreen.routeName);
+      } else {
+        setState(() {
+          confirmPasswordError = '비밀번호 재설정에 실패했습니다.';
+        });
+      }
+    } finally {
+      context.loaderOverlay.hide();
+    }
   }
 
   @override
@@ -191,6 +211,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                 padding: const EdgeInsets.only(bottom: 0),
                 child: GestureDetector(
                   onTap: () {
+                    if (!isActiveConfirmButton) return;
                     if (widget.title.isEmpty) {
                       // 회원가입시
                       context.pushNamed(
@@ -201,8 +222,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                       );
                     } else {
                       // 비밀번호 재설정
-                      context.pushReplacementNamed(
-                          SetPasswordCompletedScreen.routeName);
+                      changePassword();
                     }
                   },
                   child: MediaQuery.of(context).viewInsets.bottom != 0

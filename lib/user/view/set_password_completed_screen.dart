@@ -2,9 +2,11 @@ import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SetPasswordCompletedScreen extends ConsumerStatefulWidget {
   static String get routeName => 'setPasswordCompleted';
@@ -90,7 +92,9 @@ class _SetPasswordCompletedScreenState
             ),
             const SizedBox(height: 80),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                context.pushReplacementNamed(EmailLoginScreen.routeName);
+              },
               child: const FilledButtonWidget(text: '로그인', isEnable: true),
             ),
             const SizedBox(
