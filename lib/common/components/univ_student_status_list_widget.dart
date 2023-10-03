@@ -1,18 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/custom_loading.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/list_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:flutter/material.dart';
-
-import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
 
 class UnivStudentStatusListWidget extends StatefulWidget {
   final UniversityStudentStatusModel? selectedUnivStudentStatusModel;
+  final Function(UniversityStudentStatusModel) onTap;
   const UnivStudentStatusListWidget({
     Key? key,
     this.selectedUnivStudentStatusModel,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -67,19 +70,6 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
     super.dispose();
   }
 
-  void onTapTile(UniversityStudentStatusModel model) {
-    setState(() {
-      univerisyStudentStatusList = univerisyStudentStatusList.map((n) {
-        if (n.ename == model.ename) {
-          selectedModel = model;
-          return model.copyWith(isCheck: true);
-        } else {
-          return n.copyWith(isCheck: false);
-        }
-      }).toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -105,6 +95,7 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
                             setState(() {
                               selectedModel = e;
                             });
+                            widget.onTap(e);
                           },
                           centerWidget: Text(
                             e.kname,

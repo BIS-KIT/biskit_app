@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -6,14 +9,17 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
-import 'package:flutter/material.dart';
 
 class UnivGraduateStatusListWidget extends StatefulWidget {
   final UniversityStudentStatusModel selectedStudentStatusModel;
+  final Function(UniversityGraduateStatusModel) onTap;
+  final Function() submit;
   const UnivGraduateStatusListWidget({
-    super.key,
+    Key? key,
     required this.selectedStudentStatusModel,
-  });
+    required this.onTap,
+    required this.submit,
+  }) : super(key: key);
 
   @override
   State<UnivGraduateStatusListWidget> createState() => _UnivListWidgetState();
@@ -75,19 +81,6 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
     super.dispose();
   }
 
-  void onTapTile(UniversityGraduateStatusModel model) {
-    setState(() {
-      univerisyGraduateStatusList = univerisyGraduateStatusList.map((n) {
-        if (n.ename == model.ename) {
-          selectedModel = model;
-          return model.copyWith(isCheck: true);
-        } else {
-          return n.copyWith(isCheck: false);
-        }
-      }).toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -113,6 +106,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                             setState(() {
                               selectedModel = e;
                             });
+                            widget.onTap(e);
                           },
                           centerWidget: Text(
                             e.kname,
@@ -131,6 +125,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
             child: GestureDetector(
               onTap: () {
                 if (selectedModel != null) {
+                  widget.submit();
                   Navigator.pop(
                     context,
                     selectedModel,

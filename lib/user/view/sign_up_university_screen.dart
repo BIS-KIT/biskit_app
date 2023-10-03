@@ -1,24 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
-import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
-import 'package:biskit_app/common/model/api_res_model.dart';
-import 'package:biskit_app/common/model/university_graduate_status_model.dart';
-import 'package:biskit_app/common/model/university_model.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/univ_list_widget.dart';
+import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
+import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/model/api_res_model.dart';
+import 'package:biskit_app/common/model/university_graduate_status_model.dart';
+import 'package:biskit_app/common/model/university_model.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loader_overlay/loader_overlay.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
 
 import '../../common/model/university_student_status_model.dart';
 
@@ -39,6 +39,8 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   UniversityModel? selectedUnivModel;
   UniversityStudentStatusModel? selectedStudentStatusModel;
   UniversityGraduateStatusModel? selectedGraduateStatusModel;
+
+  UniversitySet? universitySet;
 
   int startBottomSheetIndex = 0;
 
@@ -66,6 +68,11 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
           48,
       contentWidget: UnivListWidget(
         selectedUnivModel: selectedUnivModel,
+        onTap: (model) {
+          setState(() {
+            selectedUnivModel = model;
+          });
+        },
       ),
     );
   }
@@ -88,6 +95,11 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       },
       contentWidget: UnivStudentStatusListWidget(
         selectedUnivStudentStatusModel: selectedStudentStatusModel,
+        onTap: (model) {
+          setState(() {
+            selectedStudentStatusModel = model;
+          });
+        },
       ),
     );
   }
@@ -110,6 +122,24 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       },
       contentWidget: UnivGraduateStatusListWidget(
         selectedStudentStatusModel: selectedStudentStatusModel!,
+        onTap: (model) {
+          setState(() {
+            selectedGraduateStatusModel = model;
+          });
+        },
+        submit: () {
+          if (selectedUnivModel != null &&
+              selectedStudentStatusModel != null &&
+              selectedGraduateStatusModel != null) {
+            setState(() {
+              universitySet = UniversitySet(
+                universityModel: selectedUnivModel!,
+                universityStudentStatusModel: selectedStudentStatusModel!,
+                universityGraduateStatusModel: selectedGraduateStatusModel!,
+              );
+            });
+          }
+        },
       ),
     );
   }
@@ -176,9 +206,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   }
 
   onTapSignUp() async {
-    if (selectedUnivModel != null &&
-        selectedStudentStatusModel != null &&
-        selectedGraduateStatusModel != null) {
+    if (universitySet != null) {
       ApiResModel apiResModel;
       context.loaderOverlay.show();
 
@@ -186,9 +214,11 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       apiResModel = await ref
           .read(authRepositoryProvider)
           .signUpEmail(widget.signUpModel.copyWith(
+            // TODO Univer set 수정
             university_id: 1,
-            department: selectedStudentStatusModel!.kname,
-            education_status: selectedGraduateStatusModel!.kname,
+            department: universitySet!.universityStudentStatusModel.kname,
+            education_status:
+                universitySet!.universityGraduateStatusModel.kname,
           ));
       if (!mounted) return;
       context.loaderOverlay.hide();
@@ -232,7 +262,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                   ),
 
                   // 선택 버튼
-                  startBottomSheetIndex == 3
+                  universitySet != null
                       ? Column(
                           children: [
                             Container(
@@ -262,7 +292,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        selectedUnivModel!.kname,
+                                        universitySet!.universityModel.kname,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -293,7 +323,8 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        selectedStudentStatusModel!.kname,
+                                        universitySet!
+                                            .universityStudentStatusModel.kname,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -324,7 +355,9 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        selectedGraduateStatusModel!.kname,
+                                        universitySet!
+                                            .universityGraduateStatusModel
+                                            .kname,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -377,7 +410,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                 onTap: onTapSignUp,
                 child: FilledButtonWidget(
                   text: '가입하기',
-                  isEnable: startBottomSheetIndex == 3,
+                  isEnable: universitySet != null,
                 ),
               ),
             ),
@@ -409,4 +442,15 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       ],
     );
   }
+}
+
+class UniversitySet {
+  UniversityModel universityModel;
+  UniversityStudentStatusModel universityStudentStatusModel;
+  UniversityGraduateStatusModel universityGraduateStatusModel;
+  UniversitySet({
+    required this.universityModel,
+    required this.universityStudentStatusModel,
+    required this.universityGraduateStatusModel,
+  });
 }
