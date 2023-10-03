@@ -231,4 +231,35 @@ class AuthRepository {
 
     return map;
   }
+
+  Future<bool> changePassword({
+    required String? token,
+    required String newPassword,
+  }) async {
+    bool isChanged = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/change-password/',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        data: json.encode({
+          'new_password': newPassword,
+          'new_password_check': newPassword,
+        }),
+      );
+      logger.d(res);
+      if (res.statusCode == 200) {
+        isChanged = true;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+
+    return isChanged;
+  }
 }
