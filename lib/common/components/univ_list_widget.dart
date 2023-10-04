@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +148,9 @@ class _UnivListWidgetState extends State<UnivListWidget> {
             ),
             Expanded(
                 child: isLoading
-                    ? const CircularProgressIndicator()
+                    ? const Center(
+                        child: CustomLoading(),
+                      )
                     : SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         keyboardDismissBehavior:
