@@ -246,7 +246,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
           isDismissible: false,
           height: MediaQuery.of(context).size.height -
               MediaQuery.of(context).padding.top -
-              118,
+              44,
           contentWidget: const KeywordInputWidget(),
         );
         logger.d(result);

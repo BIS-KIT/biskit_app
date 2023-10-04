@@ -22,6 +22,7 @@ class CustomTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
   final Color borderColor;
+  final bool autofocus;
   const CustomTextFormField({
     Key? key,
     this.textAlign = TextAlign.start,
@@ -41,6 +42,7 @@ class CustomTextFormField extends StatelessWidget {
     this.inputFormatters,
     this.maxLines = 1,
     this.borderColor = kColorBgElevation3,
+    this.autofocus = false,
   }) : super(key: key);
 
   @override
@@ -64,6 +66,7 @@ class CustomTextFormField extends StatelessWidget {
       style: kTsEnBody16Rg.copyWith(
         color: kColorContentWeak,
       ),
+      autofocus: autofocus,
       readOnly: readOnly,
       cursorColor: kColorContentWeak,
       keyboardType: keyboardType,
