@@ -6,8 +6,6 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:flutter/material.dart';
 
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-
 class LangLevelListWidget extends StatefulWidget {
   final int level;
   final Function(int) callback;
@@ -75,6 +73,12 @@ class _LangLevelListWidgetState extends State<LangLevelListWidget> {
                 ))
           .toList();
     });
+
+    if (!l.isChecked) {
+      // 선택시
+      widget.callback(l.level);
+      Navigator.pop(context, l.level);
+    }
   }
 
   @override
@@ -83,81 +87,59 @@ class _LangLevelListWidgetState extends State<LangLevelListWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...levelList
-                      .map(
-                        (e) => ListWidget(
-                          touchWidget: CheckCircleWidget(
-                            value: e.isChecked,
-                          ),
-                          onTap: () {
-                            onTapLevel(e);
-                          },
-                          isSubComponent: true,
-                          borderColor: e == levelList.last
-                              ? kColorBgDefault
-                              : kColorBorderDefalut,
-                          centerWidget: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            children: [
+              ...levelList
+                  .map(
+                    (e) => ListWidget(
+                      touchWidget: CheckCircleWidget(
+                        value: e.isChecked,
+                      ),
+                      onTap: () {
+                        onTapLevel(e);
+                      },
+                      isSubComponent: true,
+                      borderColor: e == levelList.last
+                          ? kColorBgDefault
+                          : kColorBorderDefalut,
+                      centerWidget: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    getLevelTitle(e.level),
-                                    style: getTsBody16Sb(context).copyWith(
-                                      color: kColorContentWeak,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  LevelBarWidget(
-                                    level: e.level,
-                                  ),
-                                ],
+                              Text(
+                                getLevelTitle(e.level),
+                                style: getTsBody16Sb(context).copyWith(
+                                  color: kColorContentWeak,
+                                ),
                               ),
                               const SizedBox(
-                                height: 4,
+                                width: 8,
                               ),
-                              Text(
-                                getLevelSubTitle(e.level),
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeakest,
-                                ),
+                              LevelBarWidget(
+                                level: e.level,
                               ),
                             ],
                           ),
-                        ),
-                      )
-                      .toList(),
-                ],
-              ),
-            ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            getLevelSubTitle(e.level),
+                            style: getTsBody14Rg(context).copyWith(
+                              color: kColorContentWeakest,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 16,
+          const Padding(
+            padding: EdgeInsets.only(
               bottom: 34,
-            ),
-            child: GestureDetector(
-              onTap: () {
-                int level =
-                    levelList.singleWhere((element) => element.isChecked).level;
-                if (levelList
-                    .where((element) => element.isChecked)
-                    .isNotEmpty) {
-                  widget.callback(level);
-                }
-                Navigator.pop(context, level);
-              },
-              child: FilledButtonWidget(
-                text: '완료',
-                isEnable:
-                    levelList.where((element) => element.isChecked).isNotEmpty,
-              ),
             ),
           ),
         ],

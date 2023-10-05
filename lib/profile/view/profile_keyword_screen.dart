@@ -95,7 +95,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '딱딱한비스킷님,\n좋아하는 것을 알려주세요',
+                  '${widget.profileCreateModel!.nick_name}님,\n좋아하는 것을 알려주세요',
                   style: getTsHeading24(context).copyWith(
                     color: kColorContentDefault,
                   ),

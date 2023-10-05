@@ -87,7 +87,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
               onChanged: (value) {
                 // logger.d(value.contains('\n'));
               },
-              hintText: '키워드를 적어주세요',
+              hintText: '좋아하는 것을 알려주세요',
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               maxLines: null,

@@ -16,6 +16,8 @@ showBiskitBottomSheet({
   Function()? onRightTap,
   bool isDismissible = true,
   Widget? contentWidget,
+  bool isScrollControlled = true,
+  bool enableDrag = true,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -27,7 +29,8 @@ showBiskitBottomSheet({
         top: Radius.circular(20),
       ),
     ),
-    isScrollControlled: true,
+    enableDrag: enableDrag,
+    isScrollControlled: isScrollControlled,
     useSafeArea: true,
     barrierColor: Colors.black.withOpacity(0.5),
     builder: (context) {
@@ -114,6 +117,8 @@ showDefaultModalBottomSheet({
   bool titleLeftButton = false,
   bool titleRightButton = false,
   Widget? contentWidget,
+  bool enableDrag = true,
+  bool isDismissible = true,
 }) {
   showModalBottomSheet(
     context: context,
@@ -124,8 +129,10 @@ showDefaultModalBottomSheet({
         top: Radius.circular(20),
       ),
     ),
+    enableDrag: enableDrag,
     isScrollControlled: true,
     useSafeArea: true,
+    isDismissible: isDismissible,
     barrierColor: Colors.black.withOpacity(0.5),
     builder: (context) {
       return Container(

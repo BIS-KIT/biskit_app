@@ -52,13 +52,16 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
   // 레벨선택
   onTapSelectedLevel(UseLanguageModel useLanguage) {
     FocusScope.of(context).unfocus();
-    showDefaultModalBottomSheet(
+    showBiskitBottomSheet(
       context: context,
       title: '레벨 선택',
-      titleRightButton: true,
-      height: MediaQuery.of(context).size.height -
-          MediaQuery.of(context).padding.top -
-          200,
+      rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+      onRightTap: () {
+        Navigator.pop(context);
+      },
+      isDismissible: false,
+      isScrollControlled: true,
+      enableDrag: false,
       contentWidget: LangLevelListWidget(
         level: useLanguage.level,
         callback: (level) {
@@ -101,6 +104,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
         children: [
           SearchBarWidget(
             controller: searchBarController,
+            hintText: '언어 검색',
             onChanged: (value) {},
           ),
           const SizedBox(
