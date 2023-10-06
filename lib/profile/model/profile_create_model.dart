@@ -5,17 +5,20 @@ import 'package:flutter/foundation.dart';
 
 import 'package:biskit_app/profile/model/Introduction_create_model.dart';
 import 'package:biskit_app/profile/model/available_language_create_model.dart';
+import 'package:biskit_app/profile/model/student_card_model.dart';
 
 class ProfileCreateModel {
   final String nick_name;
   final String? profile_photo;
   final List<AvailableLanguageCreateModel> available_languages;
   final List<IntroductionCreateModel> introductions;
+  final StudentCard? student_card;
   ProfileCreateModel({
     required this.nick_name,
     required this.profile_photo,
     required this.available_languages,
     required this.introductions,
+    this.student_card,
   });
 
   ProfileCreateModel copyWith({
@@ -23,12 +26,14 @@ class ProfileCreateModel {
     String? profile_photo,
     List<AvailableLanguageCreateModel>? available_languages,
     List<IntroductionCreateModel>? introductions,
+    StudentCard? student_card,
   }) {
     return ProfileCreateModel(
       nick_name: nick_name ?? this.nick_name,
       profile_photo: profile_photo ?? this.profile_photo,
       available_languages: available_languages ?? this.available_languages,
       introductions: introductions ?? this.introductions,
+      student_card: student_card ?? this.student_card,
     );
   }
 
@@ -38,6 +43,7 @@ class ProfileCreateModel {
       'profile_photo': profile_photo,
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
       'introductions': introductions.map((x) => x.toMap()).toList(),
+      'student_card': student_card?.toMap(),
     };
   }
 
@@ -47,16 +53,20 @@ class ProfileCreateModel {
       profile_photo:
           map['profile_photo'] != null ? map['profile_photo'] as String : null,
       available_languages: List<AvailableLanguageCreateModel>.from(
-        (map['available_languages'] as List).map<AvailableLanguageCreateModel>(
+        (map['available_languages'] as List<int>)
+            .map<AvailableLanguageCreateModel>(
           (x) =>
               AvailableLanguageCreateModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
       introductions: List<IntroductionCreateModel>.from(
-        (map['introductions'] as List).map<IntroductionCreateModel>(
+        (map['introductions'] as List<int>).map<IntroductionCreateModel>(
           (x) => IntroductionCreateModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      student_card: map['student_card'] != null
+          ? StudentCard.fromMap(map['student_card'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -67,7 +77,7 @@ class ProfileCreateModel {
 
   @override
   String toString() {
-    return 'ProfileCreateModel(nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions)';
+    return 'ProfileCreateModel(nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, student_card: $student_card)';
   }
 
   @override
@@ -77,7 +87,8 @@ class ProfileCreateModel {
     return other.nick_name == nick_name &&
         other.profile_photo == profile_photo &&
         listEquals(other.available_languages, available_languages) &&
-        listEquals(other.introductions, introductions);
+        listEquals(other.introductions, introductions) &&
+        other.student_card == student_card;
   }
 
   @override
@@ -85,6 +96,7 @@ class ProfileCreateModel {
     return nick_name.hashCode ^
         profile_photo.hashCode ^
         available_languages.hashCode ^
-        introductions.hashCode;
+        introductions.hashCode ^
+        student_card.hashCode;
   }
 }

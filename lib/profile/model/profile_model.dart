@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/introduction_model.dart';
+import 'package:biskit_app/profile/model/student_verification_model.dart';
 
 class ProfileModel {
   final int id;
@@ -13,6 +14,7 @@ class ProfileModel {
   final String? profile_photo;
   final List<AvailableLanguageModel> available_languages;
   final List<IntroductionModel> introductions;
+  final StudentVerificationModel? student_verification;
   ProfileModel({
     required this.id,
     required this.user_id,
@@ -20,6 +22,7 @@ class ProfileModel {
     required this.profile_photo,
     required this.available_languages,
     required this.introductions,
+    required this.student_verification,
   });
 
   ProfileModel copyWith({
@@ -29,6 +32,7 @@ class ProfileModel {
     String? profile_photo,
     List<AvailableLanguageModel>? available_languages,
     List<IntroductionModel>? introductions,
+    StudentVerificationModel? student_verification,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -37,6 +41,7 @@ class ProfileModel {
       profile_photo: profile_photo ?? this.profile_photo,
       available_languages: available_languages ?? this.available_languages,
       introductions: introductions ?? this.introductions,
+      student_verification: student_verification ?? this.student_verification,
     );
   }
 
@@ -48,6 +53,7 @@ class ProfileModel {
       'profile_photo': profile_photo,
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
       'introductions': introductions.map((x) => x.toMap()).toList(),
+      'student_verification': student_verification?.toMap(),
     };
   }
 
@@ -68,6 +74,10 @@ class ProfileModel {
           (x) => IntroductionModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      student_verification: map['student_verification'] != null
+          ? StudentVerificationModel.fromMap(
+              map['student_verification'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -78,7 +88,7 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions)';
+    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, student_verification: $student_verification)';
   }
 
   @override
@@ -90,7 +100,8 @@ class ProfileModel {
         other.nick_name == nick_name &&
         other.profile_photo == profile_photo &&
         listEquals(other.available_languages, available_languages) &&
-        listEquals(other.introductions, introductions);
+        listEquals(other.introductions, introductions) &&
+        other.student_verification == student_verification;
   }
 
   @override
@@ -100,6 +111,7 @@ class ProfileModel {
         nick_name.hashCode ^
         profile_photo.hashCode ^
         available_languages.hashCode ^
-        introductions.hashCode;
+        introductions.hashCode ^
+        student_verification.hashCode;
   }
 }

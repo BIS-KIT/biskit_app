@@ -19,6 +19,16 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguageModel>?> {
     getList();
   }
 
+  init() {
+    state = state!
+        .map((e) => UseLanguageModel(
+              languageModel: e.languageModel,
+              level: 0,
+              isChecked: false,
+            ))
+        .toList();
+  }
+
   getList() async {
     final List<LanguageModel> list = await utilRepository.getLanguages();
     state = list

@@ -134,6 +134,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
           profilePhoto =
               await ref.read(profileRepositoryProvider).postProfilePhoto(
                     profilePhoto: selectedPhotoModel!,
+                    isProfile: true,
                   );
         } finally {
           context.loaderOverlay.hide();

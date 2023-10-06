@@ -1,10 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/components/tooltip_widget.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/profile/model/student_card_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -42,14 +46,37 @@ class _ProfileIdConfirmScreenState
     super.dispose();
   }
 
-  submit() async {
-    // TODO 학생증 처리
-    // String? studentCardPath;
+  submit(bool isPhoto) async {
+    context.loaderOverlay.show();
+    String? studentCardPhoto;
+    if (isPhoto) {
+      if (selectedPhotoModel != null) {
+        try {
+          studentCardPhoto =
+              await ref.read(profileRepositoryProvider).postProfilePhoto(
+                    profilePhoto: selectedPhotoModel!,
+                    isProfile: false,
+                  );
+        } finally {}
+        logger.d('uploadFilePath : $studentCardPhoto');
+      } else {
+        return;
+      }
+    }
     if (widget.profileCreateModel != null) {
-      logger.d(widget.profileCreateModel!.toJson());
       await ref.read(profileRepositoryProvider).createProfile(
-            profileCreateModel: widget.profileCreateModel!,
+            profileCreateModel: isPhoto
+                ? widget.profileCreateModel!.copyWith(
+                    student_card: StudentCard(
+                      student_card: studentCardPhoto!,
+                      verification_status:
+                          describeEnum(verification_status.PENDING),
+                    ),
+                  )
+                : widget.profileCreateModel!,
           );
+      if (!mounted) return;
+      context.loaderOverlay.hide();
     }
   }
 
@@ -201,7 +228,7 @@ class _ProfileIdConfirmScreenState
                     children: [
                       GestureDetector(
                         onTap: () {
-                          submit();
+                          submit(false);
                         },
                         child: Text(
                           '다음에 할게요',
@@ -215,9 +242,16 @@ class _ProfileIdConfirmScreenState
                   const SizedBox(
                     height: 16,
                   ),
-                  FilledButtonWidget(
-                    text: '작성 완료',
-                    isEnable: selectedPhotoModel != null,
+                  GestureDetector(
+                    onTap: () {
+                      if (selectedPhotoModel != null) {
+                        submit(true);
+                      }
+                    },
+                    child: FilledButtonWidget(
+                      text: '작성 완료',
+                      isEnable: selectedPhotoModel != null,
+                    ),
                   ),
                 ],
               ),
