@@ -1,16 +1,24 @@
 import 'dart:io';
 
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/test2_screen.dart';
 import 'package:biskit_app/common/view/test_screen.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
+import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => 'login';
@@ -21,7 +29,67 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  void kakaoLogin() {}
+  // Kakao Login
+  void signInWithKakao() async {
+    if (await kakao.isKakaoTalkInstalled()) {
+      try {
+        await kakao.UserApi.instance.loginWithKakaoTalk();
+        logger.d('카카오톡으로 로그인 성공');
+      } catch (error) {
+        logger.d('카카오톡으로 로그인 실패 $error');
+
+        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+        if (error is PlatformException && error.code == 'CANCELED') {
+          return;
+        }
+        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
+        try {
+          final kakao.OAuthToken result =
+              await kakao.UserApi.instance.loginWithKakaoAccount();
+          logger.d('카카오계정으로 로그인 성공 : ${result.toJson()}');
+        } catch (error) {
+          logger.d('카카오계정으로 로그인 실패 $error');
+        }
+      }
+    } else {
+      try {
+        final kakao.OAuthToken result =
+            await kakao.UserApi.instance.loginWithKakaoAccount();
+        logger.d('카카오계정으로 로그인 성공 : ${result.toJson()}');
+      } catch (error) {
+        logger.d('카카오계정으로 로그인 실패 $error');
+      }
+    }
+
+    kakao.User user = await kakao.UserApi.instance.me();
+    logger.d('사용자 정보 요청 성공'
+        '\n회원번호: ${user.id}'
+        '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
+
+    // TODO 로그인 처리 이메일 없이도 로그인 가능해야함
+    UserModelBase? userModelBase =
+        await ref.read(userMeProvider.notifier).login(
+              email: user.kakaoAccount!.email,
+              snsId: user.id.toString(),
+              snsType: SnsType.kakao,
+            );
+
+    if (!mounted) return;
+    if (userModelBase == null) {
+      // 가입된 아이디 없으면 회원가입 처리
+      if (!mounted) return;
+      context.pushNamed(
+        SignUpAgreeScreen.routeName,
+        extra: SignUpModel(
+          email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+          sns_type: describeEnum(SnsType.kakao),
+          sns_id: user.id.toString(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -115,7 +183,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: _buildGoogle(context),
               ),
               GestureDetector(
-                onTap: kakaoLogin,
+                onTap: signInWithKakao,
                 child: _buildKakao(context),
               ),
               if (Platform.isIOS)

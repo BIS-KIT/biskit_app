@@ -77,7 +77,11 @@ class RouteProvider extends ChangeNotifier {
                 GoRoute(
                   path: 'signUpAgree',
                   name: SignUpAgreeScreen.routeName,
-                  builder: (_, __) => const SignUpAgreeScreen(),
+                  builder: (_, state) {
+                    return SignUpAgreeScreen(
+                      signUpModel: state.extra as SignUpModel,
+                    );
+                  },
                   routes: [
                     GoRoute(
                       path: 'signUpEmail',

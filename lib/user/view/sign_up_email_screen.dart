@@ -23,6 +23,7 @@ import 'package:biskit_app/user/view/set_password_screen.dart';
 import '../../common/components/tooltip_widget.dart';
 import '../../common/const/colors.dart';
 import '../../common/const/fonts.dart';
+import '../../common/view/name_birth_gender_screen.dart';
 
 class SignUpEmailScreen extends ConsumerStatefulWidget {
   final SignUpModel signUpModel;
@@ -58,6 +59,11 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     super.initState();
     pinController = TextEditingController();
     pinFocusNode = FocusNode();
+
+    email = widget.signUpModel.email ?? '';
+    if (email.isNotEmpty) {
+      isButtonEnable = true;
+    }
     // if (kDebugMode) {
     //   email = 'test_user@gmail.com';
     // }
@@ -224,10 +230,22 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
         setState(() {
           isTimerView = false;
         });
-        context.pushNamed(
-          SetPasswordScreen.routeName,
-          extra: widget.signUpModel.copyWith(email: email),
-        );
+
+        if (widget.signUpModel.sns_type == null) {
+          // email signup
+          context.pushNamed(
+            SetPasswordScreen.routeName,
+            extra: widget.signUpModel.copyWith(email: email),
+          );
+        } else {
+          // sns signup
+          context.pushNamed(
+            NameBirthGenderScreen.routeName,
+            extra: widget.signUpModel.copyWith(
+              email: email,
+            ),
+          );
+        }
       }
     } else {
       setState(() {

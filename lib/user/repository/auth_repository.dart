@@ -26,9 +26,18 @@ class AuthRepository {
   });
 
   Future<LoginResponse> login({
-    required String email,
-    required String password,
+    String? email,
+    String? password,
+    String? snsType,
+    String? snsId,
   }) async {
+    Object data = json.encode({
+      'email': email,
+      'password': password,
+      'sns_type': snsType,
+      'sns_id': snsId,
+    });
+    logger.d(data.toString());
     final res = await dio.post(
       '$baseUrl/login',
       options: Options(
@@ -37,10 +46,7 @@ class AuthRepository {
           'Accept': 'application/json',
         },
       ),
-      data: json.encode({
-        'email': email,
-        'password': password,
-      }),
+      data: data,
     );
 
     logger.d(res);

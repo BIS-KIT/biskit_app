@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -211,7 +212,10 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
-                    context.pushReplacementNamed(SignUpAgreeScreen.routeName);
+                    context.pushReplacementNamed(
+                      SignUpAgreeScreen.routeName,
+                      extra: SignUpModel(),
+                    );
                   },
                   child: const FilledButtonWidget(
                     height: 52,
