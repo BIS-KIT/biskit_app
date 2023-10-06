@@ -54,6 +54,8 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
       context: context,
       title: '레벨 선택',
       titleRightButton: true,
+      enableDrag: false,
+      isDismissible: false,
       height: MediaQuery.of(context).size.height -
           MediaQuery.of(context).padding.top -
           200,
@@ -74,6 +76,8 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
       context: context,
       title: '언어 선택',
       titleRightButton: true,
+      enableDrag: false,
+      isDismissible: false,
       contentWidget: LangListWidget(callback: () {
         List<UseLanguageModel> tempList =
             ref.read(useLanguageProvider.notifier).getSelectedList();
@@ -160,6 +164,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
                       onTap: onTapSelectedLang,
                       child: const OutlinedButtonWidget(
                         text: '언어선택',
+                        height: 52,
                         isEnable: true,
                         leftIconPath: 'assets/icons/ic_plus_line_24.svg',
                       ),
@@ -178,6 +183,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
               onTap: onTapNext,
               child: FilledButtonWidget(
                 text: '다음',
+                height: 56,
                 isEnable: selectedList.isNotEmpty,
               ),
             ),
@@ -205,26 +211,38 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
       ),
       child: Row(
         children: [
-          Text(
-            e.languageModel.kr_name,
-            style: getTsBody16Sb(context).copyWith(
-              color: kColorContentWeak,
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                onTapSelectedLang();
+              },
+              child: Row(
+                children: [
+                  Text(
+                    e.languageModel.kr_name,
+                    style: getTsBody16Sb(context).copyWith(
+                      color: kColorContentWeak,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    getLevelTitle(e.level),
+                    style: getTsBody16Sb(context).copyWith(
+                      color: kColorContentSecondary,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  LevelBarWidget(level: e.level),
+                  const Spacer(),
+                ],
+              ),
             ),
           ),
-          const SizedBox(
-            width: 12,
-          ),
-          Text(
-            getLevelTitle(e.level),
-            style: getTsBody16Sb(context).copyWith(
-              color: kColorContentSecondary,
-            ),
-          ),
-          const SizedBox(
-            width: 6,
-          ),
-          LevelBarWidget(level: e.level),
-          const Spacer(),
           GestureDetector(
             onTap: () {
               setState(() {

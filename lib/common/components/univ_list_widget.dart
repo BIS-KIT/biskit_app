@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -147,34 +148,38 @@ class _UnivListWidgetState extends State<UnivListWidget> {
             ),
             Expanded(
                 child: isLoading
-                    ? const CircularProgressIndicator()
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        child: Column(
-                          children: tempList
-                              .map(
-                                (e) => ListWidget(
-                                  height: 56,
-                                  borderColor: e == tempList.last
-                                      ? kColorBgDefault
-                                      : kColorBorderDefalut,
-                                  touchWidget: CheckCircleWidget(
-                                    value: e == selectedModel ? true : false,
-                                  ),
-                                  onTap: () {
-                                    onTapTile(e);
-                                  },
-                                  centerWidget: Text(
-                                    e.kname,
-                                    style: getTsBody16Rg(context).copyWith(
-                                      color: kColorContentWeak,
+                    ? const Center(
+                        child: CustomLoading(),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: SingleChildScrollView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          child: Column(
+                            children: tempList
+                                .map(
+                                  (e) => ListWidget(
+                                    height: 56,
+                                    borderColor: e == tempList.last
+                                        ? kColorBgDefault
+                                        : kColorBorderDefalut,
+                                    touchWidget: CheckCircleWidget(
+                                      value: e == selectedModel ? true : false,
+                                    ),
+                                    onTap: () {
+                                      onTapTile(e);
+                                    },
+                                    centerWidget: Text(
+                                      e.kname,
+                                      style: getTsBody16Rg(context).copyWith(
+                                        color: kColorContentWeak,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                )
+                                .toList(),
+                          ),
                         ),
                       )),
             Padding(

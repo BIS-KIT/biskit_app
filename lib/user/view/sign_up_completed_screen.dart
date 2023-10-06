@@ -50,7 +50,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                         height: 12,
                       ),
                       Text(
-                        '서로가 편하고 즐거운 모임을 위해\n프로필 작성이 필요해요',
+                        '보다 즐거운 모임을 위해\n프로필을 작성해주세요',
                         textAlign: TextAlign.center,
                         style: getTsBody16Rg(context).copyWith(
                           color: kColorContentWeaker,

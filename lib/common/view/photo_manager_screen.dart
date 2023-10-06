@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -89,14 +90,17 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     );
 
     for (var path in _paths!) {
-      _albums.add(
-        Album(
-          id: path.id,
-          name: path.isAll ? '최근 항목' : path.name,
-          count: await path.assetCountAsync,
-          thumbnail: (await path.getAssetListRange(start: 0, end: 1))[0],
-        ),
-      );
+      int count = await path.assetCountAsync;
+      if (count > 0) {
+        _albums.add(
+          Album(
+            id: path.id,
+            name: path.isAll ? '최근 항목' : path.name,
+            count: count,
+            thumbnail: (await path.getAssetListRange(start: 0, end: 1))[0],
+          ),
+        );
+      }
     }
 
     // _albums = _paths!.map((e) {
@@ -248,7 +252,9 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
   Expanded _buildPhotos() {
     return Expanded(
       child: isLoading
-          ? const CircularProgressIndicator()
+          ? const Center(
+              child: CustomLoading(),
+            )
           : GridView(
               controller: scrollController,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -260,10 +266,15 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 if (widget.isCamera)
                   Container(
                     color: kColorBgElevation3,
-                    child: const Icon(
-                      Icons.camera_alt_rounded,
-                      size: 40,
-                      color: kColorContentWeakest,
+                    padding: const EdgeInsets.all(41.5),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_camera_fill_24.svg',
+                      width: 40,
+                      height: 40,
+                      colorFilter: const ColorFilter.mode(
+                        kColorContentWeakest,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ..._images.map(
@@ -427,13 +438,18 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: const SizedBox(
+                  child: Container(
                     width: 44,
                     height: 44,
-                    child: Icon(
-                      Icons.close_rounded,
-                      size: 24,
-                      color: Colors.black,
+                    padding: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_cancel_line_24.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        kColorContentDefault,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

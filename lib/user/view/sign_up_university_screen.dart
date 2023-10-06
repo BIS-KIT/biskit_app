@@ -305,6 +305,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                   const Divider(
                                     thickness: 1,
                                     color: kColorBorderDefalut,
+                                    height: 1,
                                   ),
                                   const SizedBox(
                                     height: 16,
@@ -336,6 +337,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                   ),
                                   const Divider(
                                     thickness: 1,
+                                    height: 1,
                                     color: kColorBorderDefalut,
                                   ),
                                   const SizedBox(

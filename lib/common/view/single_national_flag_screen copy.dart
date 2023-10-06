@@ -180,26 +180,28 @@ class _SingleNationalFlagScreenState
                   ? const Center(
                       child: CustomLoading(),
                     )
-                  : SingleChildScrollView(
-                      controller: autoScrollController,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
                       ),
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      child: Column(
-                        children: tempList
-                            .map((e) => ListFlagWidget(
-                                  model: e,
-                                  isCheck: selectedModel != null &&
-                                          selectedModel!.id == e.id
-                                      ? true
-                                      : false,
-                                  onTap: () {
-                                    onTapTile(e);
-                                  },
-                                ))
-                            .toList(),
+                      child: SingleChildScrollView(
+                        controller: autoScrollController,
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        child: Column(
+                          children: tempList
+                              .map((e) => ListFlagWidget(
+                                    model: e,
+                                    isCheck: selectedModel != null &&
+                                            selectedModel!.id == e.id
+                                        ? true
+                                        : false,
+                                    onTap: () {
+                                      onTapTile(e);
+                                    },
+                                  ))
+                              .toList(),
+                        ),
                       ),
                     ),
             ),

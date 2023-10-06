@@ -1,9 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/common/components/tooltip_widget.dart';
+import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/profile/model/student_card_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -29,8 +34,6 @@ class ProfileIdConfirmScreen extends ConsumerStatefulWidget {
 
 class _ProfileIdConfirmScreenState
     extends ConsumerState<ProfileIdConfirmScreen> {
-  final JustTheController tooltipController = JustTheController();
-
   PhotoModel? selectedPhotoModel;
 
   @override
@@ -43,14 +46,37 @@ class _ProfileIdConfirmScreenState
     super.dispose();
   }
 
-  submit() async {
-    // TODO 학생증 처리
-    // String? studentCardPath;
+  submit(bool isPhoto) async {
+    context.loaderOverlay.show();
+    String? studentCardPhoto;
+    if (isPhoto) {
+      if (selectedPhotoModel != null) {
+        try {
+          studentCardPhoto =
+              await ref.read(profileRepositoryProvider).postProfilePhoto(
+                    profilePhoto: selectedPhotoModel!,
+                    isProfile: false,
+                  );
+        } finally {}
+        logger.d('uploadFilePath : $studentCardPhoto');
+      } else {
+        return;
+      }
+    }
     if (widget.profileCreateModel != null) {
-      logger.d(widget.profileCreateModel!.toJson());
       await ref.read(profileRepositoryProvider).createProfile(
-            profileCreateModel: widget.profileCreateModel!,
+            profileCreateModel: isPhoto
+                ? widget.profileCreateModel!.copyWith(
+                    student_card: StudentCard(
+                      student_card: studentCardPhoto!,
+                      verification_status:
+                          describeEnum(verification_status.PENDING),
+                    ),
+                  )
+                : widget.profileCreateModel!,
           );
+      if (!mounted) return;
+      context.loaderOverlay.hide();
     }
   }
 
@@ -91,8 +117,8 @@ class _ProfileIdConfirmScreenState
               onTap: () async {
                 final List result = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const PhotoManagerScreen(
+                      createUpDownRoute(
+                        const PhotoManagerScreen(
                           isCamera: true,
                           maxCnt: 1,
                         ),
@@ -202,7 +228,7 @@ class _ProfileIdConfirmScreenState
                     children: [
                       GestureDetector(
                         onTap: () {
-                          submit();
+                          submit(false);
                         },
                         child: Text(
                           '다음에 할게요',
@@ -216,9 +242,16 @@ class _ProfileIdConfirmScreenState
                   const SizedBox(
                     height: 16,
                   ),
-                  FilledButtonWidget(
-                    text: '작성 완료',
-                    isEnable: selectedPhotoModel != null,
+                  GestureDetector(
+                    onTap: () {
+                      if (selectedPhotoModel != null) {
+                        submit(true);
+                      }
+                    },
+                    child: FilledButtonWidget(
+                      text: '작성 완료',
+                      isEnable: selectedPhotoModel != null,
+                    ),
                   ),
                 ],
               ),
@@ -231,7 +264,7 @@ class _ProfileIdConfirmScreenState
 
   Column _buildTop(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(
           height: 8,
@@ -245,63 +278,31 @@ class _ProfileIdConfirmScreenState
         const SizedBox(
           height: 12,
         ),
-        JustTheTooltip(
-          controller: tooltipController,
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
-          backgroundColor: Colors.black.withOpacity(0.7),
-          elevation: 0,
-          tailBaseWidth: 20,
-          tailLength: 6,
+        TooltipWidget(
           preferredDirection: AxisDirection.down,
-          content: SizedBox(
-            width: 315,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 12,
+          tooltipText:
+              '비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 학생인증 용도 외 다른 어떠한 용도로도 사용되지 않으며, 인증이 끝난 즉시 파기됩니다. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다.',
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                'assets/icons/ic_help_fill_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentWeaker,
+                  BlendMode.srcIn,
+                ),
               ),
-              child: Text(
-                '비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 학생인증 용도 외 다른 어떠한 용도로도 사용되지 않으며, 인증이 끝난 즉시 파기됩니다. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다.',
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                '학생인증이 왜 필요한가요?',
                 style: getTsBody14Rg(context).copyWith(
-                  color: kColorBgDefault,
+                  color: kColorContentWeaker,
                 ),
               ),
-            ),
-          ),
-          offset: 8,
-          tailBuilder: (tip, point2, point3) {
-            return Path()
-              ..moveTo(tip.dx - (tip.dx * 0.5), tip.dy)
-              ..lineTo(point2.dx - (point2.dx * 0.5), point2.dy)
-              ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
-              ..close();
-          },
-          child: GestureDetector(
-            onTap: () {
-              tooltipController.showTooltip();
-            },
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/ic_help_fill_24.svg',
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    kColorContentWeaker,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  '학생인증이 왜 필요한가요?',
-                  style: getTsBody14Rg(context).copyWith(
-                    color: kColorContentWeaker,
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
         ),
       ],

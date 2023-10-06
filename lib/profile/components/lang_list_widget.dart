@@ -52,13 +52,16 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
   // 레벨선택
   onTapSelectedLevel(UseLanguageModel useLanguage) {
     FocusScope.of(context).unfocus();
-    showDefaultModalBottomSheet(
+    showBiskitBottomSheet(
       context: context,
       title: '레벨 선택',
-      titleRightButton: true,
-      height: MediaQuery.of(context).size.height -
-          MediaQuery.of(context).padding.top -
-          200,
+      rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+      onRightTap: () {
+        Navigator.pop(context);
+      },
+      isDismissible: false,
+      isScrollControlled: true,
+      enableDrag: false,
       contentWidget: LangLevelListWidget(
         level: useLanguage.level,
         callback: (level) {
@@ -66,6 +69,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                 useLanguage: useLanguage,
                 level: level,
               );
+          searchBarController.text = '';
         },
       ),
     );
@@ -101,6 +105,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
         children: [
           SearchBarWidget(
             controller: searchBarController,
+            hintText: '언어 검색',
             onChanged: (value) {},
           ),
           const SizedBox(
@@ -124,35 +129,15 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                       return Column(
                         children: [
                           ...viewList
+                              .where((element) => element.isChecked)
                               .map(
-                                (e) => ListWidget(
-                                  height: 56,
-                                  touchWidget: CheckCircleWidget(
-                                    value: e.isChecked,
-                                  ),
-                                  onTap: () {
-                                    onTapLang(e);
-                                  },
-                                  centerWidget: Text(
-                                    context.locale.languageCode == kEn
-                                        ? e.languageModel.en_name
-                                        : e.languageModel.kr_name,
-                                    style: getTsBody16Rg(context).copyWith(
-                                      color: kColorContentWeak,
-                                    ),
-                                  ),
-                                  rightWidget: e.isChecked
-                                      ? SelectWidget(
-                                          text: getLevelTitle(e.level),
-                                          usageType: 'body',
-                                          iconPath:
-                                              'assets/icons/ic_chevron_down_line_24.svg',
-                                          onTap: () {
-                                            onTapSelectedLevel(e);
-                                          },
-                                        )
-                                      : null,
-                                ),
+                                (e) => _buildListWidget(e, context),
+                              )
+                              .toList(),
+                          ...viewList
+                              .where((element) => !element.isChecked)
+                              .map(
+                                (e) => _buildListWidget(e, context),
                               )
                               .toList(),
                         ],
@@ -192,6 +177,36 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
           ),
         ],
       ),
+    );
+  }
+
+  ListWidget _buildListWidget(UseLanguageModel e, BuildContext context) {
+    return ListWidget(
+      height: 56,
+      touchWidget: CheckCircleWidget(
+        value: e.isChecked,
+      ),
+      onTap: () {
+        onTapLang(e);
+      },
+      centerWidget: Text(
+        context.locale.languageCode == kEn
+            ? e.languageModel.en_name
+            : e.languageModel.kr_name,
+        style: getTsBody16Rg(context).copyWith(
+          color: kColorContentWeak,
+        ),
+      ),
+      rightWidget: e.isChecked
+          ? SelectWidget(
+              text: getLevelTitle(e.level),
+              usageType: 'body',
+              iconPath: 'assets/icons/ic_chevron_down_line_24.svg',
+              onTap: () {
+                onTapSelectedLevel(e);
+              },
+            )
+          : null,
     );
   }
 }

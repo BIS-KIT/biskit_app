@@ -8,6 +8,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
@@ -133,6 +134,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
           profilePhoto =
               await ref.read(profileRepositoryProvider).postProfilePhoto(
                     profilePhoto: selectedPhotoModel!,
+                    isProfile: true,
                   );
         } finally {
           context.loaderOverlay.hide();
@@ -199,8 +201,8 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                       onTap: () async {
                         final List result = await Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const PhotoManagerScreen(
+                              createUpDownRoute(
+                                const PhotoManagerScreen(
                                   isCamera: true,
                                   maxCnt: 1,
                                 ),
@@ -300,7 +302,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
               ),
             ),
           ),
-          MediaQuery.of(context).viewInsets.bottom == 0
+          MediaQuery.of(context).viewInsets.bottom < 100
               ? Padding(
                   padding: const EdgeInsets.only(
                     left: 20,

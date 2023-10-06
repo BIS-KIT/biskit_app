@@ -65,23 +65,33 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
         reasonController.text.isNotEmpty;
   }
 
+  onTapSubmit() {
+    if (getButtonEnable()) {
+      Navigator.pop(context, {
+        'keyword': keywordController.text,
+        'reason': reasonController.text,
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            CustomTextFormField(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CustomTextFormField(
               controller: keywordController,
               focusNode: keywordFocusNode,
               onChanged: (value) {
                 // logger.d(value.contains('\n'));
               },
-              hintText: '키워드를 적어주세요',
+              hintText: '좋아하는 것을 알려주세요',
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               maxLines: null,
+              autofocus: true,
               suffixIcon: keywordController.text.isNotEmpty
                   ? GestureDetector(
                       onTap: () {
@@ -99,92 +109,120 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     )
                   : null,
             ),
-            isReasonView
-                ? Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 12),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: kColorBgElevation1,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(6)),
-                              border: Border.all(
-                                width: 1,
-                                color: kColorBgElevation3,
-                              ),
-                            ),
-                            child: TextFormField(
-                              controller: reasonController,
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                              focusNode: reasonFocusNode,
-                              expands: true,
-                              maxLines: null,
-                              minLines: null,
-                              decoration: InputDecoration(
-                                hintText: '',
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                                hintStyle: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentPlaceholder,
+          ),
+          isReasonView
+              ? Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.only(top: 12),
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: kColorBgElevation1,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6)),
+                                    border: Border.all(
+                                      width: 1,
+                                      color: kColorBgElevation3,
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    controller: reasonController,
+                                    onChanged: (value) {
+                                      setState(() {});
+                                    },
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    focusNode: reasonFocusNode,
+                                    expands: true,
+                                    maxLines: null,
+                                    minLines: null,
+                                    decoration: InputDecoration(
+                                      hintText: '좋아하는 이유를 알려주세요',
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      hintStyle:
+                                          getTsBody16Rg(context).copyWith(
+                                        color: kColorContentPlaceholder,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              Text(
+                                '${reasonController.text.length}/300',
+                                style: getTsCaption12Rg(context).copyWith(
+                                  color: kColorContentWeakest,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (MediaQuery.of(context).viewInsets.bottom > 150)
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                onTapSubmit();
+                              },
+                              child: FilledButtonWidget(
+                                text: '완료',
+                                isEnable: getButtonEnable(),
+                                height: 52,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          '${reasonController.text.length}/300',
-                          style: getTsCaption12Rg(context).copyWith(
-                            color: kColorContentWeakest,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : const Spacer(),
-            if (MediaQuery.of(context).viewInsets.bottom > 150)
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom -
-                        (16 + 34 + 52) +
-                        20,
+                    ],
                   ),
-                ],
-              ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                bottom: 34,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  if (getButtonEnable()) {
-                    Navigator.pop(context, {
-                      'keyword': keywordController.text,
-                      'reason': reasonController.text,
-                    });
-                  }
-                },
-                child: FilledButtonWidget(
-                  text: '완료',
-                  isEnable: getButtonEnable(),
-                  height: 52,
+                )
+              : const Spacer(),
+          if (MediaQuery.of(context).viewInsets.bottom > 150)
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height:
+                      MediaQuery.of(context).viewInsets.bottom - (16 + 34 + 52),
                 ),
+              ],
+            ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 16,
+              bottom: 34,
+              left: 20,
+              right: 20,
+            ),
+            child: GestureDetector(
+              onTap: () {
+                onTapSubmit();
+              },
+              child: FilledButtonWidget(
+                text: '완료',
+                isEnable: getButtonEnable(),
+                height: 52,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

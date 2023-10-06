@@ -88,6 +88,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
               const Divider(
                 thickness: 1,
+                height: 1,
                 color: kColorBgElevation3,
               ),
               const SizedBox(
@@ -197,14 +198,16 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  context.pushNamed(
-                    SignUpEmailScreen.routeName,
-                    extra: SignUpModel(
-                      terms_mandatory: isAgree1,
-                      terms_optional: isAgree2,
-                      terms_push: isAgree3,
-                    ),
-                  );
+                  if (isAgree1 && isAgree2 && isAgree3) {
+                    context.pushNamed(
+                      SignUpEmailScreen.routeName,
+                      extra: SignUpModel(
+                        terms_mandatory: isAgree1,
+                        terms_optional: isAgree2,
+                        terms_push: isAgree3,
+                      ),
+                    );
+                  }
                 },
                 child: FilledButtonWidget(
                   text: '다음',

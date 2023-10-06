@@ -105,53 +105,53 @@ class ProfileRepository {
 
   postProfilePhoto({
     required PhotoModel profilePhoto,
+    required bool isProfile,
   }) async {
     String? path;
-    final user = ref.watch(userMeProvider);
-    if (user is UserModel) {
-      File? file = await profilePhoto.assetEntity.originFile;
+    // final user = ref.watch(userMeProvider);
+    // if (user is UserModel) {
 
-      Response? res;
+    //   } catch (e) {
+    //     logger.e(e.toString());
+    //   }
+    // }
+    File? file = await profilePhoto.assetEntity.originFile;
 
-      try {
-        if (user.profile == null) {
-          // create
-          res = await dio.post(
-            '$baseUrl/',
-            options: Options(
-              headers: {
-                'Content-Type':
-                    file == null ? 'application/json' : 'multipart/form-data',
-                'Accept': 'application/json',
-              },
-            ),
-            queryParameters: {
-              'user_id': user.id,
-            },
-            data: file == null
-                ? null
-                : FormData.fromMap({
-                    'photo': [
-                      await MultipartFile.fromFile(
-                        file.path,
-                        filename: file.path.split('/').last,
-                      ),
-                    ],
-                  }),
-          );
-        } else {
-          // update
-        }
+    Response? res;
 
-        if (res != null && res.statusCode == 200) {
-          logger.d(res);
-          path = res.data['image_url'];
-        }
-      } catch (e) {
-        logger.e(e.toString());
+    try {
+      // create
+      res = await dio.post(
+        '$baseUrl/photo',
+        options: Options(
+          headers: {
+            'Content-Type':
+                file == null ? 'application/json' : 'multipart/form-data',
+            'Accept': 'application/json',
+          },
+        ),
+        queryParameters: {
+          'is_profile': isProfile,
+        },
+        data: file == null
+            ? null
+            : FormData.fromMap({
+                'photo': [
+                  await MultipartFile.fromFile(
+                    file.path,
+                    filename: file.path.split('/').last,
+                  ),
+                ],
+              }),
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        path = res.data['image_url'];
       }
+    } catch (e) {
+      logger.e(e.toString());
     }
-
     return path;
   }
 }

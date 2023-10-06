@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
+import 'package:biskit_app/common/components/tooltip_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
@@ -12,8 +13,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class FindPasswordScreen extends ConsumerStatefulWidget {
@@ -33,7 +32,6 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
 
   late TextEditingController pinController;
   late FocusNode pinFocusNode;
-  final JustTheController tooltipController = JustTheController();
 
   String? pinCodeError;
 
@@ -288,44 +286,13 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                 ),
               ),
               if (isPinCodeMode)
-                JustTheTooltip(
-                  controller: tooltipController,
-                  borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  backgroundColor: Colors.black.withOpacity(0.7),
-                  margin: const EdgeInsets.only(left: 20),
-                  elevation: 0,
-                  tailBaseWidth: 20,
-                  tailLength: 6,
-                  preferredDirection: AxisDirection.up,
-                  content: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
+                TooltipWidget(
+                  tooltipText:
                       '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
-                      style: getTsBody14Sb(context).copyWith(
-                        color: kColorBgDefault,
-                      ),
-                    ),
-                  ),
-                  offset: 8,
-                  tailBuilder: (tip, point2, point3) {
-                    logger.d(tip);
-                    logger.d(point2);
-                    logger.d(point3);
-                    return Path()
-                      ..moveTo(tip.dx - (tip.dx * 0.5), tip.dy)
-                      ..lineTo(point2.dx - (point2.dx * 0.5), point2.dy)
-                      ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
-                      ..close();
-                  },
-                  child: GestureDetector(
-                    onTap: () {
-                      tooltipController.showTooltip();
-                    },
-                    child: Text(
-                      '메일을 받지 못하셨나요?',
-                      style: getTsBody14Rg(context)
-                          .copyWith(color: kColorContentWeakest),
-                    ),
+                  child: Text(
+                    '메일을 받지 못하셨나요?',
+                    style: getTsBody14Rg(context)
+                        .copyWith(color: kColorContentWeakest),
                   ),
                 ),
               SizedBox(
