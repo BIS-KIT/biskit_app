@@ -14,7 +14,10 @@ import 'package:biskit_app/common/view/error_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/view/set_password_completed_screen.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:biskit_app/user/view/sign_up_completed_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
@@ -345,10 +348,37 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
+                        builder: (context) =>
+                            const SetPasswordCompletedScreen(),
+                      ));
+                },
+                child: const Text('비밀번호 재설정 완료화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => const SignUpCompletedScreen(),
                       ));
                 },
                 child: const Text('회원가입 완료 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileNicknameScreen(),
+                      ));
+                },
+                child: const Text('프로필 닉네임 화면'),
               ),
               const SizedBox(
                 height: 10,
@@ -422,6 +452,26 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                       ));
                 },
                 child: const Text('키워드 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileIdConfirmScreen(
+                          profileCreateModel: ProfileCreateModel(
+                            nick_name: '딱딱한비스킷이야임뫄짜식',
+                            profile_photo: null,
+                            available_languages: [],
+                            introductions: [],
+                          ),
+                        ),
+                      ));
+                },
+                child: const Text('학생증 인증 화면'),
               ),
 
               const SizedBox(

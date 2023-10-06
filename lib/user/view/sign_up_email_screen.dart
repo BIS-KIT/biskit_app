@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -21,6 +20,7 @@ import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
 
+import '../../common/components/tooltip_widget.dart';
 import '../../common/const/colors.dart';
 import '../../common/const/fonts.dart';
 
@@ -48,8 +48,6 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
   String? pinCodeError;
   String recivePinCode = '';
 
-  final JustTheController tooltipController = JustTheController();
-
   late Timer timer;
   bool isTimerView = false;
   Duration pinDuration = const Duration(minutes: 5);
@@ -70,7 +68,6 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     super.dispose();
     pinController.dispose();
     pinFocusNode.dispose();
-    tooltipController.dispose();
   }
 
   void startTimer() {
@@ -356,45 +353,13 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                   ),
                 ),
                 if (isPinCodeMode)
-                  JustTheTooltip(
-                    controller: tooltipController,
-                    borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    backgroundColor: Colors.black.withOpacity(0.7),
-                    margin: const EdgeInsets.only(left: 20),
-                    elevation: 0,
-                    tailBaseWidth: 20,
-                    tailLength: 6,
-                    preferredDirection: AxisDirection.up,
-                    content: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text(
+                  TooltipWidget(
+                    tooltipText:
                         '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
-                        style: getTsBody14Sb(context).copyWith(
-                          color: kColorBgDefault,
-                        ),
-                      ),
-                    ),
-                    offset: 8,
-                    tailBuilder: (tip, point2, point3) {
-                      return Path()
-                        ..moveTo(tip.dx - (tip.dx * 0.5), tip.dy)
-                        ..lineTo(point2.dx - (point2.dx * 0.5), point2.dy)
-                        ..lineTo(point3.dx - (point3.dx * 0.5), point3.dy)
-                        ..close();
-                    },
-                    // showDuration: const Duration(seconds: 3),
-                    // isModal: true,
-
-                    // waitDuration: const Duration(seconds: 3),
-                    child: GestureDetector(
-                      onTap: () {
-                        tooltipController.showTooltip();
-                      },
-                      child: Text(
-                        '메일을 받지 못하셨나요?',
-                        style: getTsBody14Rg(context).copyWith(
-                          color: kColorContentWeakest,
-                        ),
+                    child: Text(
+                      '메일을 받지 못하셨나요?',
+                      style: getTsBody14Rg(context).copyWith(
+                        color: kColorContentWeakest,
                       ),
                     ),
                   ),

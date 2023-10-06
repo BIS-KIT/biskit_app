@@ -238,9 +238,11 @@ showConfirmModal({
   String title = '',
   String content = '',
   String leftButton = '취소',
-  Color? leftColor,
+  Color? leftBackgroundColor,
+  Color? leftTextColor,
   String rightButton = '확인',
-  Color? rightColor,
+  Color rightBackgroundColor = kColorContentError,
+  Color rightTextColor = kColorBgDefault,
   required Function leftCall,
   required Function rightCall,
 }) {
@@ -323,8 +325,8 @@ showConfirmModal({
                   child: FilledButtonWidget(
                     text: rightButton,
                     isEnable: true,
-                    backgroundColor: kColorContentError,
-                    fontColor: kColorBgDefault,
+                    backgroundColor: rightBackgroundColor,
+                    fontColor: rightTextColor,
                     height: 44,
                   ),
                 ),
@@ -409,6 +411,25 @@ showDefaultModal({
             ),
           ),
         ],
+      );
+    },
+  );
+}
+
+/// 다음화면시 업다운 애니메이션
+Route<List<dynamic>> createUpDownRoute(Widget nextScreen) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = const Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
       );
     },
   );

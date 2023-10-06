@@ -41,6 +41,8 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         });
         Navigator.pop(context);
       },
+      rightBackgroundColor: kColorBgError,
+      rightTextColor: kColorContentError,
       title: '삭제하시겠어요?',
     );
   }
@@ -116,11 +118,11 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
           // keyword
           Expanded(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 32),
               child: Column(
                 children: [
-                  Container(
-                    height: 360,
-                    padding: const EdgeInsets.only(top: 32),
+                  SizedBox(
+                    height: 362,
                     child: Center(
                       child: ListView.separated(
                         shrinkWrap: true,
@@ -135,9 +137,14 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                             return _buildKeywordCard(index, context);
                           }
                         },
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 12,
-                        ),
+                        separatorBuilder: (context, index) {
+                          if (keywordList.length == 5 && index == 0) {
+                            return Container();
+                          }
+                          return const SizedBox(
+                            width: 12,
+                          );
+                        },
                         itemCount: keywordList.length + 1,
                       ),
                     ),
@@ -203,7 +210,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   width: 24,
                   height: 24,
                   colorFilter: const ColorFilter.mode(
-                    kColorContentWeaker,
+                    kColorContentWeakest,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -215,6 +222,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
           ),
           const Divider(
             thickness: 1,
+            height: 1,
             color: kColorBorderOnBgInverse,
           ),
           const SizedBox(
@@ -263,26 +271,36 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
       child: Container(
         width: 270,
         height: 360,
+        // padding: const EdgeInsets.symmetric(vertical: 160),
         decoration: BoxDecoration(
           color: kColorBgElevation1,
           borderRadius: const BorderRadius.all(Radius.circular(12)),
           border: Border.all(
             width: 1,
-            color: kColorBgElevation3,
+            color: kColorBorderDefalut,
           ),
         ),
         alignment: Alignment.center,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/icons/ic_plus_line_24.svg',
-              width: 40,
+            Container(
+              height: 160,
+            ),
+            SizedBox(
               height: 40,
-              colorFilter: const ColorFilter.mode(
-                kColorContentDisabled,
-                BlendMode.srcIn,
+              child: SvgPicture.asset(
+                'assets/icons/ic_plus_line_24.svg',
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentWeakest,
+                  BlendMode.srcIn,
+                ),
               ),
+            ),
+            Container(
+              height: 160,
             ),
           ],
         ),

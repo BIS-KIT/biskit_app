@@ -151,33 +151,35 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                     ? const Center(
                         child: CustomLoading(),
                       )
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        child: Column(
-                          children: tempList
-                              .map(
-                                (e) => ListWidget(
-                                  height: 56,
-                                  borderColor: e == tempList.last
-                                      ? kColorBgDefault
-                                      : kColorBorderDefalut,
-                                  touchWidget: CheckCircleWidget(
-                                    value: e == selectedModel ? true : false,
-                                  ),
-                                  onTap: () {
-                                    onTapTile(e);
-                                  },
-                                  centerWidget: Text(
-                                    e.kname,
-                                    style: getTsBody16Rg(context).copyWith(
-                                      color: kColorContentWeak,
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: SingleChildScrollView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          child: Column(
+                            children: tempList
+                                .map(
+                                  (e) => ListWidget(
+                                    height: 56,
+                                    borderColor: e == tempList.last
+                                        ? kColorBgDefault
+                                        : kColorBorderDefalut,
+                                    touchWidget: CheckCircleWidget(
+                                      value: e == selectedModel ? true : false,
+                                    ),
+                                    onTap: () {
+                                      onTapTile(e);
+                                    },
+                                    centerWidget: Text(
+                                      e.kname,
+                                      style: getTsBody16Rg(context).copyWith(
+                                        color: kColorContentWeak,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                )
+                                .toList(),
+                          ),
                         ),
                       )),
             Padding(
