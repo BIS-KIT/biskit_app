@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/test2_screen.dart';
 import 'package:biskit_app/common/view/test_screen.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
+import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,6 +66,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     logger.d('사용자 정보 요청 성공'
         '\n회원번호: ${user.id}'
         '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
+
+    // TODO 로그인 처리 이메일 없이도 로그인 가능해야함
+    UserModelBase? userModelBase =
+        await ref.read(userMeProvider.notifier).login(
+              email: user.kakaoAccount!.email,
+              snsId: user.id.toString(),
+              snsType: SnsType.kakao,
+            );
+
+    if (!mounted) return;
+    if (userModelBase == null) {
+      // 가입된 아이디 없으면 회원가입 처리
+      if (!mounted) return;
+      context.pushNamed(
+        SignUpAgreeScreen.routeName,
+        extra: SignUpModel(
+          email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+          sns_type: describeEnum(SnsType.kakao),
+          sns_id: user.id.toString(),
+        ),
+      );
+    }
   }
 
   @override

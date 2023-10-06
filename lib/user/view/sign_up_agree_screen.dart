@@ -1,3 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/check_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -8,13 +13,14 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class SignUpAgreeScreen extends ConsumerStatefulWidget {
+  final SignUpModel signUpModel;
+  const SignUpAgreeScreen({
+    super.key,
+    required this.signUpModel,
+  });
   static String get routeName => 'signUpAgree';
-  const SignUpAgreeScreen({super.key});
 
   @override
   ConsumerState<SignUpAgreeScreen> createState() => _SignUpAgreeScreenState();
@@ -201,7 +207,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   if (isAgree1 && isAgree2 && isAgree3) {
                     context.pushNamed(
                       SignUpEmailScreen.routeName,
-                      extra: SignUpModel(
+                      extra: widget.signUpModel.copyWith(
                         terms_mandatory: isAgree1,
                         terms_optional: isAgree2,
                         terms_push: isAgree3,

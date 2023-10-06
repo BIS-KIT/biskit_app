@@ -22,6 +22,8 @@ class UserModel extends UserModelBase {
   final String gender;
   final bool is_active;
   final bool is_admin;
+  final String? sns_type;
+  final String? sns_id;
   final ProfileModel? profile;
 
   UserModel({
@@ -32,6 +34,8 @@ class UserModel extends UserModelBase {
     required this.gender,
     required this.is_active,
     required this.is_admin,
+    this.sns_type,
+    this.sns_id,
     required this.profile,
   });
 
@@ -43,6 +47,8 @@ class UserModel extends UserModelBase {
     String? gender,
     bool? is_active,
     bool? is_admin,
+    String? sns_type,
+    String? sns_id,
     ProfileModel? profile,
   }) {
     return UserModel(
@@ -53,6 +59,8 @@ class UserModel extends UserModelBase {
       gender: gender ?? this.gender,
       is_active: is_active ?? this.is_active,
       is_admin: is_admin ?? this.is_admin,
+      sns_type: sns_type ?? this.sns_type,
+      sns_id: sns_id ?? this.sns_id,
       profile: profile ?? this.profile,
     );
   }
@@ -66,6 +74,8 @@ class UserModel extends UserModelBase {
       'gender': gender,
       'is_active': is_active,
       'is_admin': is_admin,
+      'sns_type': sns_type,
+      'sns_id': sns_id,
       'profile': profile?.toMap(),
     };
   }
@@ -79,6 +89,8 @@ class UserModel extends UserModelBase {
       gender: map['gender'] as String,
       is_active: map['is_active'] as bool,
       is_admin: map['is_admin'] as bool,
+      sns_type: map['sns_type'] != null ? map['sns_type'] as String : null,
+      sns_id: map['sns_id'] != null ? map['sns_id'] as String : null,
       profile: map['profile'] != null
           ? ProfileModel.fromMap(map['profile'] as Map<String, dynamic>)
           : null,
@@ -92,7 +104,7 @@ class UserModel extends UserModelBase {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, birth: $birth, gender: $gender, is_active: $is_active, is_admin: $is_admin, profile: $profile)';
+    return 'UserModel(id: $id, email: $email, name: $name, birth: $birth, gender: $gender, is_active: $is_active, is_admin: $is_admin, sns_type: $sns_type, sns_id: $sns_id, profile: $profile)';
   }
 
   @override
@@ -106,6 +118,8 @@ class UserModel extends UserModelBase {
         other.gender == gender &&
         other.is_active == is_active &&
         other.is_admin == is_admin &&
+        other.sns_type == sns_type &&
+        other.sns_id == sns_id &&
         other.profile == profile;
   }
 
@@ -118,6 +132,8 @@ class UserModel extends UserModelBase {
         gender.hashCode ^
         is_active.hashCode ^
         is_admin.hashCode ^
+        sns_type.hashCode ^
+        sns_id.hashCode ^
         profile.hashCode;
   }
 }

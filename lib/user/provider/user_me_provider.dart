@@ -1,9 +1,11 @@
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -69,9 +71,11 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     await getMe();
   }
 
-  Future<UserModelBase> login({
-    required String email,
-    required String password,
+  Future<UserModelBase?> login({
+    String? email,
+    String? password,
+    SnsType? snsType,
+    String? snsId,
   }) async {
     UserModelBase? userModelBase;
     try {
@@ -80,6 +84,8 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
       final resp = await authRepository.login(
         email: email,
         password: password,
+        snsType: snsType == null ? null : describeEnum(snsType),
+        snsId: snsId,
       );
 
       logger.d(resp);
@@ -98,7 +104,7 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
         }
       }
     }
-    return Future.value(userModelBase);
+    return userModelBase;
   }
 
   Future<void> logout() async {

@@ -70,7 +70,7 @@ class _ProfileIdConfirmScreenState
                     student_card: StudentCard(
                       student_card: studentCardPhoto!,
                       verification_status:
-                          describeEnum(verification_status.PENDING),
+                          describeEnum(VerificationStatus.PENDING),
                     ),
                   )
                 : widget.profileCreateModel!,
