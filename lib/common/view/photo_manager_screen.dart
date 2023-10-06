@@ -90,14 +90,17 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     );
 
     for (var path in _paths!) {
-      _albums.add(
-        Album(
-          id: path.id,
-          name: path.isAll ? '최근 항목' : path.name,
-          count: await path.assetCountAsync,
-          thumbnail: (await path.getAssetListRange(start: 0, end: 1))[0],
-        ),
-      );
+      int count = await path.assetCountAsync;
+      if (count > 0) {
+        _albums.add(
+          Album(
+            id: path.id,
+            name: path.isAll ? '최근 항목' : path.name,
+            count: count,
+            thumbnail: (await path.getAssetListRange(start: 0, end: 1))[0],
+          ),
+        );
+      }
     }
 
     // _albums = _paths!.map((e) {
