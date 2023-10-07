@@ -12,12 +12,14 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
 import 'package:biskit_app/user/view/sign_up_agree_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -29,6 +31,47 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  // google login
+  signInWithGoogle() async {
+    UserCredential? userCredential;
+    if (kIsWeb) {
+      // Create a new provider
+      GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+      googleProvider
+          .addScope('https://www.googleapis.com/auth/contacts.readonly');
+      googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+
+      userCredential =
+          await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    } else {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    logger.d(
+        'signInWithGoogle.FirebaseAuth.instance.signInWithCredential(credential)>>>[${userCredential.user!.uid}]$userCredential');
+    if (userCredential.user != null) {
+      await login(
+        email: userCredential.user!.email,
+        snsId: userCredential.user!.uid,
+        snsType: SnsType.google,
+      );
+    }
+  }
+
   // Kakao Login
   void signInWithKakao() async {
     if (await kakao.isKakaoTalkInstalled()) {
@@ -67,24 +110,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         '\n회원번호: ${user.id}'
         '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
 
+    await login(
+      email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+      snsId: user.id.toString(),
+      snsType: SnsType.kakao,
+    );
+  }
+
+  login({
+    String? email,
+    String? password,
+    String? snsId,
+    SnsType? snsType,
+  }) async {
     // TODO 로그인 처리 이메일 없이도 로그인 가능해야함
     UserModelBase? userModelBase =
         await ref.read(userMeProvider.notifier).login(
-              email: user.kakaoAccount!.email,
-              snsId: user.id.toString(),
-              snsType: SnsType.kakao,
+              email: email,
+              password: password,
+              snsId: snsId,
+              snsType: snsType,
             );
 
     if (!mounted) return;
-    if (userModelBase == null) {
+    if (userModelBase == null || userModelBase is UserModelError) {
       // 가입된 아이디 없으면 회원가입 처리
       if (!mounted) return;
       context.pushNamed(
         SignUpAgreeScreen.routeName,
         extra: SignUpModel(
-          email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
-          sns_type: describeEnum(SnsType.kakao),
-          sns_id: user.id.toString(),
+          email: email,
+          password: password,
+          sns_type: snsType == null ? null : describeEnum(snsType),
+          sns_id: snsId,
         ),
       );
     }
@@ -179,7 +237,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: signInWithGoogle,
                 child: _buildGoogle(context),
               ),
               GestureDetector(
