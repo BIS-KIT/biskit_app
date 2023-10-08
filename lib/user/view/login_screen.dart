@@ -91,6 +91,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       UserCredential authResult =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       logger.d('_authResult : ${authResult.toString()}');
+      if (authResult.user != null) {
+        await login(
+          email: authResult.user!.email,
+          snsId: authResult.user!.uid,
+          snsType: SnsType.apple,
+        );
+      }
     } catch (error) {
       logger.d(error);
     }
