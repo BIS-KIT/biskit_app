@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => 'login';
@@ -69,6 +70,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         snsId: userCredential.user!.uid,
         snsType: SnsType.google,
       );
+    }
+  }
+
+  // apple login
+  signInWithApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      logger.d('_authResult : ${authResult.toString()}');
+    } catch (error) {
+      logger.d(error);
     }
   }
 
@@ -246,7 +270,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               if (Platform.isIOS)
                 GestureDetector(
-                  onTap: () {},
+                  onTap: signInWithApple,
                   child: _buildApple(context),
                 ),
               GestureDetector(
