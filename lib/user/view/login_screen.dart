@@ -91,6 +91,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       UserCredential authResult =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       logger.d('_authResult : ${authResult.toString()}');
+      // is_private_email : true 인 경우 이메일 가리기 처리 한 상태
       if (authResult.user != null) {
         await login(
           email: authResult.user!.email,
