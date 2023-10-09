@@ -7,3 +7,4 @@
 */
 "CFBundleDisplayName" = "BISKIT";
 "NSPhotoLibraryUsageDescription" = "In order to access your photo library";
+"NSCameraUsageDescription" = "Please allow camera access";
