@@ -115,7 +115,13 @@ class ProfileRepository {
     //     logger.e(e.toString());
     //   }
     // }
-    File? file = await profilePhoto.assetEntity.originFile;
+    File? file;
+
+    if (profilePhoto.photoType == PhotoType.asset) {
+      file = await profilePhoto.assetEntity!.originFile;
+    } else {
+      file = File(profilePhoto.cameraXfile!.path);
+    }
 
     Response? res;
 

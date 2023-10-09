@@ -1,13 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -40,6 +41,8 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
   // PhotoModel? viewPhoto;
 
   bool isAlbumView = false;
+
+  final ImagePicker _picker = ImagePicker();
 
   ScrollController scrollController = ScrollController();
 
@@ -136,14 +139,50 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
 
     setState(() {
       if (albumChange) {
-        _images = loadImages.map((e) => PhotoModel(assetEntity: e)).toList();
-        logger.d(_images.map((e) => e.assetEntity.id).toList().toString());
+        _images = loadImages
+            .map((e) => PhotoModel(
+                  assetEntity: e,
+                  photoType: PhotoType.asset,
+                ))
+            .toList();
+        logger.d(_images.map((e) => e.assetEntity!.id).toList().toString());
       } else {
-        _images
-            .addAll(loadImages.map((e) => PhotoModel(assetEntity: e)).toList());
+        _images.addAll(loadImages
+            .map((e) => PhotoModel(
+                  assetEntity: e,
+                  photoType: PhotoType.asset,
+                ))
+            .toList());
       }
       // isLoading = false;
     });
+  }
+
+  onTapComplete() {
+    Navigator.pop(
+      context,
+      _selectedPhoto,
+    );
+  }
+
+  // 사진촬영
+  takePhoto() async {
+    logger.d('camera');
+    final XFile? xFile = await _picker.pickImage(
+      source: ImageSource.camera,
+    );
+    logger.d('xFile : ${xFile?.path}');
+    if (xFile != null) {
+      if (!mounted) return;
+      PhotoModel photoModel = PhotoModel(
+        photoType: PhotoType.camera,
+        cameraXfile: xFile,
+      );
+      Navigator.pop(
+        context,
+        [photoModel],
+      );
+    }
   }
 
   @override
@@ -264,16 +303,19 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
               ),
               children: [
                 if (widget.isCamera)
-                  Container(
-                    color: kColorBgElevation3,
-                    padding: const EdgeInsets.all(41.5),
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_camera_fill_24.svg',
-                      width: 40,
-                      height: 40,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentWeakest,
-                        BlendMode.srcIn,
+                  GestureDetector(
+                    onTap: takePhoto,
+                    child: Container(
+                      color: kColorBgElevation3,
+                      padding: const EdgeInsets.all(41.5),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_camera_fill_24.svg',
+                        width: 40,
+                        height: 40,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentWeakest,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                   ),
@@ -293,7 +335,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
           width: double.infinity,
           height: double.infinity,
           child: AssetEntityImage(
-            e.assetEntity,
+            e.assetEntity!,
             isOriginal: false,
             fit: BoxFit.cover,
           ),
@@ -301,7 +343,8 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
         GestureDetector(
           onTap: () {
             if (_selectedPhoto
-                .where((element) => element.assetEntity.id == e.assetEntity.id)
+                .where(
+                    (element) => element.assetEntity!.id == e.assetEntity!.id)
                 .isEmpty) {
               // 비활성화 상태를 선택한 경우
               if (_selectedPhoto.length >= widget.maxCnt) {
@@ -323,7 +366,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
               // 활성화 상태를 선택한 경우
               setState(() {
                 _selectedPhoto.removeWhere(
-                    (element) => element.assetEntity.id == e.assetEntity.id);
+                    (element) => element.assetEntity!.id == e.assetEntity!.id);
               });
             }
           },
@@ -331,7 +374,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
             decoration: BoxDecoration(
               border: _selectedPhoto
                       .where((element) =>
-                          element.assetEntity.id == e.assetEntity.id)
+                          element.assetEntity!.id == e.assetEntity!.id)
                       .isNotEmpty
                   ? Border.all(
                       width: 3,
@@ -350,7 +393,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
             decoration: BoxDecoration(
               color: _selectedPhoto
                       .where((element) =>
-                          element.assetEntity.id == e.assetEntity.id)
+                          element.assetEntity!.id == e.assetEntity!.id)
                       .isNotEmpty
                   ? kColorBgPrimaryStrong
                   : kColorBgDefault.withOpacity(0.4),
@@ -358,7 +401,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                 width: 2,
                 color: _selectedPhoto
                         .where((element) =>
-                            element.assetEntity.id == e.assetEntity.id)
+                            element.assetEntity!.id == e.assetEntity!.id)
                         .isNotEmpty
                     ? kColorBgPrimaryStrong
                     : Colors.black.withOpacity(0.4),
@@ -366,14 +409,14 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
               shape: BoxShape.circle,
             ),
             child: _selectedPhoto
-                    .where(
-                        (element) => element.assetEntity.id == e.assetEntity.id)
+                    .where((element) =>
+                        element.assetEntity!.id == e.assetEntity!.id)
                     .isNotEmpty
                 ? Text(
                     (_selectedPhoto
-                                .map((e) => e.assetEntity.id)
+                                .map((e) => e.assetEntity!.id)
                                 .toList()
-                                .indexOf(e.assetEntity.id) +
+                                .indexOf(e.assetEntity!.id) +
                             1)
                         .toString(),
                     textAlign: TextAlign.center,
@@ -530,12 +573,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                         width: 8,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.pop(
-                            context,
-                            _selectedPhoto,
-                          );
-                        },
+                        onTap: onTapComplete,
                         child: Text(
                           '완료',
                           style: getTsBody16Sb(context).copyWith(
@@ -630,16 +668,26 @@ class Album {
 }
 
 class PhotoModel {
-  final AssetEntity assetEntity;
+  final AssetEntity? assetEntity;
+  final XFile? cameraXfile;
+  final PhotoType photoType;
   PhotoModel({
-    required this.assetEntity,
+    this.assetEntity,
+    this.cameraXfile,
+    required this.photoType,
   });
 
   PhotoModel copyWith({
     AssetEntity? assetEntity,
+    XFile? cameraXfile,
+    PhotoType? photoType,
   }) {
     return PhotoModel(
       assetEntity: assetEntity ?? this.assetEntity,
+      cameraXfile: cameraXfile ?? this.cameraXfile,
+      photoType: photoType ?? this.photoType,
     );
   }
 }
+
+enum PhotoType { camera, asset }
