@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
@@ -225,10 +226,17 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                             ),
                             foregroundImage: selectedPhotoModel == null
                                 ? null
-                                : AssetEntityImageProvider(
-                                    selectedPhotoModel!.assetEntity,
-                                    isOriginal: true,
-                                  ),
+                                : selectedPhotoModel!.photoType ==
+                                        PhotoType.asset
+                                    ? AssetEntityImageProvider(
+                                        selectedPhotoModel!.assetEntity!,
+                                        isOriginal: true,
+                                      )
+                                    : Image.file(
+                                        File(
+                                          selectedPhotoModel!.cameraXfile!.path,
+                                        ),
+                                      ).image,
                           ),
                           Positioned(
                             bottom: 0,

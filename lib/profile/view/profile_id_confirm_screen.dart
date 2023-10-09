@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:biskit_app/common/components/tooltip_widget.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -142,76 +144,18 @@ class _ProfileIdConfirmScreenState
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: selectedPhotoModel == null
-                    ? Column(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              width: double.infinity,
-                              // height: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              color: kColorBgPrimary,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/ic_plus_line_24.svg',
-                                    width: 40,
-                                    height: 40,
-                                    colorFilter: const ColorFilter.mode(
-                                      kColorContentOnBgPrimary,
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
-                                  Text(
-                                    '학생증 올리기',
-                                    style: getTsHeading18(context).copyWith(
-                                      color: kColorContentOnBgPrimary,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    '(모바일)학생증 또는 학적증명자료',
-                                    style: getTsBody14Rg(context).copyWith(
-                                      color: kColorContentOnBgPrimary,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                    ? _buildIdCard(context)
+                    : selectedPhotoModel!.photoType == PhotoType.asset
+                        ? AssetEntityImage(
+                            selectedPhotoModel!.assetEntity!,
+                            fit: BoxFit.contain,
+                          )
+                        : Image.file(
+                            File(
+                              selectedPhotoModel!.cameraXfile!.path,
                             ),
+                            fit: BoxFit.contain,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '실명, 학교, 학과, 학번',
-                                  style: getTsBody14Sb(context).copyWith(
-                                    color: kColorContentWeaker,
-                                  ),
-                                ),
-                                Text(
-                                  '이 정확히 나오도록 올려주세요',
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeaker,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : AssetEntityImage(
-                        selectedPhotoModel!.assetEntity,
-                        fit: BoxFit.contain,
-                      ),
               ),
             ),
 
@@ -259,6 +203,75 @@ class _ProfileIdConfirmScreenState
           ],
         ),
       ),
+    );
+  }
+
+  Column _buildIdCard(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            width: double.infinity,
+            // height: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            color: kColorBgPrimary,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/ic_plus_line_24.svg',
+                  width: 40,
+                  height: 40,
+                  colorFilter: const ColorFilter.mode(
+                    kColorContentOnBgPrimary,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  '학생증 올리기',
+                  style: getTsHeading18(context).copyWith(
+                    color: kColorContentOnBgPrimary,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  '(모바일)학생증 또는 학적증명자료',
+                  style: getTsBody14Rg(context).copyWith(
+                    color: kColorContentOnBgPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '실명, 학교, 학과, 학번',
+                style: getTsBody14Sb(context).copyWith(
+                  color: kColorContentWeaker,
+                ),
+              ),
+              Text(
+                '이 정확히 나오도록 올려주세요',
+                style: getTsBody14Rg(context).copyWith(
+                  color: kColorContentWeaker,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
