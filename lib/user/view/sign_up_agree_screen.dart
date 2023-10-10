@@ -14,6 +14,8 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_email_screen.dart';
 
+import '../../common/view/name_birth_gender_screen.dart';
+
 class SignUpAgreeScreen extends ConsumerStatefulWidget {
   final SignUpModel signUpModel;
   const SignUpAgreeScreen({
@@ -205,14 +207,25 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               GestureDetector(
                 onTap: () {
                   if (isAgree1 && isAgree2 && isAgree3) {
-                    context.pushNamed(
-                      SignUpEmailScreen.routeName,
-                      extra: widget.signUpModel.copyWith(
-                        terms_mandatory: isAgree1,
-                        terms_optional: isAgree2,
-                        terms_push: isAgree3,
-                      ),
-                    );
+                    if (widget.signUpModel.sns_type != null) {
+                      context.pushNamed(
+                        NameBirthGenderScreen.routeName,
+                        extra: widget.signUpModel.copyWith(
+                          terms_mandatory: isAgree1,
+                          terms_optional: isAgree2,
+                          terms_push: isAgree3,
+                        ),
+                      );
+                    } else {
+                      context.pushNamed(
+                        SignUpEmailScreen.routeName,
+                        extra: widget.signUpModel.copyWith(
+                          terms_mandatory: isAgree1,
+                          terms_optional: isAgree2,
+                          terms_push: isAgree3,
+                        ),
+                      );
+                    }
                   }
                 },
                 child: FilledButtonWidget(

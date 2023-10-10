@@ -211,15 +211,15 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       context.loaderOverlay.show();
 
       // Sign up
-      apiResModel = await ref
-          .read(authRepositoryProvider)
-          .signUpEmail(widget.signUpModel.copyWith(
-            // TODO Univer set 수정
-            university_id: 1,
-            department: universitySet!.universityStudentStatusModel.kname,
-            education_status:
-                universitySet!.universityGraduateStatusModel.kname,
-          ));
+      apiResModel = await ref.read(authRepositoryProvider).signUpEmail(
+            widget.signUpModel.copyWith(
+              // TODO Univer set 수정
+              university_id: 1,
+              department: universitySet!.universityStudentStatusModel.kname,
+              education_status:
+                  universitySet!.universityGraduateStatusModel.kname,
+            ),
+          );
       if (!mounted) return;
       context.loaderOverlay.hide();
       if (apiResModel.isOk) {

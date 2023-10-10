@@ -5,6 +5,7 @@ import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/test2_screen.dart';
 import 'package:biskit_app/common/view/test_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
@@ -66,7 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         'signInWithGoogle.FirebaseAuth.instance.signInWithCredential(credential)>>>[${userCredential.user!.uid}]$userCredential');
     if (userCredential.user != null) {
       await login(
-        email: userCredential.user!.email,
+        // email: userCredential.user!.email,
         snsId: userCredential.user!.uid,
         snsType: SnsType.google,
       );
@@ -94,7 +95,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // is_private_email : true 인 경우 이메일 가리기 처리 한 상태
       if (authResult.user != null) {
         await login(
-          email: authResult.user!.email,
+          // email: authResult.user!.email,
           snsId: authResult.user!.uid,
           snsType: SnsType.apple,
         );
@@ -143,39 +144,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
 
     await login(
-      email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+      // email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
       snsId: user.id.toString(),
       snsType: SnsType.kakao,
     );
   }
 
   login({
-    String? email,
-    String? password,
-    String? snsId,
-    SnsType? snsType,
+    required String snsId,
+    required SnsType snsType,
   }) async {
     // TODO 로그인 처리 이메일 없이도 로그인 가능해야함
     UserModelBase? userModelBase =
         await ref.read(userMeProvider.notifier).login(
-              email: email,
-              password: password,
               snsId: snsId,
               snsType: snsType,
             );
 
     if (!mounted) return;
-    if (userModelBase == null || userModelBase is UserModelError) {
+    if (userModelBase == null) {
       // 가입된 아이디 없으면 회원가입 처리
       if (!mounted) return;
       context.pushNamed(
         SignUpAgreeScreen.routeName,
         extra: SignUpModel(
-          email: email,
-          password: password,
-          sns_type: snsType == null ? null : describeEnum(snsType),
+          sns_type: describeEnum(snsType),
           sns_id: snsId,
         ),
+      );
+    } else {
+      showSnackBar(
+        context: context,
+        text: (userModelBase as UserModelError).message,
       );
     }
   }

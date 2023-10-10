@@ -19,6 +19,7 @@ class SignUpCompletedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultLayout(
       child: SafeArea(
+        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

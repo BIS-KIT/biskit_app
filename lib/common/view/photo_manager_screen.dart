@@ -561,7 +561,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                     children: [
                       if (_selectedPhoto.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.only(top: 0),
                           child: Text(
                             _selectedPhoto.length.toString(),
                             style: getTsBody16Rg(context).copyWith(

@@ -287,6 +287,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
               ),
               if (isPinCodeMode)
                 TooltipWidget(
+                  preferredDirection: AxisDirection.up,
                   tooltipText:
                       '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
                   child: Text(

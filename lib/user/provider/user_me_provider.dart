@@ -99,8 +99,13 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     } on DioException catch (e) {
       logger.e(e.toString());
       if (e.response != null) {
+        logger.d(e.response!.data.toString());
         if (e.response!.statusCode == 400) {
-          userModelBase = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
+          if (e.response!.data['detail]'] == 'Incorrect credentials') {
+            userModelBase = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
+          } else {
+            userModelBase = null;
+          }
         }
       }
     }

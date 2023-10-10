@@ -35,6 +35,8 @@ void main() async {
     javaScriptAppKey: kKakaoJavascriptKey,
   );
 
+  logger.d('Kakao Hash Key : ${await KakaoSdk.origin}');
+
   runApp(
     EasyLocalization(
       supportedLocales: supportedLocales,

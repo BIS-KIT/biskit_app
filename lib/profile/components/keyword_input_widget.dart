@@ -137,10 +137,17 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                   child: TextFormField(
                                     controller: reasonController,
                                     onChanged: (value) {
-                                      setState(() {});
+                                      if (value.isNotEmpty) {
+                                        setState(() {});
+                                      }
                                     },
                                     onTap: () {
-                                      FocusScope.of(context).unfocus();
+                                      if (MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom >
+                                          0) {
+                                        FocusScope.of(context).unfocus();
+                                      }
                                     },
                                     focusNode: reasonFocusNode,
                                     expands: true,
@@ -193,7 +200,22 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     ],
                   ),
                 )
-              : const Spacer(),
+              : Expanded(
+                  child: Column(
+                  children: [
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        onTapSubmit();
+                      },
+                      child: FilledButtonWidget(
+                        text: '완료',
+                        isEnable: getButtonEnable(),
+                        height: 52,
+                      ),
+                    ),
+                  ],
+                )),
           if (MediaQuery.of(context).viewInsets.bottom > 150)
             Column(
               mainAxisSize: MainAxisSize.min,
