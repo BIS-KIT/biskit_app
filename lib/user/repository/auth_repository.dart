@@ -1,28 +1,33 @@
 import 'dart:convert';
 
-import 'package:biskit_app/common/const/data.dart';
-import 'package:biskit_app/common/model/api_res_model.dart';
-import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/common/provider/firebase_provider.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/dio/dio.dart';
+import 'package:biskit_app/common/model/api_res_model.dart';
 import 'package:biskit_app/common/model/login_response.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/user/model/sign_up_model.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
     dio: ref.watch(dioProvider),
     baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
+    firebaseMessaging: ref.watch(firebaseMessagingProvider),
   );
 });
 
 class AuthRepository {
   final Dio dio;
   final String baseUrl;
+  final FirebaseMessaging firebaseMessaging;
   AuthRepository({
     required this.dio,
     required this.baseUrl,
+    required this.firebaseMessaging,
   });
 
   Future<LoginResponse> login({
@@ -31,11 +36,13 @@ class AuthRepository {
     String? snsType,
     String? snsId,
   }) async {
+    String? fcmToken = await firebaseMessaging.getToken();
     Object data = json.encode({
       'email': email,
       'password': password,
       'sns_type': snsType,
       'sns_id': snsId,
+      'fcm_token': fcmToken,
     });
     logger.d(data.toString());
     final res = await dio.post(
@@ -116,6 +123,9 @@ class AuthRepository {
   }
 
   signUpEmail(SignUpModel signUpModel) async {
+    signUpModel = signUpModel.copyWith(
+      fcm_token: await firebaseMessaging.getToken(),
+    );
     logger.d('signUpMemail : ${signUpModel.toJson()}');
     ApiResModel apiResModel = ApiResModel(isOk: false);
     try {

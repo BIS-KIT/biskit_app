@@ -20,6 +20,7 @@ class SignUpModel {
   final bool terms_push;
   final String? sns_type;
   final String? sns_id;
+  final String? fcm_token;
   SignUpModel({
     this.email,
     this.password,
@@ -35,6 +36,7 @@ class SignUpModel {
     this.terms_push = false,
     this.sns_type,
     this.sns_id,
+    this.fcm_token,
   });
 
   SignUpModel copyWith({
@@ -52,6 +54,7 @@ class SignUpModel {
     bool? terms_push,
     String? sns_type,
     String? sns_id,
+    String? fcm_token,
   }) {
     return SignUpModel(
       email: email ?? this.email,
@@ -68,11 +71,12 @@ class SignUpModel {
       terms_push: terms_push ?? this.terms_push,
       sns_type: sns_type ?? this.sns_type,
       sns_id: sns_id ?? this.sns_id,
+      fcm_token: fcm_token ?? this.fcm_token,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'email': email,
       'password': password,
       'name': name,
@@ -87,49 +91,46 @@ class SignUpModel {
       'terms_push': terms_push,
       'sns_type': sns_type,
       'sns_id': sns_id,
+      'fcm_token': fcm_token,
     };
   }
 
   factory SignUpModel.fromMap(Map<String, dynamic> map) {
     return SignUpModel(
-      email: map['email'] != null ? map['email'] as String : null,
-      password: map['password'] != null ? map['password'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      birth: map['birth'] != null ? map['birth'] as String : null,
-      gender: map['gender'] != null ? map['gender'] as String : null,
-      nationality_ids: map['nationality_ids'] != null
-          ? List<int>.from((map['nationality_ids'] as List<int>))
-          : null,
-      university_id:
-          map['university_id'] != null ? map['university_id'] as int : null,
-      department:
-          map['department'] != null ? map['department'] as String : null,
-      education_status: map['education_status'] != null
-          ? map['education_status'] as String
-          : null,
-      terms_mandatory: map['terms_mandatory'] as bool,
-      terms_optional: map['terms_optional'] as bool,
-      terms_push: map['terms_push'] as bool,
-      sns_type: map['sns_type'] != null ? map['sns_type'] as String : null,
-      sns_id: map['sns_id'] != null ? map['sns_id'] as String : null,
+      email: map['email'],
+      password: map['password'],
+      name: map['name'],
+      birth: map['birth'],
+      gender: map['gender'],
+      nationality_ids: List<int>.from(map['nationality_ids']),
+      university_id: map['university_id']?.toInt(),
+      department: map['department'],
+      education_status: map['education_status'],
+      terms_mandatory: map['terms_mandatory'] ?? false,
+      terms_optional: map['terms_optional'] ?? false,
+      terms_push: map['terms_push'] ?? false,
+      sns_type: map['sns_type'],
+      sns_id: map['sns_id'],
+      fcm_token: map['fcm_token'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory SignUpModel.fromJson(String source) =>
-      SignUpModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      SignUpModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SignUpModel(email: $email, password: $password, name: $name, birth: $birth, gender: $gender, nationality_ids: $nationality_ids, university_id: $university_id, department: $department, education_status: $education_status, terms_mandatory: $terms_mandatory, terms_optional: $terms_optional, terms_push: $terms_push, sns_type: $sns_type, sns_id: $sns_id)';
+    return 'SignUpModel(email: $email, password: $password, name: $name, birth: $birth, gender: $gender, nationality_ids: $nationality_ids, university_id: $university_id, department: $department, education_status: $education_status, terms_mandatory: $terms_mandatory, terms_optional: $terms_optional, terms_push: $terms_push, sns_type: $sns_type, sns_id: $sns_id, fcm_token: $fcm_token)';
   }
 
   @override
-  bool operator ==(covariant SignUpModel other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.email == email &&
+    return other is SignUpModel &&
+        other.email == email &&
         other.password == password &&
         other.name == name &&
         other.birth == birth &&
@@ -142,7 +143,8 @@ class SignUpModel {
         other.terms_optional == terms_optional &&
         other.terms_push == terms_push &&
         other.sns_type == sns_type &&
-        other.sns_id == sns_id;
+        other.sns_id == sns_id &&
+        other.fcm_token == fcm_token;
   }
 
   @override
@@ -160,6 +162,7 @@ class SignUpModel {
         terms_optional.hashCode ^
         terms_push.hashCode ^
         sns_type.hashCode ^
-        sns_id.hashCode;
+        sns_id.hashCode ^
+        fcm_token.hashCode;
   }
 }
