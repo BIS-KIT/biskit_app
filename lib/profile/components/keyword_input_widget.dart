@@ -149,6 +149,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                         FocusScope.of(context).unfocus();
                                       }
                                     },
+                                    autofocus: true,
                                     focusNode: reasonFocusNode,
                                     expands: true,
                                     maxLines: null,
@@ -204,16 +205,17 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                   child: Column(
                   children: [
                     const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        onTapSubmit();
-                      },
-                      child: FilledButtonWidget(
-                        text: '완료',
-                        isEnable: getButtonEnable(),
-                        height: 52,
+                    if (MediaQuery.of(context).viewInsets.bottom > 150)
+                      GestureDetector(
+                        onTap: () {
+                          onTapSubmit();
+                        },
+                        child: FilledButtonWidget(
+                          text: '완료',
+                          isEnable: getButtonEnable(),
+                          height: 52,
+                        ),
                       ),
-                    ),
                   ],
                 )),
           if (MediaQuery.of(context).viewInsets.bottom > 150)

@@ -120,7 +120,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(
-                  height: 40,
+                  height: 16,
                 ),
                 Focus(
                   onFocusChange: (value) {

@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               snsId: snsId,
               snsType: snsType,
             );
-
+    logger.d(userModelBase);
     if (!mounted) return;
     if (userModelBase == null) {
       // 가입된 아이디 없으면 회원가입 처리
@@ -172,10 +172,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           sns_id: snsId,
         ),
       );
-    } else {
+    } else if (userModelBase is UserModelError) {
       showSnackBar(
         context: context,
-        text: (userModelBase as UserModelError).message,
+        text: userModelBase.message,
       );
     }
   }

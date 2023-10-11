@@ -16,7 +16,7 @@ class UserModelLoading extends UserModelBase {}
 
 class UserModel extends UserModelBase {
   final int id;
-  final String email;
+  final String? email;
   final String name;
   final String birth;
   final String gender;
@@ -66,7 +66,7 @@ class UserModel extends UserModelBase {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'email': email,
       'name': name,
@@ -82,25 +82,24 @@ class UserModel extends UserModelBase {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] as int,
-      email: map['email'] as String,
-      name: map['name'] as String,
-      birth: map['birth'] as String,
-      gender: map['gender'] as String,
-      is_active: map['is_active'] as bool,
-      is_admin: map['is_admin'] as bool,
-      sns_type: map['sns_type'] != null ? map['sns_type'] as String : null,
-      sns_id: map['sns_id'] != null ? map['sns_id'] as String : null,
-      profile: map['profile'] != null
-          ? ProfileModel.fromMap(map['profile'] as Map<String, dynamic>)
-          : null,
+      id: map['id']?.toInt() ?? 0,
+      email: map['email'],
+      name: map['name'] ?? '',
+      birth: map['birth'] ?? '',
+      gender: map['gender'] ?? '',
+      is_active: map['is_active'] ?? false,
+      is_admin: map['is_admin'] ?? false,
+      sns_type: map['sns_type'],
+      sns_id: map['sns_id'],
+      profile:
+          map['profile'] != null ? ProfileModel.fromMap(map['profile']) : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -108,10 +107,11 @@ class UserModel extends UserModelBase {
   }
 
   @override
-  bool operator ==(covariant UserModel other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
+    return other is UserModel &&
+        other.id == id &&
         other.email == email &&
         other.name == name &&
         other.birth == birth &&
