@@ -39,7 +39,7 @@ class ChatRepository {
             title: title,
             users: [userId],
             createUserId: userId,
-            createDate: DateTime.now(),
+            createDate: FieldValue.serverTimestamp(),
           ).toMap(),
         );
   }

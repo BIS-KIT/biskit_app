@@ -3,6 +3,7 @@ import 'package:biskit_app/chat/provider/chat_room_provider.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -304,8 +305,18 @@ class _RootTabState extends ConsumerState<RootTab>
                               Text(
                                 docs[index].title,
                               ),
-                              Text(
-                                docs[index].users.length.toString(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    docs[index].users.length.toString(),
+                                  ),
+                                  Text(
+                                    getDateTimeByTimestamp(
+                                            docs[index].createDate)
+                                        .toIso8601String(),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
