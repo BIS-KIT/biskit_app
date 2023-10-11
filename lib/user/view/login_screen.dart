@@ -154,7 +154,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     required String snsId,
     required SnsType snsType,
   }) async {
-    // TODO 로그인 처리 이메일 없이도 로그인 가능해야함
     UserModelBase? userModelBase =
         await ref.read(userMeProvider.notifier).login(
               snsId: snsId,
