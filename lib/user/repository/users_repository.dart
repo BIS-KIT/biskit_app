@@ -47,4 +47,24 @@ class UsersRepository {
 
     return userModel;
   }
+
+  Future<UserModel?> getReadUser(int userId) async {
+    UserModel? userModel;
+
+    final res = await dio.get(
+      '$baseUrl/$userId',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'accessToken': 'false',
+        },
+      ),
+    );
+
+    logger.d(res.toString());
+    userModel = UserModel.fromMap(res.data);
+
+    return userModel;
+  }
 }

@@ -48,6 +48,8 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
       final String? accessToken = await storage.read(key: kACCESS_TOKEN_KEY);
       final String? refreshToken = await storage.read(key: kREFRESH_TOKEN_KEY);
 
+      logger.d(['accessToken:$accessToken', 'refreshToken:$refreshToken']);
+
       if (accessToken == null || refreshToken == null) {
         state = null;
         return;

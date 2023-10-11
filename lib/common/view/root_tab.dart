@@ -1,6 +1,12 @@
+import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/chat/provider/chat_room_provider.dart';
+import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -114,9 +120,208 @@ class _RootTabState extends ConsumerState<RootTab>
                   ],
                 )
               : Container(),
-          Container(),
-          Container(),
+          userState is UserModel ? _buildGroupTap(userState) : Container(),
+          userState is UserModel ? _buildChatTap(userState) : Container(),
         ],
+      ),
+    );
+  }
+
+  SafeArea _buildChatTap(UserModel userState) {
+    final stream = ref.watch(chatRoomListStreamProvider);
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: stream.when(
+              data: (data) {
+                return ListView.separated(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                  ),
+                  itemBuilder: (context, index) => GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data[index].title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              data[index].lastMsg ?? '',
+                            ),
+                          ],
+                        ),
+                        Text(
+                          data[index].lastMsgDate ?? '',
+                        ),
+                      ],
+                    ),
+                  ),
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: data.length,
+                );
+              },
+              error: (error, stackTrace) => Text(error.toString()),
+              loading: () => const CircularProgressIndicator(),
+            ),
+            // StreamBuilder(
+            //   stream: stream,
+            //   builder: (context, snapshot) {
+            //     logger.d(snapshot.data);
+            //     if (snapshot.connectionState == ConnectionState.waiting) {
+            //       return const Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     } else {
+            //       if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            //         // List<ChatRoomModel> docs = snapshot
+            //         //     .map((e) => ChatRoomModel.fromMap(
+            //         //         e.data() as Map<String, dynamic>))
+            //         //     .toList();
+            //         return ListView.separated(
+            //           keyboardDismissBehavior:
+            //               ScrollViewKeyboardDismissBehavior.onDrag,
+            //           padding: const EdgeInsets.only(top: 20),
+            //           itemBuilder: (context, index) => GestureDetector(
+            //             behavior: HitTestBehavior.opaque,
+            //             onTap: () {},
+            //             child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: [
+            //                 Column(
+            //                   children: [
+            //                     Text(
+            //                       snapshot.data![index].title,
+            //                     ),
+            //                     Text(
+            //                       snapshot.data![index].lastMsg ?? '',
+            //                     ),
+            //                   ],
+            //                 ),
+            //                 Text(
+            //                   snapshot.data![index].lastMsgDate ?? '',
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //           separatorBuilder: (context, index) => const Divider(),
+            //           itemCount: snapshot.data!.length,
+            //         );
+            //       } else {
+            //         return const Text('No Data!!');
+            //       }
+            //     }
+            //   },
+            // ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  SafeArea _buildGroupTap(UserModel userState) {
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              '모임 개설',
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onSubmitted: (value) async {
+                      // 모임 개설 하면서 채팅방 생성
+                      await ref.read(chatRepositoryProvider).createChatRoom(
+                            title: value.trim(),
+                            userId: userState.id,
+                          );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: ref.read(chatRepositoryProvider).allChatRoomListStream,
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  logger.d(snapshot.data);
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.hasData) {
+                      List<ChatRoomModel> docs = snapshot.data!.docs
+                          .map((e) => ChatRoomModel.fromMap(
+                              e.data() as Map<String, dynamic>))
+                          .toList();
+                      return ListView.separated(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        padding: const EdgeInsets.only(top: 20),
+                        itemBuilder: (context, index) => GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            if (docs[index].users.contains(userState.id)) {
+                              showSnackBar(
+                                context: context,
+                                text: '이미 참여한 채팅방',
+                              );
+                            } else {
+                              ref.read(chatRepositoryProvider).goInChatRoom(
+                                    chatRoom: docs[index],
+                                    userId: userState.id,
+                                  );
+                              showSnackBar(
+                                context: context,
+                                text: '참여 완료',
+                              );
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                docs[index].title,
+                              ),
+                              Text(
+                                docs[index].users.length.toString(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemCount: docs.length,
+                      );
+                    } else {
+                      return const Text('No Data!!');
+                    }
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
