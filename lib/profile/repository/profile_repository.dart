@@ -79,7 +79,7 @@ class ProfileRepository {
     if (user is UserModel) {
       try {
         res = await dio.post(
-          '$baseUrl/',
+          baseUrl,
           options: Options(
             headers: {
               'Content-Type': 'application/json',

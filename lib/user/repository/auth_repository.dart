@@ -66,7 +66,7 @@ class AuthRepository {
     bool isExist = true;
     try {
       final res = await dio.post(
-        '$baseUrl/check-email/',
+        '$baseUrl/check-email',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ class AuthRepository {
     Map<String, String>? map;
     try {
       final res = await dio.post(
-        '$baseUrl/certificate/',
+        '$baseUrl/certificate',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ class AuthRepository {
     ApiResModel apiResModel = ApiResModel(isOk: false);
     try {
       final res = await dio.post(
-        '$baseUrl/register/',
+        '$baseUrl/register',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ class AuthRepository {
     Map<String, String>? map;
     try {
       final res = await dio.post(
-        '$baseUrl/change-password/certificate/',
+        '$baseUrl/change-password/certificate',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -220,7 +220,7 @@ class AuthRepository {
     Map<String, String>? map;
     try {
       final res = await dio.post(
-        '$baseUrl/change-password/certificate/check/',
+        '$baseUrl/change-password/certificate/check',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -255,7 +255,7 @@ class AuthRepository {
     bool isChanged = false;
     try {
       final res = await dio.post(
-        '$baseUrl/change-password/',
+        '$baseUrl/change-password',
         options: Options(
           headers: {
             'authorization': 'Bearer $token',

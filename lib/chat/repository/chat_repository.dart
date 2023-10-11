@@ -1,3 +1,4 @@
+import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/provider/firebase_provider.dart';
@@ -66,5 +67,41 @@ class ChatRepository {
           descending: true,
         )
         .snapshots();
+  }
+
+  void sendMsg({
+    required String msg,
+    required int userId,
+    required String chatRoomUid,
+  }) async {
+    String msgUid = firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoomUid)
+        .collection('Messages')
+        .doc()
+        .id;
+    logger.d('Create Message UID : $msgUid');
+    FieldValue serverTime = FieldValue.serverTimestamp();
+    await firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoomUid)
+        .collection('Messages')
+        .doc(msgUid)
+        .set(
+          ChatMsgModel(
+            uid: msgUid,
+            msg: msg,
+            createDate: serverTime,
+            createUserId: userId,
+            readUsers: [userId],
+          ).toMap(),
+        );
+
+    // chat room last msg
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
+      'lastMsg': msg,
+      'lastMsgDate': serverTime,
+      'lastMsgReadUsers': [userId],
+    });
   }
 }

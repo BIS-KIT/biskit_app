@@ -1,6 +1,7 @@
 import 'package:biskit_app/chat/model/chat_room_model.dart';
-import 'package:biskit_app/chat/provider/chat_room_provider.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
+import 'package:biskit_app/chat/view/chat_screen.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
@@ -99,6 +100,7 @@ class _RootTabState extends ConsumerState<RootTab>
                               '${(userState).profile!.profile_photo}',
                             ),
                     ),
+                    Text('userId : ${(userState).id}'),
                     Text('email : ${(userState).email}'),
                     Text('snsType : ${(userState).sns_type}'),
                     Text('nickname : ${(userState).profile!.nick_name}'),
@@ -129,104 +131,150 @@ class _RootTabState extends ConsumerState<RootTab>
   }
 
   SafeArea _buildChatTap(UserModel userState) {
-    final stream = ref.watch(chatRoomListStreamProvider);
+    // final stream = ref.watch(chatRoomListStreamProvider);
     return SafeArea(
       child: Column(
         children: [
           Expanded(
-            child: stream.when(
-              data: (data) {
-                return ListView.separated(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                    left: 20,
-                    right: 20,
-                  ),
-                  itemBuilder: (context, index) => GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            child:
+                // stream.when(
+                //   data: (data) {
+                //     return ListView.separated(
+                //       keyboardDismissBehavior:
+                //           ScrollViewKeyboardDismissBehavior.onDrag,
+                //       padding: const EdgeInsets.only(
+                //         top: 20,
+                //         left: 20,
+                //         right: 20,
+                //       ),
+                //       itemBuilder: (context, index) => GestureDetector(
+                //         behavior: HitTestBehavior.opaque,
+                //         onTap: () {},
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Column(
+                //               crossAxisAlignment: CrossAxisAlignment.start,
+                //               children: [
+                //                 Text(
+                //                   data[index].title,
+                //                   style: const TextStyle(
+                //                     fontWeight: FontWeight.bold,
+                //                     fontSize: 18,
+                //                   ),
+                //                 ),
+                //                 Text(
+                //                   data[index].lastMsg ?? '',
+                //                 ),
+                //               ],
+                //             ),
+                //             Text(
+                //               data[index].lastMsgDate ?? '',
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //       separatorBuilder: (context, index) => const Divider(),
+                //       itemCount: data.length,
+                //     );
+                //   },
+                //   error: (error, stackTrace) => Text(error.toString()),
+                //   loading: () => const CircularProgressIndicator(),
+                // ),
+                StreamBuilder(
+              stream: ref
+                  .read(chatRepositoryProvider)
+                  .getMyChatRoomListStream(userId: userState.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                    List<ChatRoomModel> docs = snapshot.data!.docs
+                        .map((e) => ChatRoomModel.fromMap(
+                            e.data() as Map<String, dynamic>))
+                        .toList();
+                    return ListView.separated(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.only(
+                        top: 20,
+                        left: 20,
+                        right: 20,
+                      ),
+                      itemBuilder: (context, index) => GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                  chatRoomUid: docs[index].uid,
+                                  chatRoomTitle: docs[index].title,
+                                ),
+                              ));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              data[index].title,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                            const CircleAvatar(
+                              radius: 24,
+                              backgroundColor: Colors.amber,
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    docs[index].title,
+                                  ),
+                                  Text(
+                                    docs[index].lastMsg ?? '',
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              data[index].lastMsg ?? '',
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  docs[index].lastMsgDate == null
+                                      ? ''
+                                      : getDateTimeByTimestamp(
+                                              docs[index].lastMsgDate)
+                                          .toString(),
+                                ),
+                                docs[index].lastMsgReadUsers != null &&
+                                        !docs[index]
+                                            .lastMsgReadUsers!
+                                            .contains(userState.id)
+                                    ? const CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: kColorContentError,
+                                      )
+                                    : Container()
+                              ],
                             ),
                           ],
                         ),
-                        Text(
-                          data[index].lastMsgDate ?? '',
-                        ),
-                      ],
-                    ),
-                  ),
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: data.length,
-                );
+                      ),
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemCount: docs.length,
+                    );
+                  } else {
+                    return const Text('No Data!!');
+                  }
+                }
               },
-              error: (error, stackTrace) => Text(error.toString()),
-              loading: () => const CircularProgressIndicator(),
             ),
-            // StreamBuilder(
-            //   stream: stream,
-            //   builder: (context, snapshot) {
-            //     logger.d(snapshot.data);
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     } else {
-            //       if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            //         // List<ChatRoomModel> docs = snapshot
-            //         //     .map((e) => ChatRoomModel.fromMap(
-            //         //         e.data() as Map<String, dynamic>))
-            //         //     .toList();
-            //         return ListView.separated(
-            //           keyboardDismissBehavior:
-            //               ScrollViewKeyboardDismissBehavior.onDrag,
-            //           padding: const EdgeInsets.only(top: 20),
-            //           itemBuilder: (context, index) => GestureDetector(
-            //             behavior: HitTestBehavior.opaque,
-            //             onTap: () {},
-            //             child: Row(
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: [
-            //                 Column(
-            //                   children: [
-            //                     Text(
-            //                       snapshot.data![index].title,
-            //                     ),
-            //                     Text(
-            //                       snapshot.data![index].lastMsg ?? '',
-            //                     ),
-            //                   ],
-            //                 ),
-            //                 Text(
-            //                   snapshot.data![index].lastMsgDate ?? '',
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //           separatorBuilder: (context, index) => const Divider(),
-            //           itemCount: snapshot.data!.length,
-            //         );
-            //       } else {
-            //         return const Text('No Data!!');
-            //       }
-            //     }
-            //   },
-            // ),
           ),
         ],
       ),
@@ -312,9 +360,11 @@ class _RootTabState extends ConsumerState<RootTab>
                                     docs[index].users.length.toString(),
                                   ),
                                   Text(
-                                    getDateTimeByTimestamp(
-                                            docs[index].createDate)
-                                        .toIso8601String(),
+                                    docs[index].createDate == null
+                                        ? ''
+                                        : getDateTimeByTimestamp(
+                                                docs[index].createDate)
+                                            .toIso8601String(),
                                   ),
                                 ],
                               ),
@@ -325,7 +375,7 @@ class _RootTabState extends ConsumerState<RootTab>
                         itemCount: docs.length,
                       );
                     } else {
-                      return const Text('No Data!!');
+                      return const Text('데이터 없음');
                     }
                   }
                 },
