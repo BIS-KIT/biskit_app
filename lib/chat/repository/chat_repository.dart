@@ -1,23 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/provider/firebase_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:biskit_app/user/repository/users_repository.dart';
 
 final chatRepositoryProvider = Provider<ChatRepository>((ref) => ChatRepository(
       dio: ref.watch(dioProvider),
       firebaseFirestore: ref.watch(firebaseFirestoreProvider),
+      usersRepository: ref.watch(usersRepositoryProvider),
     ));
 
 class ChatRepository {
   final Dio dio;
   final FirebaseFirestore firebaseFirestore;
+  final UsersRepository usersRepository;
   ChatRepository({
     required this.dio,
     required this.firebaseFirestore,
+    required this.usersRepository,
   });
 
   Stream<QuerySnapshot> get allChatRoomListStream => firebaseFirestore
@@ -102,6 +107,30 @@ class ChatRepository {
       'lastMsg': msg,
       'lastMsgDate': serverTime,
       'lastMsgReadUsers': [userId],
+    });
+  }
+
+  Stream<List<ChatMsgModel>> getChatMsgStream({
+    required String chatRoomUid,
+    int limit = 20,
+  }) {
+    return firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoomUid)
+        .collection('Messages')
+        .orderBy('createDate', descending: true)
+        .limit(limit)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      // logger.d(snapshot.docs[0].data());
+      final result =
+          snapshot.docs.map((e) => ChatMsgModel.fromMap(e.data())).toList();
+      return result;
+      // for (var e in snapshot.docs) {
+      //   logger.d(e.data());
+
+      // }
+      // return snapshot;
     });
   }
 }

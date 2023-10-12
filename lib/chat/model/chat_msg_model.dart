@@ -9,12 +9,14 @@ class ChatMsgModel {
   final int createUserId;
   final dynamic createDate;
   final List<int> readUsers;
+  final String? createUserProfilePath;
   ChatMsgModel({
     required this.uid,
     required this.msg,
     required this.createUserId,
     required this.createDate,
     required this.readUsers,
+    this.createUserProfilePath,
   });
 
   ChatMsgModel copyWith({
@@ -23,6 +25,7 @@ class ChatMsgModel {
     int? createUserId,
     dynamic createDate,
     List<int>? readUsers,
+    String? createUserProfilePath,
   }) {
     return ChatMsgModel(
       uid: uid ?? this.uid,
@@ -30,48 +33,54 @@ class ChatMsgModel {
       createUserId: createUserId ?? this.createUserId,
       createDate: createDate ?? this.createDate,
       readUsers: readUsers ?? this.readUsers,
+      createUserProfilePath:
+          createUserProfilePath ?? this.createUserProfilePath,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'uid': uid,
       'msg': msg,
       'createUserId': createUserId,
       'createDate': createDate,
       'readUsers': readUsers,
+      'createUserProfilePath': createUserProfilePath,
     };
   }
 
   factory ChatMsgModel.fromMap(Map<String, dynamic> map) {
     return ChatMsgModel(
-      uid: map['uid'] as String,
-      msg: map['msg'] as String,
-      createUserId: map['createUserId'] as int,
-      createDate: map['createDate'] as dynamic,
-      readUsers: List.from((map['readUsers'] as List)),
+      uid: map['uid'] ?? '',
+      msg: map['msg'] ?? '',
+      createUserId: map['createUserId']?.toInt() ?? 0,
+      createDate: map['createDate'],
+      readUsers: List<int>.from(map['readUsers']),
+      createUserProfilePath: map['createUserProfilePath'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory ChatMsgModel.fromJson(String source) =>
-      ChatMsgModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      ChatMsgModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'ChatMsgModel(uid: $uid, msg: $msg, createUserId: $createUserId, createDate: $createDate, readUsers: $readUsers)';
+    return 'ChatMsgModel(uid: $uid, msg: $msg, createUserId: $createUserId, createDate: $createDate, readUsers: $readUsers, createUserProfilePath: $createUserProfilePath)';
   }
 
   @override
-  bool operator ==(covariant ChatMsgModel other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.uid == uid &&
+    return other is ChatMsgModel &&
+        other.uid == uid &&
         other.msg == msg &&
         other.createUserId == createUserId &&
         other.createDate == createDate &&
-        listEquals(other.readUsers, readUsers);
+        listEquals(other.readUsers, readUsers) &&
+        other.createUserProfilePath == createUserProfilePath;
   }
 
   @override
@@ -80,6 +89,7 @@ class ChatMsgModel {
         msg.hashCode ^
         createUserId.hashCode ^
         createDate.hashCode ^
-        readUsers.hashCode;
+        readUsers.hashCode ^
+        createUserProfilePath.hashCode;
   }
 }

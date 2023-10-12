@@ -67,4 +67,13 @@ class UsersRepository {
 
     return userModel;
   }
+
+  getUserProfilePath(int userId) async {
+    String? path;
+    UserModel? userModel = await getReadUser(userId);
+    if (userModel != null) {
+      path = userModel.profile?.profile_photo;
+    }
+    return path;
+  }
 }
