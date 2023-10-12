@@ -12,6 +12,7 @@ import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String chatRoomUid;
@@ -319,9 +320,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.image_outlined),
+          Container(
+            width: 44,
+            height: 44,
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(
+              'assets/icons/ic_image_line_24.svg',
+              width: 24,
+              height: 24,
+            ),
           ),
           Expanded(
             child: Container(
@@ -347,13 +354,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       controller: textEditingController,
                       minLines: 1,
                       maxLines: 4,
+                      style: getTsBody16Rg(context).copyWith(
+                        color: kColorContentWeak,
+                      ),
                       decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 7),
                         border: InputBorder.none,
+                        isDense: true,
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: () {
                       String msg = textEditingController.text.trim();
                       if (msg.isNotEmpty) {
                         ref.read(chatRepositoryProvider).sendMsg(
@@ -364,11 +376,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         textEditingController.text = '';
                       }
                     },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.yellow,
-                    ),
-                    icon: const Icon(
-                      Icons.arrow_upward,
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: kColorBgPrimary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_arrow_upward_line_24.svg',
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
                   ),
                 ],
