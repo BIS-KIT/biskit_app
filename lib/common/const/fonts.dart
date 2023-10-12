@@ -54,6 +54,12 @@ TextStyle getTsCaption11Rg(BuildContext context) {
       : kTsKrCaption11Rg;
 }
 
+TextStyle getTsCaption10Rg(BuildContext context) {
+  return context.locale.languageCode == kEn
+      ? kTsEnCaption10Rg
+      : kTsKrCaption10Rg;
+}
+
 // 국문
 const TextStyle kTsKrHeading24Bd = TextStyle(
   color: Color(0xFF292C45),
@@ -131,6 +137,13 @@ const TextStyle kTsKrCaption11Rg = TextStyle(
   color: Color(0xFF292C45),
   fontFamily: 'Pretendard',
   fontSize: 11,
+  fontWeight: FontWeight.w400,
+  height: 1.5,
+);
+const TextStyle kTsKrCaption10Rg = TextStyle(
+  color: Color(0xFF292C45),
+  fontFamily: 'Pretendard',
+  fontSize: 10,
   fontWeight: FontWeight.w400,
   height: 1.5,
 );
@@ -212,6 +225,13 @@ const TextStyle kTsEnCaption11Rg = TextStyle(
   color: Color(0xFF292C45),
   fontFamily: 'Pretendard',
   fontSize: 11,
+  fontWeight: FontWeight.w400,
+  height: 1.4,
+);
+const TextStyle kTsEnCaption10Rg = TextStyle(
+  color: Color(0xFF292C45),
+  fontFamily: 'Pretendard',
+  fontSize: 10,
   fontWeight: FontWeight.w400,
   height: 1.4,
 );
