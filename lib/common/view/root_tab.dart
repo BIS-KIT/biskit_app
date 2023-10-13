@@ -2,6 +2,7 @@ import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
@@ -9,6 +10,7 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,6 +27,7 @@ class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
   int index = 0;
   late TabController controller;
+  final DateFormat dayFormat = DateFormat('MM월 dd일', 'ko');
 
   @override
   void initState() {
@@ -134,54 +137,24 @@ class _RootTabState extends ConsumerState<RootTab>
     // final stream = ref.watch(chatRoomListStreamProvider);
     return SafeArea(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 12,
+              bottom: 12,
+              left: 20,
+              right: 10,
+            ),
+            child: Text(
+              '채팅',
+              style: getTsHeading20(context).copyWith(
+                color: Colors.black,
+              ),
+            ),
+          ),
           Expanded(
-            child:
-                // stream.when(
-                //   data: (data) {
-                //     return ListView.separated(
-                //       keyboardDismissBehavior:
-                //           ScrollViewKeyboardDismissBehavior.onDrag,
-                //       padding: const EdgeInsets.only(
-                //         top: 20,
-                //         left: 20,
-                //         right: 20,
-                //       ),
-                //       itemBuilder: (context, index) => GestureDetector(
-                //         behavior: HitTestBehavior.opaque,
-                //         onTap: () {},
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Column(
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               children: [
-                //                 Text(
-                //                   data[index].title,
-                //                   style: const TextStyle(
-                //                     fontWeight: FontWeight.bold,
-                //                     fontSize: 18,
-                //                   ),
-                //                 ),
-                //                 Text(
-                //                   data[index].lastMsg ?? '',
-                //                 ),
-                //               ],
-                //             ),
-                //             Text(
-                //               data[index].lastMsgDate ?? '',
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //       separatorBuilder: (context, index) => const Divider(),
-                //       itemCount: data.length,
-                //     );
-                //   },
-                //   error: (error, stackTrace) => Text(error.toString()),
-                //   loading: () => const CircularProgressIndicator(),
-                // ),
-                StreamBuilder(
+            child: StreamBuilder(
               stream: ref
                   .read(chatRepositoryProvider)
                   .getMyChatRoomListStream(userId: userState.id),
@@ -199,78 +172,132 @@ class _RootTabState extends ConsumerState<RootTab>
                     return ListView.separated(
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        left: 20,
-                        right: 20,
-                      ),
+                      // padding: const EdgeInsets.only(
+                      //   top: 20,
+                      //   left: 20,
+                      //   right: 20,
+                      // ),
                       itemBuilder: (context, index) => GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () {
+                        onTap: () async {
+                          // 마지막 메시지 읽음으로 변경
+                          ref.read(chatRepositoryProvider).lastMsgRead(
+                                chatRoom: docs[index],
+                                userId: userState.id,
+                              );
+
+                          if (!docs[index].firstUserInfoList.any(
+                              (element) => element.userId == userState.id)) {
+                            // 최초 채팅방 입장시 처리
+                            await ref.read(chatRepositoryProvider).firstJoin(
+                                  chatRoom: docs[index],
+                                  user: userState,
+                                );
+                          }
+
+                          if (!mounted) return;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatScreen(
                                   chatRoomUid: docs[index].uid,
-                                  chatRoomTitle: docs[index].title,
                                 ),
                               ));
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const CircleAvatar(
-                              radius: 24,
-                              backgroundColor: Colors.amber,
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    docs[index].title,
-                                  ),
-                                  Text(
-                                    docs[index].lastMsg ?? '',
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  docs[index].lastMsgDate == null
-                                      ? ''
-                                      : getDateTimeByTimestamp(
-                                              docs[index].lastMsgDate)
-                                          .toString(),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundImage: const AssetImage(
+                                  'assets/images/88.png',
                                 ),
-                                docs[index].lastMsgReadUsers != null &&
-                                        !docs[index]
-                                            .lastMsgReadUsers!
-                                            .contains(userState.id)
-                                    ? const CircleAvatar(
-                                        radius: 4,
-                                        backgroundColor: kColorContentError,
-                                      )
-                                    : Container()
-                              ],
-                            ),
-                          ],
+                                foregroundImage:
+                                    docs[index].roomImagePath == null
+                                        ? null
+                                        : NetworkImage(
+                                            docs[index].roomImagePath!,
+                                          ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      docs[index].title,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: getTsBody16Sb(context).copyWith(
+                                        color: kColorContentDefault,
+                                      ),
+                                    ),
+                                    if (docs[index]
+                                        .firstUserInfoList
+                                        .where((element) =>
+                                            element.userId == userState.id)
+                                        .isNotEmpty)
+                                      Text(
+                                        docs[index].lastMsg ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: getTsBody14Rg(context).copyWith(
+                                          color: kColorContentWeaker,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              if (docs[index]
+                                  .firstUserInfoList
+                                  .where((element) =>
+                                      element.userId == userState.id)
+                                  .isNotEmpty)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      docs[index].lastMsgDate == null
+                                          ? ''
+                                          : dayFormat.format(
+                                              getDateTimeByTimestamp(
+                                                  docs[index].lastMsgDate),
+                                            ),
+                                      style: getTsCaption12Rg(context).copyWith(
+                                        color: kColorContentWeakest,
+                                      ),
+                                    ),
+                                    docs[index].lastMsgUid == null ||
+                                            docs[index]
+                                                .lastMsgReadUsers
+                                                .contains(userState.id)
+                                        ? Container()
+                                        : const Padding(
+                                            padding: EdgeInsets.only(top: 8.0),
+                                            child: CircleAvatar(
+                                              radius: 4,
+                                              backgroundColor:
+                                                  kColorContentError,
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
                       ),
-                      separatorBuilder: (context, index) => const Divider(),
+                      separatorBuilder: (context, index) => const SizedBox(),
                       itemCount: docs.length,
                     );
                   } else {
-                    return const Text('No Data!!');
+                    return const Center(child: Text('데이터 없음'));
                   }
                 }
               },
@@ -331,7 +358,7 @@ class _RootTabState extends ConsumerState<RootTab>
                         itemBuilder: (context, index) => GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           onTap: () {
-                            if (docs[index].users.contains(userState.id)) {
+                            if (docs[index].joinUsers.contains(userState.id)) {
                               showSnackBar(
                                 context: context,
                                 text: '이미 참여한 채팅방',
@@ -350,21 +377,22 @@ class _RootTabState extends ConsumerState<RootTab>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                docs[index].title,
+                              Expanded(
+                                child: Text(
+                                  docs[index].title,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    docs[index].users.length.toString(),
+                                    '인원 : ${docs[index].joinUsers.length.toString()}',
                                   ),
                                   Text(
                                     docs[index].createDate == null
                                         ? ''
-                                        : getDateTimeByTimestamp(
-                                                docs[index].createDate)
-                                            .toIso8601String(),
+                                        : '개설일 : ${dayFormat.format(getDateTimeByTimestamp(docs[index].createDate))}',
                                   ),
                                 ],
                               ),

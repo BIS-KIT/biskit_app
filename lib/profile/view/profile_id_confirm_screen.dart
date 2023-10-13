@@ -6,7 +6,6 @@ import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/model/student_card_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -71,8 +70,7 @@ class _ProfileIdConfirmScreenState
                 ? widget.profileCreateModel!.copyWith(
                     student_card: StudentCard(
                       student_card: studentCardPhoto!,
-                      verification_status:
-                          describeEnum(VerificationStatus.PENDING),
+                      verification_status: VerificationStatus.PENDING.name,
                     ),
                   )
                 : widget.profileCreateModel!,

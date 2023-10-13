@@ -3,60 +3,72 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+enum ChatRowType {
+  message,
+  notice,
+  noticeOnlyMe,
+  noticeOther,
+}
+
 class ChatMsgModel {
   final String uid;
+  final String chatRowType;
   final String msg;
+  final String? noticeText;
   final int createUserId;
   final dynamic createDate;
   final List<int> readUsers;
-  final String? createUserProfilePath;
   ChatMsgModel({
     required this.uid,
+    required this.chatRowType,
     required this.msg,
+    this.noticeText,
     required this.createUserId,
     required this.createDate,
     required this.readUsers,
-    this.createUserProfilePath,
   });
 
   ChatMsgModel copyWith({
     String? uid,
+    String? chatRowType,
     String? msg,
+    ValueGetter<String?>? noticeText,
     int? createUserId,
     dynamic createDate,
     List<int>? readUsers,
-    String? createUserProfilePath,
   }) {
     return ChatMsgModel(
       uid: uid ?? this.uid,
+      chatRowType: chatRowType ?? this.chatRowType,
       msg: msg ?? this.msg,
+      noticeText: noticeText != null ? noticeText() : this.noticeText,
       createUserId: createUserId ?? this.createUserId,
       createDate: createDate ?? this.createDate,
       readUsers: readUsers ?? this.readUsers,
-      createUserProfilePath:
-          createUserProfilePath ?? this.createUserProfilePath,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
+      'chatRowType': chatRowType,
       'msg': msg,
+      'noticeText': noticeText,
       'createUserId': createUserId,
       'createDate': createDate,
       'readUsers': readUsers,
-      'createUserProfilePath': createUserProfilePath,
     };
   }
 
   factory ChatMsgModel.fromMap(Map<String, dynamic> map) {
     return ChatMsgModel(
       uid: map['uid'] ?? '',
+      chatRowType: map['chatRowType'] ?? '',
       msg: map['msg'] ?? '',
+      noticeText: map['noticeText'],
       createUserId: map['createUserId']?.toInt() ?? 0,
       createDate: map['createDate'],
       readUsers: List<int>.from(map['readUsers']),
-      createUserProfilePath: map['createUserProfilePath'],
     );
   }
 
@@ -67,7 +79,7 @@ class ChatMsgModel {
 
   @override
   String toString() {
-    return 'ChatMsgModel(uid: $uid, msg: $msg, createUserId: $createUserId, createDate: $createDate, readUsers: $readUsers, createUserProfilePath: $createUserProfilePath)';
+    return 'ChatMsgModel(uid: $uid, chatRowType: $chatRowType, msg: $msg, noticeText: $noticeText, createUserId: $createUserId, createDate: $createDate, readUsers: $readUsers)';
   }
 
   @override
@@ -76,20 +88,22 @@ class ChatMsgModel {
 
     return other is ChatMsgModel &&
         other.uid == uid &&
+        other.chatRowType == chatRowType &&
         other.msg == msg &&
+        other.noticeText == noticeText &&
         other.createUserId == createUserId &&
         other.createDate == createDate &&
-        listEquals(other.readUsers, readUsers) &&
-        other.createUserProfilePath == createUserProfilePath;
+        listEquals(other.readUsers, readUsers);
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
+        chatRowType.hashCode ^
         msg.hashCode ^
+        noticeText.hashCode ^
         createUserId.hashCode ^
         createDate.hashCode ^
-        readUsers.hashCode ^
-        createUserProfilePath.hashCode;
+        readUsers.hashCode;
   }
 }

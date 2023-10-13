@@ -5,7 +5,6 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -86,7 +85,7 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
       final resp = await authRepository.login(
         email: email,
         password: password,
-        snsType: snsType == null ? null : describeEnum(snsType),
+        snsType: snsType?.name,
         snsId: snsId,
       );
 

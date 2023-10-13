@@ -1,3 +1,4 @@
+import 'package:biskit_app/user/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,9 +44,11 @@ class ChatRepository {
           ChatRoomModel(
             uid: chatRoomId,
             title: title,
-            users: [userId],
+            joinUsers: [userId],
+            lastMsgReadUsers: [],
+            firstUserInfoList: [],
             createUserId: userId,
-            createDate: FieldValue.serverTimestamp(),
+            createDate: Timestamp.now(),
           ).toMap(),
         );
   }
@@ -56,17 +59,24 @@ class ChatRepository {
         .collection('ChatRoom')
         .doc(chatRoom.uid)
         .set(chatRoom.copyWith(
-          users: [
-            ...chatRoom.users,
+          joinUsers: [
+            ...chatRoom.joinUsers,
             userId,
           ],
         ).toMap());
   }
 
+  getChatRoomById(String chatRoomUid) async {
+    return await firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoomUid)
+        .get();
+  }
+
   Stream<QuerySnapshot> getMyChatRoomListStream({required int userId}) {
     return firebaseFirestore
         .collection('ChatRoom')
-        .where('users', arrayContains: userId)
+        .where('joinUsers', arrayContains: userId)
         .orderBy(
           'lastMsgDate',
           descending: true,
@@ -74,10 +84,12 @@ class ChatRepository {
         .snapshots();
   }
 
-  void sendMsg({
+  sendMsg({
     required String msg,
     required int userId,
     required String chatRoomUid,
+    required ChatRowType chatRowType,
+    String? noticeText,
   }) async {
     String msgUid = firebaseFirestore
         .collection('ChatRoom')
@@ -86,7 +98,6 @@ class ChatRepository {
         .doc()
         .id;
     logger.d('Create Message UID : $msgUid');
-    FieldValue serverTime = FieldValue.serverTimestamp();
     await firebaseFirestore
         .collection('ChatRoom')
         .doc(chatRoomUid)
@@ -96,28 +107,35 @@ class ChatRepository {
           ChatMsgModel(
             uid: msgUid,
             msg: msg,
-            createDate: serverTime,
+            createDate: Timestamp.now(),
             createUserId: userId,
             readUsers: [userId],
+            chatRowType: chatRowType.name,
+            noticeText: noticeText,
           ).toMap(),
         );
 
     // chat room last msg
     await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
+      'lastMsgUid': msgUid,
       'lastMsg': msg,
-      'lastMsgDate': serverTime,
+      'lastMsgDate': Timestamp.now(),
       'lastMsgReadUsers': [userId],
     });
   }
 
   Stream<List<ChatMsgModel>> getChatMsgStream({
     required String chatRoomUid,
+    required Timestamp? fromTimestamp,
     int limit = 20,
   }) {
+    // logger.d(fromTimestamp!.toDate());
     return firebaseFirestore
         .collection('ChatRoom')
         .doc(chatRoomUid)
         .collection('Messages')
+        .where('createDate',
+            isGreaterThanOrEqualTo: fromTimestamp ?? Timestamp.now())
         .orderBy('createDate', descending: true)
         .limit(limit)
         .snapshots()
@@ -132,5 +150,62 @@ class ChatRepository {
       // }
       // return snapshot;
     });
+  }
+
+  void lastMsgRead({
+    required ChatRoomModel chatRoom,
+    required int userId,
+  }) async {
+    if (chatRoom.lastMsgReadUsers.contains(userId)) {
+      // 이미 읽었으면 처리 안함
+      return;
+    }
+    await firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoom.uid)
+        .set(chatRoom.copyWith(
+          lastMsgReadUsers: [
+            ...chatRoom.lastMsgReadUsers,
+            userId,
+          ],
+        ).toMap());
+  }
+
+  // 채팅방 처음 입장시 처리
+  firstJoin({
+    required ChatRoomModel chatRoom,
+    required UserModel user,
+  }) async {
+    // 최초 입장시 데이터 저장
+    await firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoom.uid)
+        .set(chatRoom.copyWith(
+          firstUserInfoList: [
+            ...chatRoom.firstUserInfoList,
+            ChatRoomFirstUserInfo(
+              userId: user.id,
+              firstJoinDate: Timestamp.now(),
+            ),
+          ],
+        ).toMap());
+
+    // 최초 입장시 안내문구 : 입장문구
+    await sendMsg(
+      msg: '',
+      noticeText:
+          '비스킷은 서로가 신뢰할 수 있는 커뮤니티를 만들어가고 있어요. 여기다가 맨처음 들어오면 알려줄 안내사항 적으면 될듯? 뭐라고 적지',
+      userId: user.id,
+      chatRoomUid: chatRoom.uid,
+      chatRowType: ChatRowType.noticeOnlyMe,
+    );
+    // 최초 입장시 안내문구 : 참여문구
+    sendMsg(
+      msg: '',
+      noticeText: '${user.profile!.nick_name}님이 참여했습니다.',
+      userId: user.id,
+      chatRoomUid: chatRoom.uid,
+      chatRowType: ChatRowType.notice,
+    );
   }
 }

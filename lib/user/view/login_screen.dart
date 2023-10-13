@@ -167,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       context.pushNamed(
         SignUpAgreeScreen.routeName,
         extra: SignUpModel(
-          sns_type: describeEnum(snsType),
+          sns_type: snsType.name,
           sns_id: snsId,
         ),
       );
