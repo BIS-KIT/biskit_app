@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,38 +141,77 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Widget _buildOtherMsg(List<ChatMsgModel> list, int index, String? text,
       DateTime createDateTime, BuildContext context) {
+    double topPaddingSize = 16;
+    bool isProfileView = true;
+    bool isMsgTimeView = true;
+
+    if (index + 1 < list.length) {
+      // 이 후 메시지 값을 가져온다
+      if (list[index + 1].chatRowType == ChatRowType.message.name &&
+          list[index + 1].createUserId == list[index].createUserId) {
+        // 이전 메시지가 내가 쓴 메시지라면
+
+        if (getTimestampDifference(
+                    list[index + 1].createDate, list[index].createDate)
+                .inMinutes
+                .abs() <
+            1) {
+          topPaddingSize = 8; // 간격 줄이기
+          isProfileView = false; // 프로파일 가리기
+        }
+      }
+    }
+    if (index - 1 >= 0) {
+      // 이 전 메시지 값을 가져온다
+      if (list[index - 1].chatRowType == ChatRowType.message.name &&
+          list[index - 1].createUserId == list[index].createUserId) {
+        // 이전 메시지가 내가 쓴 메시지라면
+
+        if (getTimestampDifference(
+                    list[index - 1].createDate, list[index].createDate)
+                .inMinutes
+                .abs() <
+            1) {
+          isMsgTimeView = false; // 채팅 시간 가리기
+        }
+      }
+    }
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 16,
+      padding: EdgeInsets.only(
+        top: topPaddingSize,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FutureBuilder(
-              future: ref
-                  .read(usersRepositoryProvider)
-                  .getUserProfilePath(list[index].createUserId),
-              builder: (context, snapshot) {
-                text = snapshot.data.toString();
-                // logger.d(text);
-                if (snapshot.hasData) {
-                  return CircleAvatar(
-                    radius: 16,
-                    backgroundImage: const AssetImage(
-                      'assets/images/88.png',
-                    ),
-                    foregroundImage: NetworkImage(text!),
-                  );
-                }
-                return const CircleAvatar(
-                  radius: 16,
-                  backgroundImage: AssetImage(
-                    'assets/images/88.png',
-                  ),
+          isProfileView
+              ? FutureBuilder(
+                  future: ref
+                      .read(usersRepositoryProvider)
+                      .getUserProfilePath(list[index].createUserId),
+                  builder: (context, snapshot) {
+                    text = snapshot.data.toString();
+                    // logger.d(text);
+                    if (snapshot.hasData) {
+                      return CircleAvatar(
+                        radius: 16,
+                        backgroundImage: const AssetImage(
+                          'assets/images/88.png',
+                        ),
+                        foregroundImage: NetworkImage(text!),
+                      );
+                    }
+                    return const CircleAvatar(
+                      radius: 16,
+                      backgroundImage: AssetImage(
+                        'assets/images/88.png',
+                      ),
 
-                  // child: ,
-                );
-              }),
+                      // child: ,
+                    );
+                  })
+              : const SizedBox(
+                  width: 32,
+                ),
           const SizedBox(
             width: 8,
           ),
@@ -193,14 +233,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const SizedBox(
             width: 4,
           ),
-          Text(
-            msgDateFormat.format(
-              createDateTime,
+          if (isMsgTimeView)
+            Text(
+              msgDateFormat.format(
+                createDateTime,
+              ),
+              style: getTsCaption10Rg(context).copyWith(
+                color: kColorContentWeakest,
+              ),
             ),
-            style: getTsCaption10Rg(context).copyWith(
-              color: kColorContentWeakest,
-            ),
-          ),
         ],
       ),
     );
@@ -209,9 +250,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget _buildMyMsg(DateTime createDateTime, BuildContext context,
       List<ChatMsgModel> list, int index) {
     // logger.d('[$index]:${list[index].toString()}');
+    double topPaddingSize = 16;
+    if (index + 1 < list.length) {
+      // 이 전 메시지 값을 가져온다
+      if (list[index + 1].chatRowType == ChatRowType.message.name &&
+          list[index + 1].createUserId == list[index].createUserId) {
+        topPaddingSize = 8;
+      }
+    }
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 16,
+      padding: EdgeInsets.only(
+        top: topPaddingSize,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
