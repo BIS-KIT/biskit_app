@@ -249,13 +249,37 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Widget _buildMyMsg(DateTime createDateTime, BuildContext context,
       List<ChatMsgModel> list, int index) {
-    // logger.d('[$index]:${list[index].toString()}');
     double topPaddingSize = 16;
+    bool isMsgTimeView = true;
+
     if (index + 1 < list.length) {
-      // 이 전 메시지 값을 가져온다
+      // 이 후 메시지 값을 가져온다
       if (list[index + 1].chatRowType == ChatRowType.message.name &&
           list[index + 1].createUserId == list[index].createUserId) {
-        topPaddingSize = 8;
+        // 이전 메시지가 내가 쓴 메시지라면
+
+        if (getTimestampDifference(
+                    list[index + 1].createDate, list[index].createDate)
+                .inMinutes
+                .abs() <
+            1) {
+          topPaddingSize = 8; // 간격 줄이기
+        }
+      }
+    }
+    if (index - 1 >= 0) {
+      // 이 전 메시지 값을 가져온다
+      if (list[index - 1].chatRowType == ChatRowType.message.name &&
+          list[index - 1].createUserId == list[index].createUserId) {
+        // 이전 메시지가 내가 쓴 메시지라면
+
+        if (getTimestampDifference(
+                    list[index - 1].createDate, list[index].createDate)
+                .inMinutes
+                .abs() <
+            1) {
+          isMsgTimeView = false; // 채팅 시간 가리기
+        }
       }
     }
     return Padding(
@@ -270,14 +294,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const SizedBox(
             width: 20,
           ),
-          Text(
-            msgDateFormat.format(
-              createDateTime,
+          if (isMsgTimeView)
+            Text(
+              msgDateFormat.format(
+                createDateTime,
+              ),
+              style: getTsCaption10Rg(context).copyWith(
+                color: kColorContentWeakest,
+              ),
             ),
-            style: getTsCaption10Rg(context).copyWith(
-              color: kColorContentWeakest,
-            ),
-          ),
           const SizedBox(
             width: 4,
           ),
