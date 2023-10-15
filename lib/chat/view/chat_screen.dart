@@ -1,6 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/date_util.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/profile/model/profile_photo_model.dart';
+import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,10 +15,8 @@ import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:biskit_app/user/repository/users_repository.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String chatRoomUid;
@@ -29,7 +32,9 @@ class ChatScreen extends ConsumerStatefulWidget {
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   ChatRoomModel? chatRoomModel;
+  List<ProfilePhotoModel> profilePhotoList = [];
   late final TextEditingController textEditingController;
+  late final ScrollController scrollController;
   final DateFormat msgDateFormat = DateFormat('a hh:mm', 'ko');
   final DateFormat dayFormat = DateFormat('yyyy년 MM월 dd일 EEE', 'ko');
 
@@ -37,7 +42,27 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void initState() {
     super.initState();
     textEditingController = TextEditingController();
+    scrollController = ScrollController();
     fetchChatRoom();
+  }
+
+  void addProfilePhoto(int createUserId) async {
+    List<ProfilePhotoModel> list = await ref
+        .read(profileRepositoryProvider)
+        .getProfilePhotos([createUserId]);
+    setState(() {
+      profilePhotoList = [
+        ...profilePhotoList,
+        ...list,
+      ];
+    });
+  }
+
+  fetchChatRoomUserProfile() async {
+    profilePhotoList = await ref
+        .read(profileRepositoryProvider)
+        .getProfilePhotos(chatRoomModel!.joinUsers);
+    setState(() {});
   }
 
   fetchChatRoom() async {
@@ -49,12 +74,28 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         chatRoomModel =
             ChatRoomModel.fromMap(result.data() as Map<String, dynamic>);
       });
+      await fetchChatRoomUserProfile();
     }
+  }
+
+  // 이미지 보내기
+  sendAttach() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PhotoManagerScreen(
+          isCamera: true,
+          maxCnt: 1,
+        ),
+      ),
+    );
+    logger.d(result);
   }
 
   @override
   void dispose() {
     textEditingController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -63,13 +104,28 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(chatRoomModel == null ? '' : chatRoomModel!.title),
-        centerTitle: true,
-        elevation: 8,
+    return DefaultLayout(
+      title: chatRoomModel == null ? '' : chatRoomModel!.title,
+      shape: const Border(
+        bottom: BorderSide(
+          color: kColorBorderDefalut,
+          width: 1,
+        ),
       ),
-      body: userState is UserModel && chatRoomModel != null
+      actions: [
+        Container(
+          width: 44,
+          height: 44,
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(right: 10),
+          child: SvgPicture.asset(
+            'assets/icons/ic_more_horiz_line_24.svg',
+            width: 24,
+            height: 24,
+          ),
+        ),
+      ],
+      child: userState is UserModel && chatRoomModel != null
           ? Container(
               color: kColorBgElevation1,
               child: Column(
@@ -89,8 +145,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             snapshot.data != null &&
                             snapshot.data!.isNotEmpty) {
                           List<ChatMsgModel> list = snapshot.data!;
-
                           return ListView.builder(
+                            controller: scrollController,
                             keyboardDismissBehavior:
                                 ScrollViewKeyboardDismissBehavior.onDrag,
                             padding: const EdgeInsets.only(
@@ -102,20 +158,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             itemBuilder: (context, index) {
                               ChatMsgModel chatMsgModel = list[index];
                               Widget widgetMsg = const Row();
-                              DateTime createDateTime = getDateTimeByTimestamp(
-                                list[index].createDate,
-                              );
+                              // DateTime createDateTime = getDateTimeByTimestamp(
+                              //   list[index].createDate,
+                              // );
                               if (chatMsgModel.chatRowType ==
                                   ChatRowType.message.name) {
                                 if (chatMsgModel.createUserId == userState.id) {
                                   // 나의 메시지
-                                  widgetMsg = _buildMyMsg(
-                                      createDateTime, context, list, index);
+                                  widgetMsg = _buildMyMsg(context, list, index);
                                 } else {
                                   // 상대방 메시지
-                                  String? text;
-                                  widgetMsg = _buildOtherMsg(list, index, text,
-                                      createDateTime, context);
+                                  widgetMsg =
+                                      _buildOtherMsg(list, index, context);
                                 }
                               } else {
                                 widgetMsg =
@@ -139,8 +193,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  Widget _buildOtherMsg(List<ChatMsgModel> list, int index, String? text,
-      DateTime createDateTime, BuildContext context) {
+  Widget _buildOtherMsg(
+      List<ChatMsgModel> list, int index, BuildContext context) {
     double topPaddingSize = 16;
     bool isProfileView = true;
     bool isMsgTimeView = true;
@@ -151,9 +205,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           list[index + 1].createUserId == list[index].createUserId) {
         // 이전 메시지가 내가 쓴 메시지라면
 
-        if (getTimestampDifference(
+        if (getTimestampDifferenceMin(
                     list[index + 1].createDate, list[index].createDate)
-                .inMinutes
                 .abs() <
             1) {
           topPaddingSize = 8; // 간격 줄이기
@@ -167,9 +220,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           list[index - 1].createUserId == list[index].createUserId) {
         // 이전 메시지가 내가 쓴 메시지라면
 
-        if (getTimestampDifference(
+        if (getTimestampDifferenceMin(
                     list[index - 1].createDate, list[index].createDate)
-                .inMinutes
                 .abs() <
             1) {
           isMsgTimeView = false; // 채팅 시간 가리기
@@ -183,35 +235,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          isProfileView
-              ? FutureBuilder(
-                  future: ref
-                      .read(usersRepositoryProvider)
-                      .getUserProfilePath(list[index].createUserId),
-                  builder: (context, snapshot) {
-                    text = snapshot.data.toString();
-                    // logger.d(text);
-                    if (snapshot.hasData) {
-                      return CircleAvatar(
-                        radius: 16,
-                        backgroundImage: const AssetImage(
-                          'assets/images/88.png',
-                        ),
-                        foregroundImage: NetworkImage(text!),
-                      );
-                    }
-                    return const CircleAvatar(
-                      radius: 16,
-                      backgroundImage: AssetImage(
-                        'assets/images/88.png',
-                      ),
-
-                      // child: ,
-                    );
-                  })
-              : const SizedBox(
+          Builder(
+            builder: (context) {
+              String? profilePath;
+              if (profilePhotoList.isNotEmpty) {
+                profilePath = profilePhotoList
+                    .singleWhere((element) =>
+                        int.parse(element.user_id) == list[index].createUserId)
+                    .profile_photo;
+              }
+              if (isProfileView) {
+                return CircleAvatar(
+                  radius: 16,
+                  backgroundImage: const AssetImage(
+                    'assets/images/88.png',
+                  ),
+                  foregroundImage:
+                      profilePath == null ? null : NetworkImage(profilePath),
+                );
+              } else {
+                return const SizedBox(
                   width: 32,
-                ),
+                );
+              }
+            },
+          ),
           const SizedBox(
             width: 8,
           ),
@@ -236,7 +284,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           if (isMsgTimeView)
             Text(
               msgDateFormat.format(
-                createDateTime,
+                list[index].createDate.toDate(),
               ),
               style: getTsCaption10Rg(context).copyWith(
                 color: kColorContentWeakest,
@@ -247,8 +295,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  Widget _buildMyMsg(DateTime createDateTime, BuildContext context,
-      List<ChatMsgModel> list, int index) {
+  Widget _buildMyMsg(BuildContext context, List<ChatMsgModel> list, int index) {
     double topPaddingSize = 16;
     bool isMsgTimeView = true;
 
@@ -258,9 +305,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           list[index + 1].createUserId == list[index].createUserId) {
         // 이전 메시지가 내가 쓴 메시지라면
 
-        if (getTimestampDifference(
+        if (getTimestampDifferenceMin(
                     list[index + 1].createDate, list[index].createDate)
-                .inMinutes
                 .abs() <
             1) {
           topPaddingSize = 8; // 간격 줄이기
@@ -273,9 +319,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           list[index - 1].createUserId == list[index].createUserId) {
         // 이전 메시지가 내가 쓴 메시지라면
 
-        if (getTimestampDifference(
+        if (getTimestampDifferenceMin(
                     list[index - 1].createDate, list[index].createDate)
-                .inMinutes
                 .abs() <
             1) {
           isMsgTimeView = false; // 채팅 시간 가리기
@@ -297,7 +342,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           if (isMsgTimeView)
             Text(
               msgDateFormat.format(
-                createDateTime,
+                list[index].createDate.toDate(),
               ),
               style: getTsCaption10Rg(context).copyWith(
                 color: kColorContentWeakest,
@@ -332,16 +377,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   Widget _buildNotice(ChatMsgModel notice, int userId) {
-    if (notice.noticeText == null) {
-      // error 경우
-      return Container();
-    }
-
     if (notice.chatRowType == ChatRowType.noticeOnlyMe.name &&
         notice.createUserId != userId) {
       // 오직 나에게만 보이는 메시지
       // 상대방의 경우 빈값을 리턴
       return Container();
+    }
+
+    if (notice.chatRowType == ChatRowType.noticeJoin.name) {
+      // 최초 참여시에 프로필 정보 업데이트
+      if (!profilePhotoList.any(
+          (element) => int.parse(element.user_id) == notice.createUserId)) {
+        // 기존에 프로필 정보가 없으면 처리
+        addProfilePhoto(notice.createUserId);
+      }
     }
     return Padding(
       padding: const EdgeInsets.only(
@@ -367,7 +416,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ),
               ),
               child: Text(
-                notice.noticeText!,
+                notice.msg,
                 style: getTsCaption12Rg(context).copyWith(
                   color: kColorContentWeakest,
                 ),
@@ -390,14 +439,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              'assets/icons/ic_image_line_24.svg',
-              width: 24,
-              height: 24,
+          GestureDetector(
+            onTap: () {
+              sendAttach();
+            },
+            child: Container(
+              width: 44,
+              height: 44,
+              padding: const EdgeInsets.all(10),
+              child: SvgPicture.asset(
+                'assets/icons/ic_image_line_24.svg',
+                width: 24,
+                height: 24,
+              ),
             ),
           ),
           Expanded(
@@ -427,8 +481,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       style: getTsBody16Rg(context).copyWith(
                         color: kColorContentWeak,
                       ),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 7),
+                      decoration: InputDecoration(
+                        hintText: '메세지 입력...',
+                        hintStyle: getTsBody16Rg(context).copyWith(
+                          color: kColorContentPlaceholder,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 7),
                         border: InputBorder.none,
                         isDense: true,
                       ),
@@ -440,11 +498,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       if (msg.isNotEmpty) {
                         ref.read(chatRepositoryProvider).sendMsg(
                               msg: msg,
+                              chatMsgType: ChatMsgType.text,
                               userId: userState.id,
                               chatRoomUid: widget.chatRoomUid,
                               chatRowType: ChatRowType.message,
                             );
                         textEditingController.text = '';
+                        scrollController.jumpTo(0);
                       }
                     },
                     child: Container(

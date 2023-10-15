@@ -115,8 +115,9 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
     //     count: await e.assetCountAsync,
     //   );
     // }).toList();
-
-    await getPhotos(_albums[0], albumChange: true);
+    if (_albums.isNotEmpty) {
+      await getPhotos(_albums[0], albumChange: true);
+    }
   }
 
   // 앨범 이미지 목록

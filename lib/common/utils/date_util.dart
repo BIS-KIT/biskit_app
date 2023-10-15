@@ -6,6 +6,6 @@ int getDayDifference(DateTime d1, DateTime d2) {
       .inDays;
 }
 
-Duration getTimestampDifference(Timestamp t1, Timestamp t2) {
-  return t1.toDate().difference(t2.toDate());
+int getTimestampDifferenceMin(Timestamp t1, Timestamp t2) {
+  return t1.toDate().minute - t2.toDate().minute;
 }

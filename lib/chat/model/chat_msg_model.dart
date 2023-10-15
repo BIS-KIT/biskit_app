@@ -8,13 +8,19 @@ enum ChatRowType {
   notice,
   noticeOnlyMe,
   noticeOther,
+  noticeJoin,
+}
+
+enum ChatMsgType {
+  text,
+  image,
 }
 
 class ChatMsgModel {
   final String uid;
   final String chatRowType;
   final String msg;
-  final String? noticeText;
+  final String msgType;
   final int createUserId;
   final dynamic createDate;
   final List<int> readUsers;
@@ -22,7 +28,7 @@ class ChatMsgModel {
     required this.uid,
     required this.chatRowType,
     required this.msg,
-    this.noticeText,
+    required this.msgType,
     required this.createUserId,
     required this.createDate,
     required this.readUsers,
@@ -32,7 +38,7 @@ class ChatMsgModel {
     String? uid,
     String? chatRowType,
     String? msg,
-    ValueGetter<String?>? noticeText,
+    String? msgType,
     int? createUserId,
     dynamic createDate,
     List<int>? readUsers,
@@ -41,7 +47,7 @@ class ChatMsgModel {
       uid: uid ?? this.uid,
       chatRowType: chatRowType ?? this.chatRowType,
       msg: msg ?? this.msg,
-      noticeText: noticeText != null ? noticeText() : this.noticeText,
+      msgType: msgType ?? this.msgType,
       createUserId: createUserId ?? this.createUserId,
       createDate: createDate ?? this.createDate,
       readUsers: readUsers ?? this.readUsers,
@@ -53,7 +59,7 @@ class ChatMsgModel {
       'uid': uid,
       'chatRowType': chatRowType,
       'msg': msg,
-      'noticeText': noticeText,
+      'msgType': msgType,
       'createUserId': createUserId,
       'createDate': createDate,
       'readUsers': readUsers,
@@ -65,7 +71,7 @@ class ChatMsgModel {
       uid: map['uid'] ?? '',
       chatRowType: map['chatRowType'] ?? '',
       msg: map['msg'] ?? '',
-      noticeText: map['noticeText'],
+      msgType: map['msgType'] ?? '',
       createUserId: map['createUserId']?.toInt() ?? 0,
       createDate: map['createDate'],
       readUsers: List<int>.from(map['readUsers']),
@@ -79,7 +85,7 @@ class ChatMsgModel {
 
   @override
   String toString() {
-    return 'ChatMsgModel(uid: $uid, chatRowType: $chatRowType, msg: $msg, noticeText: $noticeText, createUserId: $createUserId, createDate: $createDate, readUsers: $readUsers)';
+    return 'ChatMsgModel(uid: $uid, chatRowType: $chatRowType, msg: $msg, msgType: $msgType, createUserId: $createUserId, createDate: $createDate, readUsers: $readUsers)';
   }
 
   @override
@@ -90,7 +96,7 @@ class ChatMsgModel {
         other.uid == uid &&
         other.chatRowType == chatRowType &&
         other.msg == msg &&
-        other.noticeText == noticeText &&
+        other.msgType == msgType &&
         other.createUserId == createUserId &&
         other.createDate == createDate &&
         listEquals(other.readUsers, readUsers);
@@ -101,7 +107,7 @@ class ChatMsgModel {
     return uid.hashCode ^
         chatRowType.hashCode ^
         msg.hashCode ^
-        noticeText.hashCode ^
+        msgType.hashCode ^
         createUserId.hashCode ^
         createDate.hashCode ^
         readUsers.hashCode;

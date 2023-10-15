@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,6 +69,29 @@ class ProfileRepository {
     }
 
     return isOk;
+  }
+
+  getProfilePhotos(List<int> userIds) async {
+    List<ProfilePhotoModel> profilePhotoModel = [];
+    final res = await dio.get(
+      '$baseUrl/photos',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+      queryParameters: {
+        'user_ids': userIds,
+      },
+    );
+
+    // logger.d(res.toString());
+    if (res.statusCode == 200 && res.data != null) {
+      profilePhotoModel = List.from(res.data
+          .map((e) => ProfilePhotoModel.fromMap(e as Map<String, dynamic>)));
+    }
+    return profilePhotoModel;
   }
 
   createProfile({

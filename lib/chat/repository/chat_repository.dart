@@ -86,10 +86,10 @@ class ChatRepository {
 
   sendMsg({
     required String msg,
+    required ChatMsgType chatMsgType,
     required int userId,
     required String chatRoomUid,
     required ChatRowType chatRowType,
-    String? noticeText,
   }) async {
     String msgUid = firebaseFirestore
         .collection('ChatRoom')
@@ -107,11 +107,11 @@ class ChatRepository {
           ChatMsgModel(
             uid: msgUid,
             msg: msg,
+            msgType: chatMsgType.name,
             createDate: Timestamp.now(),
             createUserId: userId,
             readUsers: [userId],
             chatRowType: chatRowType.name,
-            noticeText: noticeText,
           ).toMap(),
         );
 
@@ -192,8 +192,8 @@ class ChatRepository {
 
     // 최초 입장시 안내문구 : 입장문구
     await sendMsg(
-      msg: '',
-      noticeText:
+      chatMsgType: ChatMsgType.text,
+      msg:
           '비스킷은 서로가 신뢰할 수 있는 커뮤니티를 만들어가고 있어요. 여기다가 맨처음 들어오면 알려줄 안내사항 적으면 될듯? 뭐라고 적지',
       userId: user.id,
       chatRoomUid: chatRoom.uid,
@@ -201,11 +201,11 @@ class ChatRepository {
     );
     // 최초 입장시 안내문구 : 참여문구
     sendMsg(
-      msg: '',
-      noticeText: '${user.profile!.nick_name}님이 참여했습니다.',
+      chatMsgType: ChatMsgType.text,
+      msg: '${user.profile!.nick_name}님이 참여했습니다.',
       userId: user.id,
       chatRoomUid: chatRoom.uid,
-      chatRowType: ChatRowType.notice,
+      chatRowType: ChatRowType.noticeJoin,
     );
   }
 }
