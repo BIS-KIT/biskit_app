@@ -13,6 +13,7 @@ class DefaultLayout extends StatelessWidget {
   final List<Widget>? actions;
   final bool resizeToAvoidBottomInset;
 
+  final ShapeBorder? shape;
   const DefaultLayout({
     Key? key,
     this.backgroundColor,
@@ -22,6 +23,7 @@ class DefaultLayout extends StatelessWidget {
     this.floatingActionButton,
     this.actions,
     this.resizeToAvoidBottomInset = true,
+    this.shape,
   }) : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class DefaultLayout extends StatelessWidget {
         surfaceTintColor: backgroundColor ?? kColorBgDefault,
         elevation: 0,
         centerTitle: true,
+        shape: shape,
         title: Text(
           title!,
           style: getTsHeading18(context).copyWith(

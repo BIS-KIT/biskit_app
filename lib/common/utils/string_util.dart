@@ -48,3 +48,7 @@ String getLevelSubTitle(int level) {
       return '대부분의 것들을 편히 이해할 수 있어요';
   }
 }
+
+DateTime getDateTimeByTimestamp(dynamic timestamp) {
+  return timestamp.toDate().toLocal();
+}
