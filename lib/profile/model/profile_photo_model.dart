@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 class ProfilePhotoModel {
-  final String user_id;
+  final int user_id;
   final String? profile_photo;
   final String nick_name;
   ProfilePhotoModel({
@@ -13,7 +13,7 @@ class ProfilePhotoModel {
   });
 
   ProfilePhotoModel copyWith({
-    String? user_id,
+    int? user_id,
     String? profile_photo,
     String? nick_name,
   }) {
@@ -34,7 +34,7 @@ class ProfilePhotoModel {
 
   factory ProfilePhotoModel.fromMap(Map<String, dynamic> map) {
     return ProfilePhotoModel(
-      user_id: map['user_id'] ?? '',
+      user_id: map['user_id']?.toInt() ?? 0,
       profile_photo: map['profile_photo'],
       nick_name: map['nick_name'] ?? '',
     );

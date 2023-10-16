@@ -241,7 +241,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               if (profilePhotoList.isNotEmpty) {
                 profilePath = profilePhotoList
                     .singleWhere((element) =>
-                        int.parse(element.user_id) == list[index].createUserId)
+                        element.user_id == list[index].createUserId)
                     .profile_photo;
               }
               if (isProfileView) {
@@ -386,8 +386,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     if (notice.chatRowType == ChatRowType.noticeJoin.name) {
       // 최초 참여시에 프로필 정보 업데이트
-      if (!profilePhotoList.any(
-          (element) => int.parse(element.user_id) == notice.createUserId)) {
+      if (!profilePhotoList
+          .any((element) => element.user_id == notice.createUserId)) {
         // 기존에 프로필 정보가 없으면 처리
         addProfilePhoto(notice.createUserId);
       }
