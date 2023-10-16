@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
@@ -59,10 +60,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   fetchChatRoomUserProfile() async {
-    profilePhotoList = await ref
+    // profilePhotoList =
+    List<ProfilePhotoModel> list = await ref
         .read(profileRepositoryProvider)
         .getProfilePhotos(chatRoomModel!.joinUsers);
-    setState(() {});
+    setState(() {
+      profilePhotoList = list;
+    });
   }
 
   fetchChatRoom() async {
@@ -237,21 +241,54 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         children: [
           Builder(
             builder: (context) {
-              String? profilePath;
+              ProfilePhotoModel? profilePhotoModel;
               if (profilePhotoList.isNotEmpty) {
-                profilePath = profilePhotoList
-                    .singleWhere((element) =>
-                        element.user_id == list[index].createUserId)
-                    .profile_photo;
+                profilePhotoModel = profilePhotoList.firstWhere(
+                  (element) => element.user_id == list[index].createUserId,
+                );
               }
+              // logger.d('BUILD!!!!');
               if (isProfileView) {
-                return CircleAvatar(
-                  radius: 16,
-                  backgroundImage: const AssetImage(
-                    'assets/images/88.png',
-                  ),
-                  foregroundImage:
-                      profilePath == null ? null : NetworkImage(profilePath),
+                return Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundImage: const AssetImage(
+                        'assets/images/88.png',
+                      ),
+                      foregroundImage: profilePhotoModel?.profile_photo == null
+                          ? null
+                          : NetworkImage(profilePhotoModel!.profile_photo!),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: kColorBorderStrong,
+                            width: 1,
+                          ),
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: profilePhotoModel!.nationalities.isEmpty
+                            ? Container()
+                            : ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(16)),
+                                child: SvgPicture.network(
+                                  '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
+                                  width: 16,
+                                  height: 16,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
                 );
               } else {
                 return const SizedBox(
@@ -387,7 +424,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     if (notice.chatRowType == ChatRowType.noticeJoin.name) {
       // 최초 참여시에 프로필 정보 업데이트
       if (!profilePhotoList
-          .any((element) => element.user_id == notice.createUserId)) {
+              .any((element) => element.user_id == notice.createUserId) &&
+          profilePhotoList.isNotEmpty) {
         // 기존에 프로필 정보가 없으면 처리
         addProfilePhoto(notice.createUserId);
       }

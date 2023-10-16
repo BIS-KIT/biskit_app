@@ -75,6 +75,7 @@ class ProfileRepository {
     List<ProfilePhotoModel> profilePhotoModel = [];
     final res = await dio.get(
       '$baseUrl/photos',
+      // '$baseUrl/photos?${userIds.map((e) => 'user_ids=$e&').join('')}',
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ class ProfileRepository {
       },
     );
 
-    // logger.d(res.toString());
+    logger.d(res.toString());
     if (res.statusCode == 200 && res.data != null) {
       profilePhotoModel = List.from(res.data
           .map((e) => ProfilePhotoModel.fromMap(e as Map<String, dynamic>)));
