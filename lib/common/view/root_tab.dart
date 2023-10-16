@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
@@ -5,15 +7,15 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../utils/date_util.dart';
 
 class RootTab extends ConsumerStatefulWidget {
   static String get routeName => 'home';
@@ -27,13 +29,13 @@ class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
   int index = 0;
   late TabController controller;
-  final DateFormat dayFormat = DateFormat('MM월 dd일', 'ko');
+  // final DateFormat dayFormat = DateFormat('MM월 dd일', 'ko');
 
   @override
   void initState() {
     super.initState();
 
-    controller = TabController(length: 3, vsync: this);
+    controller = TabController(length: 5, vsync: this);
 
     controller.addListener(tabListener);
   }
@@ -56,33 +58,50 @@ class _RootTabState extends ConsumerState<RootTab>
     final userState = ref.watch(userMeProvider);
     // logger.d((userState as UserModel).toJson());
     return DefaultLayout(
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey.shade500,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          controller.animateTo(index);
-        },
-        currentIndex: index,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        iconSize: 26,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: '홈',
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(
+          bottom: Platform.isIOS ? 28 : 0,
+          left: 8,
+          right: 8,
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: kColorBorderWeak,
+            width: 1,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.tickets),
-            label: '이용권',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.perm_identity_rounded),
-            label: 'My',
-          ),
-        ],
+        ),
+        child: BottomNavigationBar(
+          elevation: 0,
+          selectedFontSize: 0,
+          unselectedFontSize: 0,
+          backgroundColor: kColorBgDefault,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            controller.animateTo(index);
+          },
+          currentIndex: index,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: [
+            _buildBottomItem(
+              iconPath: 'assets/icons/ic_home_fill_24.svg',
+              label: '홈',
+            ),
+            _buildBottomItem(
+              iconPath: 'assets/icons/ic_search_line_24.svg',
+              label: '검색',
+            ),
+            _buildBottomCenterItem(),
+            _buildBottomItem(
+              iconPath: 'assets/icons/ic_chat_fill_24.svg',
+              label: '채팅',
+            ),
+            _buildBottomItem(
+              iconPath: 'assets/icons/ic_person_fill_24.svg',
+              label: '프로필',
+            ),
+          ],
+        ),
       ),
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
@@ -126,10 +145,73 @@ class _RootTabState extends ConsumerState<RootTab>
                   ],
                 )
               : Container(),
+          Container(),
           userState is UserModel ? _buildGroupTap(userState) : Container(),
           userState is UserModel ? _buildChatTap(userState) : Container(),
+          Container(),
         ],
       ),
+    );
+  }
+
+  BottomNavigationBarItem _buildBottomCenterItem() {
+    return BottomNavigationBarItem(
+      icon: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: kColorBgPrimary,
+        ),
+        child: SvgPicture.asset(
+          'assets/icons/ic_plus_line_24.svg',
+          width: 24,
+          height: 24,
+          colorFilter: const ColorFilter.mode(
+            kColorContentOnBgPrimary,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
+      label: '',
+    );
+  }
+
+  BottomNavigationBarItem _buildBottomItem({
+    required String iconPath,
+    required String label,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 16,
+        ),
+        child: SvgPicture.asset(
+          iconPath,
+          width: 32,
+          height: 32,
+          colorFilter: const ColorFilter.mode(
+            kColorContentPlaceholder,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
+      activeIcon: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 16,
+        ),
+        child: SvgPicture.asset(
+          iconPath,
+          width: 32,
+          height: 32,
+          colorFilter: const ColorFilter.mode(
+            kColorContentDefault,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
+      label: label,
     );
   }
 
@@ -266,10 +348,8 @@ class _RootTabState extends ConsumerState<RootTab>
                                     Text(
                                       docs[index].lastMsgDate == null
                                           ? ''
-                                          : dayFormat.format(
-                                              getDateTimeByTimestamp(
-                                                  docs[index].lastMsgDate),
-                                            ),
+                                          : getDateTimeToString(
+                                              docs[index].lastMsgDate.toDate()),
                                       style: getTsCaption12Rg(context).copyWith(
                                         color: kColorContentWeakest,
                                       ),
@@ -392,7 +472,7 @@ class _RootTabState extends ConsumerState<RootTab>
                                   Text(
                                     docs[index].createDate == null
                                         ? ''
-                                        : '개설일 : ${dayFormat.format(getDateTimeByTimestamp(docs[index].createDate))}',
+                                        : '개설일 : ${getDateTimeToString(docs[index].createDate.toDate())}',
                                   ),
                                 ],
                               ),
