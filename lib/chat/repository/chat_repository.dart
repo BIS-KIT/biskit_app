@@ -114,14 +114,16 @@ class ChatRepository {
             chatRowType: chatRowType.name,
           ).toMap(),
         );
-
-    // chat room last msg
-    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
-      'lastMsgUid': msgUid,
-      'lastMsg': msg,
-      'lastMsgDate': Timestamp.now(),
-      'lastMsgReadUsers': [userId],
-    });
+    if (chatRowType == ChatRowType.message) {
+      // 메시지인 경우에 마지막 메시지를 넣어준다
+      // chat room last msg
+      await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
+        'lastMsgUid': msgUid,
+        'lastMsg': msg,
+        'lastMsgDate': Timestamp.now(),
+        'lastMsgReadUsers': [userId],
+      });
+    }
   }
 
   Stream<List<ChatMsgModel>> getChatMsgStream({
