@@ -21,6 +21,7 @@ const Color kColorBgDimmed = Color(0x7f000000);
 const Color kColorBorderPrimary = Color(0xffffe433);
 const Color kColorBorderPrimaryStrong = Color(0xffffd01c);
 const Color kColorBorderDefalut = Color(0xffe4e9f1);
+const Color kColorBorderWeak = Color(0xfff1f4f9);
 const Color kColorBorderStrong = Color(0xffd3d9e2);
 const Color kColorBorderStronger = Color(0xff677389);
 const Color kColorBorderOnBgInverse = Color(0xff465063);
