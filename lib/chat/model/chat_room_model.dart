@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
@@ -66,6 +66,7 @@ class ChatRoomModel {
   final String? roomImagePath;
   final String? lastMsgUid;
   final String? lastMsg;
+  final String? lastMsgType;
   final dynamic lastMsgDate;
   final List<int> lastMsgReadUsers;
   final int createUserId;
@@ -78,6 +79,7 @@ class ChatRoomModel {
     this.roomImagePath,
     this.lastMsgUid,
     this.lastMsg,
+    this.lastMsgType,
     this.lastMsgDate,
     required this.lastMsgReadUsers,
     required this.createUserId,
@@ -92,6 +94,7 @@ class ChatRoomModel {
     String? roomImagePath,
     String? lastMsgUid,
     String? lastMsg,
+    String? lastMsgType,
     dynamic lastMsgDate,
     List<int>? lastMsgReadUsers,
     int? createUserId,
@@ -105,6 +108,7 @@ class ChatRoomModel {
       roomImagePath: roomImagePath ?? this.roomImagePath,
       lastMsgUid: lastMsgUid ?? this.lastMsgUid,
       lastMsg: lastMsg ?? this.lastMsg,
+      lastMsgType: lastMsgType ?? this.lastMsgType,
       lastMsgDate: lastMsgDate ?? this.lastMsgDate,
       lastMsgReadUsers: lastMsgReadUsers ?? this.lastMsgReadUsers,
       createUserId: createUserId ?? this.createUserId,
@@ -121,6 +125,7 @@ class ChatRoomModel {
       'roomImagePath': roomImagePath,
       'lastMsgUid': lastMsgUid,
       'lastMsg': lastMsg,
+      'lastMsgType': lastMsgType,
       'lastMsgDate': lastMsgDate,
       'lastMsgReadUsers': lastMsgReadUsers,
       'createUserId': createUserId,
@@ -139,6 +144,7 @@ class ChatRoomModel {
       roomImagePath: map['roomImagePath'],
       lastMsgUid: map['lastMsgUid'],
       lastMsg: map['lastMsg'],
+      lastMsgType: map['lastMsgType'],
       lastMsgDate: map['lastMsgDate'],
       lastMsgReadUsers: List<int>.from(map['lastMsgReadUsers']),
       createUserId: map['createUserId']?.toInt() ?? 0,
@@ -153,12 +159,13 @@ class ChatRoomModel {
 
   @override
   String toString() {
-    return 'ChatRoomModel(uid: $uid, title: $title, joinUsers: $joinUsers, firstUserInfoList: $firstUserInfoList, roomImagePath: $roomImagePath, lastMsgUid: $lastMsgUid, lastMsg: $lastMsg, lastMsgDate: $lastMsgDate, lastMsgReadUsers: $lastMsgReadUsers, createUserId: $createUserId, createDate: $createDate)';
+    return 'ChatRoomModel(uid: $uid, title: $title, joinUsers: $joinUsers, firstUserInfoList: $firstUserInfoList, roomImagePath: $roomImagePath, lastMsgUid: $lastMsgUid, lastMsg: $lastMsg, lastMsgType: $lastMsgType, lastMsgDate: $lastMsgDate, lastMsgReadUsers: $lastMsgReadUsers, createUserId: $createUserId, createDate: $createDate)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is ChatRoomModel &&
         other.uid == uid &&
@@ -168,6 +175,7 @@ class ChatRoomModel {
         other.roomImagePath == roomImagePath &&
         other.lastMsgUid == lastMsgUid &&
         other.lastMsg == lastMsg &&
+        other.lastMsgType == lastMsgType &&
         other.lastMsgDate == lastMsgDate &&
         listEquals(other.lastMsgReadUsers, lastMsgReadUsers) &&
         other.createUserId == createUserId &&
@@ -183,6 +191,7 @@ class ChatRoomModel {
         roomImagePath.hashCode ^
         lastMsgUid.hashCode ^
         lastMsg.hashCode ^
+        lastMsgType.hashCode ^
         lastMsgDate.hashCode ^
         lastMsgReadUsers.hashCode ^
         createUserId.hashCode ^
