@@ -83,8 +83,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   // 이미지 보내기
-  sendAttach() async {
-    final result = await Navigator.push(
+  sendAttach(UserModel userState) async {
+    final List<PhotoModel> result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const PhotoManagerScreen(
@@ -93,7 +93,36 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
       ),
     );
-    logger.d(result);
+    if (result.isNotEmpty) {
+      logger.d(result);
+      // 이미지 메시지 처리
+      String? msgUid = await ref.read(chatRepositoryProvider).sendMsg(
+            msg: '',
+            chatMsgType: ChatMsgType.image,
+            userId: userState.id,
+            chatRoomUid: widget.chatRoomUid,
+            chatRowType: ChatRowType.message,
+          );
+      if (msgUid != null) {
+        // 이미지 업로드 처리
+        String? imagePath =
+            await ref.read(chatRepositoryProvider).postChatUpload(
+                  chatRoomUid: widget.chatRoomUid,
+                  msgUid: msgUid,
+                  result: result,
+                );
+        if (imagePath != null) {
+          logger.d(imagePath);
+          ref.read(chatRepositoryProvider).updateMsg(
+            chatRoomUid: widget.chatRoomUid,
+            msgUid: msgUid,
+            data: {
+              'msg': imagePath,
+            },
+          );
+        }
+      }
+    }
   }
 
   @override
@@ -300,21 +329,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const SizedBox(
             width: 8,
           ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 12,
-              ),
-              decoration: const BoxDecoration(
-                color: kColorBgDefault,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Text(
-                list[index].msg,
-              ),
-            ),
-          ),
+          _buildMsgBubble(list[index], false),
+          // Flexible(
+          //   child: Container(
+          //     padding: const EdgeInsets.symmetric(
+          //       vertical: 8,
+          //       horizontal: 12,
+          //     ),
+          //     decoration: const BoxDecoration(
+          //       color: kColorBgDefault,
+          //       borderRadius: BorderRadius.all(Radius.circular(12)),
+          //     ),
+          //     child: Text(
+          //       list[index].msg,
+          //     ),
+          //   ),
+          // ),
           const SizedBox(
             width: 4,
           ),
@@ -388,28 +418,55 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const SizedBox(
             width: 4,
           ),
-          Flexible(
-            child: Container(
+          _buildMsgBubble(list[index], true),
+        ],
+      ),
+    );
+  }
+
+  Flexible _buildMsgBubble(
+    ChatMsgModel chatMsgModel,
+    bool isMe,
+  ) {
+    return Flexible(
+      child: chatMsgModel.msgType == ChatMsgType.text.name
+          ? Container(
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
                 horizontal: 12,
               ),
-              decoration: const BoxDecoration(
-                color: kColorBgPrimary,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: isMe ? kColorBgPrimary : kColorBgDefault,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(12),
                 ),
               ),
               child: Text(
-                list[index].msg,
+                chatMsgModel.msg,
                 style: const TextStyle(
                   overflow: TextOverflow.clip,
                 ),
               ),
+            )
+          : Container(
+              width: 180,
+              height: 144,
+              decoration: BoxDecoration(
+                color: isMe ? kColorBgPrimary : kColorBgDefault,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(12),
+                ),
+                image: chatMsgModel.msg.isEmpty
+                    ? null
+                    : DecorationImage(
+                        image: NetworkImage(
+                          chatMsgModel.msg,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+              ),
+              // child: chatMsgModel.msg.isEmpty ? const CustomLoading() : null,
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -479,7 +536,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              sendAttach();
+              sendAttach(userState);
             },
             child: Container(
               width: 44,

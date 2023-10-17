@@ -1,4 +1,6 @@
-import 'package:biskit_app/user/model/user_model.dart';
+import 'dart:io';
+
+import 'package:biskit_app/common/const/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,22 +10,27 @@ import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/provider/firebase_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/user/repository/users_repository.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 
 final chatRepositoryProvider = Provider<ChatRepository>((ref) => ChatRepository(
       dio: ref.watch(dioProvider),
+      userModel: ref.watch(userMeProvider),
       firebaseFirestore: ref.watch(firebaseFirestoreProvider),
-      usersRepository: ref.watch(usersRepositoryProvider),
+      baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion/chat',
     ));
 
 class ChatRepository {
   final Dio dio;
+  final UserModelBase? userModel;
   final FirebaseFirestore firebaseFirestore;
-  final UsersRepository usersRepository;
+  final String baseUrl;
   ChatRepository({
     required this.dio,
+    required this.userModel,
     required this.firebaseFirestore,
-    required this.usersRepository,
+    required this.baseUrl,
   });
 
   Stream<QuerySnapshot> get allChatRoomListStream => firebaseFirestore
@@ -84,7 +91,22 @@ class ChatRepository {
         .snapshots();
   }
 
-  sendMsg({
+  void updateMsg({
+    required String chatRoomUid,
+    required String msgUid,
+    required Map<String, String> data,
+  }) async {
+    await firebaseFirestore
+        .collection('ChatRoom')
+        .doc(chatRoomUid)
+        .collection('Messages')
+        .doc(msgUid)
+        .update(
+          data,
+        );
+  }
+
+  Future<String?> sendMsg({
     required String msg,
     required ChatMsgType chatMsgType,
     required int userId,
@@ -98,21 +120,22 @@ class ChatRepository {
         .doc()
         .id;
     logger.d('Create Message UID : $msgUid');
+    ChatMsgModel chatMsgModel = ChatMsgModel(
+      uid: msgUid,
+      msg: msg,
+      msgType: chatMsgType.name,
+      createDate: Timestamp.now(),
+      createUserId: userId,
+      readUsers: [userId],
+      chatRowType: chatRowType.name,
+    );
     await firebaseFirestore
         .collection('ChatRoom')
         .doc(chatRoomUid)
         .collection('Messages')
         .doc(msgUid)
         .set(
-          ChatMsgModel(
-            uid: msgUid,
-            msg: msg,
-            msgType: chatMsgType.name,
-            createDate: Timestamp.now(),
-            createUserId: userId,
-            readUsers: [userId],
-            chatRowType: chatRowType.name,
-          ).toMap(),
+          chatMsgModel.toMap(),
         );
     if (chatRowType == ChatRowType.message) {
       // 메시지인 경우에 마지막 메시지를 넣어준다
@@ -122,8 +145,11 @@ class ChatRepository {
         'lastMsg': msg,
         'lastMsgDate': Timestamp.now(),
         'lastMsgReadUsers': [userId],
+        'lastMsgType': chatMsgType.name,
       });
     }
+
+    return msgUid;
   }
 
   Stream<List<ChatMsgModel>> getChatMsgStream({
@@ -209,5 +235,67 @@ class ChatRepository {
       chatRoomUid: chatRoom.uid,
       chatRowType: ChatRowType.noticeJoin,
     );
+  }
+
+  Future<String?> postChatUpload({
+    required String chatRoomUid,
+    required String msgUid,
+    required List<PhotoModel> result,
+  }) async {
+    String? path;
+    if (userModel is UserModel) {
+      File? file;
+      PhotoModel photoModel = result[0];
+      if (photoModel.photoType == PhotoType.asset) {
+        file = await photoModel.assetEntity!.originFile;
+      } else {
+        file = File(photoModel.cameraXfile!.path);
+      }
+
+      Response? res;
+
+      try {
+        // 메시지 파이어베이스 아이디값 가져오기
+        // String msgUid = firebaseFirestore
+        //     .collection('ChatRoom')
+        //     .doc(chatRoomUid)
+        //     .collection('Messages')
+        //     .doc()
+        //     .id;
+
+        res = await dio.post(
+          '$baseUrl/upload',
+          options: Options(
+            headers: {
+              'Content-Type':
+                  file == null ? 'application/json' : 'multipart/form-data',
+              'Accept': 'application/json',
+            },
+          ),
+          queryParameters: {
+            'chat_id': chatRoomUid,
+            'message_id': msgUid,
+          },
+          data: file == null
+              ? null
+              : FormData.fromMap({
+                  'photo': [
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: file.path.split('/').last,
+                    ),
+                  ],
+                }),
+        );
+
+        if (res.statusCode == 200) {
+          logger.d(res);
+          path = res.data['image_url'];
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+    return path;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
@@ -324,7 +325,10 @@ class _RootTabState extends ConsumerState<RootTab>
                                             element.userId == userState.id)
                                         .isNotEmpty)
                                       Text(
-                                        docs[index].lastMsg ?? '',
+                                        docs[index].lastMsgType ==
+                                                ChatMsgType.text.name
+                                            ? docs[index].lastMsg ?? ''
+                                            : '사진',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: getTsBody14Rg(context).copyWith(
