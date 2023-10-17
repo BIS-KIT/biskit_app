@@ -381,7 +381,27 @@ class _RootTabState extends ConsumerState<RootTab>
                       itemCount: docs.length,
                     );
                   } else {
-                    return const Center(child: Text('데이터 없음'));
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/ic_chat_fill_24.svg',
+                            width: 56,
+                            height: 56,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            '채팅방이 없어요',
+                            style: getTsBody16Rg(context).copyWith(
+                              color: kColorContentWeakest,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   }
                 }
               },
