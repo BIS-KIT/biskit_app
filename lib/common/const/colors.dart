@@ -2,6 +2,8 @@ import 'dart:ui';
 
 const Color kColorBiskitNavy = Color(0xFF0C1142);
 
+// Base Color
+const Color kColorBaseBlack = Color(0xff000000);
 // Background Color
 const Color kColorBgPrimaryWeak = Color(0xfffdfade);
 const Color kColorBgPrimary = Color(0xfffef076);

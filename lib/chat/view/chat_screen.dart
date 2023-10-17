@@ -2,9 +2,9 @@
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/common/view/photo_view_screen.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,6 +18,8 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+
+import '../../common/utils/date_util.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String chatRoomUid;
@@ -159,108 +161,274 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
       ],
       child: userState is UserModel && chatRoomModel != null
-          ? Container(
-              color: kColorBgElevation1,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: ref.read(chatRepositoryProvider).getChatMsgStream(
-                            chatRoomUid: widget.chatRoomUid,
-                            fromTimestamp: chatRoomModel!.firstUserInfoList
-                                .singleWhere(
-                                    (element) => element.userId == userState.id)
-                                .firstJoinDate,
-                            limit: 60,
-                          ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData &&
-                            snapshot.data != null &&
-                            snapshot.data!.isNotEmpty) {
-                          List<ChatMsgModel> list = snapshot.data!;
-                          return ListView.builder(
-                            controller: scrollController,
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            padding: const EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                            ),
-                            reverse: true,
-                            itemCount: list.length,
-                            itemBuilder: (context, index) {
-                              ChatMsgModel chatMsgModel = list[index];
-                              Widget widgetMsg = const Row();
-                              // DateTime createDateTime = getDateTimeByTimestamp(
-                              //   list[index].createDate,
-                              // );
-                              if (chatMsgModel.chatRowType ==
-                                  ChatRowType.message.name) {
-                                if (chatMsgModel.createUserId == userState.id) {
-                                  // 나의 메시지
-                                  widgetMsg = _buildMyMsg(context, list, index);
-                                } else {
-                                  // 상대방 메시지
-                                  widgetMsg =
-                                      _buildOtherMsg(list, index, context);
-                                }
-                              } else {
-                                widgetMsg =
-                                    _buildNotice(list[index], userState.id);
-                              }
+          ? Stack(
+              children: [
+                Container(
+                  color: kColorBgElevation1,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: StreamBuilder(
+                          stream: ref
+                              .read(chatRepositoryProvider)
+                              .getChatMsgStream(
+                                chatRoomUid: widget.chatRoomUid,
+                                fromTimestamp: chatRoomModel!.firstUserInfoList
+                                    .singleWhere((element) =>
+                                        element.userId == userState.id)
+                                    .firstJoinDate,
+                                limit: 60,
+                              ),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData &&
+                                snapshot.data != null &&
+                                snapshot.data!.isNotEmpty) {
+                              List<ChatMsgModel> list = snapshot.data!;
+                              return ListView.builder(
+                                controller: scrollController,
+                                keyboardDismissBehavior:
+                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                padding: const EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                ),
+                                reverse: true,
+                                itemCount: list.length,
+                                itemBuilder: (context, index) {
+                                  ChatMsgModel chatMsgModel = list[index];
+                                  Widget widgetMsg = const Row();
 
-                              return widgetMsg;
-                            },
-                          );
-                        } else {
-                          return const Text('데이터 없음');
-                        }
-                      },
-                    ),
+                                  double topPaddingSize = 16;
+                                  bool isProfileView = true;
+                                  bool isMsgTimeView = true;
+                                  bool isDayNoticeView = false;
+
+                                  if (index + 1 < list.length) {
+                                    // 이 후 메시지 값을 가져온다
+
+                                    // 1일 차이가 나는지 확인
+                                    if (getDayDifference(
+                                          list[index + 1].createDate.toDate(),
+                                          list[index].createDate.toDate(),
+                                        ).abs() >
+                                        0) {
+                                      isDayNoticeView = true;
+                                    } else {
+                                      isDayNoticeView = false;
+                                    }
+
+                                    if (list[index + 1].chatRowType ==
+                                            ChatRowType.message.name &&
+                                        list[index + 1].createUserId ==
+                                            list[index].createUserId) {
+                                      // 이전 메시지가 내가 쓴 메시지라면
+
+                                      if (getTimestampDifferenceMin(
+                                                  list[index + 1].createDate,
+                                                  list[index].createDate)
+                                              .abs() <
+                                          1) {
+                                        topPaddingSize =
+                                            isDayNoticeView ? 16 : 8; // 간격 줄이기
+                                        isProfileView = false; // 프로파일 가리기
+                                      }
+                                    }
+                                  }
+                                  if (index - 1 >= 0) {
+                                    // 이 전 메시지 값을 가져온다
+                                    if (list[index - 1].chatRowType ==
+                                            ChatRowType.message.name &&
+                                        list[index - 1].createUserId ==
+                                            list[index].createUserId) {
+                                      // 이전 메시지가 내가 쓴 메시지라면
+
+                                      if (getTimestampDifferenceMin(
+                                                  list[index - 1].createDate,
+                                                  list[index].createDate)
+                                              .abs() <
+                                          1) {
+                                        isMsgTimeView = false; // 채팅 시간 가리기
+                                      }
+                                    }
+                                  }
+
+                                  if (chatMsgModel.chatRowType ==
+                                      ChatRowType.message.name) {
+                                    if (chatMsgModel.createUserId ==
+                                        userState.id) {
+                                      // 나의 메시지
+                                      widgetMsg = _buildMyMsg(
+                                        context,
+                                        list[index],
+                                        topPaddingSize,
+                                        isMsgTimeView,
+                                      );
+                                    } else {
+                                      // 상대방 메시지
+                                      widgetMsg = _buildOtherMsg(
+                                        context,
+                                        list[index],
+                                        topPaddingSize,
+                                        isMsgTimeView,
+                                        isProfileView,
+                                      );
+                                    }
+                                  } else {
+                                    widgetMsg =
+                                        _buildNotice(list[index], userState.id);
+                                  }
+
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      if (isDayNoticeView)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 16,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              _buildNoticeBubble(
+                                                '${dayFormat.format(list[index].createDate.toDate())}요일',
+                                                null,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      widgetMsg,
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Text('데이터 없음');
+                            }
+                          },
+                        ),
+                      ),
+                      _buildInput(context, userState),
+                    ],
                   ),
-                  _buildInput(context, userState),
-                ],
-              ),
+                ),
+
+                // 모임카드
+                Container(
+                  margin: const EdgeInsets.only(
+                    top: 8,
+                    left: 20,
+                    right: 20,
+                  ),
+                  padding: const EdgeInsets.only(
+                    top: 12,
+                    left: 16,
+                    bottom: 12,
+                    right: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kColorBgDefault,
+                    border: Border.all(
+                      width: 1,
+                      color: kColorBorderDefalut,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/ic_calendar_check_fill_24.svg',
+                        width: 20,
+                        height: 20,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentWeaker,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              '10/16',
+                              style: getTsBody14Rg(context).copyWith(
+                                color: kColorContentWeak,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              '·',
+                              style: getTsBody14Rg(context).copyWith(
+                                color: kColorContentWeak,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              '오후 2:00',
+                              style: getTsBody14Rg(context).copyWith(
+                                color: kColorContentWeak,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              '·',
+                              style: getTsBody14Rg(context).copyWith(
+                                color: kColorContentWeak,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: Text(
+                                '장소명',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: getTsBody14Rg(context).copyWith(
+                                  color: kColorContentWeak,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      SvgPicture.asset(
+                        'assets/icons/ic_chevron_right_line_24.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentWeaker,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             )
           : Container(),
     );
   }
 
   Widget _buildOtherMsg(
-      List<ChatMsgModel> list, int index, BuildContext context) {
-    double topPaddingSize = 16;
-    bool isProfileView = true;
-    bool isMsgTimeView = true;
-
-    if (index + 1 < list.length) {
-      // 이 후 메시지 값을 가져온다
-      if (list[index + 1].chatRowType == ChatRowType.message.name &&
-          list[index + 1].createUserId == list[index].createUserId) {
-        // 이전 메시지가 내가 쓴 메시지라면
-
-        if (getTimestampDifferenceMin(
-                    list[index + 1].createDate, list[index].createDate)
-                .abs() <
-            1) {
-          topPaddingSize = 8; // 간격 줄이기
-          isProfileView = false; // 프로파일 가리기
-        }
-      }
-    }
-    if (index - 1 >= 0) {
-      // 이 전 메시지 값을 가져온다
-      if (list[index - 1].chatRowType == ChatRowType.message.name &&
-          list[index - 1].createUserId == list[index].createUserId) {
-        // 이전 메시지가 내가 쓴 메시지라면
-
-        if (getTimestampDifferenceMin(
-                    list[index - 1].createDate, list[index].createDate)
-                .abs() <
-            1) {
-          isMsgTimeView = false; // 채팅 시간 가리기
-        }
-      }
-    }
+    BuildContext context,
+    ChatMsgModel chatMsgModel,
+    double topPaddingSize,
+    bool isMsgTimeView,
+    bool isProfileView,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
         top: topPaddingSize,
@@ -273,7 +441,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ProfilePhotoModel? profilePhotoModel;
               if (profilePhotoList.isNotEmpty) {
                 profilePhotoModel = profilePhotoList.firstWhere(
-                  (element) => element.user_id == list[index].createUserId,
+                  (element) => element.user_id == chatMsgModel.createUserId,
                 );
               }
               // logger.d('BUILD!!!!');
@@ -329,29 +497,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const SizedBox(
             width: 8,
           ),
-          _buildMsgBubble(list[index], false),
-          // Flexible(
-          //   child: Container(
-          //     padding: const EdgeInsets.symmetric(
-          //       vertical: 8,
-          //       horizontal: 12,
-          //     ),
-          //     decoration: const BoxDecoration(
-          //       color: kColorBgDefault,
-          //       borderRadius: BorderRadius.all(Radius.circular(12)),
-          //     ),
-          //     child: Text(
-          //       list[index].msg,
-          //     ),
-          //   ),
-          // ),
+          _buildMsgBubble(chatMsgModel, false),
           const SizedBox(
             width: 4,
           ),
           if (isMsgTimeView)
             Text(
               msgDateFormat.format(
-                list[index].createDate.toDate(),
+                chatMsgModel.createDate.toDate(),
               ),
               style: getTsCaption10Rg(context).copyWith(
                 color: kColorContentWeakest,
@@ -362,38 +515,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  Widget _buildMyMsg(BuildContext context, List<ChatMsgModel> list, int index) {
-    double topPaddingSize = 16;
-    bool isMsgTimeView = true;
-
-    if (index + 1 < list.length) {
-      // 이 후 메시지 값을 가져온다
-      if (list[index + 1].chatRowType == ChatRowType.message.name &&
-          list[index + 1].createUserId == list[index].createUserId) {
-        // 이전 메시지가 내가 쓴 메시지라면
-
-        if (getTimestampDifferenceMin(
-                    list[index + 1].createDate, list[index].createDate)
-                .abs() <
-            1) {
-          topPaddingSize = 8; // 간격 줄이기
-        }
-      }
-    }
-    if (index - 1 >= 0) {
-      // 이 전 메시지 값을 가져온다
-      if (list[index - 1].chatRowType == ChatRowType.message.name &&
-          list[index - 1].createUserId == list[index].createUserId) {
-        // 이전 메시지가 내가 쓴 메시지라면
-
-        if (getTimestampDifferenceMin(
-                    list[index - 1].createDate, list[index].createDate)
-                .abs() <
-            1) {
-          isMsgTimeView = false; // 채팅 시간 가리기
-        }
-      }
-    }
+  Widget _buildMyMsg(
+    BuildContext context,
+    ChatMsgModel chatMsgModel,
+    double topPaddingSize,
+    bool isMsgTimeView,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
         top: topPaddingSize,
@@ -409,7 +536,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           if (isMsgTimeView)
             Text(
               msgDateFormat.format(
-                list[index].createDate.toDate(),
+                chatMsgModel.createDate.toDate(),
               ),
               style: getTsCaption10Rg(context).copyWith(
                 color: kColorContentWeakest,
@@ -418,7 +545,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const SizedBox(
             width: 4,
           ),
-          _buildMsgBubble(list[index], true),
+          _buildMsgBubble(chatMsgModel, true),
         ],
       ),
     );
@@ -448,24 +575,41 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ),
               ),
             )
-          : Container(
-              width: 180,
-              height: 144,
-              decoration: BoxDecoration(
-                color: isMe ? kColorBgPrimary : kColorBgDefault,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(12),
-                ),
-                image: chatMsgModel.msg.isEmpty
-                    ? null
-                    : DecorationImage(
-                        image: NetworkImage(
-                          chatMsgModel.msg,
+          : GestureDetector(
+              onTap: () {
+                // 이미지 프리뷰
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PhotoViewScreen(
+                      imageUrl: chatMsgModel.msg,
+                      title: profilePhotoList
+                          .firstWhere((element) =>
+                              element.user_id == chatMsgModel.createUserId)
+                          .nick_name,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                width: 180,
+                height: 144,
+                decoration: BoxDecoration(
+                  color: isMe ? kColorBgPrimary : kColorBgDefault,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                  image: chatMsgModel.msg.isEmpty
+                      ? null
+                      : DecorationImage(
+                          image: NetworkImage(
+                            chatMsgModel.msg,
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
-                      ),
+                ),
+                // child: chatMsgModel.msg.isEmpty ? const CustomLoading() : null,
               ),
-              // child: chatMsgModel.msg.isEmpty ? const CustomLoading() : null,
             ),
     );
   }
@@ -494,31 +638,42 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Flexible(
-            child: Container(
-              padding: notice.chatRowType == ChatRowType.notice.name
-                  ? const EdgeInsets.symmetric(
-                      vertical: 4,
-                      horizontal: 8,
-                    )
-                  : const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: kColorBgElevation2,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    notice.chatRowType == ChatRowType.notice.name ? 50 : 12,
-                  ),
-                ),
-              ),
-              child: Text(
-                notice.msg,
-                style: getTsCaption12Rg(context).copyWith(
-                  color: kColorContentWeakest,
-                ),
-              ),
+          _buildNoticeBubble(notice.msg, notice.chatRowType),
+        ],
+      ),
+    );
+  }
+
+  Flexible _buildNoticeBubble(
+    String text,
+    String? chatRowType,
+  ) {
+    logger.d(chatRowType);
+    return Flexible(
+      child: Container(
+        padding:
+            chatRowType == null || chatRowType == ChatRowType.noticeJoin.name
+                ? const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 8,
+                  )
+                : const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: kColorBgElevation2,
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              chatRowType == null || chatRowType == ChatRowType.noticeJoin.name
+                  ? 50
+                  : 12,
             ),
           ),
-        ],
+        ),
+        child: Text(
+          text,
+          style: getTsCaption12Rg(context).copyWith(
+            color: kColorContentWeakest,
+          ),
+        ),
       ),
     );
   }
@@ -576,6 +731,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       style: getTsBody16Rg(context).copyWith(
                         color: kColorContentWeak,
                       ),
+                      onChanged: (value) {
+                        setState(() {});
+                      },
                       decoration: InputDecoration(
                         hintText: '메세지 입력...',
                         hintStyle: getTsBody16Rg(context).copyWith(
@@ -602,20 +760,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         scrollController.jumpTo(0);
                       }
                     },
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: kColorBgPrimary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_arrow_upward_line_24.svg',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
+                    child: textEditingController.text.isEmpty
+                        ? Container()
+                        : Container(
+                            width: 36,
+                            height: 36,
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: kColorBgPrimary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_arrow_upward_line_24.svg',
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
                   ),
                 ],
               ),
