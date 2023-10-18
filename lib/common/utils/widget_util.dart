@@ -9,6 +9,7 @@ import '../const/colors.dart';
 showBiskitBottomSheet({
   required BuildContext context,
   required String title,
+  Widget? customTitleWidget,
   double? height,
   String? leftIcon,
   String? rightIcon,
@@ -41,65 +42,66 @@ showBiskitBottomSheet({
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 9,
-                  horizontal: 12,
-                ),
-                child: Row(
-                  children: [
-                    // if (leftIcon)
-                    leftIcon != null
-                        ? GestureDetector(
-                            onTap: onLeftTap,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: SvgPicture.asset(
-                                leftIcon,
-                                width: 24,
-                                height: 24,
+              customTitleWidget ??
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 9,
+                      horizontal: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        // if (leftIcon)
+                        leftIcon != null
+                            ? GestureDetector(
+                                onTap: onLeftTap,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: SvgPicture.asset(
+                                    leftIcon,
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(
+                                width: 44,
+                                height: 44,
                               ),
-                            ),
-                          )
-                        : const SizedBox(
-                            width: 44,
-                            height: 44,
-                          ),
 
-                    const SizedBox(
-                      width: 9,
-                    ),
-                    Expanded(
-                      child: Text(
-                        title,
-                        textAlign: TextAlign.center,
-                        style: getTsHeading18(context).copyWith(
-                          color: kColorContentDefault,
+                        const SizedBox(
+                          width: 9,
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 9,
-                    ),
-                    rightIcon != null
-                        ? GestureDetector(
-                            onTap: onRightTap,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: SvgPicture.asset(
-                                rightIcon,
-                                width: 24,
-                                height: 24,
-                              ),
+                        Expanded(
+                          child: Text(
+                            title,
+                            textAlign: TextAlign.center,
+                            style: getTsHeading18(context).copyWith(
+                              color: kColorContentDefault,
                             ),
-                          )
-                        : const SizedBox(
-                            width: 44,
-                            height: 44,
                           ),
-                  ],
-                ),
-              ),
+                        ),
+                        const SizedBox(
+                          width: 9,
+                        ),
+                        rightIcon != null
+                            ? GestureDetector(
+                                onTap: onRightTap,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: SvgPicture.asset(
+                                    rightIcon,
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(
+                                width: 44,
+                                height: 44,
+                              ),
+                      ],
+                    ),
+                  ),
               contentWidget ?? Container(),
             ],
           ),
