@@ -242,168 +242,173 @@ class _RootTabState extends ConsumerState<RootTab>
                   .read(chatRepositoryProvider)
                   .getMyChatRoomListStream(userId: userState.id),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                    List<ChatRoomModel> docs = snapshot.data!.docs
-                        .map((e) => ChatRoomModel.fromMap(
-                            e.data() as Map<String, dynamic>))
-                        .toList();
-                    return ListView.separated(
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      // padding: const EdgeInsets.only(
-                      //   top: 20,
-                      //   left: 20,
-                      //   right: 20,
-                      // ),
-                      itemBuilder: (context, index) => GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async {
-                          // 마지막 메시지 읽음으로 변경
-                          ref.read(chatRepositoryProvider).lastMsgRead(
+                logger.d(snapshot.connectionState);
+                // 깜빡임 현상으로 인하여 삭제
+                // if (snapshot.connectionState == ConnectionState.waiting) {
+                //   return const Center(
+                //     child: CircularProgressIndicator(),
+                //   );
+                // } else {
+                if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                  List<ChatRoomModel> docs = snapshot.data!.docs
+                      .map((e) => ChatRoomModel.fromMap(
+                          e.data() as Map<String, dynamic>))
+                      .toList();
+                  return ListView.separated(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    // padding: const EdgeInsets.only(
+                    //   top: 20,
+                    //   left: 20,
+                    //   right: 20,
+                    // ),
+                    itemBuilder: (context, index) => GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () async {
+                        // 마지막 메시지 읽음으로 변경
+                        ref.read(chatRepositoryProvider).lastMsgRead(
+                              chatRoom: docs[index],
+                              userId: userState.id,
+                            );
+
+                        if (!docs[index]
+                            .firstUserInfoList
+                            .any((element) => element.userId == userState.id)) {
+                          // 최초 채팅방 입장시 처리
+                          await ref.read(chatRepositoryProvider).firstJoin(
                                 chatRoom: docs[index],
-                                userId: userState.id,
+                                user: userState,
                               );
+                        }
 
-                          if (!docs[index].firstUserInfoList.any(
-                              (element) => element.userId == userState.id)) {
-                            // 최초 채팅방 입장시 처리
-                            await ref.read(chatRepositoryProvider).firstJoin(
-                                  chatRoom: docs[index],
-                                  user: userState,
-                                );
-                          }
-
-                          if (!mounted) return;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                  chatRoomUid: docs[index].uid,
-                                ),
-                              ));
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: 24,
-                                backgroundImage: const AssetImage(
-                                  'assets/images/88.png',
-                                ),
-                                foregroundImage:
-                                    docs[index].roomImagePath == null
-                                        ? null
-                                        : NetworkImage(
-                                            docs[index].roomImagePath!,
-                                          ),
+                        if (!mounted) return;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                chatRoomUid: docs[index].uid,
                               ),
-                              const SizedBox(
-                                width: 12,
+                            ));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundImage: const AssetImage(
+                                'assets/images/88.png',
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                              foregroundImage: docs[index].roomImagePath == null
+                                  ? null
+                                  : NetworkImage(
+                                      docs[index].roomImagePath!,
+                                    ),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    docs[index].title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: getTsBody16Sb(context).copyWith(
+                                      color: kColorContentDefault,
+                                    ),
+                                  ),
+                                  if (docs[index]
+                                          .firstUserInfoList
+                                          .where((element) =>
+                                              element.userId == userState.id)
+                                          .isNotEmpty &&
+                                      (docs[index].lastMsgType ==
+                                              ChatMsgType.text.name ||
+                                          docs[index].lastMsgType ==
+                                              ChatMsgType.image.name))
                                     Text(
-                                      docs[index].title,
+                                      docs[index].lastMsgType ==
+                                              ChatMsgType.text.name
+                                          ? docs[index].lastMsg ?? ''
+                                          : '사진',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: getTsBody16Sb(context).copyWith(
-                                        color: kColorContentDefault,
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeaker,
                                       ),
                                     ),
-                                    if (docs[index]
-                                        .firstUserInfoList
-                                        .where((element) =>
-                                            element.userId == userState.id)
-                                        .isNotEmpty)
-                                      Text(
-                                        docs[index].lastMsgType ==
-                                                ChatMsgType.text.name
-                                            ? docs[index].lastMsg ?? ''
-                                            : '사진',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: getTsBody14Rg(context).copyWith(
-                                          color: kColorContentWeaker,
-                                        ),
-                                      ),
-                                  ],
-                                ),
+                                ],
                               ),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              if (docs[index]
-                                  .firstUserInfoList
-                                  .where((element) =>
-                                      element.userId == userState.id)
-                                  .isNotEmpty)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      docs[index].lastMsgDate == null
-                                          ? ''
-                                          : getDateTimeToString(
-                                              docs[index].lastMsgDate.toDate()),
-                                      style: getTsCaption12Rg(context).copyWith(
-                                        color: kColorContentWeakest,
-                                      ),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            if (docs[index]
+                                .firstUserInfoList
+                                .where(
+                                    (element) => element.userId == userState.id)
+                                .isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    docs[index].lastMsgDate == null
+                                        ? ''
+                                        : getDateTimeToString(
+                                            docs[index].lastMsgDate.toDate()),
+                                    style: getTsCaption12Rg(context).copyWith(
+                                      color: kColorContentWeakest,
                                     ),
-                                    docs[index].lastMsgUid == null ||
-                                            docs[index]
-                                                .lastMsgReadUsers
-                                                .contains(userState.id)
-                                        ? Container()
-                                        : const Padding(
-                                            padding: EdgeInsets.only(top: 8.0),
-                                            child: CircleAvatar(
-                                              radius: 4,
-                                              backgroundColor:
-                                                  kColorContentError,
-                                            ),
+                                  ),
+                                  docs[index].lastMsgUid == null ||
+                                          docs[index]
+                                              .lastMsgReadUsers
+                                              .contains(userState.id)
+                                      ? Container()
+                                      : const Padding(
+                                          padding: EdgeInsets.only(top: 8.0),
+                                          child: CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor: kColorContentError,
                                           ),
-                                  ],
-                                ),
-                            ],
-                          ),
+                                        ),
+                                ],
+                              ),
+                          ],
                         ),
                       ),
-                      separatorBuilder: (context, index) => const SizedBox(),
-                      itemCount: docs.length,
-                    );
-                  } else {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/ic_chat_fill_24.svg',
-                            width: 56,
-                            height: 56,
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(),
+                    itemCount: docs.length,
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/ic_chat_fill_24.svg',
+                          width: 56,
+                          height: 56,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          '채팅방이 없어요',
+                          style: getTsBody16Rg(context).copyWith(
+                            color: kColorContentWeakest,
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            '채팅방이 없어요',
-                            style: getTsBody16Rg(context).copyWith(
-                              color: kColorContentWeakest,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
+                        ),
+                      ],
+                    ),
+                  );
                 }
+                // }
               },
             ),
           ),

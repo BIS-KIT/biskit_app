@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/photo_view_screen.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
@@ -134,7 +136,142 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     super.dispose();
   }
 
-  makeChatWidgetList(List<ChatMsgModel> list) {}
+  void viewBottomSeet() {
+    if (chatRoomModel != null) {
+      showBiskitBottomSheet(
+        context: context,
+        title: chatRoomModel!.title,
+        customTitleWidget: Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            bottom: 16,
+          ),
+          child: Row(
+            children: [
+              Text(
+                '참여자',
+                style: getTsBody16Sb(context).copyWith(
+                  color: kColorContentDefault,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // isScrollControlled: true,
+        enableDrag: true,
+        contentWidget: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                bottom: 40,
+              ),
+              child: Column(
+                children: profilePhotoList
+                    .map(
+                      (e) => Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            AvatarWithFlagWidget(
+                              profilePath: e.profile_photo,
+                              flagPath: e.nationalities.isEmpty
+                                  ? null
+                                  : '$kS3Url$kS3Flag43Path/${e.nationalities[0].code}.svg',
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              e.nick_name,
+                              style: getTsBody16Rg(context).copyWith(
+                                color: kColorContentWeak,
+                              ),
+                            ),
+                            if (chatRoomModel!.createUserId == e.user_id)
+                              Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/icons/ic_crown_circle_fill_24.svg',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(
+                top: 8,
+                left: 8,
+                bottom: 34,
+                right: 16,
+              ),
+              color: kColorBgElevation1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_logout_off_line_24.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        kColorContentWeaker,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_notifications_line_24.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: const ColorFilter.mode(
+                            kColorContentWeaker,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_siren_line_24.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: const ColorFilter.mode(
+                            kColorContentWeaker,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,15 +285,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
       ),
       actions: [
-        Container(
-          width: 44,
-          height: 44,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(right: 10),
-          child: SvgPicture.asset(
-            'assets/icons/ic_more_horiz_line_24.svg',
-            width: 24,
-            height: 24,
+        GestureDetector(
+          onTap: () {
+            viewBottomSeet();
+          },
+          child: Container(
+            width: 44,
+            height: 44,
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(right: 10),
+            child: SvgPicture.asset(
+              'assets/icons/ic_more_horiz_line_24.svg',
+              width: 24,
+              height: 24,
+            ),
           ),
         ),
       ],
@@ -446,47 +588,53 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               }
               // logger.d('BUILD!!!!');
               if (isProfileView) {
-                return Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 16,
-                      backgroundImage: const AssetImage(
-                        'assets/images/88.png',
-                      ),
-                      foregroundImage: profilePhotoModel?.profile_photo == null
-                          ? null
-                          : NetworkImage(profilePhotoModel!.profile_photo!),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: kColorBorderStrong,
-                            width: 1,
-                          ),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: profilePhotoModel!.nationalities.isEmpty
-                            ? Container()
-                            : ClipRRect(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(16)),
-                                child: SvgPicture.network(
-                                  '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
-                                  width: 16,
-                                  height: 16,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ],
+                return AvatarWithFlagWidget(
+                  profilePath: profilePhotoModel?.profile_photo,
+                  flagPath: profilePhotoModel!.nationalities.isEmpty
+                      ? null
+                      : '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
                 );
+                // return Stack(
+                //   children: [
+                //     CircleAvatar(
+                //       radius: 16,
+                //       backgroundImage: const AssetImage(
+                //         'assets/images/88.png',
+                //       ),
+                //       foregroundImage: profilePhotoModel?.profile_photo == null
+                //           ? null
+                //           : NetworkImage(profilePhotoModel!.profile_photo!),
+                //     ),
+                //     Positioned(
+                //       bottom: 0,
+                //       right: 0,
+                //       child: Container(
+                //         width: 16,
+                //         height: 16,
+                //         decoration: BoxDecoration(
+                //           shape: BoxShape.circle,
+                //           border: Border.all(
+                //             color: kColorBorderStrong,
+                //             width: 1,
+                //           ),
+                //         ),
+                //         clipBehavior: Clip.hardEdge,
+                //         child: profilePhotoModel!.nationalities.isEmpty
+                //             ? Container()
+                //             : ClipRRect(
+                //                 borderRadius:
+                //                     const BorderRadius.all(Radius.circular(16)),
+                //                 child: SvgPicture.network(
+                //                   '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
+                //                   width: 16,
+                //                   height: 16,
+                //                   fit: BoxFit.cover,
+                //                 ),
+                //               ),
+                //       ),
+                //     ),
+                //   ],
+                // );
               } else {
                 return const SizedBox(
                   width: 32,
