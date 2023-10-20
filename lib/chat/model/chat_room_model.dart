@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
+// import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
@@ -62,6 +63,7 @@ class ChatRoomModel {
   final String uid;
   final String title;
   final List<int> joinUsers;
+  final List<int> connectingUsers;
   final List<ChatRoomFirstUserInfo> firstUserInfoList;
   final String? roomImagePath;
   final String? lastMsgUid;
@@ -75,6 +77,7 @@ class ChatRoomModel {
     required this.uid,
     required this.title,
     required this.joinUsers,
+    required this.connectingUsers,
     required this.firstUserInfoList,
     this.roomImagePath,
     this.lastMsgUid,
@@ -90,6 +93,7 @@ class ChatRoomModel {
     String? uid,
     String? title,
     List<int>? joinUsers,
+    List<int>? connectingUsers,
     List<ChatRoomFirstUserInfo>? firstUserInfoList,
     String? roomImagePath,
     String? lastMsgUid,
@@ -104,6 +108,7 @@ class ChatRoomModel {
       uid: uid ?? this.uid,
       title: title ?? this.title,
       joinUsers: joinUsers ?? this.joinUsers,
+      connectingUsers: connectingUsers ?? this.connectingUsers,
       firstUserInfoList: firstUserInfoList ?? this.firstUserInfoList,
       roomImagePath: roomImagePath ?? this.roomImagePath,
       lastMsgUid: lastMsgUid ?? this.lastMsgUid,
@@ -121,6 +126,7 @@ class ChatRoomModel {
       'uid': uid,
       'title': title,
       'joinUsers': joinUsers,
+      'connectingUsers': connectingUsers,
       'firstUserInfoList': firstUserInfoList.map((x) => x.toMap()).toList(),
       'roomImagePath': roomImagePath,
       'lastMsgUid': lastMsgUid,
@@ -138,6 +144,7 @@ class ChatRoomModel {
       uid: map['uid'] ?? '',
       title: map['title'] ?? '',
       joinUsers: List<int>.from(map['joinUsers']),
+      connectingUsers: List<int>.from(map['connectingUsers']),
       firstUserInfoList: List<ChatRoomFirstUserInfo>.from(
           map['firstUserInfoList']
               ?.map((x) => ChatRoomFirstUserInfo.fromMap(x))),
@@ -159,18 +166,18 @@ class ChatRoomModel {
 
   @override
   String toString() {
-    return 'ChatRoomModel(uid: $uid, title: $title, joinUsers: $joinUsers, firstUserInfoList: $firstUserInfoList, roomImagePath: $roomImagePath, lastMsgUid: $lastMsgUid, lastMsg: $lastMsg, lastMsgType: $lastMsgType, lastMsgDate: $lastMsgDate, lastMsgReadUsers: $lastMsgReadUsers, createUserId: $createUserId, createDate: $createDate)';
+    return 'ChatRoomModel(uid: $uid, title: $title, joinUsers: $joinUsers, connectingUsers: $connectingUsers, firstUserInfoList: $firstUserInfoList, roomImagePath: $roomImagePath, lastMsgUid: $lastMsgUid, lastMsg: $lastMsg, lastMsgType: $lastMsgType, lastMsgDate: $lastMsgDate, lastMsgReadUsers: $lastMsgReadUsers, createUserId: $createUserId, createDate: $createDate)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return other is ChatRoomModel &&
         other.uid == uid &&
         other.title == title &&
         listEquals(other.joinUsers, joinUsers) &&
+        listEquals(other.connectingUsers, connectingUsers) &&
         listEquals(other.firstUserInfoList, firstUserInfoList) &&
         other.roomImagePath == roomImagePath &&
         other.lastMsgUid == lastMsgUid &&
@@ -187,6 +194,7 @@ class ChatRoomModel {
     return uid.hashCode ^
         title.hashCode ^
         joinUsers.hashCode ^
+        connectingUsers.hashCode ^
         firstUserInfoList.hashCode ^
         roomImagePath.hashCode ^
         lastMsgUid.hashCode ^

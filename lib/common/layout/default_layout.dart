@@ -12,6 +12,7 @@ class DefaultLayout extends StatelessWidget {
   final Widget? floatingActionButton;
   final List<Widget>? actions;
   final bool resizeToAvoidBottomInset;
+  final VoidCallback? onTapLeading;
 
   final ShapeBorder? shape;
   const DefaultLayout({
@@ -24,6 +25,7 @@ class DefaultLayout extends StatelessWidget {
     this.actions,
     this.resizeToAvoidBottomInset = true,
     this.shape,
+    this.onTapLeading,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,11 @@ class DefaultLayout extends StatelessWidget {
         leadingWidth: 54,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            if (onTapLeading == null) {
+              Navigator.pop(context);
+            } else {
+              onTapLeading!();
+            }
           },
           child: Container(
             margin: const EdgeInsets.only(
