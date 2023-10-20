@@ -52,6 +52,7 @@ class ChatRepository {
             uid: chatRoomId,
             title: title,
             joinUsers: [userId],
+            connectingUsers: [],
             lastMsgReadUsers: [],
             firstUserInfoList: [],
             createUserId: userId,
@@ -60,17 +61,20 @@ class ChatRepository {
         );
   }
 
+  updateChatRoom({
+    required String chatRoomUid,
+    required Map<String, dynamic> data,
+  }) async {
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update(
+          data,
+        );
+  }
+
   void goInChatRoom(
       {required ChatRoomModel chatRoom, required int userId}) async {
-    await firebaseFirestore
-        .collection('ChatRoom')
-        .doc(chatRoom.uid)
-        .set(chatRoom.copyWith(
-          joinUsers: [
-            ...chatRoom.joinUsers,
-            userId,
-          ],
-        ).toMap());
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoom.uid).update({
+      'joinUsers': FieldValue.arrayUnion([userId])
+    });
   }
 
   getChatRoomById(String chatRoomUid) async {
@@ -188,15 +192,9 @@ class ChatRepository {
       // 이미 읽었으면 처리 안함
       return;
     }
-    await firebaseFirestore
-        .collection('ChatRoom')
-        .doc(chatRoom.uid)
-        .set(chatRoom.copyWith(
-          lastMsgReadUsers: [
-            ...chatRoom.lastMsgReadUsers,
-            userId,
-          ],
-        ).toMap());
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoom.uid).update({
+      'lastMsgReadUsers': FieldValue.arrayUnion([userId]),
+    });
   }
 
   // 채팅방 처음 입장시 처리
@@ -205,18 +203,14 @@ class ChatRepository {
     required UserModel user,
   }) async {
     // 최초 입장시 데이터 저장
-    await firebaseFirestore
-        .collection('ChatRoom')
-        .doc(chatRoom.uid)
-        .set(chatRoom.copyWith(
-          firstUserInfoList: [
-            ...chatRoom.firstUserInfoList,
-            ChatRoomFirstUserInfo(
-              userId: user.id,
-              firstJoinDate: Timestamp.now(),
-            ),
-          ],
-        ).toMap());
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoom.uid).update({
+      'firstUserInfoList': FieldValue.arrayUnion([
+        ChatRoomFirstUserInfo(
+          userId: user.id,
+          firstJoinDate: Timestamp.now(),
+        ).toMap()
+      ])
+    });
 
     // 최초 입장시 안내문구 : 입장문구
     await sendMsg(
