@@ -254,6 +254,7 @@ class _RootTabState extends ConsumerState<RootTab>
                       .map((e) => ChatRoomModel.fromMap(
                           e.data() as Map<String, dynamic>))
                       .toList();
+
                   return ListView.separated(
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
@@ -262,126 +263,138 @@ class _RootTabState extends ConsumerState<RootTab>
                     //   left: 20,
                     //   right: 20,
                     // ),
-                    itemBuilder: (context, index) => GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () async {
-                        // 마지막 메시지 읽음으로 변경
-                        ref.read(chatRepositoryProvider).lastMsgRead(
-                              chatRoom: docs[index],
-                              userId: userState.id,
-                            );
-
-                        if (!docs[index]
+                    itemBuilder: (context, index) {
+                      ChatRoomFirstUserInfo? chatRoomFirstUserInfo;
+                      if (docs[index].firstUserInfoList.isNotEmpty) {
+                        chatRoomFirstUserInfo = docs[index]
                             .firstUserInfoList
-                            .any((element) => element.userId == userState.id)) {
-                          // 최초 채팅방 입장시 처리
-                          await ref.read(chatRepositoryProvider).firstJoin(
+                            .singleWhere(
+                                (element) => element.userId == userState.id);
+                      }
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          // 마지막 메시지 읽음으로 변경
+                          ref.read(chatRepositoryProvider).lastMsgRead(
                                 chatRoom: docs[index],
-                                user: userState,
+                                userId: userState.id,
                               );
-                        }
 
-                        if (!mounted) return;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                chatRoomUid: docs[index].uid,
+                          if (!docs[index].firstUserInfoList.any(
+                              (element) => element.userId == userState.id)) {
+                            // 최초 채팅방 입장시 처리
+                            await ref.read(chatRepositoryProvider).firstJoin(
+                                  chatRoom: docs[index],
+                                  user: userState,
+                                );
+                          }
+
+                          if (!mounted) return;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                  chatRoomUid: docs[index].uid,
+                                ),
+                              ));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundImage: const AssetImage(
+                                  'assets/images/88.png',
+                                ),
+                                foregroundImage:
+                                    docs[index].roomImagePath == null
+                                        ? null
+                                        : NetworkImage(
+                                            docs[index].roomImagePath!,
+                                          ),
                               ),
-                            ));
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundImage: const AssetImage(
-                                'assets/images/88.png',
+                              const SizedBox(
+                                width: 12,
                               ),
-                              foregroundImage: docs[index].roomImagePath == null
-                                  ? null
-                                  : NetworkImage(
-                                      docs[index].roomImagePath!,
-                                    ),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    docs[index].title,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: getTsBody16Sb(context).copyWith(
-                                      color: kColorContentDefault,
-                                    ),
-                                  ),
-                                  if (docs[index]
-                                          .firstUserInfoList
-                                          .where((element) =>
-                                              element.userId == userState.id)
-                                          .isNotEmpty &&
-                                      (docs[index].lastMsgType ==
-                                              ChatMsgType.text.name ||
-                                          docs[index].lastMsgType ==
-                                              ChatMsgType.image.name))
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      docs[index].lastMsgType ==
-                                              ChatMsgType.text.name
-                                          ? docs[index].lastMsg ?? ''
-                                          : '사진',
+                                      docs[index].title,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: getTsBody14Rg(context).copyWith(
-                                        color: kColorContentWeaker,
+                                      style: getTsBody16Sb(context).copyWith(
+                                        color: kColorContentDefault,
                                       ),
                                     ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            if (docs[index]
-                                .firstUserInfoList
-                                .where(
-                                    (element) => element.userId == userState.id)
-                                .isNotEmpty)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    docs[index].lastMsgDate == null
-                                        ? ''
-                                        : getDateTimeToString(
-                                            docs[index].lastMsgDate.toDate()),
-                                    style: getTsCaption12Rg(context).copyWith(
-                                      color: kColorContentWeakest,
-                                    ),
-                                  ),
-                                  docs[index].lastMsgUid == null ||
-                                          docs[index]
-                                              .lastMsgReadUsers
-                                              .contains(userState.id)
-                                      ? Container()
-                                      : const Padding(
-                                          padding: EdgeInsets.only(top: 8.0),
-                                          child: CircleAvatar(
-                                            radius: 4,
-                                            backgroundColor: kColorContentError,
-                                          ),
+                                    if (chatRoomFirstUserInfo != null &&
+                                        chatRoomFirstUserInfo.firstJoinDate
+                                                .microsecondsSinceEpoch <=
+                                            docs[index]
+                                                .lastMsgDate
+                                                .microsecondsSinceEpoch &&
+                                        ([
+                                          ChatMsgType.text.name,
+                                          ChatMsgType.image.name,
+                                        ].contains(docs[index].lastMsgType)))
+                                      Text(
+                                        docs[index].lastMsgType ==
+                                                ChatMsgType.text.name
+                                            ? docs[index].lastMsg ?? ''
+                                            : '사진',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: getTsBody14Rg(context).copyWith(
+                                          color: kColorContentWeaker,
                                         ),
-                                ],
+                                      ),
+                                  ],
+                                ),
                               ),
-                          ],
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              if (chatRoomFirstUserInfo != null &&
+                                  chatRoomFirstUserInfo.firstJoinDate
+                                          .microsecondsSinceEpoch <=
+                                      docs[index]
+                                          .lastMsgDate
+                                          .microsecondsSinceEpoch)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      docs[index].lastMsgDate == null
+                                          ? ''
+                                          : getDateTimeToString(
+                                              docs[index].lastMsgDate.toDate()),
+                                      style: getTsCaption12Rg(context).copyWith(
+                                        color: kColorContentWeakest,
+                                      ),
+                                    ),
+                                    docs[index].lastMsgUid == null ||
+                                            docs[index]
+                                                .lastMsgReadUsers
+                                                .contains(userState.id)
+                                        ? Container()
+                                        : const Padding(
+                                            padding: EdgeInsets.only(top: 8.0),
+                                            child: CircleAvatar(
+                                              radius: 4,
+                                              backgroundColor:
+                                                  kColorContentError,
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                     separatorBuilder: (context, index) => const SizedBox(),
                     itemCount: docs.length,
                   );

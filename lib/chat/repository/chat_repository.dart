@@ -56,7 +56,7 @@ class ChatRepository {
             lastMsgReadUsers: [],
             firstUserInfoList: [],
             createUserId: userId,
-            createDate: Timestamp.now(),
+            createDate: FieldValue.serverTimestamp(),
           ).toMap(),
         );
   }
@@ -124,11 +124,12 @@ class ChatRepository {
         .doc()
         .id;
     logger.d('Create Message UID : $msgUid');
+    FieldValue now = FieldValue.serverTimestamp();
     ChatMsgModel chatMsgModel = ChatMsgModel(
       uid: msgUid,
       msg: msg,
       msgType: chatMsgType.name,
-      createDate: Timestamp.now(),
+      createDate: now,
       createUserId: userId,
       readUsers: [userId],
       chatRowType: chatRowType.name,
@@ -147,7 +148,7 @@ class ChatRepository {
       await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
         'lastMsgUid': msgUid,
         'lastMsg': msg,
-        'lastMsgDate': Timestamp.now(),
+        'lastMsgDate': now,
         'lastMsgReadUsers': [userId],
         'lastMsgType': chatMsgType.name,
       });
@@ -167,7 +168,8 @@ class ChatRepository {
         .doc(chatRoomUid)
         .collection('Messages')
         .where('createDate',
-            isGreaterThanOrEqualTo: fromTimestamp ?? Timestamp.now())
+            isGreaterThanOrEqualTo:
+                fromTimestamp ?? FieldValue.serverTimestamp())
         .orderBy('createDate', descending: true)
         .limit(limit)
         .snapshots()
@@ -211,6 +213,8 @@ class ChatRepository {
         ).toMap()
       ])
     });
+
+    await Future.delayed(const Duration(milliseconds: 300));
 
     // 최초 입장시 안내문구 : 입장문구
     await sendMsg(

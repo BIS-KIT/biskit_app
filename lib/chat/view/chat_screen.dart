@@ -3,7 +3,6 @@ import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/photo_view_screen.dart';
@@ -41,6 +40,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   UserModelBase? userState;
   ChatRoomModel? chatRoomModel;
   List<ChatMsgModel> list = [];
+  int _limit = 20;
+  final int _limitIncrement = 20;
   List<ProfilePhotoModel> profilePhotoList = [];
   late final TextEditingController textEditingController;
   late final ScrollController scrollController;
@@ -50,10 +51,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   @override
   void initState() {
     super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addObserver(this);
     textEditingController = TextEditingController();
-    scrollController = ScrollController();
     fetchChatRoom();
+  }
+
+  _scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent - 200 &&
+        !scrollController.position.outOfRange &&
+        _limit <= list.length) {
+      // logger.d('_scrollListener');
+      setState(() {
+        _limit += _limitIncrement;
+      });
+    }
   }
 
   void addProfilePhoto(int createUserId) async {
@@ -104,7 +118,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       ),
     );
     if (result.isNotEmpty) {
-      logger.d(result);
+      // logger.d(result);
       // 이미지 메시지 처리
       String? msgUid = await ref.read(chatRepositoryProvider).sendMsg(
             msg: '',
@@ -122,7 +136,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   result: result,
                 );
         if (imagePath != null) {
-          logger.d(imagePath);
+          // logger.d(imagePath);
           ref.read(chatRepositoryProvider).updateMsg(
             chatRoomUid: widget.chatRoomUid,
             msgUid: msgUid,
@@ -137,7 +151,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    logger.d('AppLifecycleState : $state');
+    // logger.d('AppLifecycleState : $state');
+
     switch (state) {
       case AppLifecycleState.resumed:
         connectChatRoom();
@@ -182,7 +197,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     textEditingController.dispose();
     scrollController.dispose();
     super.dispose();
-    logger.d('dispose');
   }
 
   void viewBottomSeet() {
@@ -381,7 +395,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                           element.userId ==
                                           (userState as UserModel).id)
                                       .firstJoinDate,
-                                  limit: 60,
+                                  limit: _limit,
                                 ),
                             builder: (context, snapshot) {
                               if (snapshot.hasData &&
@@ -860,7 +874,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     String text,
     String? chatRowType,
   ) {
-    logger.d(chatRowType);
+    // logger.d(chatRowType);
     return Flexible(
       child: Container(
         padding:
