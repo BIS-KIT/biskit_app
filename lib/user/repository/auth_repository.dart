@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:biskit_app/common/provider/firebase_provider.dart';
+import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,12 +12,15 @@ import 'package:biskit_app/common/model/api_res_model.dart';
 import 'package:biskit_app/common/model/login_response.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final storage = ref.watch(secureStorageProvider);
   return AuthRepository(
     dio: ref.watch(dioProvider),
     baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
     firebaseMessaging: ref.watch(firebaseMessagingProvider),
+    storage: storage,
   );
 });
 
@@ -24,10 +28,13 @@ class AuthRepository {
   final Dio dio;
   final String baseUrl;
   final FirebaseMessaging firebaseMessaging;
+  final FlutterSecureStorage storage;
+
   AuthRepository({
     required this.dio,
     required this.baseUrl,
     required this.firebaseMessaging,
+    required this.storage,
   });
 
   Future<LoginResponse> login({
@@ -233,12 +240,13 @@ class AuthRepository {
         }),
       );
 
-      logger.d(res);
       if (res.statusCode == 200) {
+        final accessToken = res.data['token'];
+        await storage.write(key: kACCESS_TOKEN_KEY, value: accessToken);
+
         map = {
           'result': res.data['result'] ?? '',
           'email': res.data['email'] ?? '',
-          'token': res.data['token'] ?? '',
         };
       }
     } on DioException catch (e) {
@@ -249,18 +257,18 @@ class AuthRepository {
   }
 
   Future<bool> changePassword({
-    required String? token,
     required String newPassword,
   }) async {
     bool isChanged = false;
+
     try {
       final res = await dio.post(
         '$baseUrl/change-password',
         options: Options(
           headers: {
-            'authorization': 'Bearer $token',
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
         data: json.encode({
@@ -268,7 +276,7 @@ class AuthRepository {
           'new_password_check': newPassword,
         }),
       );
-      logger.d(res);
+
       if (res.statusCode == 200) {
         isChanged = true;
       }

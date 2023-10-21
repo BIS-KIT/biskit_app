@@ -65,7 +65,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
     try {
       bool? res = await ref
           .read(authRepositoryProvider)
-          .changePassword(token: widget.token, newPassword: password);
+          .changePassword(newPassword: password);
       if (res) {
         context.pushReplacementNamed(SetPasswordCompletedScreen.routeName);
       } else {
