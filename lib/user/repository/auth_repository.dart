@@ -273,7 +273,6 @@ class AuthRepository {
         ),
         data: json.encode({
           'new_password': newPassword,
-          'new_password_check': newPassword,
         }),
       );
 
