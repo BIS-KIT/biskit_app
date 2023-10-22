@@ -165,6 +165,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       case AppLifecycleState.detached:
         disConnectChatRoom();
         break;
+      case AppLifecycleState.hidden:
+        break;
     }
   }
 
