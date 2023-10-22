@@ -1,5 +1,6 @@
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/components/progress_bar_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
@@ -96,6 +97,15 @@ class _Test2ScreenState extends State<Test2Screen> {
                 },
                 onTapAdd: () {},
                 onTapDelete: () {},
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const ProgressBarWidget(
+                isFirstDone: true,
+                isSecondDone: false,
+                isThirdDone: false,
+                isFourthDone: false,
               ),
               const SizedBox(
                 height: 40,
