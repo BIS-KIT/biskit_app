@@ -9,6 +9,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/meet/view/meet_create_step_1.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,7 +79,17 @@ class _RootTabState extends ConsumerState<RootTab>
           backgroundColor: kColorBgDefault,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
-            controller.animateTo(index);
+            if (index == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MeetCreateStep1(),
+                ),
+              );
+              return;
+            } else {
+              controller.animateTo(index);
+            }
           },
           currentIndex: index,
           showSelectedLabels: false,
@@ -146,8 +157,8 @@ class _RootTabState extends ConsumerState<RootTab>
                   ],
                 )
               : Container(),
-          Container(),
           userState is UserModel ? _buildGroupTap(userState) : Container(),
+          Container(),
           userState is UserModel ? _buildChatTap(userState) : Container(),
           Container(),
         ],
@@ -265,7 +276,11 @@ class _RootTabState extends ConsumerState<RootTab>
                     // ),
                     itemBuilder: (context, index) {
                       ChatRoomFirstUserInfo? chatRoomFirstUserInfo;
-                      if (docs[index].firstUserInfoList.isNotEmpty) {
+                      if (docs[index]
+                          .firstUserInfoList
+                          .map((element) => element.userId)
+                          .toList()
+                          .contains(userState.id)) {
                         chatRoomFirstUserInfo = docs[index]
                             .firstUserInfoList
                             .singleWhere(
