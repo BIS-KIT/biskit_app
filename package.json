@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "build-apk": "flutter build apk --release --target-platform=android-arm64",
-    "build-apk:dev": "flutter build apk --debug --target-platform=android-arm64",
-    "firebase-deploy": "flutter build apk --release --target-platform=android-arm64 && firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-release.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
-    "firebase-deploy:dev": "flutter build apk --debug --target-platform=android-arm64 && firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-debug.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt"
+    "build-apk": "fvm flutter build apk --release --target-platform=android-arm64",
+    "build-apk:dev": "fvm flutter build apk --debug --target-platform=android-arm64",
+    "firebase-deploy": "fvm flutter build apk --release --target-platform=android-arm64 && firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-release.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
+    "firebase-deploy:dev": "fvm flutter build apk --debug --target-platform=android-arm64 && firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-debug.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt"
   }
 }
