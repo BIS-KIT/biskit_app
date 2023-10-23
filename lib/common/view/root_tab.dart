@@ -346,6 +346,9 @@ class _RootTabState extends ConsumerState<RootTab>
                                       ),
                                     ),
                                     if (chatRoomFirstUserInfo != null &&
+                                        chatRoomFirstUserInfo.firstJoinDate !=
+                                            null &&
+                                        docs[index].lastMsgDate != null &&
                                         chatRoomFirstUserInfo.firstJoinDate
                                                 .microsecondsSinceEpoch <=
                                             docs[index]
@@ -373,6 +376,8 @@ class _RootTabState extends ConsumerState<RootTab>
                                 width: 12,
                               ),
                               if (chatRoomFirstUserInfo != null &&
+                                  chatRoomFirstUserInfo.firstJoinDate != null &&
+                                  docs[index].lastMsgDate != null &&
                                   chatRoomFirstUserInfo.firstJoinDate
                                           .microsecondsSinceEpoch <=
                                       docs[index]
