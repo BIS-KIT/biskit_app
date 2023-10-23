@@ -43,9 +43,13 @@ class ChipWidget extends StatelessWidget {
                   GestureDetector(
                     onTap: onTapAdd,
                     child: SvgPicture.asset(
-                      'assets/icons/ic_cancel_line_24.svg',
+                      'assets/icons/ic_plus_line_24.svg',
                       width: 16,
                       height: 16,
+                      colorFilter: const ColorFilter.mode(
+                        kColorContentDefault,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 Padding(
