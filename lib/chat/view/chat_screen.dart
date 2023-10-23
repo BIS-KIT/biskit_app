@@ -661,16 +661,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           Builder(
             builder: (context) {
               ProfilePhotoModel? profilePhotoModel;
-              if (profilePhotoList.isNotEmpty) {
+              if (profilePhotoList.isNotEmpty &&
+                  profilePhotoList
+                      .map((e) => e.user_id)
+                      .contains(chatMsgModel.createUserId)) {
                 profilePhotoModel = profilePhotoList.firstWhere(
                   (element) => element.user_id == chatMsgModel.createUserId,
                 );
               }
               // logger.d('BUILD!!!!');
-              if (isProfileView) {
+              if (isProfileView && profilePhotoModel != null) {
                 return AvatarWithFlagWidget(
-                  profilePath: profilePhotoModel?.profile_photo,
-                  flagPath: profilePhotoModel!.nationalities.isEmpty
+                  profilePath: profilePhotoModel.profile_photo,
+                  flagPath: profilePhotoModel.nationalities.isEmpty
                       ? null
                       : '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
                 );
