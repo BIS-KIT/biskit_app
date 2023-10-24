@@ -9,7 +9,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/meet/view/meet_create_step_1.dart';
+import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -83,7 +83,7 @@ class _RootTabState extends ConsumerState<RootTab>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MeetCreateStep1(),
+                  builder: (context) => const MeetUpCreateScreen(),
                 ),
               );
               return;
