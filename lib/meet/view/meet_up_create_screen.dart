@@ -46,6 +46,8 @@ class _MeetUpCreateScreenState extends State<MeetUpCreateScreen>
       onTapLeading: () {
         if (pageIndex > 0) {
           controller.animateTo(pageIndex - 1);
+        } else if (pageIndex == 0) {
+          Navigator.pop(context);
         }
       },
       child: Padding(
