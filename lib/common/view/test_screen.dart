@@ -478,24 +478,48 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  showBiskitBottomSheet(
-                    context: context,
-                    title: '장소 검색',
-                    rightIcon: 'assets/icons/ic_cancel_line_24.svg',
-                    height: MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.top -
-                        44,
-                    contentWidget: const PlaceSearchScreen(
-                      isEng: true,
-                    ),
-                    onRightTap: () {
-                      Navigator.pop(context);
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      showBiskitBottomSheet(
+                        context: context,
+                        title: '장소 검색',
+                        rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                        height: MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            44,
+                        contentWidget: const PlaceSearchScreen(
+                          isEng: false,
+                        ),
+                        onRightTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
                     },
-                  );
-                },
-                child: const Text('장소 선택 화면'),
+                    child: const Text('장소 선택 화면(한글)'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      showBiskitBottomSheet(
+                        context: context,
+                        title: '장소 검색',
+                        rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                        height: MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            44,
+                        contentWidget: const PlaceSearchScreen(
+                          isEng: true,
+                        ),
+                        onRightTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                    child: const Text('장소 선택 화면(영문)'),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
