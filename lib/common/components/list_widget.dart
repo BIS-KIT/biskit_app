@@ -5,7 +5,7 @@ import 'package:biskit_app/common/const/colors.dart';
 
 class ListWidget extends StatelessWidget {
   final double? height;
-  final Widget touchWidget;
+  final Widget? touchWidget;
   final Widget centerWidget;
   final Widget? rightWidget;
   final Color borderColor;
@@ -14,7 +14,7 @@ class ListWidget extends StatelessWidget {
   const ListWidget({
     Key? key,
     this.height,
-    required this.touchWidget,
+    this.touchWidget,
     required this.centerWidget,
     this.rightWidget,
     this.borderColor = kColorBorderDefalut,
@@ -51,12 +51,14 @@ class ListWidget extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:
+                        touchWidget == null ? null : const EdgeInsets.all(8.0),
                     child: touchWidget,
                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
+                  if (touchWidget != null)
+                    const SizedBox(
+                      width: 4,
+                    ),
                   Expanded(
                     child: centerWidget,
                   ),
