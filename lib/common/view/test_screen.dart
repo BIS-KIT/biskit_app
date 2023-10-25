@@ -12,6 +12,7 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/error_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/common/view/place_search_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
@@ -474,6 +475,28 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                 child: const Text('학생증 인증 화면'),
               ),
 
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  showBiskitBottomSheet(
+                    context: context,
+                    title: '장소 검색',
+                    rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                    height: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        44,
+                    contentWidget: const PlaceSearchScreen(
+                      isEng: true,
+                    ),
+                    onRightTap: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+                child: const Text('장소 선택 화면'),
+              ),
               const SizedBox(
                 height: 10,
               ),

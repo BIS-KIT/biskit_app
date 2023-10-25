@@ -10,12 +10,14 @@ class OutlinedButtonWidget extends StatelessWidget {
   final bool isEnable;
   final String? leftIconPath;
   final double height;
+  final AlignmentGeometry? alignment;
   const OutlinedButtonWidget({
     Key? key,
     required this.text,
     required this.isEnable,
     this.leftIconPath,
     this.height = 56,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   @override
@@ -35,40 +37,36 @@ class OutlinedButtonWidget extends StatelessWidget {
           Radius.circular(6),
         ),
       ),
-      alignment: Alignment.center,
-      child: leftIconPath == null
-          ? Text(
+      alignment: alignment,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (leftIconPath != null)
+            Container(
+              width: 24,
+              height: 24,
+              margin: const EdgeInsets.only(right: 4),
+              child: SvgPicture.asset(
+                leftIconPath!,
+                // color: isEnable ? kColorContentWeak : kColorBorderStrong,
+                colorFilter: ColorFilter.mode(
+                  isEnable ? kColorContentWeak : kColorBorderStrong,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          Flexible(
+            child: Text(
               text,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: getTsBody16Sb(context).copyWith(
                 color: isEnable ? kColorContentWeak : kColorBorderStrong,
               ),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: SvgPicture.asset(
-                    leftIconPath!,
-                    // color: isEnable ? kColorContentWeak : kColorBorderStrong,
-                    colorFilter: ColorFilter.mode(
-                      isEnable ? kColorContentWeak : kColorBorderStrong,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  text,
-                  style: getTsBody16Sb(context).copyWith(
-                    color: isEnable ? kColorContentWeak : kColorBorderStrong,
-                  ),
-                ),
-              ],
             ),
+          ),
+        ],
+      ),
     );
   }
 }
