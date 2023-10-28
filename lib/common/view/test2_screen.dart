@@ -133,7 +133,7 @@ class _Test2ScreenState extends State<Test2Screen> {
               StepperWidget(
                 value: stepperValue,
                 onClickMinus: onClickMinus,
-                onClickPlius: onClickPlus,
+                onClickPlus: onClickPlus,
               ),
             ],
           ),

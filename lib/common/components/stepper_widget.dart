@@ -5,13 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class StepperWidget extends StatelessWidget {
   final Function() onClickMinus;
-  final Function() onClickPlius;
+  final Function() onClickPlus;
   final int value;
 
   const StepperWidget({
     Key? key,
     required this.onClickMinus,
-    required this.onClickPlius,
+    required this.onClickPlus,
     required this.value,
   }) : super(key: key);
 
@@ -51,7 +51,7 @@ class StepperWidget extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: onClickPlius,
+          onTap: onClickPlus,
           child: Container(
             width: 40,
             padding: const EdgeInsets.all(4),
