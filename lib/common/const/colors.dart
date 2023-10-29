@@ -40,6 +40,6 @@ const Color kColorContentPlaceholder = Color(0xffbcc4cf);
 const Color kColorContentInverseWeak = Color(0xfff8fafc);
 const Color kColorContentInverse = Color(0xffffffff);
 const Color kColorContentPrimary = Color(0xfff9b301);
-const Color kColorContentSecondary = Color(0xff838ded);
+const Color kColorContentSecondary = Color(0xff5b5de3);
 const Color kColorContentSeccess = Color(0xff00993a);
 const Color kColorContentError = Color(0xffdf2c22);
