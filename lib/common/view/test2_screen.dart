@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:biskit_app/common/components/calendar_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
