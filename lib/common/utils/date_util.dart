@@ -25,3 +25,21 @@ String getDateTimeToString(DateTime dateTime) {
     return dayFormat1.format(dateTime);
   }
 }
+
+DateTime getDateTimeIntervalMin5() {
+  final now = DateTime.now();
+
+  int minute = 0;
+  if (now.minute % 5 == 1) {
+    minute = 4;
+  } else if (now.minute % 5 == 2) {
+    minute = 3;
+  }
+  if (now.minute % 5 == 3) {
+    minute = 2;
+  }
+  if (now.minute % 5 == 4) {
+    minute = 1;
+  }
+  return now.add(Duration(minutes: minute));
+}

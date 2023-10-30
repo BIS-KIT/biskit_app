@@ -33,6 +33,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../components/check_circle.dart';
+import '../utils/date_util.dart';
 import 'name_birth_gender_screen.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
@@ -520,6 +521,26 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                     child: const Text('장소 선택 화면(영문)'),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  DateTime dateTime = getDateTimeIntervalMin5();
+                  final time = await showTimeBottomSheet(
+                    context: context,
+                    time: dateTime,
+                    // onDateTimeChanged: (newTime) {
+                    //   // setState(() {
+                    //   // });
+                    //   dateTime = newTime;
+                    // },
+                  );
+                  logger.d(time);
+                },
+                child: const Text('시간 선택'),
               ),
               const SizedBox(
                 height: 10,
