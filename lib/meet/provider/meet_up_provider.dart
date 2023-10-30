@@ -21,19 +21,4 @@ class MeetUpStateNotifier extends StateNotifier<CreateMeetUpModel> {
       pageIndex: 0,
     );
   }
-
-  void checkChange() {}
-
-  void setTempSave(bool isWritten) {
-    state = state.copyWith(isWritten: isWritten);
-  }
-
-  void setPageIndex(int index) {
-    state = state.copyWith(
-      pageIndex: index,
-    );
-    if (index > 0) {
-      setTempSave(true);
-    }
-  }
 }
