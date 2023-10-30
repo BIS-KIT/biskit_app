@@ -1,47 +1,143 @@
 import 'package:biskit_app/common/components/custom_text_form_field.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
-class MeetUpCreateStep4Tab extends StatelessWidget {
+class MeetUpCreateStep4Tab extends StatefulWidget {
   const MeetUpCreateStep4Tab({super.key});
 
   @override
+  State<MeetUpCreateStep4Tab> createState() => _MeetUpCreateStep4TabState();
+}
+
+class _MeetUpCreateStep4TabState extends State<MeetUpCreateStep4Tab> {
+  dynamic selectedSubject = {};
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<dynamic> subjectList = [
+      {'value': '식사', 'imgUrl': 'assets/icons/ic_restaurant_fill_48.svg'},
+      {'value': '카페', 'imgUrl': 'assets/icons/ic_cafe_fill_48.svg'},
+      {'value': '액티비티', 'imgUrl': 'assets/icons/ic_activity_fill_48.svg'},
+      {
+        'value': '언어교환',
+        'imgUrl': 'assets/icons/ic_language_exchange_fill_48.svg'
+      },
+      {'value': '스터디', 'imgUrl': 'assets/icons/ic_study_fill_48.svg'},
+      {'value': '문화·예술', 'imgUrl': 'assets/icons/ic_culture_fill_48.svg'},
+      {'value': '여행', 'imgUrl': 'assets/icons/ic_travel_fill_48.svg'},
+      {'value': '취미', 'imgUrl': 'assets/icons/ic_friends_fill_48.svg'},
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(
           height: 32,
         ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 44,
-              backgroundColor: Color(
-                0xffFEF3EB,
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: kColorBgInverseWeak,
+        GestureDetector(
+          onTap: () {
+            showBiskitBottomSheet(
+              title: '',
+              customTitleWidget: Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, left: 20, right: 20, bottom: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 44,
+                      height: 44,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '아이콘 선택',
+                          style: getTsHeading18(context).copyWith(
+                            color: kColorContentDefault,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_cancel_line_24.svg',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                child: SvgPicture.asset(
-                  'assets/icons/ic_pencil_fill_24.svg',
-                  width: 16,
-                  height: 16,
+              ),
+              context: context,
+              contentWidget: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Wrap(
+                  children: [
+                    ...subjectList.map(
+                      (e) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedSubject = e;
+                          });
+                          context.pop();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: ThumbnailIconWidget(
+                            iconUrl: e['imgUrl'],
+                            isSelected: selectedSubject['value'] == e['value'],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          ],
+            );
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ThumbnailIconWidget(
+                iconUrl: selectedSubject['value'] != null
+                    ? selectedSubject['imgUrl']
+                    : 'assets/icons/ic_restaurant_fill_48.svg',
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: kColorBgInverseWeak,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_pencil_fill_24.svg',
+                    width: 16,
+                    height: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           height: 20,

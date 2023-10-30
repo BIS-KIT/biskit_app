@@ -77,65 +77,70 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '',
-      onTapLeading: () {
-        if (pageIndex > 0) {
-          controller.animateTo(pageIndex - 1);
-        } else if (pageIndex == 0) {
-          Navigator.pop(context);
-        }
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 4,
-            ),
-            ProgressBarWidget(
-              isFirstDone: true,
-              isSecondDone: pageIndex > 0,
-              isThirdDone: pageIndex > 1,
-              isFourthDone: pageIndex > 2,
-            ),
-
-            Expanded(
-              child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller,
-                children: const [
-                  MeetUpCreateStep1Tab(),
-                  MeetUpCreateStep2Tab(),
-                  MeetUpCreateStep3Tab(),
-                  MeetUpCreateStep4Tab(),
-                ],
+      child: DefaultLayout(
+        title: '',
+        onTapLeading: () {
+          if (pageIndex > 0) {
+            controller.animateTo(pageIndex - 1);
+          } else if (pageIndex == 0) {
+            Navigator.pop(context);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 4,
               ),
-            ),
-
-            // 하단 버튼
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                bottom: 34,
+              ProgressBarWidget(
+                isFirstDone: true,
+                isSecondDone: pageIndex > 0,
+                isThirdDone: pageIndex > 1,
+                isFourthDone: pageIndex > 2,
               ),
-              child: GestureDetector(
-                onTap: () {
-                  if (pageIndex >= 0 && pageIndex < 3) {
-                    controller.animateTo(pageIndex + 1);
-                  }
-                },
-                child: FilledButtonWidget(
-                  height: 56,
-                  text: pageIndex == 3 ? '모이 만들기' : '다음',
-                  isEnable: true,
+
+              Expanded(
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: controller,
+                  children: const [
+                    MeetUpCreateStep1Tab(),
+                    MeetUpCreateStep2Tab(),
+                    MeetUpCreateStep3Tab(),
+                    MeetUpCreateStep4Tab(),
+                  ],
                 ),
               ),
-            ),
-          ],
+
+              // 하단 버튼
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  bottom: 34,
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    if (pageIndex >= 0 && pageIndex < 3) {
+                      controller.animateTo(pageIndex + 1);
+                    }
+                  },
+                  child: FilledButtonWidget(
+                    height: 56,
+                    text: pageIndex == 3 ? '모임 만들기' : '다음',
+                    isEnable: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

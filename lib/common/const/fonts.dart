@@ -90,7 +90,7 @@ const TextStyle kTsKrBody16Sb = TextStyle(
   fontFamily: 'Pretendard',
   fontSize: 16,
   fontWeight: FontWeight.w600,
-  height: 1.5,
+  height: 1.4,
 );
 
 const TextStyle kTsKrBody16Rg = TextStyle(

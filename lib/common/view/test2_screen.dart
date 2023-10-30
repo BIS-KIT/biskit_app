@@ -2,6 +2,8 @@ import 'package:biskit_app/common/components/calendar_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/progress_bar_widget.dart';
+import 'package:biskit_app/common/components/stepper_widget.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
@@ -19,6 +21,20 @@ class Test2Screen extends StatefulWidget {
 
 class _Test2ScreenState extends State<Test2Screen> {
   bool isChecked = false;
+  int stepperValue = 0;
+
+  void onClickMinus() {
+    if (stepperValue <= 0) return;
+    setState(() {
+      stepperValue = stepperValue - 1;
+    });
+  }
+
+  void onClickPlus() {
+    setState(() {
+      stepperValue = stepperValue + 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +112,7 @@ class _Test2ScreenState extends State<Test2Screen> {
                     isChecked = !isChecked;
                   });
                 },
-                onTapAdd: () {},
+                // onTapAdd: () {},
                 onTapDelete: () {},
               ),
               const SizedBox(
@@ -112,6 +128,21 @@ class _Test2ScreenState extends State<Test2Screen> {
                 height: 40,
               ),
               const CalendarWidget(),
+              const SizedBox(
+                height: 40,
+              ),
+              StepperWidget(
+                value: stepperValue,
+                onClickMinus: onClickMinus,
+                onClickPlus: onClickPlus,
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              const ThumbnailIconWidget(
+                isSelected: true,
+                iconUrl: 'assets/icons/ic_activity_fill_48.svg',
+              ),
             ],
           ),
         ),
