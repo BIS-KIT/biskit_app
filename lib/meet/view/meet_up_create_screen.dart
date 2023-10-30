@@ -95,6 +95,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
 
   @override
   Widget build(BuildContext context) {
+    final viewInsets = MediaQuery.of(context).viewInsets;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -130,7 +131,6 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   isThirdDone: pageIndex > 1,
                   isFourthDone: pageIndex > 2,
                 ),
-
                 Expanded(
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
@@ -143,26 +143,26 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                     ],
                   ),
                 ),
-
-                // 하단 버튼
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
-                    bottom: 34,
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (pageIndex >= 0 && pageIndex < 3) {
-                        controller.animateTo(pageIndex + 1);
-                      }
-                    },
-                    child: FilledButtonWidget(
-                      height: 56,
-                      text: pageIndex == 3 ? '모임 만들기' : '다음',
-                      isEnable: true,
+                if (viewInsets.bottom <= 150)
+                  // 하단 버튼
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                      bottom: 34,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (pageIndex >= 0 && pageIndex < 3) {
+                          controller.animateTo(pageIndex + 1);
+                        }
+                      },
+                      child: FilledButtonWidget(
+                        height: 56,
+                        text: pageIndex == 3 ? '모임 만들기' : '다음',
+                        isEnable: true,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
