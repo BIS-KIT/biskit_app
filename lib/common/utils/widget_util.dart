@@ -264,7 +264,7 @@ showConfirmModal({
   required Function leftCall,
   required Function rightCall,
 }) {
-  showDialog(
+  return showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
