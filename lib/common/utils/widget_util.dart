@@ -1,10 +1,26 @@
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/time_picker_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../components/filled_button_widget.dart';
 import '../const/colors.dart';
+
+/// 시간 선택 바텀 시트
+showTimeBottomSheet({
+  required BuildContext context,
+  required DateTime time,
+  // required Function(DateTime newTime) onDateTimeChanged,
+}) {
+  return showCupertinoModalPopup(
+    context: context,
+    builder: (context) {
+      return TimePickerWidget(time: time);
+    },
+  );
+}
 
 showBiskitBottomSheet({
   required BuildContext context,
