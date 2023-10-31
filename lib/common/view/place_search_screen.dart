@@ -105,6 +105,9 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                   builderDelegate: PagedChildBuilderDelegate(
                     itemBuilder: (context, KakaoDocumentModel item, index) =>
                         ListWidget(
+                      onTap: () {
+                        Navigator.pop(context, item);
+                      },
                       isSubComponent: true,
                       centerWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,11 +144,19 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        OutlinedButtonWidget(
-                          leftIconPath: 'assets/icons/ic_plus_line_24.svg',
-                          text: '\'${searchController.text.trim()}\' 장소 입력',
-                          isEnable: true,
-                          alignment: null,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(
+                              context,
+                              searchController.text.trim(),
+                            );
+                          },
+                          child: OutlinedButtonWidget(
+                            leftIconPath: 'assets/icons/ic_plus_line_24.svg',
+                            text: '\'${searchController.text.trim()}\' 장소 입력',
+                            isEnable: true,
+                            alignment: null,
+                          ),
                         ),
                         SizedBox(
                           height: viewInsets.bottom,
