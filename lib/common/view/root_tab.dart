@@ -10,6 +10,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
+import 'package:biskit_app/meet/view/meet_up_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,6 +61,7 @@ class _RootTabState extends ConsumerState<RootTab>
     final userState = ref.watch(userMeProvider);
     // logger.d((userState as UserModel).toJson());
     return DefaultLayout(
+      backgroundColor: kColorBgElevation2,
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(
           bottom: Platform.isIOS ? 28 : 0,
@@ -157,7 +159,8 @@ class _RootTabState extends ConsumerState<RootTab>
                   ],
                 )
               : Container(),
-          userState is UserModel ? _buildGroupTap(userState) : Container(),
+          // userState is UserModel ? _buildGroupTap(userState) : Container(),
+          const MeetUpListScreen(),
           Container(),
           userState is UserModel ? _buildChatTap(userState) : Container(),
           Container(),
