@@ -3,6 +3,8 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/meet/model/tag_model.dart';
+import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -87,6 +89,42 @@ class UtilRepository {
       // list = List<NationalFlagModel>.from(
       //     res.data.map((e) => NationalFlagModel.fromMap(e)).toList());
     }
+    return list;
+  }
+
+  Future<List<TopicModel>> getTopics() async {
+    List<TopicModel> list = [];
+    final res = await dio.get(
+      '$baseUrl/topics',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    logger.d(res.toString());
+    list = List.from((res.data as List).map((e) => TopicModel.fromMap(e)));
+
+    return list;
+  }
+
+  getTags() async {
+    List<TagModel> list = [];
+    final res = await dio.get(
+      '$baseUrl/tags',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    logger.d(res.toString());
+    list = List.from((res.data as List).map((e) => TagModel.fromMap(e)));
+
     return list;
   }
 }
