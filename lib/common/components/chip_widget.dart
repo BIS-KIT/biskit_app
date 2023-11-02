@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,9 @@ class ChipWidget extends StatelessWidget {
   final Function()? onTapDelete;
   final FocusNode? focusNode;
   final int? order;
-
+  final String rightIcon;
+  final Color rightIconColor;
+  final Color textColor;
   const ChipWidget({
     Key? key,
     required this.text,
@@ -23,6 +24,9 @@ class ChipWidget extends StatelessWidget {
     this.onTapDelete,
     this.focusNode,
     this.order,
+    this.rightIcon = 'assets/icons/ic_cancel_line_24.svg',
+    this.rightIconColor = kColorContentOnBgPrimary,
+    this.textColor = kColorContentOnBgPrimary,
   }) : super(key: key);
 
   @override
@@ -34,13 +38,14 @@ class ChipWidget extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: isSelected ? kColorBgPrimaryWeak : kColorBgElevation1,
-              border: Border.all(
-                  width: 1,
-                  color: isSelected
-                      ? kColorBorderPrimaryStrong
-                      : kColorBorderDefalut),
-              borderRadius: const BorderRadius.all(Radius.circular(50))),
+            color: isSelected ? kColorBgPrimaryWeak : Colors.transparent,
+            border: Border.all(
+              width: 1,
+              color:
+                  isSelected ? kColorBorderPrimaryStrong : kColorBorderStrong,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(50)),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
@@ -49,10 +54,13 @@ class ChipWidget extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: kColorBgInverse,
                     minRadius: 8,
-                    child: Text(order.toString(),
-                        textAlign: TextAlign.center,
-                        style: kTsKrCaption11Rg.copyWith(
-                            color: kColorContentInverse)),
+                    child: Text(
+                      order.toString(),
+                      textAlign: TextAlign.center,
+                      style: kTsKrCaption11Rg.copyWith(
+                        color: kColorContentInverse,
+                      ),
+                    ),
                   ),
                 if (onTapAdd != null)
                   GestureDetector(
@@ -72,8 +80,9 @@ class ChipWidget extends StatelessWidget {
                     child: Text(
                       text,
                       textAlign: TextAlign.center,
-                      style: getTsBody14Rg(context)
-                          .copyWith(color: kColorContentOnBgPrimary),
+                      style: getTsBody14Rg(context).copyWith(
+                        color: kColorContentOnBgPrimary,
+                      ),
                     ),
                   )
                 else
@@ -85,16 +94,19 @@ class ChipWidget extends StatelessWidget {
                           width: 57,
                           height: 20,
                           child: TextFormField(
-                              onChanged: onTapAdd,
-                              focusNode: focusNode,
-                              cursorHeight: 14,
-                              style: getTsBody14Rg(context)
-                                  .copyWith(color: kColorContentOnBgPrimary),
-                              decoration: InputDecoration.collapsed(
-                                  border: InputBorder.none,
-                                  hintText: '직접 입력',
-                                  hintStyle: getTsBody14Rg(context).copyWith(
-                                      color: kColorContentOnBgPrimary))),
+                            onChanged: onTapAdd,
+                            focusNode: focusNode,
+                            cursorHeight: 14,
+                            style: getTsBody14Rg(context)
+                                .copyWith(color: kColorContentOnBgPrimary),
+                            decoration: InputDecoration.collapsed(
+                              border: InputBorder.none,
+                              hintText: '직접 입력',
+                              hintStyle: getTsBody14Rg(context).copyWith(
+                                color: kColorContentOnBgPrimary,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -103,9 +115,13 @@ class ChipWidget extends StatelessWidget {
                   GestureDetector(
                     onTap: onTapDelete,
                     child: SvgPicture.asset(
-                      'assets/icons/ic_cancel_line_24.svg',
+                      rightIcon,
                       width: 16,
                       height: 16,
+                      colorFilter: ColorFilter.mode(
+                        rightIconColor,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
               ],

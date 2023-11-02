@@ -2,12 +2,13 @@
 
 import 'dart:convert';
 
+import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 
-class MeetUpModel {
+class MeetUpModel implements IModelWithId {
   final int current_participants;
   final int korean_count;
   final int foreign_count;
@@ -18,6 +19,7 @@ class MeetUpModel {
   final int max_participants;
   final String? image_url;
   final bool is_active;
+  @override
   final int id;
   final String created_time;
   final MeetUpCreatorModel creator;
