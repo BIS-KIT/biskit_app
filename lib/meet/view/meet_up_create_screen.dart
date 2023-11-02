@@ -105,6 +105,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
         rightCall: () {
           isPop = true;
           ref.read(createMeetUpProvider.notifier).init();
+          Navigator.pop(context);
           Navigator.pop(context, true);
         },
         rightButton: '나가기',

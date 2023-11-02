@@ -65,8 +65,8 @@ class _RootTabState extends ConsumerState<RootTab>
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(
           bottom: Platform.isIOS ? 28 : 0,
-          left: 8,
-          right: 8,
+          // left: 8,
+          // right: 8,
         ),
         decoration: BoxDecoration(
           border: Border.all(
