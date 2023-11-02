@@ -35,19 +35,23 @@ class CursorPagination<T> extends CursorPaginationBase {
 
 class CursorPaginationMeta {
   final int count;
+  final int totalCount;
   final bool hasMore;
 
   CursorPaginationMeta({
     required this.count,
+    required this.totalCount,
     required this.hasMore,
   });
 
   CursorPaginationMeta copyWith({
     int? count,
     bool? hasMore,
+    int? totalCount,
   }) {
     return CursorPaginationMeta(
       count: count ?? this.count,
+      totalCount: totalCount ?? this.totalCount,
       hasMore: hasMore ?? this.hasMore,
     );
   }
@@ -55,6 +59,7 @@ class CursorPaginationMeta {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'count': count,
+      'totalCount': totalCount,
       'hasMore': hasMore,
     };
   }
@@ -62,6 +67,7 @@ class CursorPaginationMeta {
   factory CursorPaginationMeta.fromMap(Map<String, dynamic> map) {
     return CursorPaginationMeta(
       count: map['count'] as int,
+      totalCount: map['totalCount'] as int,
       hasMore: map['hasMore'] as bool,
     );
   }
