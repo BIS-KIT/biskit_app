@@ -8,7 +8,7 @@ import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
+import 'package:biskit_app/common/view/single_national_flag_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 
 class NameBirthGenderScreen extends StatefulWidget {

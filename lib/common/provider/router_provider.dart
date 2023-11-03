@@ -2,7 +2,7 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/root_tab.dart';
-import 'package:biskit_app/common/view/single_national_flag_screen%20copy.dart';
+import 'package:biskit_app/common/view/single_national_flag_screen.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
