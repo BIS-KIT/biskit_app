@@ -25,7 +25,7 @@ class CreateMeetUpModel {
     this.meeting_time,
     this.max_participants = 2,
     this.image_url,
-    this.is_active,
+    this.is_active = true,
     required this.custom_tags,
     required this.custom_topics,
     required this.creator_id,
