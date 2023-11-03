@@ -224,115 +224,127 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             ],
           ),
         ),
-        // isScrollControlled: true,
+        isScrollControlled: true,
         enableDrag: true,
-        contentWidget: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: 40,
-              ),
-              child: Column(
-                children: profilePhotoList
-                    .map(
-                      (e) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        child: Row(
-                          children: [
-                            AvatarWithFlagWidget(
-                              profilePath: e.profile_photo,
-                              flagPath: e.nationalities.isEmpty
-                                  ? null
-                                  : '$kS3Url$kS3Flag43Path/${e.nationalities[0].code}.svg',
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Text(
-                              e.nick_name,
-                              style: getTsBody16Rg(context).copyWith(
-                                color: kColorContentWeak,
-                              ),
-                            ),
-                            if (chatRoomModel!.createUserId == e.user_id)
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/icons/ic_crown_circle_fill_24.svg',
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                top: 8,
-                left: 8,
-                bottom: 34,
-                right: 16,
-              ),
-              color: kColorBgElevation1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_logout_off_line_24.svg',
-                      width: 24,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentWeaker,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
-                  Row(
+        contentWidget: SizedBox(
+          height: MediaQuery.of(context).size.height - 260,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          'assets/icons/ic_notifications_line_24.svg',
-                          width: 24,
-                          height: 24,
-                          colorFilter: const ColorFilter.mode(
-                            kColorContentWeaker,
-                            BlendMode.srcIn,
-                          ),
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 40,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          'assets/icons/ic_siren_line_24.svg',
-                          width: 24,
-                          height: 24,
-                          colorFilter: const ColorFilter.mode(
-                            kColorContentWeaker,
-                            BlendMode.srcIn,
-                          ),
+                        child: Column(
+                          children: profilePhotoList
+                              .map(
+                                (e) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      AvatarWithFlagWidget(
+                                        profilePath: e.profile_photo,
+                                        flagPath: e.nationalities.isEmpty
+                                            ? null
+                                            : '$kS3Url$kS3Flag43Path/${e.nationalities[0].code}.svg',
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      Text(
+                                        e.nick_name,
+                                        style: getTsBody16Rg(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                      if (chatRoomModel!.createUserId ==
+                                          e.user_id)
+                                        Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/icons/ic_crown_circle_fill_24.svg',
+                                              width: 24,
+                                              height: 24,
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 8,
+                  left: 8,
+                  bottom: 34,
+                  right: 16,
+                ),
+                color: kColorBgElevation1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_logout_off_line_24.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentWeaker,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SvgPicture.asset(
+                            'assets/icons/ic_notifications_line_24.svg',
+                            width: 24,
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(
+                              kColorContentWeaker,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SvgPicture.asset(
+                            'assets/icons/ic_siren_line_24.svg',
+                            width: 24,
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(
+                              kColorContentWeaker,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -411,6 +423,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                   padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
+                                    top: 60,
                                   ),
                                   reverse: true,
                                   itemCount: list.length,
@@ -499,6 +512,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                           (userState as UserModel).id);
                                     }
 
+                                    // 제일 처음에 상단 여백을 제공
+
                                     return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
@@ -585,7 +600,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                               Text(
                                 '·',
                                 style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                                  color: kColorContentWeakest,
                                 ),
                               ),
                               const SizedBox(
@@ -603,7 +618,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                               Text(
                                 '·',
                                 style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                                  color: kColorContentWeakest,
                                 ),
                               ),
                               const SizedBox(
@@ -630,7 +645,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                           width: 24,
                           height: 24,
                           colorFilter: const ColorFilter.mode(
-                            kColorContentWeaker,
+                            kColorContentWeakest,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -651,24 +666,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     bool isMsgTimeView,
     bool isProfileView,
   ) {
+    ProfilePhotoModel? profilePhotoModel;
+    if (profilePhotoList.isNotEmpty &&
+        profilePhotoList
+            .map((e) => e.user_id)
+            .contains(chatMsgModel.createUserId)) {
+      profilePhotoModel = profilePhotoList.firstWhere(
+        (element) => element.user_id == chatMsgModel.createUserId,
+      );
+    }
     return Padding(
       padding: EdgeInsets.only(
         top: topPaddingSize,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Builder(
             builder: (context) {
-              ProfilePhotoModel? profilePhotoModel;
-              if (profilePhotoList.isNotEmpty &&
-                  profilePhotoList
-                      .map((e) => e.user_id)
-                      .contains(chatMsgModel.createUserId)) {
-                profilePhotoModel = profilePhotoList.firstWhere(
-                  (element) => element.user_id == chatMsgModel.createUserId,
-                );
-              }
               // logger.d('BUILD!!!!');
               if (isProfileView && profilePhotoModel != null) {
                 return AvatarWithFlagWidget(
@@ -677,47 +692,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       ? null
                       : '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
                 );
-                // return Stack(
-                //   children: [
-                //     CircleAvatar(
-                //       radius: 16,
-                //       backgroundImage: const AssetImage(
-                //         'assets/images/88.png',
-                //       ),
-                //       foregroundImage: profilePhotoModel?.profile_photo == null
-                //           ? null
-                //           : NetworkImage(profilePhotoModel!.profile_photo!),
-                //     ),
-                //     Positioned(
-                //       bottom: 0,
-                //       right: 0,
-                //       child: Container(
-                //         width: 16,
-                //         height: 16,
-                //         decoration: BoxDecoration(
-                //           shape: BoxShape.circle,
-                //           border: Border.all(
-                //             color: kColorBorderStrong,
-                //             width: 1,
-                //           ),
-                //         ),
-                //         clipBehavior: Clip.hardEdge,
-                //         child: profilePhotoModel!.nationalities.isEmpty
-                //             ? Container()
-                //             : ClipRRect(
-                //                 borderRadius:
-                //                     const BorderRadius.all(Radius.circular(16)),
-                //                 child: SvgPicture.network(
-                //                   '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
-                //                   width: 16,
-                //                   height: 16,
-                //                   fit: BoxFit.cover,
-                //                 ),
-                //               ),
-                //       ),
-                //     ),
-                //   ],
-                // );
               } else {
                 return const SizedBox(
                   width: 32,
@@ -728,19 +702,38 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           const SizedBox(
             width: 8,
           ),
-          _buildMsgBubble(chatMsgModel, false),
-          const SizedBox(
-            width: 4,
-          ),
-          if (isMsgTimeView)
-            Text(
-              msgDateFormat.format(
-                chatMsgModel.createDate.toDate(),
-              ),
-              style: getTsCaption10Rg(context).copyWith(
-                color: kColorContentWeakest,
-              ),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isProfileView && profilePhotoModel != null)
+                  Text(
+                    profilePhotoModel.nick_name,
+                    style: getTsBody14Rg(context).copyWith(
+                      color: kColorContentWeaker,
+                    ),
+                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _buildMsgBubble(chatMsgModel, false),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    if (isMsgTimeView)
+                      Text(
+                        msgDateFormat.format(
+                          chatMsgModel.createDate.toDate(),
+                        ),
+                        style: getTsCaption10Rg(context).copyWith(
+                          color: kColorContentWeakest,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
@@ -801,8 +794,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               ),
               child: Text(
                 chatMsgModel.msg,
-                style: const TextStyle(
+                style: getTsBody16Rg(context).copyWith(
                   overflow: TextOverflow.clip,
+                  color: kColorContentWeak,
                 ),
               ),
             )
@@ -918,7 +912,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         right: 16,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: textEditingController.text.contains('\n')
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.center,
         children: [
           GestureDetector(
             onTap: () {
@@ -959,6 +955,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       controller: textEditingController,
                       minLines: 1,
                       maxLines: 4,
+                      textAlign: TextAlign.start,
+                      textAlignVertical: TextAlignVertical.center,
                       style: getTsBody16Rg(context).copyWith(
                         color: kColorContentWeak,
                       ),
