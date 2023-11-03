@@ -1,10 +1,9 @@
-import 'package:biskit_app/chat/model/chat_msg_model.dart';
+import 'package:biskit_app/chat/components/chat_room_card_widget.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -20,6 +19,35 @@ class ChatRoomScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
+  onTapChatRoom({
+    required ChatRoomModel chatRoom,
+    required UserModel user,
+  }) async {
+    // 마지막 메시지 읽음으로 변경
+    ref.read(chatRepositoryProvider).lastMsgRead(
+          chatRoom: chatRoom,
+          userId: user.id,
+        );
+
+    if (!chatRoom.firstUserInfoList
+        .any((element) => element.userId == user.id)) {
+      // 최초 채팅방 입장시 처리
+      await ref.read(chatRepositoryProvider).firstJoin(
+            chatRoom: chatRoom,
+            user: user,
+          );
+    }
+
+    if (!mounted) return;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatScreen(
+            chatRoomUid: chatRoom.uid,
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
@@ -82,141 +110,16 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                               .singleWhere(
                                   (element) => element.userId == userState.id);
                         }
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () async {
-                            // 마지막 메시지 읽음으로 변경
-                            ref.read(chatRepositoryProvider).lastMsgRead(
-                                  chatRoom: docs[index],
-                                  userId: userState.id,
-                                );
-
-                            if (!docs[index].firstUserInfoList.any(
-                                (element) => element.userId == userState.id)) {
-                              // 최초 채팅방 입장시 처리
-                              await ref.read(chatRepositoryProvider).firstJoin(
-                                    chatRoom: docs[index],
-                                    user: userState,
-                                  );
-                            }
-
-                            if (!mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                    chatRoomUid: docs[index].uid,
-                                  ),
-                                ));
+                        return ChatRoomCardWidget(
+                          chatRoomModel: docs[index],
+                          user: userState,
+                          chatRoomFirstUserInfo: chatRoomFirstUserInfo,
+                          onTapChatRoom: () {
+                            onTapChatRoom(
+                              chatRoom: docs[index],
+                              user: userState,
+                            );
                           },
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CircleAvatar(
-                                  radius: 24,
-                                  backgroundImage: const AssetImage(
-                                    'assets/images/88.png',
-                                  ),
-                                  foregroundImage:
-                                      docs[index].roomImagePath == null
-                                          ? null
-                                          : NetworkImage(
-                                              docs[index].roomImagePath!,
-                                            ),
-                                ),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        docs[index].title,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: getTsBody16Sb(context).copyWith(
-                                          color: kColorContentDefault,
-                                        ),
-                                      ),
-                                      if (chatRoomFirstUserInfo != null &&
-                                          chatRoomFirstUserInfo.firstJoinDate !=
-                                              null &&
-                                          docs[index].lastMsgDate != null &&
-                                          chatRoomFirstUserInfo.firstJoinDate
-                                                  .microsecondsSinceEpoch <=
-                                              docs[index]
-                                                  .lastMsgDate
-                                                  .microsecondsSinceEpoch &&
-                                          ([
-                                            ChatMsgType.text.name,
-                                            ChatMsgType.image.name,
-                                          ].contains(docs[index].lastMsgType)))
-                                        Text(
-                                          docs[index].lastMsgType ==
-                                                  ChatMsgType.text.name
-                                              ? docs[index].lastMsg ?? ''
-                                              : '사진',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style:
-                                              getTsBody14Rg(context).copyWith(
-                                            color: kColorContentWeaker,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                                if (chatRoomFirstUserInfo != null &&
-                                    chatRoomFirstUserInfo.firstJoinDate !=
-                                        null &&
-                                    docs[index].lastMsgDate != null &&
-                                    chatRoomFirstUserInfo.firstJoinDate
-                                            .microsecondsSinceEpoch <=
-                                        docs[index]
-                                            .lastMsgDate
-                                            .microsecondsSinceEpoch)
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        docs[index].lastMsgDate == null
-                                            ? ''
-                                            : getDateTimeToString(
-                                                docs[index]
-                                                    .lastMsgDate
-                                                    .toDate(),
-                                              ),
-                                        style:
-                                            getTsCaption12Rg(context).copyWith(
-                                          color: kColorContentWeakest,
-                                        ),
-                                      ),
-                                      docs[index].lastMsgUid == null ||
-                                              docs[index]
-                                                  .lastMsgReadUsers
-                                                  .contains(userState.id)
-                                          ? Container()
-                                          : const Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 8.0),
-                                              child: CircleAvatar(
-                                                radius: 4,
-                                                backgroundColor:
-                                                    kColorContentError,
-                                              ),
-                                            ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ),
                         );
                       },
                       separatorBuilder: (context, index) => const SizedBox(),
