@@ -150,110 +150,103 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     final padding = MediaQuery.of(context).padding;
     final createMeetUpState = ref.watch(createMeetUpProvider);
 
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: WillPopScope(
-        onWillPop: onWillPop,
-        child: DefaultLayout(
-          title: '',
-          onTapLeading: onWillPop,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                // horizontal: 20,
-                ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 4,
-                ),
-                ProgressBarWidget(
-                  isFirstDone: true,
-                  isSecondDone: pageIndex > 0,
-                  isThirdDone: pageIndex > 1,
-                  isFourthDone: pageIndex > 2,
-                ),
-                Expanded(
-                  child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: controller,
-                    children: [
-                      MeetUpCreateStep1Tab(
-                        fixTopics: fixTopics,
-                        topPadding: padding.top,
-                      ),
-                      const MeetUpCreateStep2Tab(),
-                      MeetUpCreateStep3Tab(
-                        tags: tags,
-                      ),
-                      const MeetUpCreateStep4Tab(),
-                    ],
-                  ),
-                ),
-
-                // 하단 버튼
-                Builder(builder: (context) {
-                  if (viewInsets.bottom <= 150) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        top: 16,
-                        bottom: 34,
-                        left: 20,
-                        right: 20,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (isButtonEnable()) {
-                            if (pageIndex >= 0 && pageIndex < 3) {
-                              controller.animateTo(pageIndex + 1);
-
-                              logger.d(createMeetUpState);
-                            }
-                          }
-                        },
-                        child: FilledButtonWidget(
-                          height: 56,
-                          text: pageIndex == 3 ? '모임 만들기' : '다음',
-                          isEnable: isButtonEnable(),
-                        ),
-                      ),
-                    );
-                  } else {
-                    if (pageIndex == 3) {
-                      return GestureDetector(
-                        onTap: () async {
-                          if (isButtonEnable()) {
-                            if (pageIndex >= 0 && pageIndex < 3) {
-                              controller.animateTo(pageIndex + 1);
-
-                              logger.d(createMeetUpState);
-                            } else if (pageIndex == 3) {
-                              final result = await ref
-                                  .read(createMeetUpProvider.notifier)
-                                  .createMeetUp();
-                              if (result) {
-                                if (!mounted) return;
-                                Navigator.pop(context);
-                              }
-                            }
-                          }
-                        },
-                        child: FilledButtonWidget(
-                          height: 56,
-                          text: pageIndex == 3 ? '모임 만들기' : '다음',
-                          isEnable: isButtonEnable(),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }
-                }),
-              ],
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: DefaultLayout(
+        title: '',
+        onTapLeading: onWillPop,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 4,
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ProgressBarWidget(
+                isFirstDone: true,
+                isSecondDone: pageIndex > 0,
+                isThirdDone: pageIndex > 1,
+                isFourthDone: pageIndex > 2,
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: controller,
+                children: [
+                  MeetUpCreateStep1Tab(
+                    fixTopics: fixTopics,
+                    topPadding: padding.top,
+                  ),
+                  const MeetUpCreateStep2Tab(),
+                  MeetUpCreateStep3Tab(
+                    tags: tags,
+                  ),
+                  const MeetUpCreateStep4Tab(),
+                ],
+              ),
+            ),
+
+            // 하단 버튼
+            Builder(builder: (context) {
+              if (viewInsets.bottom <= 150) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    bottom: 34,
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (isButtonEnable()) {
+                        if (pageIndex >= 0 && pageIndex < 3) {
+                          controller.animateTo(pageIndex + 1);
+
+                          logger.d(createMeetUpState);
+                        }
+                      }
+                    },
+                    child: FilledButtonWidget(
+                      height: 56,
+                      text: pageIndex == 3 ? '모임 만들기' : '다음',
+                      isEnable: isButtonEnable(),
+                    ),
+                  ),
+                );
+              } else {
+                if (pageIndex == 3) {
+                  return GestureDetector(
+                    onTap: () async {
+                      if (isButtonEnable()) {
+                        if (pageIndex >= 0 && pageIndex < 3) {
+                          controller.animateTo(pageIndex + 1);
+
+                          logger.d(createMeetUpState);
+                        } else if (pageIndex == 3) {
+                          final result = await ref
+                              .read(createMeetUpProvider.notifier)
+                              .createMeetUp();
+                          if (result) {
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                          }
+                        }
+                      }
+                    },
+                    child: FilledButtonWidget(
+                      height: 56,
+                      text: pageIndex == 3 ? '모임 만들기' : '다음',
+                      isEnable: isButtonEnable(),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }
+            }),
+          ],
         ),
       ),
     );
