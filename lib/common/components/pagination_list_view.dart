@@ -6,6 +6,7 @@ import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:biskit_app/common/provider/pagination_provider.dart';
 import 'package:biskit_app/common/utils/pagination_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
@@ -21,6 +22,8 @@ class PaginationListView<T extends IModelWithId>
   final Widget? emptyDataWidget;
   final Widget? separatorWidget;
   final EdgeInsetsGeometry? padding;
+  final VoidCallback? scrollUp;
+  final VoidCallback? scrollDown;
   const PaginationListView({
     required this.provider,
     required this.itemBuilder,
@@ -28,6 +31,8 @@ class PaginationListView<T extends IModelWithId>
     this.emptyDataWidget,
     this.separatorWidget,
     this.padding,
+    this.scrollDown,
+    this.scrollUp,
     Key? key,
   }) : super(key: key);
 
@@ -53,6 +58,19 @@ class _PaginationListViewState<T extends IModelWithId>
   }
 
   void listener() {
+    // logger
+    //     .d(controller.position.userScrollDirection == ScrollDirection.forward);
+    // logger.d(controller.offset);
+    if (controller.position.userScrollDirection == ScrollDirection.forward &&
+        widget.scrollUp != null) {
+      // 스크롤 Up 시
+      widget.scrollUp!();
+    }
+    if (controller.position.userScrollDirection == ScrollDirection.reverse &&
+        widget.scrollDown != null) {
+      // 스크롤 Down 시
+      widget.scrollDown!();
+    }
     PaginationUtils.paginate(
       controller: controller,
       provider: ref.read(widget.provider.notifier),

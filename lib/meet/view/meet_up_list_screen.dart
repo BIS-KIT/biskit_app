@@ -18,6 +18,7 @@ class MeetUpListScreen extends ConsumerStatefulWidget {
 }
 
 class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
+  bool isTopVisible = true;
   bool isPopupMenuVisible = false;
   late MeetUpListOrder selectedOrder;
   final List<MeetUpListOrder> meetUpListOrder = [
@@ -59,7 +60,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             Column(
               children: [
                 // Top
-                _buildTop(context),
+                if (isTopVisible) _buildTop(context),
 
                 // 필터
                 _buildFilter(),
@@ -203,6 +204,16 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     return Expanded(
       child: PaginationListView(
         provider: meetUpProvider,
+        scrollUp: () {
+          setState(() {
+            isTopVisible = true;
+          });
+        },
+        scrollDown: () {
+          setState(() {
+            isTopVisible = false;
+          });
+        },
         padding: const EdgeInsets.only(
           top: 8,
           left: 20,
