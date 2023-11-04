@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/common/model/kakao/kakao_document_model.dart';
@@ -177,6 +178,14 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     if (state != null) {
       state = state!.copyWith(
         name: value,
+      );
+    }
+  }
+
+  void onChangedDescription(String value) {
+    if (state != null) {
+      state = state!.copyWith(
+        description: value,
       );
     }
   }
