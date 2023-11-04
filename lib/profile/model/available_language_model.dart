@@ -7,25 +7,21 @@ class AvailableLanguageModel {
   final int id;
   final String level;
   final LanguageModel language;
-  final int profile_id;
   AvailableLanguageModel({
     required this.id,
     required this.level,
     required this.language,
-    required this.profile_id,
   });
 
   AvailableLanguageModel copyWith({
     int? id,
     String? level,
     LanguageModel? language,
-    int? profile_id,
   }) {
     return AvailableLanguageModel(
       id: id ?? this.id,
       level: level ?? this.level,
       language: language ?? this.language,
-      profile_id: profile_id ?? this.profile_id,
     );
   }
 
@@ -34,7 +30,6 @@ class AvailableLanguageModel {
       'id': id,
       'level': level,
       'language': language.toMap(),
-      'profile_id': profile_id,
     };
   }
 
@@ -43,7 +38,6 @@ class AvailableLanguageModel {
       id: map['id'] as int,
       level: map['level'] as String,
       language: LanguageModel.fromMap(map['language'] as Map<String, dynamic>),
-      profile_id: map['profile_id'] ?? 0,
     );
   }
 
@@ -55,24 +49,18 @@ class AvailableLanguageModel {
 
   @override
   String toString() {
-    return 'AvailableLanguageModel(id: $id, level: $level, language: $language, profile_id: $profile_id)';
+    return 'AvailableLanguageModel(id: $id, level: $level, language: $language)';
   }
 
   @override
   bool operator ==(covariant AvailableLanguageModel other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
-        other.level == level &&
-        other.language == language &&
-        other.profile_id == profile_id;
+    return other.id == id && other.level == level && other.language == language;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        level.hashCode ^
-        language.hashCode ^
-        profile_id.hashCode;
+    return id.hashCode ^ level.hashCode ^ language.hashCode;
   }
 }
