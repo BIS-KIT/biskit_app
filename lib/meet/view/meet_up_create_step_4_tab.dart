@@ -34,9 +34,22 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
     {'value': '취미', 'imgUrl': 'assets/icons/ic_friends_fill_48.svg'},
   ];
 
+  late final FocusNode meetupDescriptionFocusNode;
+  late final TextEditingController meetupDescriptionController;
+  bool showMeetupDescription = false;
+
   @override
   void initState() {
     super.initState();
+    meetupDescriptionFocusNode = FocusNode();
+    meetupDescriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    meetupDescriptionFocusNode.dispose();
+    meetupDescriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -165,9 +178,9 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                 onChanged: (value) {
                   ref.read(createMeetUpProvider.notifier).onChangedName(value);
                 },
-                errorText: createMeetUpState != null &&
+                errorText: (createMeetUpState != null &&
                         createMeetUpState.name != null &&
-                        createMeetUpState.name!.length < 5
+                        createMeetUpState.name!.length < 5)
                     ? '5자 이상으로 입력해주세요'
                     : null,
                 maxLength: 30,
@@ -177,16 +190,80 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
           const SizedBox(
             height: 20,
           ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              OutlinedButtonWidget(
-                text: '모임설명 추가',
-                leftIconPath: 'assets/icons/ic_plus_line_24.svg',
-                isEnable: true,
-              ),
-            ],
-          ),
+          !showMeetupDescription
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showMeetupDescription = true;
+                        });
+                      },
+                      child: const OutlinedButtonWidget(
+                        text: '모임설명 추가',
+                        leftIconPath: 'assets/icons/ic_plus_line_24.svg',
+                        isEnable: true,
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: 144,
+                      margin: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: kColorBgElevation1,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(6)),
+                        border: Border.all(
+                          width: 1,
+                          color: meetupDescriptionFocusNode.hasFocus
+                              ? kColorBorderStronger
+                              : kColorBgElevation3,
+                        ),
+                      ),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          ref
+                              .read(createMeetUpProvider.notifier)
+                              .onChangedDescription(value);
+                        },
+                        onTap: () {
+                          meetupDescriptionFocusNode.requestFocus();
+                        },
+                        controller: meetupDescriptionController,
+                        focusNode: meetupDescriptionFocusNode,
+                        maxLines: null,
+                        minLines: null,
+                        decoration: InputDecoration(
+                          hintText: '모임설명을 입력해주세요',
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
+                          hintStyle: getTsBody16Rg(context).copyWith(
+                            color: kColorContentPlaceholder,
+                          ),
+                        ),
+                        style: kTsEnBody16Rg.copyWith(
+                          color: kColorContentWeak,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      '${meetupDescriptionController.text.length}/500',
+                      style: getTsCaption12Rg(context).copyWith(
+                        color: kColorContentWeakest,
+                      ),
+                    ),
+                  ],
+                ),
         ],
       ),
     );
