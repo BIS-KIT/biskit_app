@@ -1,3 +1,4 @@
+import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -125,7 +126,9 @@ class MeetUpCardWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Row(
+          Wrap(
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               const CircleAvatar(
                 radius: 8,
@@ -170,10 +173,14 @@ class MeetUpCardWidget extends StatelessWidget {
               const SizedBox(
                 width: 4,
               ),
-              Text(
-                model.location,
-                style: getTsBody14Rg(context).copyWith(
-                  color: kColorContentWeaker,
+              Flexible(
+                child: Text(
+                  model.location,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: getTsBody14Rg(context).copyWith(
+                    color: kColorContentWeaker,
+                  ),
                 ),
               ),
             ],
@@ -181,9 +188,10 @@ class MeetUpCardWidget extends StatelessWidget {
           const SizedBox(
             height: 24,
           ),
-          Wrap(
+          ExtendedWrap(
             spacing: 6,
             runSpacing: 6,
+            maxLines: 2,
             children: model.tags
                 .map(
                   (e) => Container(
