@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/common/model/kakao/kakao_document_model.dart';
@@ -71,6 +72,30 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
             ...state!.topic_ids,
             id,
           ],
+        );
+      }
+    }
+  }
+
+  // 커스텀 토픽 생성
+  onTapAddCustomTopic(String topic) {
+    if (state != null) {
+      state = state!.copyWith(
+        custom_topics: [
+          ...state!.custom_topics,
+          topic,
+        ],
+      );
+    }
+  }
+
+  onTapDeleteCustomTopic(String topic) {
+    if (state != null) {
+      if (state!.custom_topics.contains(topic)) {
+        state = state!.copyWith(
+          custom_topics: state!.custom_topics
+              .where((element) => element != topic)
+              .toList(),
         );
       }
     }
@@ -173,10 +198,41 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     }
   }
 
+  // 커스텀 태그 생성
+  onTapAddCustomTag(String tag) {
+    if (state != null) {
+      state = state!.copyWith(
+        custom_tags: [
+          ...state!.custom_tags,
+          tag,
+        ],
+      );
+    }
+  }
+
+  onTapDeleteCustomTag(String tag) {
+    if (state != null) {
+      if (state!.custom_tags.contains(tag)) {
+        state = state!.copyWith(
+          custom_tags:
+              state!.custom_tags.where((element) => element != tag).toList(),
+        );
+      }
+    }
+  }
+
   void onChangedName(String value) {
     if (state != null) {
       state = state!.copyWith(
         name: value,
+      );
+    }
+  }
+
+  void onChangedDescription(String value) {
+    if (state != null) {
+      state = state!.copyWith(
+        description: value,
       );
     }
   }
