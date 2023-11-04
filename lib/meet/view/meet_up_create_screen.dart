@@ -130,7 +130,8 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
       } else if (pageIndex == 1) {
         return true;
       } else if (pageIndex == 2) {
-        if (createMeetUpState.tag_ids.isNotEmpty &&
+        if ((createMeetUpState.tag_ids.isNotEmpty ||
+                createMeetUpState.custom_tags.isNotEmpty) &&
             createMeetUpState.language_ids.isNotEmpty) {
           return true;
         }
