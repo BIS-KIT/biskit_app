@@ -77,6 +77,30 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     }
   }
 
+  // 커스텀 토픽 생성
+  onTapAddCustomTopic(String topic) {
+    if (state != null) {
+      state = state!.copyWith(
+        custom_topics: [
+          ...state!.custom_topics,
+          topic,
+        ],
+      );
+    }
+  }
+
+  onTapDeleteCustomTopic(String topic) {
+    if (state != null) {
+      if (state!.custom_topics.contains(topic)) {
+        state = state!.copyWith(
+          custom_topics: state!.custom_topics
+              .where((element) => element != topic)
+              .toList(),
+        );
+      }
+    }
+  }
+
   getIsBottomButtonEnable(int pageIndex) {
     bool isEnable = false;
     if (state != null) {
@@ -169,6 +193,29 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
             ...state!.tag_ids,
             e.id,
           ],
+        );
+      }
+    }
+  }
+
+  // 커스텀 태그 생성
+  onTapAddCustomTag(String tag) {
+    if (state != null) {
+      state = state!.copyWith(
+        custom_tags: [
+          ...state!.custom_tags,
+          tag,
+        ],
+      );
+    }
+  }
+
+  onTapDeleteCustomTag(String tag) {
+    if (state != null) {
+      if (state!.custom_tags.contains(tag)) {
+        state = state!.copyWith(
+          custom_tags:
+              state!.custom_tags.where((element) => element != tag).toList(),
         );
       }
     }
