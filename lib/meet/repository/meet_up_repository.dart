@@ -24,13 +24,27 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     required this.baseUrl,
   });
 
+  // Future<List<MeetUpModel>> getMeetings({
+  //   int skip = 0,
+  //   int limit = 20,
+  // }) async {
+  //   List<MeetUpModel> data = [];
+
+  //   return data;
+  // }
+
   @override
   Future<CursorPagination<MeetUpModel>> paginate({
     PaginationParams? paginationParams = const PaginationParams(),
   }) async {
+    logger.d(paginationParams);
     List<MeetUpModel> data = [];
     int totalCount = 0;
     int count = 0;
+
+    int limit = paginationParams!.count!;
+    int skip = paginationParams.skip ?? 0;
+
     try {
       Response res = await dio.get(
         '${baseUrl}s',
@@ -42,11 +56,11 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         ),
         queryParameters: {
           // 'order_by': '',
-          'skip': 0,
-          'limit': 20,
+          'skip': skip,
+          'limit': limit,
         },
       );
-      logger.d(res.data);
+      // logger.d(res.data);
       if (res.statusCode == 200) {
         if ((res.data as Map).containsKey('total_count')) {
           totalCount = res.data['total_count'];
@@ -63,7 +77,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
       meta: CursorPaginationMeta(
         count: count,
         totalCount: totalCount,
-        hasMore: false,
+        hasMore: skip + count < totalCount,
       ),
       data: data,
     );

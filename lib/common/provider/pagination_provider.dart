@@ -110,6 +110,7 @@ class PaginationProvider<T extends IModelWithId,
 
         paginationParams = paginationParams.copyWith(
           after: pState.data.last.id.toString(),
+          skip: pState.data.length,
         );
       }
       // 데이터를 처음부터 가져오는 상황

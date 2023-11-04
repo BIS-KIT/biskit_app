@@ -43,7 +43,7 @@ class AvailableLanguageModel {
       id: map['id'] as int,
       level: map['level'] as String,
       language: LanguageModel.fromMap(map['language'] as Map<String, dynamic>),
-      profile_id: map['profile_id'] as int,
+      profile_id: map['profile_id'] ?? 0,
     );
   }
 
