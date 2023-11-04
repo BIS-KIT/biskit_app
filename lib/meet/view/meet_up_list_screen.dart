@@ -3,158 +3,288 @@ import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
+import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MeetUpListScreen extends StatefulWidget {
+class MeetUpListScreen extends ConsumerStatefulWidget {
   const MeetUpListScreen({super.key});
 
   @override
-  State<MeetUpListScreen> createState() => _MeetUpListScreenState();
+  ConsumerState<MeetUpListScreen> createState() => _MeetUpListScreenState();
 }
 
-class _MeetUpListScreenState extends State<MeetUpListScreen> {
+class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
+  bool isPopupMenuVisible = false;
+  late MeetUpListOrder selectedOrder;
+  final List<MeetUpListOrder> meetUpListOrder = [
+    MeetUpListOrder(
+      state: MeetUpOrderState.created_time,
+      text: '등록순',
+    ),
+    MeetUpListOrder(
+      state: MeetUpOrderState.meeting_time,
+      text: '일시순',
+    ),
+    MeetUpListOrder(
+      state: MeetUpOrderState.deadline_soon,
+      text: '마감임박순',
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedOrder = meetUpListOrder[0];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Column(
+    // final meetUpState = ref.watch(meetUpProvider);
+    return GestureDetector(
+      onTap: () {
+        if (isPopupMenuVisible) {
+          setState(() {
+            isPopupMenuVisible = false;
+          });
+        }
+      },
+      child: SafeArea(
+        bottom: false,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                // Top
+                _buildTop(context),
+
+                // 필터
+                _buildFilter(),
+
+                // List
+                _buildList(context),
+              ],
+            ),
+            _buildPopUpMenu(context),
+
+            // 로딩
+            // if (meetUpState.)
+            //   const Center(
+            //     child: CustomLoading(),
+            //   ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildPopUpMenu(BuildContext context) {
+    return Positioned(
+      top: 100,
+      left: 20,
+      child: Container(
+        height: isPopupMenuVisible ? null : 0,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x2D495B7D),
+              blurRadius: 40,
+              offset: Offset(0, 16),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: IntrinsicWidth(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...meetUpListOrder
+                  .map(
+                    (e) => GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        ref.read(meetUpProvider.notifier).setOrderBy(e.state);
+                        setState(() {
+                          selectedOrder = e;
+                          isPopupMenuVisible = false;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 24,
+                        ),
+                        child: Text(
+                          e.text,
+                          style: e == selectedOrder
+                              ? getTsBody16Sb(context).copyWith(
+                                  color: kColorContentSecondary,
+                                )
+                              : getTsBody16Rg(context).copyWith(
+                                  color: kColorContentWeakest,
+                                ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildFilter() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 8,
+        // bottom: 8,
+        left: 20,
+      ),
+      child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 2,
-              bottom: 2,
-              left: 20,
-              right: 10,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '탐색',
-                  style: getTsHeading20(context).copyWith(
-                    color: kColorContentDefault,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_filter_line_24.svg',
-                        width: 24,
-                        height: 24,
-                        colorFilter: const ColorFilter.mode(
-                          kColorContentDefault,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_search_line_24.svg',
-                        width: 24,
-                        height: 24,
-                        colorFilter: const ColorFilter.mode(
-                          kColorContentDefault,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          ChipWidget(
+            text: selectedOrder.text,
+            textColor: kColorContentDefault,
+            isSelected: false,
+            onTapDelete: () {
+              setState(() {
+                isPopupMenuVisible = !isPopupMenuVisible;
+              });
+            },
+            onClickSelect: () {
+              setState(() {
+                isPopupMenuVisible = !isPopupMenuVisible;
+              });
+            },
+            rightIcon: 'assets/icons/ic_chevron_down_line_24.svg',
+            rightIconColor: kColorContentWeaker,
           ),
-
-          // 필터
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 8,
-              // bottom: 8,
-              left: 20,
-            ),
-            child: Row(
-              children: [
-                ChipWidget(
-                  text: '등록순',
-                  textColor: kColorContentDefault,
-                  isSelected: false,
-                  onTapDelete: () {},
-                  rightIcon: 'assets/icons/ic_chevron_down_line_24.svg',
-                  rightIconColor: kColorContentWeaker,
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: 36,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.only(
-                        left: 4,
-                        right: 20,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return const ChipWidget(
-                          text: '다음주',
-                          isSelected: true,
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 4,
-                        );
-                      },
-                      itemCount: 6,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // List
           Expanded(
-            child: PaginationListView(
-              provider: meetUpProvider,
-              padding: const EdgeInsets.only(
-                top: 8,
-                left: 20,
-                right: 20,
-                bottom: 8,
-              ),
-              itemBuilder: (context, index, model) {
-                MeetUpModel meetUpModel = model as MeetUpModel;
-                return MeetUpCardWidget(
-                  model: meetUpModel,
-                );
-              },
-              separatorWidget: const SizedBox(
-                height: 12,
-              ),
-              emptyDataWidget: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    'assets/icons/ic_person_fill_24.svg',
-                    width: 56,
-                    height: 56,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    '모임이 없어요',
-                    style: getTsBody16Rg(context).copyWith(
-                      color: kColorContentWeakest,
-                    ),
-                  ),
-                ],
+            child: SizedBox(
+              height: 36,
+              child: ListView.separated(
+                padding: const EdgeInsets.only(
+                  left: 4,
+                  right: 20,
+                ),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return const ChipWidget(
+                    text: '다음주',
+                    isSelected: true,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    width: 4,
+                  );
+                },
+                itemCount: 6,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded _buildList(BuildContext context) {
+    return Expanded(
+      child: PaginationListView(
+        provider: meetUpProvider,
+        padding: const EdgeInsets.only(
+          top: 8,
+          left: 20,
+          right: 20,
+          bottom: 8,
+        ),
+        itemBuilder: (context, index, model) {
+          MeetUpModel meetUpModel = model as MeetUpModel;
+          return MeetUpCardWidget(
+            model: meetUpModel,
+          );
+        },
+        separatorWidget: const SizedBox(
+          height: 12,
+        ),
+        emptyDataWidget: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/icons/ic_person_fill_24.svg',
+              width: 56,
+              height: 56,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              '모임이 없어요',
+              style: getTsBody16Rg(context).copyWith(
+                color: kColorContentWeakest,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _buildTop(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 2,
+        bottom: 2,
+        left: 20,
+        right: 10,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '탐색',
+            style: getTsHeading20(context).copyWith(
+              color: kColorContentDefault,
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SvgPicture.asset(
+                  'assets/icons/ic_filter_line_24.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: const ColorFilter.mode(
+                    kColorContentDefault,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SvgPicture.asset(
+                  'assets/icons/ic_search_line_24.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: const ColorFilter.mode(
+                    kColorContentDefault,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

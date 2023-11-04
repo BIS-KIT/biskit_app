@@ -10,11 +10,12 @@ class _PaginationInfo {
   final int fetchCount;
   final bool fetchMore;
   final bool forceRefetch;
-
+  final Object? orderBy;
   _PaginationInfo({
     this.fetchCount = 20,
     this.fetchMore = false,
     this.forceRefetch = false,
+    this.orderBy,
   });
 }
 
@@ -49,11 +50,13 @@ class PaginationProvider<T extends IModelWithId,
     // 강제로 다시 로딩하기
     // true - CursorPaginationLoading()
     bool forceRefetch = false,
+    Object? orderBy,
   }) async {
     paginationThrottle.setValue(_PaginationInfo(
       fetchMore: fetchMore,
       fetchCount: fetchCount,
       forceRefetch: forceRefetch,
+      orderBy: orderBy,
     ));
   }
 
@@ -61,7 +64,7 @@ class PaginationProvider<T extends IModelWithId,
     final fetchCount = info.fetchCount;
     final fetchMore = info.fetchMore;
     final forceRefetch = info.forceRefetch;
-
+    final orderBy = info.orderBy;
     try {
       // 5가지 가능성
       // State의 상태
@@ -133,6 +136,7 @@ class PaginationProvider<T extends IModelWithId,
 
       final resp = await repository.paginate(
         paginationParams: paginationParams,
+        orderBy: orderBy,
       );
 
       if (state is CursorPaginationFetchingMore) {
