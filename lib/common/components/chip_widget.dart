@@ -8,13 +8,15 @@ class ChipWidget extends StatelessWidget {
   final bool isSelected;
   final Function()? onClickSelect;
   final ValueChanged<String>? onTapAdd;
-  // final Function()? onTapAdd;
   final Function()? onTapDelete;
+  final ValueChanged<String>? onTapEnter;
   final FocusNode? focusNode;
   final int? order;
   final String rightIcon;
   final Color rightIconColor;
   final Color textColor;
+  final TextEditingController? controller;
+
   const ChipWidget({
     Key? key,
     required this.text,
@@ -22,11 +24,13 @@ class ChipWidget extends StatelessWidget {
     this.onClickSelect,
     this.onTapAdd,
     this.onTapDelete,
+    this.onTapEnter,
     this.focusNode,
     this.order,
     this.rightIcon = 'assets/icons/ic_cancel_line_24.svg',
     this.rightIconColor = kColorContentOnBgPrimary,
     this.textColor = kColorContentOnBgPrimary,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -94,8 +98,11 @@ class ChipWidget extends StatelessWidget {
                           width: 57,
                           height: 20,
                           child: TextFormField(
+                            textInputAction: TextInputAction.go,
+                            onFieldSubmitted: onTapEnter,
                             onChanged: onTapAdd,
                             focusNode: focusNode,
+                            controller: controller,
                             cursorHeight: 14,
                             style: getTsBody14Rg(context)
                                 .copyWith(color: kColorContentOnBgPrimary),
