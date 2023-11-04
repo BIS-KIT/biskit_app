@@ -173,14 +173,12 @@ class MeetUpCardWidget extends StatelessWidget {
               const SizedBox(
                 width: 4,
               ),
-              Flexible(
-                child: Text(
-                  model.location,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: getTsBody14Rg(context).copyWith(
-                    color: kColorContentWeaker,
-                  ),
+              Text(
+                model.location,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: getTsBody14Rg(context).copyWith(
+                  color: kColorContentWeaker,
                 ),
               ),
             ],

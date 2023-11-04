@@ -5,6 +5,7 @@ import 'package:biskit_app/common/model/pagination_params.dart';
 import 'package:biskit_app/common/repository/base_pagination_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
+import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,14 +37,18 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   @override
   Future<CursorPagination<MeetUpModel>> paginate({
     PaginationParams? paginationParams = const PaginationParams(),
+    Object? orderBy,
   }) async {
-    logger.d(paginationParams);
+    logger.d('orderBy>>>$orderBy');
     List<MeetUpModel> data = [];
     int totalCount = 0;
     int count = 0;
 
     int limit = paginationParams!.count!;
     int skip = paginationParams.skip ?? 0;
+    // MeetUpOrderState orderBy =
+    //     (paginationParams.orderBy as MeetUpOrderState?) ??
+    //         MeetUpOrderState.created_time;
 
     try {
       Response res = await dio.get(
@@ -55,7 +60,9 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
           },
         ),
         queryParameters: {
-          // 'order_by': '',
+          'order_by':
+              ((orderBy as MeetUpOrderState?) ?? MeetUpOrderState.created_time)
+                  .name,
           'skip': skip,
           'limit': limit,
         },
@@ -77,7 +84,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
       meta: CursorPaginationMeta(
         count: count,
         totalCount: totalCount,
-        hasMore: skip + count < totalCount,
+        hasMore: (skip + count < totalCount),
       ),
       data: data,
     );

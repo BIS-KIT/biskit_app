@@ -5,21 +5,24 @@ class PaginationParams {
   final String? after;
   final int? count;
   final int? skip;
-
+  final Object? orderBy;
   const PaginationParams({
     this.after,
     this.count,
     this.skip,
+    this.orderBy,
   });
   PaginationParams copyWith({
     String? after,
     int? count,
     int? skip,
+    Object? orderBy,
   }) {
     return PaginationParams(
       after: after ?? this.after,
       count: count ?? this.count,
       skip: skip ?? this.skip,
+      orderBy: orderBy ?? this.orderBy,
     );
   }
 
@@ -45,8 +48,9 @@ class PaginationParams {
       PaginationParams.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'PaginationParams(after: $after, count: $count, skip: $skip)';
+  String toString() {
+    return 'PaginationParams(after: $after, count: $count, skip: $skip, orderBy: $orderBy)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -55,9 +59,12 @@ class PaginationParams {
     return other is PaginationParams &&
         other.after == after &&
         other.count == count &&
-        other.skip == skip;
+        other.skip == skip &&
+        other.orderBy == orderBy;
   }
 
   @override
-  int get hashCode => after.hashCode ^ count.hashCode ^ skip.hashCode;
+  int get hashCode {
+    return after.hashCode ^ count.hashCode ^ skip.hashCode ^ orderBy.hashCode;
+  }
 }
