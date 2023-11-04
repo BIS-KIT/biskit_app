@@ -2,7 +2,15 @@
   "scripts": {
     "build-apk": "fvm flutter build apk --release --target-platform=android-arm64",
     "build-apk:dev": "fvm flutter build apk --debug --target-platform=android-arm64",
-    "firebase-deploy": "fvm flutter build apk --release --target-platform=android-arm64 && firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-release.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
-    "firebase-deploy:dev": "fvm flutter build apk --debug --target-platform=android-arm64 && firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-debug.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt"
+    "build-ipa": "fvm flutter build ipa --release",
+    "build-ipa:dev": "fvm flutter build ipa --debug",
+    "fire-ios": "firebase appdistribution:distribute ./build/ios/ipa/biskit_app.ipa --app 1:713106577735:ios:1c7d6d1e0a5052ed6d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
+    "fire-ios:dev": "firebase appdistribution:distribute ./build/ios/ipa/biskit_app.ipa --app 1:713106577735:ios:1c7d6d1e0a5052ed6d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
+    "fire-and": "firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-release.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
+    "fire-and:dev": "firebase appdistribution:distribute ./build/app/outputs/flutter-apk/app-debug.apk --app 1:713106577735:android:85903d1b69e1db546d9462 --release-notes \"dev test\" --testers-file ./testers.txt",
+    "deploy-ios": "npm run build-ipa && npm run fire-ios",
+    "deploy-ios:dev": "npm run build-ipa:dev && npm run fire-ios:dev",
+    "deploy-and": "npm run build-apk && npm run fire-and",
+    "deploy-and:dev": "npm run build-apk:dev && npm run fire-and:dev"
   }
 }
