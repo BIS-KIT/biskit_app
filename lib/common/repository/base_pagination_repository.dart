@@ -6,5 +6,6 @@ abstract class IBasePaginationRepository<T extends IModelWithId> {
   Future<CursorPagination<T>> paginate({
     PaginationParams? paginationParams = const PaginationParams(),
     Object? orderBy,
+    Object? filter,
   });
 }

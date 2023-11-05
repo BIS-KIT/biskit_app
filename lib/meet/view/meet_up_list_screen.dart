@@ -1,11 +1,16 @@
 import 'package:biskit_app/common/components/chip_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
+import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
+import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +49,65 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     selectedOrder = meetUpListOrder[0];
   }
 
+  void onTapFilter() {
+    showBiskitBottomSheet(
+      context: context,
+      title: '필터',
+      rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+      onRightTap: () {
+        Navigator.pop(context);
+      },
+      height: MediaQuery.of(context).size.height -
+          MediaQuery.of(context).padding.top -
+          48,
+      contentWidget: Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              // Filter
+              const MeetUpFilterSheetWidget(),
+              // bottom button
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 12,
+                  bottom: 34,
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(meetUpFilterProvider.notifier).init();
+                      },
+                      child: const OutlinedButtonWidget(
+                        text: '초기화',
+                        isEnable: true,
+                        leftIconPath: 'assets/icons/ic_reset_line_24.svg',
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Expanded(
+                      child: FilledButtonWidget(
+                        text: '5개 모임보기',
+                        isEnable: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // final meetUpState = ref.watch(meetUpProvider);
+
     return GestureDetector(
       onTap: () {
         if (isPopupMenuVisible) {
@@ -148,6 +209,14 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   }
 
   Padding _buildFilter() {
+    final filterState = ref.watch(meetUpFilterProvider);
+    final List<MeetUpFilterModel> filterList = [];
+
+    for (var element in filterState) {
+      filterList
+          .addAll(element.filterList.where((element) => element.isSeleted));
+    }
+
     return Padding(
       padding: const EdgeInsets.only(
         top: 8,
@@ -183,8 +252,8 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                 ),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return const ChipWidget(
-                    text: '다음주',
+                  return ChipWidget(
+                    text: filterList[index].text,
                     isSelected: true,
                   );
                 },
@@ -193,7 +262,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                     width: 4,
                   );
                 },
-                itemCount: 6,
+                itemCount: filterList.length,
               ),
             ),
           ),
@@ -279,15 +348,18 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           ),
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SvgPicture.asset(
-                  'assets/icons/ic_filter_line_24.svg',
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    kColorContentDefault,
-                    BlendMode.srcIn,
+              GestureDetector(
+                onTap: onTapFilter,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_filter_line_24.svg',
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentDefault,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),

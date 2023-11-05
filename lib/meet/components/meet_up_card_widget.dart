@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,6 +24,9 @@ class MeetUpCardWidget extends StatefulWidget {
 class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
+    final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
@@ -115,12 +119,14 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         ),
                       ),
                       child: Text(
+
                         widget.model.participants_status,
                         style: getTsCaption12Sb(context).copyWith(
                           color: kColorContentInverse,
                         ),
                       ),
                     ),
+
                   ],
                 ),
               ],
@@ -135,6 +141,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
               style: getTsBody16Sb(context).copyWith(
                 color: kColorContentDefault,
               ),
+
             ),
             const SizedBox(
               height: 8,
@@ -150,6 +157,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                 const SizedBox(
                   width: 4,
                 ),
+
                 Text(
                   '00/00(월)',
                   style: getTsBody14Rg(context).copyWith(
