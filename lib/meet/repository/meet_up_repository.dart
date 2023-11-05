@@ -5,6 +5,7 @@ import 'package:biskit_app/common/model/pagination_params.dart';
 import 'package:biskit_app/common/repository/base_pagination_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
+import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:dio/dio.dart';
@@ -38,6 +39,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   Future<CursorPagination<MeetUpModel>> paginate({
     PaginationParams? paginationParams = const PaginationParams(),
     Object? orderBy,
+    Object? filter,
   }) async {
     logger.d('orderBy>>>$orderBy');
     List<MeetUpModel> data = [];
@@ -49,6 +51,12 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     // MeetUpOrderState orderBy =
     //     (paginationParams.orderBy as MeetUpOrderState?) ??
     //         MeetUpOrderState.created_time;
+    List<String> filtering = [];
+
+    if (filter != null) {
+      filtering =
+          (filter as List<MeetUpFilterModel>).map((e) => e.value).toList();
+    }
 
     try {
       Response res = await dio.get(
@@ -65,6 +73,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
                   .name,
           'skip': skip,
           'limit': limit,
+          'time_filters': filtering,
         },
       );
       // logger.d(res.data);
