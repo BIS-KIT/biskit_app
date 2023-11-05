@@ -1,10 +1,7 @@
 import 'package:biskit_app/common/components/chip_widget.dart';
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
@@ -61,45 +58,10 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
       height: MediaQuery.of(context).size.height -
           MediaQuery.of(context).padding.top -
           48,
-      contentWidget: Expanded(
+      contentWidget: const Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              // Filter
-              const MeetUpFilterSheetWidget(),
-              // bottom button
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 12,
-                  bottom: 34,
-                ),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ref.read(meetUpFilterProvider.notifier).init();
-                      },
-                      child: const OutlinedButtonWidget(
-                        text: '초기화',
-                        isEnable: true,
-                        leftIconPath: 'assets/icons/ic_reset_line_24.svg',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    const Expanded(
-                      child: FilledButtonWidget(
-                        text: '5개 모임보기',
-                        isEnable: true,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: MeetUpFilterSheetWidget(),
         ),
       ),
     );
@@ -107,8 +69,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final meetUpState = ref.watch(meetUpProvider);
-
+    final filterState = ref.watch(meetUpFilterProvider);
     return GestureDetector(
       onTap: () {
         if (isPopupMenuVisible) {
@@ -124,13 +85,13 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             Column(
               children: [
                 // Top
-                if (isTopVisible) _buildTop(context),
+                if (isTopVisible) _buildTop(context, filterState),
 
                 // 필터
                 _buildFilter(),
 
                 // List
-                _buildList(context),
+                _buildList(context, filterState),
               ],
             ),
             _buildPopUpMenu(context),
@@ -213,7 +174,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     final filterState = ref.watch(meetUpFilterProvider);
     final List<MeetUpFilterModel> filterList = [];
 
-    for (var element in filterState) {
+    for (var element in filterState.filterGroupList) {
       filterList
           .addAll(element.filterList.where((element) => element.isSeleted));
     }
@@ -272,7 +233,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     );
   }
 
-  Expanded _buildList(BuildContext context) {
+  Expanded _buildList(BuildContext context, MeetUpState filterState) {
     return Expanded(
       child: PaginationListView(
         provider: meetUpProvider,
@@ -319,7 +280,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
               height: 8,
             ),
             Text(
-              '모임이 없어요',
+              filterState.isFilterSelected ? '조건에 맞는 모임이 없어요' : '모임이 없어요',
               style: getTsBody16Rg(context).copyWith(
                 color: kColorContentWeakest,
               ),
@@ -330,15 +291,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     );
   }
 
-  Padding _buildTop(BuildContext context) {
-    final filterState = ref.watch(meetUpFilterProvider);
-    bool isFilterNotEmpty = false;
-    for (var element in filterState) {
-      isFilterNotEmpty =
-          element.filterList.where((e) => e.isSeleted).isNotEmpty;
-      if (isFilterNotEmpty) break;
-    }
-    logger.d(isFilterNotEmpty);
+  Padding _buildTop(BuildContext context, MeetUpState filterState) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 2,
@@ -373,7 +326,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                         ),
                       ),
                     ),
-                    if (isFilterNotEmpty)
+                    if (filterState.isFilterSelected)
                       Positioned(
                         top: 8,
                         right: 8,

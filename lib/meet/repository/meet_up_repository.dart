@@ -35,6 +35,34 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   //   return data;
   // }
 
+  paginateCount(List<MeetUpFilterModel> filterList) async {
+    int? totalCount;
+    try {
+      Response res = await dio.get(
+        '${baseUrl}s',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        queryParameters: {
+          'is_count_only': true,
+          'time_filters': filterList.map((e) => e.value).toList(),
+        },
+      );
+      // logger.d(res.data);
+      if (res.statusCode == 200) {
+        if ((res.data as Map).containsKey('total_count')) {
+          totalCount = res.data['total_count'];
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return totalCount;
+  }
+
   @override
   Future<CursorPagination<MeetUpModel>> paginate({
     PaginationParams? paginationParams = const PaginationParams(),
