@@ -3,7 +3,6 @@ import 'package:biskit_app/common/provider/pagination_provider.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
-import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,20 +46,18 @@ class MeetUpStateNotifier
     Object? filter,
   }) async {
     // state = CursorPaginationLoading();
-    final filterState = ref.watch(meetUpFilterProvider);
+    // final filterState = ref.watch(meetUpFilterProvider);
 
     isLoading = true;
     orderBy = meetUpOrderState;
-    final List<MeetUpFilterModel> filter = [];
-    for (var element in filterState) {
-      filter.addAll(element.filterList.where((element) => element.isSeleted));
-    }
+    final List<MeetUpFilterModel> filterList =
+        (filter as List<MeetUpFilterModel>?) ?? [];
     super.paginate(
       fetchCount: fetchCount,
       fetchMore: fetchMore,
       forceRefetch: forceRefetch,
       orderBy: orderBy,
-      filter: filter,
+      filter: filterList,
     );
     isLoading = false;
     // state = super.state;
