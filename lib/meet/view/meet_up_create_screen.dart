@@ -200,12 +200,18 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                     right: 20,
                   ),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       if (isButtonEnable()) {
                         if (pageIndex >= 0 && pageIndex < 3) {
                           controller.animateTo(pageIndex + 1);
-
-                          logger.d(createMeetUpState);
+                        } else {
+                          final result = await ref
+                              .read(createMeetUpProvider.notifier)
+                              .createMeetUp();
+                          if (result) {
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                          }
                         }
                       }
                     },
@@ -221,18 +227,12 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   return GestureDetector(
                     onTap: () async {
                       if (isButtonEnable()) {
-                        if (pageIndex >= 0 && pageIndex < 3) {
-                          controller.animateTo(pageIndex + 1);
-
-                          logger.d(createMeetUpState);
-                        } else if (pageIndex == 3) {
-                          final result = await ref
-                              .read(createMeetUpProvider.notifier)
-                              .createMeetUp();
-                          if (result) {
-                            if (!mounted) return;
-                            Navigator.pop(context);
-                          }
+                        final result = await ref
+                            .read(createMeetUpProvider.notifier)
+                            .createMeetUp();
+                        if (result) {
+                          if (!mounted) return;
+                          Navigator.pop(context);
                         }
                       }
                     },
