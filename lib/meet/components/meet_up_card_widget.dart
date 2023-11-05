@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,6 +16,8 @@ class MeetUpCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
+    final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -93,21 +96,22 @@ class MeetUpCardWidget extends StatelessWidget {
                   const SizedBox(
                     width: 8,
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: kColorBgSecondary,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                  if (model.participants_status.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: kColorBgSecondary,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        model.participants_status,
+                        style: getTsCaption12Sb(context).copyWith(
+                          color: kColorContentInverse,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      model.participants_status,
-                      style: getTsCaption12Sb(context).copyWith(
-                        color: kColorContentInverse,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -138,7 +142,7 @@ class MeetUpCardWidget extends StatelessWidget {
                 width: 4,
               ),
               Text(
-                '00/00(월)',
+                dateFormat1.format(DateTime.parse(model.created_time)),
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorContentWeaker,
                 ),
@@ -156,7 +160,7 @@ class MeetUpCardWidget extends StatelessWidget {
                 width: 4,
               ),
               Text(
-                '오전 0:00',
+                dateFormat2.format(DateTime.parse(model.created_time)),
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorContentWeaker,
                 ),

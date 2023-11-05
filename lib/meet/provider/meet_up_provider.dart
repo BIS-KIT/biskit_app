@@ -1,7 +1,9 @@
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/common/provider/pagination_provider.dart';
+import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,15 +44,23 @@ class MeetUpStateNotifier
     bool fetchMore = false,
     bool forceRefetch = false,
     Object? orderBy,
+    Object? filter,
   }) async {
     // state = CursorPaginationLoading();
+    final filterState = ref.watch(meetUpFilterProvider);
+
     isLoading = true;
     orderBy = meetUpOrderState;
+    final List<MeetUpFilterModel> filter = [];
+    for (var element in filterState) {
+      filter.addAll(element.filterList.where((element) => element.isSeleted));
+    }
     super.paginate(
       fetchCount: fetchCount,
       fetchMore: fetchMore,
       forceRefetch: forceRefetch,
       orderBy: orderBy,
+      filter: filter,
     );
     isLoading = false;
     // state = super.state;
