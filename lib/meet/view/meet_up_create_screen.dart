@@ -1,6 +1,5 @@
 import 'package:biskit_app/common/components/progress_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
@@ -149,7 +148,6 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
   Widget build(BuildContext context) {
     final viewInsets = MediaQuery.of(context).viewInsets;
     final padding = MediaQuery.of(context).padding;
-    final createMeetUpState = ref.watch(createMeetUpProvider);
 
     return WillPopScope(
       onWillPop: onWillPop,

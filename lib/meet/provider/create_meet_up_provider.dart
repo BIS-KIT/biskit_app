@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/common/model/kakao/kakao_document_model.dart';

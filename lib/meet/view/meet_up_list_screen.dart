@@ -5,6 +5,7 @@ import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
@@ -330,6 +331,14 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   }
 
   Padding _buildTop(BuildContext context) {
+    final filterState = ref.watch(meetUpFilterProvider);
+    bool isFilterNotEmpty = false;
+    for (var element in filterState) {
+      isFilterNotEmpty =
+          element.filterList.where((e) => e.isSeleted).isNotEmpty;
+      if (isFilterNotEmpty) break;
+    }
+    logger.d(isFilterNotEmpty);
     return Padding(
       padding: const EdgeInsets.only(
         top: 2,
@@ -350,17 +359,34 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             children: [
               GestureDetector(
                 onTap: onTapFilter,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic_filter_line_24.svg',
-                    width: 24,
-                    height: 24,
-                    colorFilter: const ColorFilter.mode(
-                      kColorContentDefault,
-                      BlendMode.srcIn,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_filter_line_24.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentDefault,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (isFilterNotEmpty)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          width: 5,
+                          height: 5,
+                          decoration: const BoxDecoration(
+                            color: kColorBgNotification,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               Padding(

@@ -119,14 +119,12 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         ),
                       ),
                       child: Text(
-
                         widget.model.participants_status,
                         style: getTsCaption12Sb(context).copyWith(
                           color: kColorContentInverse,
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ],
@@ -141,7 +139,6 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
               style: getTsBody16Sb(context).copyWith(
                 color: kColorContentDefault,
               ),
-
             ),
             const SizedBox(
               height: 8,
@@ -157,9 +154,8 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                 const SizedBox(
                   width: 4,
                 ),
-
                 Text(
-                  '00/00(월)',
+                  dateFormat1.format(DateTime.parse(widget.model.created_time)),
                   style: getTsBody14Rg(context).copyWith(
                     color: kColorContentWeaker,
                   ),
@@ -177,7 +173,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                   width: 4,
                 ),
                 Text(
-                  '오전 0:00',
+                  dateFormat2.format(DateTime.parse(widget.model.created_time)),
                   style: getTsBody14Rg(context).copyWith(
                     color: kColorContentWeaker,
                   ),

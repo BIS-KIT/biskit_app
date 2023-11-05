@@ -43,3 +43,4 @@ const Color kColorContentPrimary = Color(0xfff9b301);
 const Color kColorContentSecondary = Color(0xff5b5de3);
 const Color kColorContentSeccess = Color(0xff00993a);
 const Color kColorContentError = Color(0xffdf2c22);
+const Color kColorBgNotification = Color(0xffff6924);
