@@ -2,10 +2,12 @@ import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
+import 'package:biskit_app/meet/view/meet_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -224,6 +226,12 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           MeetUpModel meetUpModel = model as MeetUpModel;
           return MeetUpCardWidget(
             model: meetUpModel,
+            onTapMeetUp: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MeetUpScreen(meetUp: meetUpModel)));
+            },
           );
         },
         separatorWidget: const SizedBox(
