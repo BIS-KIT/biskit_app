@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
+import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
@@ -20,6 +21,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     required this.ref,
   }) : super(
           MeetUpState(
+            meetUpOrderState: MeetUpOrderState.created_time,
             isFilterSelected: false,
             filterGroupList: [],
             totalCount: 0,
@@ -176,6 +178,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
   paginate() async {
     await ref.read(meetUpProvider.notifier).paginate(
           filter: state.filterGroupList,
+          orderBy: state.meetUpOrderState,
           forceRefetch: true,
         );
   }
@@ -193,24 +196,35 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
 
     await paginate();
   }
+
+  setOrderBy(MeetUpOrderState meetUpOrderState) async {
+    state = state.copyWith(
+      meetUpOrderState: meetUpOrderState,
+    );
+    await paginate();
+  }
 }
 
 class MeetUpState {
+  final MeetUpOrderState meetUpOrderState;
   final bool isFilterSelected;
   final List<MeetUpFilterGroup> filterGroupList;
   final int? totalCount;
   MeetUpState({
+    required this.meetUpOrderState,
     required this.isFilterSelected,
     required this.filterGroupList,
     required this.totalCount,
   });
 
   MeetUpState copyWith({
+    MeetUpOrderState? meetUpOrderState,
     bool? isFilterSelected,
     List<MeetUpFilterGroup>? filterGroupList,
     int? totalCount,
   }) {
     return MeetUpState(
+      meetUpOrderState: meetUpOrderState ?? this.meetUpOrderState,
       isFilterSelected: isFilterSelected ?? this.isFilterSelected,
       filterGroupList: filterGroupList ?? this.filterGroupList,
       totalCount: totalCount ?? this.totalCount,

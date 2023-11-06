@@ -106,7 +106,6 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     Object? orderBy,
     Object? filter,
   }) async {
-    logger.d('orderBy>>>$orderBy');
     List<MeetUpModel> data = [];
     int totalCount = 0;
     int count = 0;

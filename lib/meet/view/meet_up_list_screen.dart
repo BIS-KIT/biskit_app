@@ -139,7 +139,9 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                     (e) => GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        ref.read(meetUpProvider.notifier).setOrderBy(e.state);
+                        ref
+                            .read(meetUpFilterProvider.notifier)
+                            .setOrderBy(e.state);
                         setState(() {
                           selectedOrder = e;
                           isPopupMenuVisible = false;
