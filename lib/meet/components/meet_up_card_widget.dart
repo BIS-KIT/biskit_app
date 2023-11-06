@@ -110,21 +110,22 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     const SizedBox(
                       width: 8,
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: kColorBgSecondary,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                    if (widget.model.participants_status.isNotEmpty)
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: kColorBgSecondary,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          widget.model.participants_status,
+                          style: getTsCaption12Sb(context).copyWith(
+                            color: kColorContentInverse,
+                          ),
                         ),
                       ),
-                      child: Text(
-                        widget.model.participants_status,
-                        style: getTsCaption12Sb(context).copyWith(
-                          color: kColorContentInverse,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ],

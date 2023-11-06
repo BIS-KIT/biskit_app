@@ -1,6 +1,5 @@
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/common/provider/pagination_provider.dart';
-import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
@@ -45,21 +44,16 @@ class MeetUpStateNotifier
     Object? orderBy,
     Object? filter,
   }) async {
-    // state = CursorPaginationLoading();
-    // final filterState = ref.watch(meetUpFilterProvider);
-
     isLoading = true;
     orderBy = meetUpOrderState;
-    final List<MeetUpFilterModel> filterList =
-        (filter as List<MeetUpFilterModel>?) ?? [];
+
     super.paginate(
       fetchCount: fetchCount,
       fetchMore: fetchMore,
       forceRefetch: forceRefetch,
       orderBy: orderBy,
-      filter: filterList,
+      filter: filter,
     );
     isLoading = false;
-    // state = super.state;
   }
 }

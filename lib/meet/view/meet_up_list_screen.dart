@@ -48,6 +48,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   }
 
   void onTapFilter() {
+    // ref.read(meetUpFilterProvider.notifier).tempSave();
     showBiskitBottomSheet(
       context: context,
       title: '필터',
@@ -204,30 +205,31 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             rightIcon: 'assets/icons/ic_chevron_down_line_24.svg',
             rightIconColor: kColorContentWeaker,
           ),
-          Expanded(
-            child: SizedBox(
-              height: 36,
-              child: ListView.separated(
-                padding: const EdgeInsets.only(
-                  left: 4,
-                  right: 20,
+          if (filterState.isFilterSelected)
+            Expanded(
+              child: SizedBox(
+                height: 36,
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(
+                    left: 4,
+                    right: 20,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return ChipWidget(
+                      text: filterList[index].text,
+                      isSelected: true,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      width: 4,
+                    );
+                  },
+                  itemCount: filterList.length,
                 ),
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return ChipWidget(
-                    text: filterList[index].text,
-                    isSelected: true,
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(
-                    width: 4,
-                  );
-                },
-                itemCount: filterList.length,
               ),
             ),
-          ),
         ],
       ),
     );

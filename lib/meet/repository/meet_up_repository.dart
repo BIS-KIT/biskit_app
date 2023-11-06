@@ -8,6 +8,7 @@ import 'package:biskit_app/meet/model/create_meet_up_model.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,8 +36,41 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   //   return data;
   // }
 
-  paginateCount(List<MeetUpFilterModel> filterList) async {
+  paginateCount(List<MeetUpFilterGroup> filter) async {
     int? totalCount;
+    List<String> timeFilter = [];
+    List<int> tagFilter = [];
+    List<int> topicsFilter = [];
+    String nationalFilter = 'ALL';
+
+    for (var f in filter) {
+      if (f.filterType == MeetUpFilterType.tag) {
+        // tag
+        tagFilter.addAll(f.filterList
+            .where((element) => element.isSeleted)
+            .toList()
+            .map((e) => int.parse(e.value)));
+      } else if (f.filterType == MeetUpFilterType.topic) {
+        // topic
+        topicsFilter.addAll(f.filterList
+            .where((element) => element.isSeleted)
+            .toList()
+            .map((e) => int.parse(e.value)));
+      } else if (f.filterType == MeetUpFilterType.national) {
+        // 주최자 국적
+        List<MeetUpFilterModel> temp =
+            f.filterList.where((element) => element.isSeleted).toList();
+        if (temp.length == 1) {
+          nationalFilter = temp[0].value;
+        }
+      } else {
+        // 나머지 시간 관련 필터
+        timeFilter.addAll(f.filterList
+            .where((element) => element.isSeleted)
+            .toList()
+            .map((e) => e.value));
+      }
+    }
     try {
       Response res = await dio.get(
         '${baseUrl}s',
@@ -48,7 +82,10 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         ),
         queryParameters: {
           'is_count_only': true,
-          'time_filters': filterList.map((e) => e.value).toList(),
+          'tags_ids': tagFilter,
+          'topics_ids': topicsFilter,
+          'creator_nationality': nationalFilter,
+          'time_filters': timeFilter,
         },
       );
       // logger.d(res.data);
@@ -79,12 +116,45 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     // MeetUpOrderState orderBy =
     //     (paginationParams.orderBy as MeetUpOrderState?) ??
     //         MeetUpOrderState.created_time;
-    List<String> filtering = [];
+    List<String> timeFilter = [];
+    List<int> tagFilter = [];
+    List<int> topicsFilter = [];
+    String nationalFilter = 'ALL';
 
     if (filter != null) {
-      filtering =
-          (filter as List<MeetUpFilterModel>).map((e) => e.value).toList();
+      // filtering =
+      //     (filter as List<MeetUpFilterModel>).map((e) => e.value).toList();
+
+      for (var f in (filter as List<MeetUpFilterGroup>)) {
+        if (f.filterType == MeetUpFilterType.tag) {
+          // tag
+          tagFilter.addAll(f.filterList
+              .where((element) => element.isSeleted)
+              .toList()
+              .map((e) => int.parse(e.value)));
+        } else if (f.filterType == MeetUpFilterType.topic) {
+          // topic
+          topicsFilter.addAll(f.filterList
+              .where((element) => element.isSeleted)
+              .toList()
+              .map((e) => int.parse(e.value)));
+        } else if (f.filterType == MeetUpFilterType.national) {
+          // 주최자 국적
+          List<MeetUpFilterModel> temp =
+              f.filterList.where((element) => element.isSeleted).toList();
+          if (temp.length == 1) {
+            nationalFilter = temp[0].value;
+          }
+        } else {
+          // 나머지 시간 관련 필터
+          timeFilter.addAll(f.filterList
+              .where((element) => element.isSeleted)
+              .toList()
+              .map((e) => e.value));
+        }
+      }
     }
+    logger.d('tagFilter>>>$tagFilter');
 
     try {
       Response res = await dio.get(
@@ -101,7 +171,10 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
                   .name,
           'skip': skip,
           'limit': limit,
-          'time_filters': filtering,
+          'tags_ids': tagFilter,
+          'topics_ids': topicsFilter,
+          'creator_nationality': nationalFilter,
+          'time_filters': timeFilter,
         },
       );
       // logger.d(res.data);
