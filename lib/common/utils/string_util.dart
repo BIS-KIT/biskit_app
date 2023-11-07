@@ -32,6 +32,40 @@ String getLevelServerValue(int level) {
   }
 }
 
+int getLevelServerValueToInt(String value) {
+  switch (value) {
+    case 'PROFICIENT':
+      return 5;
+    case 'ADVANCED':
+      return 4;
+    case 'INTERMEDIATE':
+      return 3;
+    case 'BASIC':
+      return 2;
+    case 'BEGINNER':
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+String getLevelServerValueToKrString(String value) {
+  switch (value) {
+    case 'PROFICIENT':
+      return '능숙';
+    case 'ADVANCED':
+      return '고급';
+    case 'INTERMEDIATE':
+      return '중급';
+    case 'BASIC':
+      return '기초';
+    case 'BEGINNER':
+      return '초보';
+    default:
+      return '레벨';
+  }
+}
+
 String getLevelSubTitle(int level) {
   switch (level) {
     case 5:

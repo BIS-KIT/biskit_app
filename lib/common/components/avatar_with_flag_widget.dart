@@ -6,10 +6,14 @@ import 'package:biskit_app/common/const/colors.dart';
 class AvatarWithFlagWidget extends StatelessWidget {
   final String? profilePath;
   final String? flagPath;
+  final double? radius;
+  final double? flagRadius;
   const AvatarWithFlagWidget({
     Key? key,
     this.profilePath,
     this.flagPath,
+    this.radius = 16,
+    this.flagRadius = 16,
   }) : super(key: key);
 
   @override
@@ -17,7 +21,7 @@ class AvatarWithFlagWidget extends StatelessWidget {
     return Stack(
       children: [
         CircleAvatar(
-          radius: 16,
+          radius: radius,
           backgroundImage: const AssetImage(
             'assets/images/88.png',
           ),
@@ -28,8 +32,8 @@ class AvatarWithFlagWidget extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: Container(
-            width: 16,
-            height: 16,
+            width: flagRadius,
+            height: flagRadius,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -44,8 +48,8 @@ class AvatarWithFlagWidget extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(16)),
                     child: SvgPicture.network(
                       flagPath!,
-                      width: 16,
-                      height: 16,
+                      width: flagRadius,
+                      height: flagRadius,
                       fit: BoxFit.cover,
                     ),
                   ),

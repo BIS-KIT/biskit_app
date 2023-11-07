@@ -16,7 +16,8 @@ class ChipWidget extends StatelessWidget {
   final Color rightIconColor;
   final Color textColor;
   final TextEditingController? controller;
-
+  final Color selectedColor;
+  final Color selectedBorderColor;
   const ChipWidget({
     Key? key,
     required this.text,
@@ -31,6 +32,8 @@ class ChipWidget extends StatelessWidget {
     this.rightIconColor = kColorContentOnBgPrimary,
     this.textColor = kColorContentOnBgPrimary,
     this.controller,
+    this.selectedColor = kColorBgPrimaryWeak,
+    this.selectedBorderColor = kColorBorderPrimaryStrong,
   }) : super(key: key);
 
   @override
@@ -42,11 +45,10 @@ class ChipWidget extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? kColorBgPrimaryWeak : Colors.transparent,
+            color: isSelected ? selectedColor : Colors.transparent,
             border: Border.all(
               width: 1,
-              color:
-                  isSelected ? kColorBorderPrimaryStrong : kColorBorderStrong,
+              color: isSelected ? selectedBorderColor : kColorBorderStrong,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(50)),
           ),
@@ -85,7 +87,7 @@ class ChipWidget extends StatelessWidget {
                       text,
                       textAlign: TextAlign.center,
                       style: getTsBody14Rg(context).copyWith(
-                        color: kColorContentOnBgPrimary,
+                        color: textColor,
                       ),
                     ),
                   )
