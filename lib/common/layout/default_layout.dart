@@ -5,6 +5,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 
 class DefaultLayout extends StatelessWidget {
+  final String? leadingIconPath;
   final Color? backgroundColor;
   final Widget child;
   final String? title;
@@ -17,6 +18,7 @@ class DefaultLayout extends StatelessWidget {
   final ShapeBorder? shape;
   const DefaultLayout({
     Key? key,
+    this.leadingIconPath = 'assets/icons/ic_arrow_back_ios_line_24.svg',
     this.backgroundColor,
     required this.child,
     this.title,
@@ -75,7 +77,7 @@ class DefaultLayout extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             constraints: const BoxConstraints(),
             child: SvgPicture.asset(
-              'assets/icons/ic_arrow_back_ios_line_24.svg',
+              leadingIconPath!,
               width: 24,
               height: 24,
               colorFilter: const ColorFilter.mode(

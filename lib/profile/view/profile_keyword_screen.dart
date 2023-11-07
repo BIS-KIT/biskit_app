@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/profile/model/Introduction_create_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -10,16 +10,23 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/components/keyword_input_widget.dart';
+import 'package:biskit_app/profile/model/Introduction_create_model.dart';
+import 'package:biskit_app/profile/model/introduction_model.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
-import 'package:go_router/go_router.dart';
 
 class ProfileKeywordScreen extends StatefulWidget {
   static String get routeName => 'profileKeyword';
   final ProfileCreateModel? profileCreateModel;
+  final bool isEditorMode;
+  final List<IntroductionModel>? introductions;
+  final String? userNickName;
   const ProfileKeywordScreen({
     Key? key,
     this.profileCreateModel,
+    this.isEditorMode = false,
+    this.introductions,
+    this.userNickName,
   }) : super(key: key);
 
   @override
@@ -27,7 +34,30 @@ class ProfileKeywordScreen extends StatefulWidget {
 }
 
 class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
-  final List<KeywordModel> keywordList = [];
+  List<KeywordModel> keywordList = [];
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  init() {
+    if (widget.isEditorMode) {
+      setState(() {
+        keywordList = List<KeywordModel>.from(
+          widget.introductions!
+              .map(
+                (e) => KeywordModel(
+                  keyword: e.keyword,
+                  reason: e.context,
+                ),
+              )
+              .toList(),
+        );
+      });
+    }
+  }
 
   void onTapKeywordDelete(int index) {
     showConfirmModal(
@@ -50,18 +80,34 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
 
   onTapNext() {
     if (keywordList.isNotEmpty) {
-      context.pushNamed(
-        ProfileIdConfirmScreen.routeName,
-        extra: widget.profileCreateModel!.copyWith(
-            introductions: List.from(
-          keywordList.map(
-            (e) => IntroductionCreateModel(
-              keyword: e.keyword,
-              context: e.reason,
-            ),
+      if (widget.isEditorMode) {
+        // TODO 에디트 모드
+
+        // 실패시 토스트 처리
+        showSnackBar(
+          context: context,
+          text: '저장에 실패했어요. 다시 시도해주세요.',
+          margin: const EdgeInsets.only(
+            left: 12,
+            right: 12,
+            bottom: 102,
           ),
-        )),
-      );
+        );
+      } else {
+        // 회원가입 진행
+        context.pushNamed(
+          ProfileIdConfirmScreen.routeName,
+          extra: widget.profileCreateModel!.copyWith(
+              introductions: List.from(
+            keywordList.map(
+              (e) => IntroductionCreateModel(
+                keyword: e.keyword,
+                context: e.reason,
+              ),
+            ),
+          )),
+        );
+      }
     }
   }
 
@@ -69,21 +115,24 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '',
+      leadingIconPath:
+          widget.isEditorMode ? 'assets/icons/ic_cancel_line_24.svg' : null,
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: Container(
-            padding: const EdgeInsets.only(
-              right: 10,
-            ),
-            child: Text(
-              '3 / 4',
-              style: getTsBody14Rg(context).copyWith(
-                color: kColorContentWeakest,
+        if (!widget.isEditorMode)
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Container(
+              padding: const EdgeInsets.only(
+                right: 10,
+              ),
+              child: Text(
+                '3 / 4',
+                style: getTsBody14Rg(context).copyWith(
+                  color: kColorContentWeakest,
+                ),
               ),
             ),
           ),
-        ),
       ],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +147,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '${widget.profileCreateModel!.nick_name}님,\n좋아하는 것을 알려주세요',
+                  '${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}님,\n좋아하는 것을 알려주세요',
                   style: getTsHeading24(context).copyWith(
                     color: kColorContentDefault,
                   ),
