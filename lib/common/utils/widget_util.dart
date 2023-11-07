@@ -234,6 +234,7 @@ showDefaultModalBottomSheet({
 showSnackBar({
   required BuildContext context,
   required String text,
+  EdgeInsetsGeometry? margin,
 }) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
@@ -247,6 +248,7 @@ showSnackBar({
       ),
       backgroundColor: Colors.black,
       padding: const EdgeInsets.all(16),
+      margin: margin,
     ),
   );
 }

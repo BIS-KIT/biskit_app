@@ -13,6 +13,7 @@ import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:biskit_app/user/view/introduction_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,7 +28,7 @@ class MyPageScreen extends ConsumerStatefulWidget {
 class _MyPageScreenState extends ConsumerState<MyPageScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController = TabController(
-    length: 3,
+    length: 2,
     vsync: this,
     initialIndex: 0,
   );
@@ -220,10 +221,6 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                               Tab(
                                 height: 25,
                                 text: '내 모임',
-                              ),
-                              Tab(
-                                height: 25,
-                                text: '좋아요',
                               ),
                               Tab(
                                 height: 25,
@@ -461,40 +458,50 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
             ),
 
             // Badge group
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      spacing: 4,
-                      children: [
-                        // Badge
-                        ...userState.profile!.introductions
-                            .map(
-                              (e) => BadgeWidget(text: e.keyword),
-                            )
-                            .toList(),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Transform.rotate(
-                    angle: -90 * pi / 180,
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_chevron_down_line_24.svg',
-                      width: 24,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentWeakest,
-                        BlendMode.srcIn,
+            GestureDetector(
+              // behavior: HitTestBehavior.opaque,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const IntroductionViewScreen(),
+                    ));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Wrap(
+                        spacing: 4,
+                        children: [
+                          // Badge
+                          ...userState.profile!.introductions
+                              .map(
+                                (e) => BadgeWidget(text: e.keyword),
+                              )
+                              .toList(),
+                        ],
                       ),
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Transform.rotate(
+                      angle: -90 * pi / 180,
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_chevron_down_line_24.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentWeakest,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
 
