@@ -246,7 +246,7 @@ showSnackBar({
           color: kColorBgDefault,
         ),
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: kColorBgOverlay.withOpacity(0.7),
       padding: const EdgeInsets.all(16),
       margin: margin,
     ),
