@@ -7,6 +7,7 @@ import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:biskit_app/user/view/my_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -160,7 +161,7 @@ class _RootTabState extends ConsumerState<RootTab>
           const MeetUpListScreen(),
           Container(),
           const ChatRoomScreen(),
-          Container(),
+          const MyPageScreen(),
         ],
       ),
     );

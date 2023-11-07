@@ -1,7 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:biskit_app/profile/model/profile_model.dart';
+import 'package:biskit_app/user/model/user_nationality_model.dart';
+import 'package:biskit_app/user/model/user_university_model.dart';
 
 abstract class UserModelBase {}
 
@@ -25,6 +29,8 @@ class UserModel extends UserModelBase {
   final String? sns_type;
   final String? sns_id;
   final ProfileModel? profile;
+  final List<UserUniversityModel> user_university;
+  final List<UserNationalityModel> user_nationality;
 
   UserModel({
     required this.id,
@@ -37,6 +43,8 @@ class UserModel extends UserModelBase {
     this.sns_type,
     this.sns_id,
     required this.profile,
+    required this.user_university,
+    required this.user_nationality,
   });
 
   UserModel copyWith({
@@ -50,6 +58,8 @@ class UserModel extends UserModelBase {
     String? sns_type,
     String? sns_id,
     ProfileModel? profile,
+    List<UserUniversityModel>? user_university,
+    List<UserNationalityModel>? user_nationality,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -62,6 +72,8 @@ class UserModel extends UserModelBase {
       sns_type: sns_type ?? this.sns_type,
       sns_id: sns_id ?? this.sns_id,
       profile: profile ?? this.profile,
+      user_university: user_university ?? this.user_university,
+      user_nationality: user_nationality ?? this.user_nationality,
     );
   }
 
@@ -77,6 +89,8 @@ class UserModel extends UserModelBase {
       'sns_type': sns_type,
       'sns_id': sns_id,
       'profile': profile?.toMap(),
+      'user_university': user_university.map((x) => x.toMap()).toList(),
+      'user_nationality': user_nationality.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -93,6 +107,10 @@ class UserModel extends UserModelBase {
       sns_id: map['sns_id'],
       profile:
           map['profile'] != null ? ProfileModel.fromMap(map['profile']) : null,
+      user_university: List<UserUniversityModel>.from(
+          map['user_university']?.map((x) => UserUniversityModel.fromMap(x))),
+      user_nationality: List<UserNationalityModel>.from(
+          map['user_nationality']?.map((x) => UserNationalityModel.fromMap(x))),
     );
   }
 
@@ -103,7 +121,7 @@ class UserModel extends UserModelBase {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, birth: $birth, gender: $gender, is_active: $is_active, is_admin: $is_admin, sns_type: $sns_type, sns_id: $sns_id, profile: $profile)';
+    return 'UserModel(id: $id, email: $email, name: $name, birth: $birth, gender: $gender, is_active: $is_active, is_admin: $is_admin, sns_type: $sns_type, sns_id: $sns_id, profile: $profile, user_university: $user_university, user_nationality: $user_nationality)';
   }
 
   @override
@@ -120,7 +138,9 @@ class UserModel extends UserModelBase {
         other.is_admin == is_admin &&
         other.sns_type == sns_type &&
         other.sns_id == sns_id &&
-        other.profile == profile;
+        other.profile == profile &&
+        listEquals(other.user_university, user_university) &&
+        listEquals(other.user_nationality, user_nationality);
   }
 
   @override
@@ -134,6 +154,8 @@ class UserModel extends UserModelBase {
         is_admin.hashCode ^
         sns_type.hashCode ^
         sns_id.hashCode ^
-        profile.hashCode;
+        profile.hashCode ^
+        user_university.hashCode ^
+        user_nationality.hashCode;
   }
 }
