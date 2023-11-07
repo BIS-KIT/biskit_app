@@ -41,7 +41,7 @@ class ChatRepository {
       )
       .snapshots();
 
-  createChatRoom({
+  Future<String> createChatRoom({
     required String title,
     required int userId,
   }) async {
@@ -59,6 +59,7 @@ class ChatRepository {
             createDate: FieldValue.serverTimestamp(),
           ).toMap(),
         );
+    return chatRoomId;
   }
 
   updateChatRoom({

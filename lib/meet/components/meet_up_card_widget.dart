@@ -39,6 +39,20 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
           borderRadius: BorderRadius.all(
             Radius.circular(12),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x11495B7D),
+              blurRadius: 20,
+              offset: Offset(0, 4),
+              spreadRadius: 0,
+            ),
+            BoxShadow(
+              color: Color(0x07495B7D),
+              blurRadius: 1,
+              offset: Offset(0, 0),
+              spreadRadius: 0,
+            )
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
