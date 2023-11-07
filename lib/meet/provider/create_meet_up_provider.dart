@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/model/kakao/kakao_document_model.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
@@ -16,6 +17,7 @@ final createMeetUpProvider =
     userModelBase: ref.watch(userMeProvider),
     utilRepository: ref.watch(utilRepositoryProvider),
     meetUpRepository: ref.watch(meetUpRepositoryProvider),
+    chatRepository: ref.watch(chatRepositoryProvider),
   );
 });
 
@@ -23,10 +25,12 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   final UserModelBase? userModelBase;
   final UtilRepository utilRepository;
   final MeetUpRepository meetUpRepository;
+  final ChatRepository chatRepository;
   CreateMeetUpStateNotifier({
     required this.userModelBase,
     required this.utilRepository,
     required this.meetUpRepository,
+    required this.chatRepository,
   }) : super(null) {
     //
     init();
@@ -239,7 +243,19 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   createMeetUp() async {
     bool result = false;
     if (state != null) {
-      result = await meetUpRepository.createMeetUp(state!);
+      // firebase chat room create
+      String chatRoomUid = await chatRepository.createChatRoom(
+        title: state!.name ?? '',
+        userId: state!.creator_id,
+      );
+
+      if (chatRoomUid.isEmpty) {
+        return false;
+      }
+
+      result = await meetUpRepository.createMeetUp(state!.copyWith(
+        chat_id: chatRoomUid,
+      ));
       init();
     }
     return result;
