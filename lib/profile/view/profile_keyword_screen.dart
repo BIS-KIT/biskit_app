@@ -11,7 +11,6 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/components/keyword_input_widget.dart';
 import 'package:biskit_app/profile/model/Introduction_create_model.dart';
-import 'package:biskit_app/profile/model/introduction_model.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 
@@ -19,12 +18,14 @@ class ProfileKeywordScreen extends StatefulWidget {
   static String get routeName => 'profileKeyword';
   final ProfileCreateModel? profileCreateModel;
   final bool isEditorMode;
-  final List<IntroductionModel>? introductions;
+  final Function? editorCallback;
+  final List<KeywordModel>? introductions;
   final String? userNickName;
   const ProfileKeywordScreen({
     Key? key,
     this.profileCreateModel,
     this.isEditorMode = false,
+    this.editorCallback,
     this.introductions,
     this.userNickName,
   }) : super(key: key);
@@ -45,16 +46,17 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   init() {
     if (widget.isEditorMode) {
       setState(() {
-        keywordList = List<KeywordModel>.from(
-          widget.introductions!
-              .map(
-                (e) => KeywordModel(
-                  keyword: e.keyword,
-                  reason: e.context,
-                ),
-              )
-              .toList(),
-        );
+        keywordList = widget.introductions!;
+        // keywordList = List<KeywordModel>.from(
+        //   widget.introductions!
+        //       .map(
+        //         (e) => KeywordModel(
+        //           keyword: e.keyword,
+        //           reason: e.context,
+        //         ),
+        //       )
+        //       .toList(),
+        // );
       });
     }
   }
@@ -81,18 +83,23 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   onTapNext() {
     if (keywordList.isNotEmpty) {
       if (widget.isEditorMode) {
+        widget.editorCallback!.call(keywordList);
+        // if (widget.isProfileEditorMode) {
+        //   Navigator.pop(context, keywordList);
+        //   return;
+        // }
         // TODO 에디트 모드
 
         // 실패시 토스트 처리
-        showSnackBar(
-          context: context,
-          text: '저장에 실패했어요. 다시 시도해주세요.',
-          margin: const EdgeInsets.only(
-            left: 12,
-            right: 12,
-            bottom: 102,
-          ),
-        );
+        // showSnackBar(
+        //   context: context,
+        //   text: '저장에 실패했어요. 다시 시도해주세요.',
+        //   margin: const EdgeInsets.only(
+        //     left: 12,
+        //     right: 12,
+        //     bottom: 102,
+        //   ),
+        // );
       } else {
         // 회원가입 진행
         context.pushNamed(
@@ -215,7 +222,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
             child: GestureDetector(
               onTap: onTapNext,
               child: FilledButtonWidget(
-                text: '다음',
+                text: widget.isEditorMode ? '저장' : '다음',
                 isEnable: keywordList.isNotEmpty,
               ),
             ),

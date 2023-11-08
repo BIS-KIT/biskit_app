@@ -136,7 +136,10 @@ class IntroductionViewScreen extends ConsumerWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProfileKeywordScreen(
-                      introductions: userState.profile!.introductions,
+                      introductions: userState.profile!.introductions
+                          .map((e) => KeywordModel(
+                              keyword: e.keyword, reason: e.context))
+                          .toList(),
                       isEditorMode: true,
                       userNickName: userState.profile!.nick_name,
                     ),

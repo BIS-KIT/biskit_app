@@ -8,6 +8,7 @@ import 'custom_text_form_field.dart';
 
 class TextInputWidget extends StatelessWidget {
   final String title;
+  final TextStyle? titleStyle;
   final String? hintText;
   final String? errorText;
   final ValueChanged<String>? onChanged;
@@ -24,6 +25,7 @@ class TextInputWidget extends StatelessWidget {
   const TextInputWidget({
     Key? key,
     required this.title,
+    this.titleStyle,
     this.hintText,
     this.errorText,
     this.onChanged,
@@ -46,9 +48,10 @@ class TextInputWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: getTsBody14Sb(context).copyWith(
-            color: kColorContentWeak,
-          ),
+          style: titleStyle ??
+              getTsBody14Sb(context).copyWith(
+                color: kColorContentWeak,
+              ),
         ),
         const SizedBox(
           height: 8,
