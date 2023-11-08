@@ -6,11 +6,15 @@ import 'package:biskit_app/common/const/fonts.dart';
 
 class BadgeWidget extends StatelessWidget {
   final String text;
+  final Color? backgroundColor;
+  final Color? textColor;
   final bool isShowLeftIcon;
   final bool isShowRightIcon;
   const BadgeWidget({
     Key? key,
     required this.text,
+    this.backgroundColor,
+    this.textColor,
     this.isShowLeftIcon = false,
     this.isShowRightIcon = false,
   }) : super(key: key);
@@ -22,9 +26,9 @@ class BadgeWidget extends StatelessWidget {
         vertical: 4,
         horizontal: 6,
       ),
-      decoration: const BoxDecoration(
-        color: kColorBgElevation2,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: backgroundColor ?? kColorBgElevation2,
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
       ),
@@ -48,7 +52,7 @@ class BadgeWidget extends StatelessWidget {
             child: Text(
               text,
               style: getTsBody14Rg(context).copyWith(
-                color: kColorContentWeaker,
+                color: textColor ?? kColorContentWeaker,
               ),
             ),
           ),

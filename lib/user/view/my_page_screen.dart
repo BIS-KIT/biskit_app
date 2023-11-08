@@ -4,13 +4,13 @@ import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
 import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/common/components/level_bar_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
+import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
+import 'package:biskit_app/profile/view/profile_edit_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/introduction_view_screen.dart';
@@ -43,119 +43,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.only(
-              top: 16,
-              bottom: 24,
-            ),
-            decoration: const BoxDecoration(
-              color: kColorBgDefault,
-              borderRadius: BorderRadius.all(
-                Radius.circular(16),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 24,
-                    right: 12,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '사용가능언어',
-                          style: getTsHeading18(context).copyWith(
-                            color: kColorContentDefault,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SvgPicture.asset(
-                            'assets/icons/ic_cancel_line_24.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentDefault,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      ...userState.profile!.available_languages
-                          .map(
-                            (l) => Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    width: 1,
-                                    color: kColorBorderDefalut,
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    l.language.kr_name,
-                                    style: getTsBody16Sb(context).copyWith(
-                                      color: kColorContentWeak,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        getLevelServerValueToKrString(l.level),
-                                        style: getTsBody16Sb(context).copyWith(
-                                          color: kColorContentSecondary,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      LevelBarWidget(
-                                        level:
-                                            getLevelServerValueToInt(l.level),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return UseLanguageModalWidget(
+          available_languages: userState.profile!.available_languages,
         );
       },
     );
@@ -239,10 +128,11 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                               return Container(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: const Column(
+                                child: Column(
+                                  // mainAxisSize: MainAxisSize.max,
                                   children: [
                                     // Status tab
-                                    Row(
+                                    const Row(
                                       children: [
                                         ChipWidget(
                                           text: '참여중',
@@ -253,14 +143,14 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                               kColorBgInverseWeak,
                                         ),
                                         SizedBox(
-                                          width: 12,
+                                          width: 4,
                                         ),
                                         ChipWidget(
                                           text: '승인대기',
                                           isSelected: false,
                                         ),
                                         SizedBox(
-                                          width: 12,
+                                          width: 4,
                                         ),
                                         ChipWidget(
                                           text: '지난모임',
@@ -268,48 +158,49 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+
+                                    SizedBox(
+                                      height: 164,
+                                      child: Center(
+                                        child: Text(
+                                          '참여중인 모임이 없어요',
+                                          style:
+                                              getTsBody14Sb(context).copyWith(
+                                            color: kColorContentWeakest,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               );
-                            } else if (tabController.index == 1) {
+                            } else {
                               return Container(
-                                child: const Text('2'),
-                              );
-                            } else if (tabController.index == 2) {
-                              return Container(
-                                child: const Text('3'),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 164,
+                                      child: Center(
+                                        child: Text(
+                                          '모임에 참여하고 후기를 남겨보세요',
+                                          style:
+                                              getTsBody14Sb(context).copyWith(
+                                            color: kColorContentWeakest,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               );
                             }
-                            return Container();
                           },
                         ),
-
-                        // SizedBox(
-                        //   height: 600,
-                        //   child: TabBarView(
-                        //     controller: tabController,
-                        //     children: const [
-                        //       Column(
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: [
-                        //           Text('1'),
-                        //         ],
-                        //       ),
-                        //       Column(
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: [
-                        //           Text('2'),
-                        //         ],
-                        //       ),
-                        //       Column(
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: [
-                        //           Text('3'),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -506,16 +397,31 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
             ),
 
             // btn
-            const Padding(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 left: 20,
                 bottom: 20,
                 right: 20,
               ),
-              child: OutlinedButtonWidget(
-                text: '프로필 수정',
-                height: 40,
-                isEnable: true,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileEditScreen(
+                        profile: userState.profile!,
+                        user_university: [
+                          ...userState.user_university,
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: const OutlinedButtonWidget(
+                  text: '프로필 수정',
+                  height: 40,
+                  isEnable: true,
+                ),
               ),
             ),
           ],
