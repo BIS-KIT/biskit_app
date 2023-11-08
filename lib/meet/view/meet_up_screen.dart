@@ -26,6 +26,8 @@ class _MeetUpScreenState extends ConsumerState<MeetUpScreen> {
         return true;
       },
       child: DefaultLayout(
+        borderShape: false,
+        backgroundColor: kColorBgElevation2,
         title: '',
         onTapLeading: () {
           Navigator.pop(context);
