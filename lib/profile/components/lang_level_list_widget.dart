@@ -1,6 +1,6 @@
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/level_bar_widget.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
@@ -91,7 +91,7 @@ class _LangLevelListWidgetState extends State<LangLevelListWidget> {
             children: [
               ...levelList
                   .map(
-                    (e) => ListWidget(
+                    (e) => ListWidgetTemp(
                       touchWidget: CheckCircleWidget(
                         value: e.isChecked,
                       ),

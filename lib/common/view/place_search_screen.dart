@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -104,7 +104,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate(
                     itemBuilder: (context, KakaoDocumentModel item, index) =>
-                        ListWidget(
+                        ListWidgetTemp(
                       onTap: () {
                         Navigator.pop(context, item);
                       },

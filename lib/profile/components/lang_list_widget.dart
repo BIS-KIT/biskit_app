@@ -1,5 +1,5 @@
 import 'package:biskit_app/common/components/check_circle.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -180,8 +180,8 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
     );
   }
 
-  ListWidget _buildListWidget(UseLanguageModel e, BuildContext context) {
-    return ListWidget(
+  ListWidgetTemp _buildListWidget(UseLanguageModel e, BuildContext context) {
+    return ListWidgetTemp(
       height: 56,
       touchWidget: CheckCircleWidget(
         value: e.isChecked,

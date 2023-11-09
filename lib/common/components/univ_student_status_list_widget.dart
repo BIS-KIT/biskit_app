@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
@@ -83,7 +83,7 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
               : Column(
                   children: univerisyStudentStatusList
                       .map(
-                        (e) => ListWidget(
+                        (e) => ListWidgetTemp(
                           height: 56,
                           borderColor: e == univerisyStudentStatusList.last
                               ? kColorBgDefault
