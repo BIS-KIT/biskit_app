@@ -153,6 +153,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
       onWillPop: onWillPop,
       child: DefaultLayout(
         title: '',
+        backgroundColor: kColorBgDefault,
         onTapLeading: onWillPop,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

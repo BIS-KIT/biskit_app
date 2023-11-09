@@ -60,6 +60,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
         });
       },
       child: Scaffold(
+        backgroundColor: kColorBgDefault,
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
