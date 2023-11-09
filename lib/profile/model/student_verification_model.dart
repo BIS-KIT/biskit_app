@@ -6,6 +6,7 @@ import 'dart:convert';
 class StudentVerificationModel {
   final int id;
   final String student_card;
+  // 인증상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
   final String verification_status;
   StudentVerificationModel({
     required this.id,
