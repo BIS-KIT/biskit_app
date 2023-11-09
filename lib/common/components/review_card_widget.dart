@@ -3,10 +3,16 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:photo_manager/photo_manager.dart';
+
+enum ReviewImgType { networkImage, photoModel }
 
 class ReviewCardWidget extends StatelessWidget {
   final double width;
+  final ReviewImgType reviewImgType;
   final String? imagePath;
+  final PhotoModel? photoModel;
   final bool isShowLock;
   final bool isShowDelete;
   final bool isShowFlag;
@@ -15,7 +21,9 @@ class ReviewCardWidget extends StatelessWidget {
   const ReviewCardWidget({
     Key? key,
     required this.width,
+    required this.reviewImgType,
     this.imagePath,
+    this.photoModel,
     this.isShowLock = false,
     this.isShowDelete = false,
     this.isShowFlag = false,
@@ -36,24 +44,42 @@ class ReviewCardWidget extends StatelessWidget {
     }
     return Stack(
       children: [
-        Container(
-          width: width,
-          height: width,
-          decoration: BoxDecoration(
-            color: const Color(0xff000000).withOpacity(0.15),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(8),
-            ),
-            image: imagePath == null
-                ? null
-                : DecorationImage(
-                    image: NetworkImage(
-                      imagePath!,
+        if (reviewImgType == ReviewImgType.networkImage)
+          Container(
+            width: width,
+            height: width,
+            decoration: BoxDecoration(
+              color: const Color(0xff000000).withOpacity(0.15),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+              image: imagePath == null
+                  ? null
+                  : DecorationImage(
+                      image: NetworkImage(
+                        imagePath!,
+                      ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
-                  ),
+            ),
           ),
-        ),
+        if (reviewImgType == ReviewImgType.photoModel)
+          Container(
+            width: width,
+            height: width,
+            decoration: BoxDecoration(
+              color: const Color(0xff000000).withOpacity(0.15),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+              image: photoModel == null
+                  ? null
+                  : DecorationImage(
+                      image: AssetEntityImageProvider(photoModel!.assetEntity!),
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
 
         // show lock
         if (isShowLock)
@@ -99,7 +125,7 @@ class ReviewCardWidget extends StatelessWidget {
           ),
 
         // show logo
-        if (isShowDelete)
+        if (isShowFlag || isShowLogo)
           Container(
             // bottom: padding,
             // right: padding,
@@ -115,7 +141,7 @@ class ReviewCardWidget extends StatelessWidget {
                     spacing: spacing,
                     runSpacing: spacing,
                     children: [
-                      if (flagCodeList != null)
+                      if (flagCodeList != null && isShowFlag)
                         ...flagCodeList!
                             .map((e) => ClipRRect(
                                   borderRadius: const BorderRadius.all(
@@ -132,15 +158,16 @@ class ReviewCardWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                SvgPicture.asset(
-                  'assets/icons/biskit_signature_mono.svg',
-                  width: 43,
-                  height: 20,
-                  colorFilter: const ColorFilter.mode(
-                    kColorContentInverse,
-                    BlendMode.srcIn,
+                if (isShowLogo)
+                  SvgPicture.asset(
+                    'assets/icons/biskit_signature_mono.svg',
+                    width: 43,
+                    height: 20,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentInverse,
+                      BlendMode.srcIn,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

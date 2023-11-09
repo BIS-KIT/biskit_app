@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:biskit_app/chat/view/chat_room_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';

@@ -9,6 +9,7 @@ import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
 import 'package:biskit_app/profile/view/profile_edit_screen.dart';
@@ -237,6 +238,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                             .map((e) => ReviewCardWidget(
                                                   width: width,
                                                   imagePath: e['imagePath'],
+                                                  reviewImgType: ReviewImgType
+                                                      .networkImage,
                                                   flagCodeList:
                                                       e['nationalList']
                                                           as List<String>,
@@ -285,43 +288,53 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
     );
   }
 
-  Container _buildReviewWriteCard({
+  Widget _buildReviewWriteCard({
     required BuildContext context,
     double? width,
   }) {
-    return Container(
-      height: width ?? 164,
-      width: width,
-      padding: const EdgeInsets.all(12),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MyMeetUpListScreen(),
+          ),
+        );
+      },
+      child: Container(
+        height: width ?? 164,
+        width: width,
+        padding: const EdgeInsets.all(12),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+          color: kColorBgElevation3,
         ),
-        color: kColorBgElevation3,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            'assets/icons/ic_plus_line_24.svg',
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              kColorContentWeaker,
-              BlendMode.srcIn,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/icons/ic_plus_line_24.svg',
+              width: 24,
+              height: 24,
+              colorFilter: const ColorFilter.mode(
+                kColorContentWeaker,
+                BlendMode.srcIn,
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            '인생샷을 남겨보세요',
-            style: getTsBody14Sb(context).copyWith(
-              color: kColorContentWeaker,
+            const SizedBox(
+              height: 8,
             ),
-          ),
-        ],
+            Text(
+              '인생샷을 남겨보세요',
+              style: getTsBody14Sb(context).copyWith(
+                color: kColorContentWeaker,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
