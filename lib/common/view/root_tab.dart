@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:biskit_app/chat/view/chat_room_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -61,15 +62,16 @@ class _RootTabState extends ConsumerState<RootTab>
     return DefaultLayout(
       backgroundColor: scafoldBackgroundColor,
       bottomNavigationBar: Container(
-        padding: EdgeInsets.only(
-          bottom: Platform.isIOS ? 28 : 0,
-          // left: 8,
-          // right: 8,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
         ),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: kColorBorderWeak,
-            width: 1,
+        decoration: const BoxDecoration(
+          color: kColorBgDefault,
+          border: Border(
+            top: BorderSide(
+              width: 1,
+              color: kColorBorderWeak,
+            ),
           ),
         ),
         child: BottomNavigationBar(
@@ -82,9 +84,7 @@ class _RootTabState extends ConsumerState<RootTab>
             if (index == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const MeetUpCreateScreen(),
-                ),
+                createUpDownRoute(const MeetUpCreateScreen()),
               );
               return;
             } else {
