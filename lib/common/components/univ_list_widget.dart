@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -159,7 +159,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                           child: Column(
                             children: tempList
                                 .map(
-                                  (e) => ListWidget(
+                                  (e) => ListWidgetTemp(
                                     height: 56,
                                     borderColor: e == tempList.last
                                         ? kColorBgDefault

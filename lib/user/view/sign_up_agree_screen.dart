@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/check_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/components/select_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -76,7 +76,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               ),
 
               // 약관
-              ListWidget(
+              ListWidgetTemp(
                 height: 40,
                 borderColor: kColorBgDefault,
                 onTap: onTapAll,
@@ -102,7 +102,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
               const SizedBox(
                 height: 16,
               ),
-              ListWidget(
+              ListWidgetTemp(
                 height: 40,
                 borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
@@ -127,7 +127,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   onTap: () {},
                 ),
               ),
-              ListWidget(
+              ListWidgetTemp(
                 height: 40,
                 borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
@@ -153,7 +153,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 ),
               ),
 
-              ListWidget(
+              ListWidgetTemp(
                 height: 40,
                 borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(
@@ -178,7 +178,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   onTap: () {},
                 ),
               ),
-              ListWidget(
+              ListWidgetTemp(
                 height: 40,
                 borderColor: kColorBgDefault,
                 touchWidget: CheckWidget(

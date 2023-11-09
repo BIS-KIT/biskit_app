@@ -1,6 +1,6 @@
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
-import 'package:biskit_app/common/components/list_widget.dart';
+import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/components/radio_widget.dart';
@@ -242,7 +242,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ListWidget(
+              ListWidgetTemp(
                 onTap: () {
                   logger.d('onTap');
                 },
@@ -267,7 +267,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ListWidget(
+              ListWidgetTemp(
                 onTap: () {
                   logger.d('onTap');
                 },

@@ -8,7 +8,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 class SelectWidget extends StatelessWidget {
   final String usageType;
   final String text;
-  final String iconPath;
+  final String? iconPath;
   final Function()? onTap;
   const SelectWidget({
     Key? key,
@@ -36,22 +36,23 @@ class SelectWidget extends StatelessWidget {
                     color: kColorContentDefault,
                   ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                iconPath,
-                width: 24,
-                height: 24,
-                colorFilter: ColorFilter.mode(
-                  usageType == 'body'
-                      ? kColorContentWeakest
-                      : kColorContentDefault,
-                  BlendMode.srcIn,
+          if (iconPath != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  iconPath!,
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    usageType == 'body'
+                        ? kColorContentWeakest
+                        : kColorContentDefault,
+                    BlendMode.srcIn,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );
