@@ -5,6 +5,7 @@ import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -33,6 +34,31 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
     initialIndex: 0,
   );
 
+  // 후기 작성 권한
+  bool isReviewWriteEnable = true;
+  List reviewList = [
+    {
+      'imagePath':
+          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'nationalList': <String>[
+        'kr',
+        'er',
+        'ch',
+        'fj',
+        'gb',
+        'gd',
+      ],
+    },
+    {
+      'imagePath':
+          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'nationalList': <String>[
+        'kr',
+        'er',
+      ],
+    },
+  ];
+
   @override
   void dispose() {
     tabController.dispose();
@@ -53,6 +79,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
+    final size = MediaQuery.of(context).size;
     return SafeArea(
       bottom: false,
       child: Column(
@@ -65,6 +92,10 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                 )
               : Expanded(
                   child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                      bottom: 22,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -178,26 +209,69 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                 ),
                               );
                             } else {
-                              return Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 164,
-                                      child: Center(
-                                        child: Text(
-                                          '모임에 참여하고 후기를 남겨보세요',
-                                          style:
-                                              getTsBody14Sb(context).copyWith(
-                                            color: kColorContentWeakest,
+                              if (isReviewWriteEnable) {
+                                if (reviewList.isEmpty) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                    ),
+                                    child:
+                                        _buildReviewWriteCard(context: context),
+                                  );
+                                } else {
+                                  double width = (size.width - 40 - 8) / 2;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                    ),
+                                    child: Wrap(
+                                      alignment: WrapAlignment.spaceBetween,
+                                      runSpacing: 8,
+                                      children: [
+                                        _buildReviewWriteCard(
+                                          context: context,
+                                          width: width,
+                                        ),
+                                        ...reviewList
+                                            .map((e) => ReviewCardWidget(
+                                                  width: width,
+                                                  imagePath: e['imagePath'],
+                                                  flagCodeList:
+                                                      e['nationalList']
+                                                          as List<String>,
+                                                  isShowDelete: true,
+                                                  isShowFlag: true,
+                                                  isShowLock: true,
+                                                  isShowLogo: true,
+                                                ))
+                                            .toList(),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } else {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 164,
+                                        child: Center(
+                                          child: Text(
+                                            '모임에 참여하고 후기를 남겨보세요',
+                                            style:
+                                                getTsBody14Sb(context).copyWith(
+                                              color: kColorContentWeakest,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }
                             }
                           },
                         ),
@@ -205,6 +279,47 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                     ),
                   ),
                 ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildReviewWriteCard({
+    required BuildContext context,
+    double? width,
+  }) {
+    return Container(
+      height: width ?? 164,
+      width: width,
+      padding: const EdgeInsets.all(12),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        color: kColorBgElevation3,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            'assets/icons/ic_plus_line_24.svg',
+            width: 24,
+            height: 24,
+            colorFilter: const ColorFilter.mode(
+              kColorContentWeaker,
+              BlendMode.srcIn,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            '인생샷을 남겨보세요',
+            style: getTsBody14Sb(context).copyWith(
+              color: kColorContentWeaker,
+            ),
+          ),
         ],
       ),
     );
@@ -350,7 +465,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
 
             // Badge group
             GestureDetector(
-              // behavior: HitTestBehavior.opaque,
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Navigator.push(
                     context,
