@@ -9,20 +9,21 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 
-class ReviewWriteScreen extends StatefulWidget {
-  final PhotoModel? photoModel;
-  final MeetUpModel meetUpModel;
-  const ReviewWriteScreen({
+class ReviewEditScreen extends StatefulWidget {
+  final String imagePath;
+  final String reviewText;
+  // final MeetUpModel meetUpModel;
+  const ReviewEditScreen({
     Key? key,
-    required this.meetUpModel,
-    this.photoModel,
+    required this.imagePath,
+    required this.reviewText,
   }) : super(key: key);
 
   @override
-  State<ReviewWriteScreen> createState() => _ReviewWriteScreenState();
+  State<ReviewEditScreen> createState() => _ReviewEditScreenState();
 }
 
-class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
+class _ReviewEditScreenState extends State<ReviewEditScreen> {
   final ScrollController controller = ScrollController(
       // initialScrollOffset: 0.0,
       // keepScrollOffset: true,
@@ -32,6 +33,8 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   @override
   void initState() {
     super.initState();
+    reviewStr = widget.reviewText;
+    textEditingController.text = reviewStr;
     controller.addListener(() {
       controller.jumpTo(controller.position.maxScrollExtent);
     });
@@ -48,25 +51,10 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return DefaultLayout(
-      title: '후기 작성',
+      title: '후기 수정',
       leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
       onTapLeading: () async {
-        await showConfirmModal(
-          context: context,
-          leftCall: () {
-            Navigator.pop(context);
-          },
-          leftButton: '취소',
-          rightCall: () {
-            Navigator.pop(context);
-            Navigator.pop(context, [true]);
-          },
-          rightButton: '나가기',
-          rightBackgroundColor: kColorBgError,
-          rightTextColor: kColorContentError,
-          title: '나가시겠어요?',
-          content: '작성한 내용이 모두 사라져요',
-        );
+        Navigator.pop(context);
       },
       child: SafeArea(
         child: Column(
@@ -83,8 +71,9 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                     children: [
                       ReviewCardWidget(
                         width: size.width - 40,
-                        reviewImgType: ReviewImgType.photoModel,
-                        photoModel: widget.photoModel,
+                        reviewImgType: ReviewImgType.networkImage,
+                        // photoModel: widget.photoModel,
+                        imagePath: widget.imagePath,
                         isShowLogo: true,
                         isShowFlag: true,
                         flagCodeList: const [
@@ -163,7 +152,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 right: 20,
               ),
               child: const FilledButtonWidget(
-                text: '후기 남기기',
+                text: '후기 수정하기',
                 isEnable: true,
               ),
             )

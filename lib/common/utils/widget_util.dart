@@ -8,6 +8,110 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../components/filled_button_widget.dart';
 import '../const/colors.dart';
 
+/// more 버튼 바텀 시트
+showReviewMoreBottomSheet({
+  required BuildContext context,
+  Function()? onTapFix,
+  Function()? onTapDelete,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    barrierColor: kColorBgDimmed.withOpacity(0.5),
+    builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: onTapFix,
+              child: Container(
+                width: double.infinity,
+                height: 56,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: kColorBgDefault,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '수정하기',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentDefault,
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: onTapDelete,
+              child: Container(
+                width: double.infinity,
+                height: 56,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: kColorBgDefault,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '삭제하기',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentError,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 56,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: kColorBgDefault,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '취소',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentDefault,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 /// 시간 선택 바텀 시트
 showTimeBottomSheet({
   required BuildContext context,

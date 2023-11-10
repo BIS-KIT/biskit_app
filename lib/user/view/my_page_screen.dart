@@ -13,6 +13,7 @@ import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
 import 'package:biskit_app/profile/view/profile_edit_screen.dart';
+import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/introduction_view_screen.dart';
@@ -235,18 +236,29 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                           width: width,
                                         ),
                                         ...reviewList
-                                            .map((e) => ReviewCardWidget(
-                                                  width: width,
-                                                  imagePath: e['imagePath'],
-                                                  reviewImgType: ReviewImgType
-                                                      .networkImage,
-                                                  flagCodeList:
-                                                      e['nationalList']
-                                                          as List<String>,
-                                                  isShowDelete: true,
-                                                  isShowFlag: true,
-                                                  isShowLock: true,
-                                                  isShowLogo: true,
+                                            .map((e) => GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const ReviewViewScreen(),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: ReviewCardWidget(
+                                                    width: width,
+                                                    imagePath: e['imagePath'],
+                                                    reviewImgType: ReviewImgType
+                                                        .networkImage,
+                                                    flagCodeList:
+                                                        e['nationalList']
+                                                            as List<String>,
+                                                    isShowDelete: true,
+                                                    isShowFlag: true,
+                                                    isShowLock: true,
+                                                    isShowLogo: true,
+                                                  ),
                                                 ))
                                             .toList(),
                                       ],

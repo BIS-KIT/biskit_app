@@ -91,15 +91,20 @@ class _MyMeetUpListScreenState extends State<MyMeetUpListScreen> {
                   ),
                   child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          'assets/icons/ic_arrow_back_ios_line_24.svg',
-                          width: 24,
-                          height: 24,
-                          colorFilter: const ColorFilter.mode(
-                            kColorContentDefault,
-                            BlendMode.srcIn,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SvgPicture.asset(
+                            'assets/icons/ic_arrow_back_ios_line_24.svg',
+                            width: 24,
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(
+                              kColorContentDefault,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),
