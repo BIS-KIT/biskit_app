@@ -9,6 +9,7 @@ const Color kColorBgPrimaryWeak = Color(0xfffdfade);
 const Color kColorBgPrimary = Color(0xfffef076);
 const Color kColorBgPrimaryStrong = Color(0xffffe433);
 const Color kColorBgSecondary = Color(0xff838ded);
+const Color kColorBgSecondaryWeak = Color(0xffEFEFFE);
 const Color kColorBgDefault = Color(0xFFFFFFFF);
 const Color kColorBgElevation1 = Color(0xfff8fafc);
 const Color kColorBgElevation2 = Color(0xfff1f4f9);

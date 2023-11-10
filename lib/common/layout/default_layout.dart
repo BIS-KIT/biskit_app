@@ -14,6 +14,7 @@ class DefaultLayout extends StatelessWidget {
   final List<Widget>? actions;
   final bool resizeToAvoidBottomInset;
   final VoidCallback? onTapLeading;
+  final bool borderShape;
 
   final ShapeBorder? shape;
   const DefaultLayout({
@@ -28,6 +29,7 @@ class DefaultLayout extends StatelessWidget {
     this.resizeToAvoidBottomInset = true,
     this.shape,
     this.onTapLeading,
+    this.borderShape = true,
   }) : super(key: key);
 
   @override
@@ -53,7 +55,7 @@ class DefaultLayout extends StatelessWidget {
         surfaceTintColor: backgroundColor ?? kColorBgDefault,
         elevation: 0,
         centerTitle: true,
-        shape: shape,
+        shape: borderShape ? shape : null,
         title: Text(
           title!,
           style: getTsHeading18(context).copyWith(

@@ -51,7 +51,7 @@ class BadgeWidget extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: getTsBody14Rg(context).copyWith(
+              style: getTsCaption12Sb(context).copyWith(
                 color: textColor ?? kColorContentWeaker,
               ),
             ),
