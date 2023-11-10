@@ -2,10 +2,9 @@ import 'package:biskit_app/chat/view/chat_room_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/common/view/home_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_list_screen.dart';
-import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/my_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +22,7 @@ class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
   int index = 0;
   late TabController controller;
-  Color scafoldBackgroundColor = kColorBgElevation2;
+  Color scafoldBackgroundColor = kColorBgElevation1;
   // final DateFormat dayFormat = DateFormat('MM월 dd일', 'ko');
 
   @override
@@ -47,6 +46,8 @@ class _RootTabState extends ConsumerState<RootTab>
       index = controller.index;
       if (index == 3) {
         scafoldBackgroundColor = kColorBgDefault;
+      } else if (index == 0) {
+        scafoldBackgroundColor = kColorBgElevation1;
       } else {
         scafoldBackgroundColor = kColorBgElevation2;
       }
@@ -55,7 +56,7 @@ class _RootTabState extends ConsumerState<RootTab>
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userMeProvider);
+    // final userState = ref.watch(userMeProvider);
     // logger.d((userState as UserModel).toJson());
     return DefaultLayout(
       backgroundColor: scafoldBackgroundColor,
@@ -117,45 +118,7 @@ class _RootTabState extends ConsumerState<RootTab>
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          userState is UserModel
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 36,
-                      backgroundImage: const AssetImage(
-                        'assets/images/88.png',
-                      ),
-                      foregroundImage: userState.profile!.profile_photo == null
-                          ? null
-                          : NetworkImage(
-                              '${(userState).profile!.profile_photo}',
-                            ),
-                    ),
-                    Text('userId : ${(userState).id}'),
-                    Text('email : ${(userState).email}'),
-                    Text('snsType : ${(userState).sns_type}'),
-                    Text('nickname : ${(userState).profile!.nick_name}'),
-                    ElevatedButton(
-                      onPressed: () {
-                        ref.read(userMeProvider.notifier).deleteUser();
-                      },
-                      child: const Text(
-                        'Delete User',
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        ref.read(userMeProvider.notifier).logout();
-                      },
-                      child: const Text(
-                        'Logout',
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
-          // userState is UserModel ? _buildGroupTap(userState) : Container(),
+          const HomeScreen(),
           const MeetUpListScreen(),
           Container(),
           const ChatRoomScreen(),
