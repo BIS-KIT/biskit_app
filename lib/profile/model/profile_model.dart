@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/introduction_model.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
+import 'package:biskit_app/user/model/user_university_model.dart';
 
 class ProfileModel {
   final int id;
@@ -14,6 +15,7 @@ class ProfileModel {
   final String? profile_photo;
   final List<AvailableLanguageModel> available_languages;
   final List<IntroductionModel> introductions;
+  final UserUniversityModel user_university;
   final StudentVerificationModel? student_verification;
   ProfileModel({
     required this.id,
@@ -22,6 +24,7 @@ class ProfileModel {
     required this.profile_photo,
     required this.available_languages,
     required this.introductions,
+    required this.user_university,
     required this.student_verification,
   });
 
@@ -32,6 +35,7 @@ class ProfileModel {
     String? profile_photo,
     List<AvailableLanguageModel>? available_languages,
     List<IntroductionModel>? introductions,
+    UserUniversityModel? user_university,
     StudentVerificationModel? student_verification,
   }) {
     return ProfileModel(
@@ -41,42 +45,38 @@ class ProfileModel {
       profile_photo: profile_photo ?? this.profile_photo,
       available_languages: available_languages ?? this.available_languages,
       introductions: introductions ?? this.introductions,
+      user_university: user_university ?? this.user_university,
       student_verification: student_verification ?? this.student_verification,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'user_id': user_id,
       'nick_name': nick_name,
       'profile_photo': profile_photo,
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
       'introductions': introductions.map((x) => x.toMap()).toList(),
+      'user_university': user_university.toMap(),
       'student_verification': student_verification?.toMap(),
     };
   }
 
   factory ProfileModel.fromMap(Map<String, dynamic> map) {
     return ProfileModel(
-      id: map['id'] as int,
-      user_id: map['user_id'] as int,
-      nick_name: map['nick_name'] as String,
-      profile_photo:
-          map['profile_photo'] != null ? map['profile_photo'] as String : null,
+      id: map['id']?.toInt() ?? 0,
+      user_id: map['user_id']?.toInt() ?? 0,
+      nick_name: map['nick_name'] ?? '',
+      profile_photo: map['profile_photo'],
       available_languages: List<AvailableLanguageModel>.from(
-        (map['available_languages'] as List).map<AvailableLanguageModel>(
-          (x) => AvailableLanguageModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+          map['available_languages']
+              ?.map((x) => AvailableLanguageModel.fromMap(x))),
       introductions: List<IntroductionModel>.from(
-        (map['introductions'] as List).map<IntroductionModel>(
-          (x) => IntroductionModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+          map['introductions']?.map((x) => IntroductionModel.fromMap(x))),
+      user_university: UserUniversityModel.fromMap(map['user_university']),
       student_verification: map['student_verification'] != null
-          ? StudentVerificationModel.fromMap(
-              map['student_verification'] as Map<String, dynamic>)
+          ? StudentVerificationModel.fromMap(map['student_verification'])
           : null,
     );
   }
@@ -84,23 +84,25 @@ class ProfileModel {
   String toJson() => json.encode(toMap());
 
   factory ProfileModel.fromJson(String source) =>
-      ProfileModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      ProfileModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, student_verification: $student_verification)';
+    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, user_university: $user_university, student_verification: $student_verification)';
   }
 
   @override
-  bool operator ==(covariant ProfileModel other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
+    return other is ProfileModel &&
+        other.id == id &&
         other.user_id == user_id &&
         other.nick_name == nick_name &&
         other.profile_photo == profile_photo &&
         listEquals(other.available_languages, available_languages) &&
         listEquals(other.introductions, introductions) &&
+        other.user_university == user_university &&
         other.student_verification == student_verification;
   }
 
@@ -112,6 +114,7 @@ class ProfileModel {
         profile_photo.hashCode ^
         available_languages.hashCode ^
         introductions.hashCode ^
+        user_university.hashCode ^
         student_verification.hashCode;
   }
 }

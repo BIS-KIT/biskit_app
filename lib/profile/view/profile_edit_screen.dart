@@ -27,7 +27,7 @@ import 'package:biskit_app/user/model/user_university_model.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
   final ProfileModel profile;
-  final List<UserUniversityModel> user_university;
+  final UserUniversityModel user_university;
   const ProfileEditScreen({
     Key? key,
     required this.profile,
@@ -511,7 +511,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                 width: 8,
                               ),
                               Text(
-                                widget.user_university[0].university.kr_name,
+                                widget.user_university.university.kr_name,
                                 style: getTsBody16Rg(context).copyWith(
                                   color: kColorContentDisabled,
                                 ),
@@ -541,7 +541,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                 width: 8,
                               ),
                               Text(
-                                widget.user_university[0].department,
+                                widget.user_university.department,
                                 style: getTsBody16Rg(context).copyWith(
                                   color: kColorContentWeak,
                                 ),
@@ -571,7 +571,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                 width: 8,
                               ),
                               Text(
-                                widget.user_university[0].education_status,
+                                widget.user_university.education_status,
                                 style: getTsBody16Rg(context).copyWith(
                                   color: kColorContentWeak,
                                 ),
