@@ -452,7 +452,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                         spacing: 4,
                         children: [
                           Text(
-                            userState.user_university[0].university.kr_name,
+                            userState
+                                .profile!.user_university.university.kr_name,
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),
@@ -464,7 +465,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                             ),
                           ),
                           Text(
-                            '${userState.user_university[0].department} ${userState.user_university[0].education_status}',
+                            '${userState.profile!.user_university.department} ${userState.profile!.user_university.education_status}',
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),
@@ -539,9 +540,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                     MaterialPageRoute(
                       builder: (context) => ProfileEditScreen(
                         profile: userState.profile!,
-                        user_university: [
-                          ...userState.user_university,
-                        ],
+                        user_university: userState.profile!.user_university,
                       ),
                     ),
                   );
