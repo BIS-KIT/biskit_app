@@ -5,6 +5,7 @@ import 'package:biskit_app/common/model/pagination_params.dart';
 import 'package:biskit_app/common/repository/base_pagination_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
+import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
@@ -221,5 +222,24 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
       logger.e(e.toString());
     }
     return false;
+  }
+
+  Future<MeetUpDetailModel> getMeetUpDetail(int meetUpId) async {
+    MeetUpDetailModel meetUpDetailModel;
+    final res = await dio.get(
+      '$baseUrl/$meetUpId',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    // if (res.statusCode == 200) {
+    logger.d(res);
+    meetUpDetailModel = MeetUpDetailModel.fromMap(res.data);
+
+    return meetUpDetailModel;
+    // }
   }
 }
