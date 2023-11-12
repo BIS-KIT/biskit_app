@@ -3,6 +3,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+// TODO: Chip 종류에 따라 bg, text 다르게 해서 타입별로 선택할 수 있도록 수정 필요
 class ChipWidget extends StatelessWidget {
   final String text;
   final bool isSelected;
@@ -17,6 +18,7 @@ class ChipWidget extends StatelessWidget {
   final Color? textColor;
   final TextEditingController? controller;
   final Color? selectedColor;
+  final Color selectedTextColor;
   final Color? selectedBorderColor;
   const ChipWidget({
     Key? key,
@@ -33,6 +35,7 @@ class ChipWidget extends StatelessWidget {
     this.textColor = kColorContentOnBgPrimary,
     this.controller,
     this.selectedColor = kColorBgPrimaryWeak,
+    this.selectedTextColor = kColorContentDefault,
     this.selectedBorderColor = kColorBorderPrimaryStrong,
   }) : super(key: key);
 
@@ -87,7 +90,7 @@ class ChipWidget extends StatelessWidget {
                       text,
                       textAlign: TextAlign.center,
                       style: getTsBody14Rg(context).copyWith(
-                        color: textColor,
+                        color: isSelected ? selectedTextColor : textColor,
                       ),
                     ),
                   )
