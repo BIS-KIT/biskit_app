@@ -6,6 +6,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 
 class DefaultLayout extends StatelessWidget {
   final String? leadingIconPath;
+  final Color? appBarBackgroundColor;
   final Color? backgroundColor;
   final Widget child;
   final String? title;
@@ -20,6 +21,7 @@ class DefaultLayout extends StatelessWidget {
   const DefaultLayout({
     Key? key,
     this.leadingIconPath = 'assets/icons/ic_arrow_back_ios_line_24.svg',
+    this.appBarBackgroundColor,
     this.backgroundColor,
     required this.child,
     this.title,
@@ -51,8 +53,8 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         toolbarHeight: 48,
-        backgroundColor: backgroundColor ?? kColorBgDefault,
-        surfaceTintColor: backgroundColor ?? kColorBgDefault,
+        backgroundColor: appBarBackgroundColor ?? kColorBgDefault,
+        surfaceTintColor: appBarBackgroundColor ?? kColorBgDefault,
         elevation: 0,
         centerTitle: true,
         shape: borderShape ? shape : null,

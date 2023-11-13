@@ -34,7 +34,8 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '설정',
-      backgroundColor: kColorBgDefault,
+      appBarBackgroundColor: kColorBgDefault,
+      backgroundColor: kColorBorderWeak,
       shape: const Border(
         bottom: BorderSide(
           width: 1,
