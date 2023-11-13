@@ -38,6 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       id: 65,
       name: 'TATAT',
       birth: '1999-11-11',
+      user_nationality: [],
       gender: 'male',
     ),
     participants_status: '외국인 모집',

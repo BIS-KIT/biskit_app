@@ -88,12 +88,12 @@ class UseLanguageModalWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             border: Border(
-                              bottom: BorderSide(
-                                width: index == available_languages.length - 1
-                                    ? 0
-                                    : 1,
-                                color: kColorBorderDefalut,
-                              ),
+                              bottom: index == available_languages.length - 1
+                                  ? BorderSide.none
+                                  : const BorderSide(
+                                      width: 1,
+                                      color: kColorBorderDefalut,
+                                    ),
                             ),
                           ),
                           child: Row(

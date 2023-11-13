@@ -13,12 +13,15 @@ class MeetUpCardWidget extends StatefulWidget {
   final MeetUpModel model;
   final VoidCallback onTapMeetUp;
   final MeetUpCardSizeType sizeType;
-
+  final bool isHostTag;
+  final bool isParticipantsStatusTag;
   const MeetUpCardWidget({
     Key? key,
     required this.model,
     required this.onTapMeetUp,
     this.sizeType = MeetUpCardSizeType.L,
+    this.isHostTag = false,
+    this.isParticipantsStatusTag = true,
   }) : super(key: key);
 
   @override
@@ -130,22 +133,41 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     const SizedBox(
                       width: 8,
                     ),
-                    if (widget.model.participants_status.isNotEmpty)
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: kColorBgSecondary,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          widget.model.participants_status,
-                          style: getTsCaption12Sb(context).copyWith(
-                            color: kColorContentInverse,
-                          ),
-                        ),
-                      ),
+                    widget.isHostTag
+                        ? Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: kColorBgSecondaryWeak,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                            ),
+                            child: Text(
+                              '모임장',
+                              style: getTsCaption12Sb(context).copyWith(
+                                color: kColorContentSecondary,
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    widget.model.participants_status.isNotEmpty &&
+                            widget.isParticipantsStatusTag
+                        ? Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: kColorBgSecondary,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
+                            child: Text(
+                              widget.model.participants_status,
+                              style: getTsCaption12Sb(context).copyWith(
+                                color: kColorContentInverse,
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ],

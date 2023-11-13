@@ -1,15 +1,23 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
+import 'package:biskit_app/user/model/user_nationality_model.dart';
 
 class MeetUpCreatorModel {
   final int id;
   final String name;
   final String birth;
   final String gender;
+  final List<UserNationalityModel> user_nationality;
   MeetUpCreatorModel({
     required this.id,
     required this.name,
     required this.birth,
     required this.gender,
+    required this.user_nationality,
   });
 
   MeetUpCreatorModel copyWith({
@@ -17,12 +25,14 @@ class MeetUpCreatorModel {
     String? name,
     String? birth,
     String? gender,
+    List<UserNationalityModel>? user_nationality,
   }) {
     return MeetUpCreatorModel(
       id: id ?? this.id,
       name: name ?? this.name,
       birth: birth ?? this.birth,
       gender: gender ?? this.gender,
+      user_nationality: user_nationality ?? this.user_nationality,
     );
   }
 
@@ -32,6 +42,7 @@ class MeetUpCreatorModel {
       'name': name,
       'birth': birth,
       'gender': gender,
+      'user_nationality': user_nationality.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -41,6 +52,8 @@ class MeetUpCreatorModel {
       name: map['name'] ?? '',
       birth: map['birth'] ?? '',
       gender: map['gender'] ?? '',
+      user_nationality: List<UserNationalityModel>.from(
+          map['user_nationality']?.map((x) => UserNationalityModel.fromMap(x))),
     );
   }
 
@@ -51,7 +64,7 @@ class MeetUpCreatorModel {
 
   @override
   String toString() {
-    return 'MeetUpCreatorModel(id: $id, name: $name, birth: $birth, gender: $gender)';
+    return 'MeetUpCreatorModel(id: $id, name: $name, birth: $birth, gender: $gender, user_nationality: $user_nationality)';
   }
 
   @override
@@ -62,11 +75,16 @@ class MeetUpCreatorModel {
         other.id == id &&
         other.name == name &&
         other.birth == birth &&
-        other.gender == gender;
+        other.gender == gender &&
+        listEquals(other.user_nationality, user_nationality);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ birth.hashCode ^ gender.hashCode;
+    return id.hashCode ^
+        name.hashCode ^
+        birth.hashCode ^
+        gender.hashCode ^
+        user_nationality.hashCode;
   }
 }
