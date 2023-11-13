@@ -7,8 +7,11 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +32,8 @@ class MeetUpScreen extends ConsumerStatefulWidget {
 class _MeetUpScreenState extends ConsumerState<MeetUpScreen> {
   late MeetUpDetailModel meetUpDetail;
   int selectedLang = 0;
-
+  String buttonText = '';
+  bool buttonStatus = true;
   @override
   void initState() {
     super.initState();
@@ -47,6 +51,33 @@ class _MeetUpScreenState extends ConsumerState<MeetUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int userId = (ref.watch(userMeProvider) as UserModel).id;
+    // List<int> participantIds =
+    //     meetUpDetail.participants.map((participant) => participant.id).toList();
+    bool isMeetUpMember = meetUpDetail.participants
+        .any((participant) => participant.id == userId);
+
+    logger.d(userId);
+    logger.d(meetUpDetail);
+    if (userId == meetUpDetail.creator.id) {
+      setState(() {
+        buttonText = '모임원 관리';
+        buttonStatus = true;
+      });
+    } else if (isMeetUpMember) {
+      setState(() {
+        buttonText = '채팅하기';
+        buttonStatus = true;
+      });
+    } else if (meetUpDetail.current_participants >=
+        meetUpDetail.max_participants) {
+      buttonText = '인원이 마감되었어요';
+      buttonStatus = false;
+    } else {
+      buttonText = '참여신청';
+      buttonStatus = true;
+    }
+
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -167,7 +198,8 @@ class _MeetUpScreenState extends ConsumerState<MeetUpScreen> {
                 decoration: const BoxDecoration(color: kColorBgDefault),
                 padding: const EdgeInsets.only(
                     top: 12, bottom: 20, left: 20, right: 20),
-                child: const FilledButtonWidget(isEnable: true, text: '참여신청'),
+                child: FilledButtonWidget(
+                    isEnable: buttonStatus, text: buttonText),
               ),
             ],
           ),
@@ -549,9 +581,25 @@ Container _participants(BuildContext context, MeetUpDetailModel meetUpDetail) {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(participant.name,
-                                  style: getTsBody16Sb(context)
-                                      .copyWith(color: kColorContentWeak)),
+                              Row(
+                                children: [
+                                  Text(
+                                    participant.name,
+                                    style: getTsBody16Sb(context)
+                                        .copyWith(color: kColorContentWeak),
+                                  ),
+                                  if (participant.id == meetUpDetail.creator.id)
+                                    SvgPicture.asset(
+                                      'assets/icons/ic_crown_circle_fill_24.svg',
+                                      width: 24,
+                                      height: 24,
+                                      colorFilter: const ColorFilter.mode(
+                                        kColorContentPrimary,
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                ],
+                              ),
                               const SizedBox(height: 2),
                               Text(
                                 "${participant.profile?.user_university.university.kr_name} · ${participant.profile?.user_university.department} ${participant.profile?.user_university.education_status}",
