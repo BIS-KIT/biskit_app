@@ -35,6 +35,7 @@ class _MyMeetUpListScreenState extends State<MyMeetUpListScreen> {
       name: 'TATAT',
       birth: '1999-11-11',
       gender: 'male',
+      user_nationality: [],
     ),
     participants_status: '외국인 모집',
     tags: [

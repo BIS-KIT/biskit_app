@@ -9,15 +9,18 @@ import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
+import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/profile/view/profile_edit_screen.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/introduction_view_screen.dart';
 import 'package:biskit_app/user/view/setting_screen.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -82,6 +85,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
+    final profileMeetingState = ref.watch(profileMeetingProvider);
     final size = MediaQuery.of(context).size;
     return SafeArea(
       bottom: false,
@@ -159,57 +163,10 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                         Builder(
                           builder: (context) {
                             if (tabController.index == 0) {
-                              return Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  // mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    // Status tab
-                                    const Row(
-                                      children: [
-                                        ChipWidget(
-                                          text: '참여중',
-                                          textColor: kColorContentInverse,
-                                          isSelected: true,
-                                          selectedColor: kColorBgInverseWeak,
-                                          selectedBorderColor:
-                                              kColorBgInverseWeak,
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        ChipWidget(
-                                          text: '승인대기',
-                                          isSelected: false,
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        ChipWidget(
-                                          text: '지난모임',
-                                          isSelected: false,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-
-                                    SizedBox(
-                                      height: 164,
-                                      child: Center(
-                                        child: Text(
-                                          '참여중인 모임이 없어요',
-                                          style:
-                                              getTsBody14Sb(context).copyWith(
-                                            color: kColorContentWeakest,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              return _buildMeetings(
+                                userState,
+                                profileMeetingState,
+                                context,
                               );
                             } else {
                               if (isReviewWriteEnable) {
@@ -296,6 +253,128 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                   ),
                 ),
         ],
+      ),
+    );
+  }
+
+  Container _buildMeetings(
+    UserModel userState,
+    ProfileMeetingState profileMeetingState,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        // mainAxisSize: MainAxisSize.max,
+        children: [
+          // Status tab
+          Row(
+            children: [
+              _buildChip(
+                text: '참여중',
+                profileMeetingState: profileMeetingState,
+                status: ProfileMeetingStatus.APPROVE,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              _buildChip(
+                text: '승인대기',
+                profileMeetingState: profileMeetingState,
+                status: ProfileMeetingStatus.PENDING,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              _buildChip(
+                text: '지난모임',
+                profileMeetingState: profileMeetingState,
+                status: ProfileMeetingStatus.PAST,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          profileMeetingState.isLoading
+              ? const SizedBox(
+                  height: 164,
+                  child: Center(
+                    child: CustomLoading(),
+                  ),
+                )
+              : profileMeetingState.dataList.isEmpty
+                  ? SizedBox(
+                      height: 164,
+                      child: Center(
+                        child: Text(
+                          _getEmptyText(
+                              profileMeetingState.profileMeetingStatus),
+                          style: getTsBody14Sb(context).copyWith(
+                            color: kColorContentWeakest,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        ...profileMeetingState.dataList
+                            .mapIndexed((index, e) => Column(
+                                  children: [
+                                    MeetUpCardWidget(
+                                      model: e,
+                                      isHostTag: userState.id == e.creator.id,
+                                      isParticipantsStatusTag: false,
+                                      onTapMeetUp: () {},
+                                    ),
+                                    if (index !=
+                                        profileMeetingState.dataList.length - 1)
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                  ],
+                                ))
+                            .toList(),
+                      ],
+                    ),
+        ],
+      ),
+    );
+  }
+
+  String _getEmptyText(ProfileMeetingStatus status) {
+    String str = '';
+    if (status == ProfileMeetingStatus.APPROVE) {
+      str = '참여중인 모임이 없어요';
+    } else if (status == ProfileMeetingStatus.PENDING) {
+      str = '승인대기중인 모임이 없어요';
+    } else {
+      str = '지난 모임이 없어요';
+    }
+    return str;
+  }
+
+  Widget _buildChip({
+    required String text,
+    required ProfileMeetingState profileMeetingState,
+    required ProfileMeetingStatus status,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        ref.read(profileMeetingProvider.notifier).onTapStatus(status);
+      },
+      child: ChipWidget(
+        text: text,
+        textColor: profileMeetingState.profileMeetingStatus == status
+            ? kColorContentInverse
+            : null,
+        isSelected: profileMeetingState.profileMeetingStatus == status,
+        selectedColor: profileMeetingState.profileMeetingStatus == status
+            ? kColorBgInverseWeak
+            : null,
+        selectedBorderColor: profileMeetingState.profileMeetingStatus == status
+            ? kColorBgInverseWeak
+            : null,
       ),
     );
   }

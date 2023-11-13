@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
@@ -184,5 +185,36 @@ class ProfileRepository {
       logger.e(e.toString());
     }
     return path;
+  }
+
+  getMyMeetings(String status) async {
+    List<MeetUpModel> data = [];
+    Response? res;
+    final user = ref.watch(userMeProvider);
+    if (user is UserModel) {
+      try {
+        res = await dio.get(
+          '$baseUrl/${user.id}/meetings',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'status': status,
+          },
+        );
+
+        if (res.statusCode == 200) {
+          // logger.d(res);
+          data = List.from(res.data.map((e) => MeetUpModel.fromMap(e)));
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+    return data;
   }
 }

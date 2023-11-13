@@ -14,10 +14,10 @@ class ChipWidget extends StatelessWidget {
   final int? order;
   final String rightIcon;
   final Color rightIconColor;
-  final Color textColor;
+  final Color? textColor;
   final TextEditingController? controller;
-  final Color selectedColor;
-  final Color selectedBorderColor;
+  final Color? selectedColor;
+  final Color? selectedBorderColor;
   const ChipWidget({
     Key? key,
     required this.text,
@@ -48,7 +48,7 @@ class ChipWidget extends StatelessWidget {
             color: isSelected ? selectedColor : Colors.transparent,
             border: Border.all(
               width: 1,
-              color: isSelected ? selectedBorderColor : kColorBorderStrong,
+              color: isSelected ? selectedBorderColor! : kColorBorderStrong,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(50)),
           ),
