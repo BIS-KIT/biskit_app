@@ -4,11 +4,13 @@ import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/root_tab.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen.dart';
 import 'package:biskit_app/common/view/splash_screen.dart';
+import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
 import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
+import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -208,6 +210,18 @@ class RouteProvider extends ChangeNotifier {
           path: '/',
           name: RootTab.routeName,
           builder: (context, state) => const RootTab(),
+          routes: [
+            GoRoute(
+              path: 'myMeetUpList',
+              name: MyMeetUpListScreen.routeName,
+              builder: (context, state) => const MyMeetUpListScreen(),
+            ),
+            GoRoute(
+              path: 'reviewView',
+              name: ReviewViewScreen.routeName,
+              builder: (context, state) => const ReviewViewScreen(),
+            ),
+          ],
         ),
         GoRoute(
           path: '/photoManager',

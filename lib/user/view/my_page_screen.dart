@@ -9,12 +9,14 @@ import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/profile/view/profile_edit_screen.dart';
+import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -24,6 +26,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class MyPageScreen extends ConsumerStatefulWidget {
   const MyPageScreen({super.key});
@@ -39,6 +42,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
     vsync: this,
     initialIndex: 0,
   );
+
+  final ScrollController scrollController = ScrollController();
 
   // 후기 작성 권한
   bool isReviewWriteEnable = true;
@@ -66,8 +71,22 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   ];
 
   @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (scrollController.offset >
+              scrollController.position.maxScrollExtent - 300 &&
+          tabController.index == 1) {
+        logger.d('scrolll');
+        ref.read(reviewProvider.notifier).fetchItems();
+      }
+    });
+  }
+
+  @override
   void dispose() {
     tabController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -99,6 +118,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                 )
               : Expanded(
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     padding: const EdgeInsets.only(
                       top: 8,
                       bottom: 22,
@@ -385,12 +405,13 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   }) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MyMeetUpListScreen(),
-          ),
-        );
+        context.pushNamed(MyMeetUpListScreen.routeName);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const MyMeetUpListScreen(),
+        //   ),
+        // );
       },
       child: Container(
         height: width ?? 164,

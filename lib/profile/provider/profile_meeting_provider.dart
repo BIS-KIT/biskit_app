@@ -41,6 +41,12 @@ class ProfileMeetingStateNotifier extends StateNotifier<ProfileMeetingState> {
     );
   }
 
+  // TODO 개발용 나의 모임 가져오기
+  getMyMeeting() async {
+    return await profileRepository
+        .getMyMeetings(ProfileMeetingStatus.APPROVE.name);
+  }
+
   void onTapStatus(ProfileMeetingStatus status) {
     state = state.copyWith(
       profileMeetingStatus: status,

@@ -1,3 +1,6 @@
+import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/review/repository/review_repository.dart';
+import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -8,8 +11,10 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ReviewWriteScreen extends StatefulWidget {
+class ReviewWriteScreen extends ConsumerStatefulWidget {
   final PhotoModel? photoModel;
   final MeetUpModel meetUpModel;
   const ReviewWriteScreen({
@@ -19,10 +24,10 @@ class ReviewWriteScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ReviewWriteScreen> createState() => _ReviewWriteScreenState();
+  ConsumerState<ReviewWriteScreen> createState() => _ReviewWriteScreenState();
 }
 
-class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
+class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
   final ScrollController controller = ScrollController(
       // initialScrollOffset: 0.0,
       // keepScrollOffset: true,
@@ -162,14 +167,32 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 bottom: 20,
                 right: 20,
               ),
-              child: const FilledButtonWidget(
-                text: '후기 남기기',
-                isEnable: true,
+              child: GestureDetector(
+                onTap: () {
+                  onTapCreateReview();
+                },
+                child: const FilledButtonWidget(
+                  text: '후기 남기기',
+                  isEnable: true,
+                ),
               ),
             )
           ],
         ),
       ),
     );
+  }
+
+  onTapCreateReview() async {
+    // TODO Image upload
+    String imageUrl = '';
+    final result = await ref.read(meetUpRepositoryProvider).createReview(
+          meetingId: widget.meetUpModel.id,
+          imageUrl: imageUrl,
+          context: textEditingController.text,
+        );
+
+    if (!mounted) return;
+    context.goNamed(ReviewViewScreen.routeName);
   }
 }
