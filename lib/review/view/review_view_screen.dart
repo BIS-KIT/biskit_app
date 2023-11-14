@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/view/photo_view_screen.dart';
 import 'package:biskit_app/review/view/review_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +11,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 
 class ReviewViewScreen extends StatelessWidget {
+  static String get routeName => 'reviewView';
   const ReviewViewScreen({
     Key? key,
   }) : super(key: key);
@@ -104,17 +106,22 @@ class ReviewViewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ReviewCardWidget(
-              width: size.width - 40,
-              imagePath:
-                  'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              reviewImgType: ReviewImgType.networkImage,
-              isShowLogo: true,
-              isShowFlag: true,
-              flagCodeList: const [
-                'kr',
-                'us',
-              ],
+            GestureDetector(
+              onTap: () {
+                // PhotoViewScreen(imageUrl: imageUrl)
+              },
+              child: ReviewCardWidget(
+                width: size.width - 40,
+                imagePath:
+                    'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                reviewImgType: ReviewImgType.networkImage,
+                isShowLogo: true,
+                isShowFlag: true,
+                flagCodeList: const [
+                  'kr',
+                  'us',
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,

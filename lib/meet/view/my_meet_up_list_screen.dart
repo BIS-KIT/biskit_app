@@ -1,52 +1,77 @@
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
-import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
-import 'package:biskit_app/meet/model/tag_model.dart';
+import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/review/view/review_write_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MyMeetUpListScreen extends StatefulWidget {
+class MyMeetUpListScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'myMeetUpList';
   const MyMeetUpListScreen({super.key});
 
   @override
-  State<MyMeetUpListScreen> createState() => _MyMeetUpListScreenState();
+  ConsumerState<MyMeetUpListScreen> createState() => _MyMeetUpListScreenState();
 }
 
-class _MyMeetUpListScreenState extends State<MyMeetUpListScreen> {
-  MeetUpModel testModel = MeetUpModel(
-    current_participants: 1,
-    korean_count: 1,
-    foreign_count: 0,
-    name: '모임 밋업 비스킷 채팅 우아악',
-    location: '서울시청',
-    description: 'asdf',
-    meeting_time: '2023-11-07T01:55:05.72773',
-    max_participants: 2,
-    image_url: null,
-    is_active: true,
-    id: 60,
-    created_time: '2023-11-07T01:55:05.72773',
-    creator: MeetUpCreatorModel(
-      id: 65,
-      name: 'TATAT',
-      birth: '1999-11-11',
-      gender: 'male',
-      user_nationality: [],
-    ),
-    participants_status: '외국인 모집',
-    tags: [
-      TagModel(
-        id: 1,
-        kr_name: '영어 못해도 괜찮아요',
-        en_name: '',
-        is_custom: false,
-      ),
-    ],
-  );
+class _MyMeetUpListScreenState extends ConsumerState<MyMeetUpListScreen> {
+  List<MeetUpModel> list = [];
+  bool isLoading = false;
+  // MeetUpModel testModel = MeetUpModel(
+  //   current_participants: 1,
+  //   korean_count: 1,
+  //   foreign_count: 0,
+  //   name: '모임 밋업 비스킷 채팅 우아악',
+  //   location: '서울시청',
+  //   description: 'asdf',
+  //   meeting_time: '2023-11-07T01:55:05.72773',
+  //   max_participants: 2,
+  //   image_url: null,
+  //   is_active: true,
+  //   id: 60,
+  //   created_time: '2023-11-07T01:55:05.72773',
+  //   creator: MeetUpCreatorModel(
+  //     id: 65,
+  //     name: 'TATAT',
+  //     birth: '1999-11-11',
+  //     gender: 'male',
+  //     user_nationality: [],
+  //   ),
+  //   participants_status: '외국인 모집',
+  //   tags: [
+  //     TagModel(
+  //       id: 1,
+  //       kr_name: '영어 못해도 괜찮아요',
+  //       en_name: '',
+  //       is_custom: false,
+  //     ),
+  //   ],
+  // );
+
+  @override
+  initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final List<MeetUpModel> data =
+        await ref.read(profileMeetingProvider.notifier).getMyMeeting();
+
+    setState(() {
+      isLoading = false;
+      list = data;
+    });
+  }
+
   onTapMeetUpCard(MeetUpModel model) async {
     final List<PhotoModel> result = await Navigator.push(
       context,
@@ -130,22 +155,26 @@ class _MyMeetUpListScreenState extends State<MyMeetUpListScreen> {
               ],
             ),
             Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 20,
-                ),
-                itemBuilder: (context, index) => MeetUpCardWidget(
-                  model: testModel,
-                  onTapMeetUp: () {
-                    onTapMeetUpCard(testModel);
-                  },
-                ),
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: 12,
-                ),
-                itemCount: 5,
-              ),
+              child: isLoading
+                  ? const Center(
+                      child: CustomLoading(),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 20,
+                      ),
+                      itemBuilder: (context, index) => MeetUpCardWidget(
+                        model: list[index],
+                        onTapMeetUp: () {
+                          onTapMeetUpCard(list[index]);
+                        },
+                      ),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 12,
+                      ),
+                      itemCount: list.length,
+                    ),
             ),
           ],
         ),

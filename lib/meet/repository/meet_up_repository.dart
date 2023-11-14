@@ -10,20 +10,25 @@ import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final meetUpRepositoryProvider = Provider<MeetUpRepository>((ref) {
   return MeetUpRepository(
+    ref: ref,
     dio: ref.watch(dioProvider),
     baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion/meeting',
   );
 });
 
 class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
+  final Ref ref;
   final Dio dio;
   final String baseUrl;
   MeetUpRepository({
+    required this.ref,
     required this.dio,
     required this.baseUrl,
   });
@@ -241,5 +246,40 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
 
     return meetUpDetailModel;
     // }
+  }
+
+  createReview({
+    required int meetingId,
+    required String imageUrl,
+    required String context,
+  }) async {
+    Response? res;
+    final user = ref.watch(userMeProvider);
+    if (user is UserModel) {
+      try {
+        res = await dio.post(
+          '$baseUrl/$meetingId/reviews',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          data: {
+            'context': context,
+            'image_url': imageUrl,
+            'creator_id': user.id,
+          },
+        );
+
+        if (res.statusCode == 200) {
+          logger.d(res);
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+    return res;
   }
 }

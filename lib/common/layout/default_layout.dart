@@ -16,7 +16,7 @@ class DefaultLayout extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final VoidCallback? onTapLeading;
   final bool borderShape;
-  final String backgroundImageSrc;
+  final String? backgroundImageSrc;
 
   final ShapeBorder? shape;
   const DefaultLayout({
@@ -33,22 +33,23 @@ class DefaultLayout extends StatelessWidget {
     this.shape,
     this.onTapLeading,
     this.borderShape = true,
-    this.backgroundImageSrc = '',
+    this.backgroundImageSrc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(
-          backgroundImageSrc,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
+        if (backgroundImageSrc != null)
+          Image.asset(
+            backgroundImageSrc!,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
+          ),
         Scaffold(
           resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-          backgroundColor: backgroundImageSrc != ''
+          backgroundColor: backgroundImageSrc != null
               ? Colors.transparent
               : backgroundColor ?? kColorBgDefault,
           body: child,
