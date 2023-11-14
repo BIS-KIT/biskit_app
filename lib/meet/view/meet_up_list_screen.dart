@@ -263,9 +263,13 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             model: meetUpModel,
             onTapMeetUp: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MeetUpScreen(meetUp: meetUpModel)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MeetUpScreen(
+                    meetUpId: meetUpModel.id,
+                  ),
+                ),
+              );
             },
           );
         },

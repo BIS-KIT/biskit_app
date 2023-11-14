@@ -16,6 +16,7 @@ class DefaultLayout extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final VoidCallback? onTapLeading;
   final bool borderShape;
+  final String backgroundImageSrc;
 
   final ShapeBorder? shape;
   const DefaultLayout({
@@ -32,17 +33,30 @@ class DefaultLayout extends StatelessWidget {
     this.shape,
     this.onTapLeading,
     this.borderShape = true,
+    this.backgroundImageSrc = '',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      backgroundColor: backgroundColor ?? kColorBgDefault,
-      body: child,
-      appBar: renderAppBar(context),
-      bottomNavigationBar: bottomNavigationBar,
-      floatingActionButton: floatingActionButton,
+    return Stack(
+      children: [
+        Image.asset(
+          backgroundImageSrc,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+        ),
+        Scaffold(
+          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+          backgroundColor: backgroundImageSrc != ''
+              ? Colors.transparent
+              : backgroundColor ?? kColorBgDefault,
+          body: child,
+          appBar: renderAppBar(context),
+          bottomNavigationBar: bottomNavigationBar,
+          floatingActionButton: floatingActionButton,
+        ),
+      ],
     );
   }
 
@@ -53,7 +67,9 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         toolbarHeight: 48,
-        backgroundColor: appBarBackgroundColor ?? kColorBgDefault,
+        backgroundColor: backgroundImageSrc != ''
+            ? Colors.transparent
+            : appBarBackgroundColor ?? kColorBgDefault,
         surfaceTintColor: appBarBackgroundColor ?? kColorBgDefault,
         elevation: 0,
         centerTitle: true,
