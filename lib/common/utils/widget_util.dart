@@ -19,93 +19,96 @@ showReviewMoreBottomSheet({
     backgroundColor: Colors.transparent,
     barrierColor: kColorBgDimmed.withOpacity(0.5),
     builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GestureDetector(
-              onTap: onTapFix,
-              child: Container(
-                width: double.infinity,
-                height: 56,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                decoration: const BoxDecoration(
-                  color: kColorBgDefault,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+      return Material(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: onTapFix,
+                child: Container(
+                  width: double.infinity,
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
                   ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '수정하기',
-                  style: getTsBody16Rg(context).copyWith(
-                    color: kColorContentDefault,
+                  decoration: const BoxDecoration(
+                    color: kColorBgDefault,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: onTapDelete,
-              child: Container(
-                width: double.infinity,
-                height: 56,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                decoration: const BoxDecoration(
-                  color: kColorBgDefault,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '삭제하기',
-                  style: getTsBody16Rg(context).copyWith(
-                    color: kColorContentError,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '수정하기',
+                    style: getTsBody16Rg(context).copyWith(
+                      color: kColorContentDefault,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: double.infinity,
-                height: 56,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                decoration: const BoxDecoration(
-                  color: kColorBgDefault,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
+              GestureDetector(
+                onTap: onTapDelete,
+                child: Container(
+                  width: double.infinity,
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
                   ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '취소',
-                  style: getTsBody16Rg(context).copyWith(
-                    color: kColorContentDefault,
+                  decoration: const BoxDecoration(
+                    color: kColorBgDefault,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '삭제하기',
+                    style: getTsBody16Rg(context).copyWith(
+                      color: kColorContentError,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-          ],
+              const SizedBox(
+                height: 8,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: kColorBgDefault,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '취소',
+                    style: getTsBody16Rg(context).copyWith(
+                      color: kColorContentDefault,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+            ],
+          ),
         ),
       );
     },
