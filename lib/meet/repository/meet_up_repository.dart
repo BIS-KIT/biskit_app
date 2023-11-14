@@ -10,6 +10,7 @@ import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
+import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
@@ -281,5 +282,62 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
       }
     }
     return res;
+  }
+
+  getMeetingAllReviews({
+    required int skip,
+    required int limit,
+  }) async {
+    List<ResReviewModel> list = [];
+    final user = ref.watch(userMeProvider);
+    if (user is UserModel) {
+      try {
+        final res = await dio.get(
+          '$baseUrl/reviews/${user.id}',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'skip': skip,
+            'limit': limit,
+          },
+        );
+
+        if (res.statusCode == 200) {
+          // logger.d(res);
+          list = List.from(res.data.map((e) => ResReviewModel.fromMap(e)));
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+    return list;
+  }
+
+  getMeeting(int id) async {
+    try {
+      final res = await dio.get(
+        '$baseUrl/$id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        return MeetUpModel.fromMap(res.data);
+        // list = List.from(res.data.map((e) => ResReviewModel.fromMap(e)));
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
   }
 }

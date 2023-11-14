@@ -16,9 +16,9 @@ class ChipWidget extends StatelessWidget {
   final String rightIcon;
   final Color rightIconColor;
   final Color? textColor;
+  final Color? selectedTextColor;
   final TextEditingController? controller;
   final Color? selectedColor;
-  final Color selectedTextColor;
   final Color? selectedBorderColor;
   const ChipWidget({
     Key? key,

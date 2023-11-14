@@ -48,8 +48,28 @@ class ReviewStateNotifier extends StateNotifier<List<ResReviewModel>> {
     );
   }
 
+  fetchItems({
+    int skip = 0,
+    int limit = 20,
+  }) async {
+    paginationThrottle.setValue(_PaginationInfo(
+      skip: skip,
+      limit: limit,
+    ));
+  }
+
   _throttledPagination(_PaginationInfo info) async {
     logger.d(info);
+    int skip = info.skip;
+    int limit = info.limit;
+
+    final List<ResReviewModel> result =
+        await meetUpRepository.getMeetingAllReviews(
+      skip: skip,
+      limit: limit,
+    );
+    // TODO 나중에 페이지 네이션 해야함
+    state = result;
   }
 
   createReview({
@@ -66,13 +86,9 @@ class ReviewStateNotifier extends StateNotifier<List<ResReviewModel>> {
     logger.d(result);
   }
 
-  fetchItems({
-    int skip = 0,
-    int limit = 20,
-  }) async {
-    paginationThrottle.setValue(_PaginationInfo(
-      skip: skip,
-      limit: limit,
-    ));
+  deleteReview({required int id}) async {
+    final result = await reviewRepository.deleteReview(id);
+    logger.d(result);
+    // TODO 삭제 성공시 state 지워주기
   }
 }

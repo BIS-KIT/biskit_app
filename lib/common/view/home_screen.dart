@@ -2,6 +2,7 @@ import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
@@ -64,16 +65,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (userState is UserModel)
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  // horizontal: 20,
-                ),
                 child: Column(
                   children: [
                     // Category
-                    Padding(
+                    Container(
+                      color: kColorBgDefault,
                       padding: const EdgeInsets.symmetric(
-                        vertical: 4,
+                        vertical: 24,
                         horizontal: 20,
                       ),
                       child: Column(
@@ -88,92 +86,93 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           const SizedBox(
                             height: 24,
                           ),
-                          const Wrap(
+                          Wrap(
+                            alignment: WrapAlignment.center,
                             runSpacing: 16,
                             children: [
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
-                              CategoryItemWidget(
-                                iconPath:
-                                    'assets/icons/ic_restaurant_fill_48.svg',
-                                text: '식사',
-                              ),
+                              ...kCategoryList
+                                  .map(
+                                    (e) => CategoryItemWidget(
+                                      iconPath: e['imgUrl']!,
+                                      text: e['value']!,
+                                    ),
+                                  )
+                                  .toList(),
                             ],
                           ),
                         ],
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 36,
-                    ),
-
-                    // Meetup
-                    SizedBox(
-                      height: 230,
+                    Container(
+                      color: kColorBgElevation1,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                      ),
                       child: Column(
                         children: [
-                          // Title area
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                            ),
-                            child: Row(
+                          // Meetup
+                          SizedBox(
+                            height: 230,
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    '우리학교에서 개설된 모임',
-                                    style: getTsHeading18(context).copyWith(
-                                      color: kColorContentDefault,
-                                    ),
+                                // Title area
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '우리학교에서 개설된 모임',
+                                          style:
+                                              getTsHeading18(context).copyWith(
+                                            color: kColorContentDefault,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(6),
+                                        child: SvgPicture.asset(
+                                          'assets/icons/ic_chevron_right_line_24.svg',
+                                          width: 24,
+                                          height: 24,
+                                          colorFilter: const ColorFilter.mode(
+                                            kColorContentWeakest,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+
                                 const SizedBox(
-                                  width: 8,
+                                  height: 8,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(6),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/ic_chevron_right_line_24.svg',
-                                    width: 24,
-                                    height: 24,
-                                    colorFilter: const ColorFilter.mode(
-                                      kColorContentWeakest,
-                                      BlendMode.srcIn,
+
+                                SizedBox(
+                                  height: 182,
+                                  child: ListView.separated(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
                                     ),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        MeetUpCardWidget(
+                                      model: testModel,
+                                      sizeType: MeetUpCardSizeType.M,
+                                      onTapMeetUp: () {},
+                                    ),
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(
+                                      width: 12,
+                                    ),
+                                    itemCount: 4,
                                   ),
                                 ),
                               ],
@@ -181,122 +180,99 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
 
                           const SizedBox(
-                            height: 8,
+                            height: 36,
                           ),
 
-                          SizedBox(
-                            height: 182,
-                            child: ListView.separated(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) => MeetUpCardWidget(
-                                model: testModel,
-                                sizeType: MeetUpCardSizeType.M,
-                                onTapMeetUp: () {},
-                              ),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                width: 12,
-                              ),
-                              itemCount: 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 36,
-                    ),
-
-                    // Tag
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                          // Tag
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                              vertical: 8,
+                              horizontal: 20,
                             ),
-                            child: Text(
-                              '태그로 찾기',
-                              style: getTsHeading18(context).copyWith(
-                                color: kColorContentDefault,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  child: Text(
+                                    '태그로 찾기',
+                                    style: getTsHeading18(context).copyWith(
+                                      color: kColorContentDefault,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                const Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    BtnTagWidget(
+                                      label: '비건',
+                                      emoji: '🌱',
+                                    ),
+                                    BtnTagWidget(
+                                      label: '크리스마스에 놀아요',
+                                      emoji: '🎄',
+                                    ),
+                                    BtnTagWidget(
+                                      label: '영어 못해도 괜찮아요',
+                                      emoji: '🥺',
+                                    ),
+                                    BtnTagWidget(
+                                      label: '점심식사',
+                                      emoji: '🍚',
+                                    ),
+                                    BtnTagWidget(
+                                      label: '함께 스터디해요',
+                                      emoji: '👩🏽‍💻',
+                                    ),
+                                    BtnTagWidget(
+                                      label: '뒷풀이',
+                                      emoji: '🍺',
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
+
                           const SizedBox(
-                            height: 8,
+                            height: 36,
                           ),
-                          const Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: [
-                              BtnTagWidget(
-                                label: '비건',
-                                emoji: '🌱',
-                              ),
-                              BtnTagWidget(
-                                label: '크리스마스에 놀아요',
-                                emoji: '🎄',
-                              ),
-                              BtnTagWidget(
-                                label: '영어 못해도 괜찮아요',
-                                emoji: '🥺',
-                              ),
-                              BtnTagWidget(
-                                label: '점심식사',
-                                emoji: '🍚',
-                              ),
-                              BtnTagWidget(
-                                label: '함께 스터디해요',
-                                emoji: '👩🏽‍💻',
-                              ),
-                              BtnTagWidget(
-                                label: '뒷풀이',
-                                emoji: '🍺',
-                              ),
-                            ],
+
+                          // Make meetup card
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 32,
+                              horizontal: 20,
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  '원하는 모임이 없다면 직접 만들어볼까요?',
+                                  style: getTsBody14Sb(context).copyWith(
+                                    color: kColorContentWeaker,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                const OutlinedButtonWidget(
+                                  text: '모임 만들기',
+                                  isEnable: true,
+                                  height: 44,
+                                  leftIconPath:
+                                      'assets/icons/ic_plus_line_24.svg',
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-
-                    const SizedBox(
-                      height: 36,
-                    ),
-
-                    // Make meetup card
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 32,
-                        horizontal: 20,
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            '원하는 모임이 없다면 직접 만들어볼까요?',
-                            style: getTsBody14Sb(context).copyWith(
-                              color: kColorContentWeaker,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          const OutlinedButtonWidget(
-                            text: '모임 만들기',
-                            isEnable: true,
-                            height: 44,
-                            leftIconPath: 'assets/icons/ic_plus_line_24.svg',
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -306,8 +282,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  SizedBox _buildNavigatorBar() {
-    return SizedBox(
+  Widget _buildNavigatorBar() {
+    return Container(
+      color: kColorBgDefault,
       height: 48,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

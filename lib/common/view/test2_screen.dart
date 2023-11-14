@@ -139,10 +139,11 @@ class _Test2ScreenState extends State<Test2Screen> {
               const SizedBox(
                 height: 40,
               ),
-              const ThumbnailIconWidget(
-                isSelected: true,
-                iconUrl: 'assets/icons/ic_activity_fill_48.svg',
-              ),
+              // TODO
+              // const ThumbnailIconWidget(
+              //   isSelected: true,
+              //   iconUrl: 'assets/icons/ic_activity_fill_48.svg',
+              // ),
             ],
           ),
         ),

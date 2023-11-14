@@ -47,6 +47,8 @@ class _RootTabState extends ConsumerState<RootTab>
       if (index == 3) {
         scafoldBackgroundColor = kColorBgDefault;
       } else if (index == 0) {
+        scafoldBackgroundColor = kColorBgDefault;
+      } else if (index == 1) {
         scafoldBackgroundColor = kColorBgElevation1;
       } else {
         scafoldBackgroundColor = kColorBgElevation2;
@@ -104,11 +106,11 @@ class _RootTabState extends ConsumerState<RootTab>
             ),
             _buildBottomCenterItem(),
             _buildBottomItem(
-              iconPath: 'assets/icons/ic_chat_fill_24.svg',
+              iconPath: 'assets/icons/ic_chat_line_24.svg',
               label: '채팅',
             ),
             _buildBottomItem(
-              iconPath: 'assets/icons/ic_person_fill_24.svg',
+              iconPath: 'assets/icons/ic_face_line_24.svg',
               label: '프로필',
             ),
           ],
@@ -131,17 +133,16 @@ class _RootTabState extends ConsumerState<RootTab>
   BottomNavigationBarItem _buildBottomCenterItem() {
     return BottomNavigationBarItem(
       icon: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: kColorBgPrimary,
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 17,
         ),
         child: SvgPicture.asset(
-          'assets/icons/ic_plus_line_24.svg',
-          width: 24,
-          height: 24,
+          'assets/icons/ic_create_line_24.svg',
+          width: 32,
+          height: 32,
           colorFilter: const ColorFilter.mode(
-            kColorContentOnBgPrimary,
+            kColorContentWeaker,
             BlendMode.srcIn,
           ),
         ),
@@ -158,7 +159,7 @@ class _RootTabState extends ConsumerState<RootTab>
       icon: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 12,
-          horizontal: 16,
+          horizontal: 17,
         ),
         child: SvgPicture.asset(
           iconPath,
@@ -173,7 +174,7 @@ class _RootTabState extends ConsumerState<RootTab>
       activeIcon: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 12,
-          horizontal: 16,
+          horizontal: 17,
         ),
         child: SvgPicture.asset(
           iconPath,

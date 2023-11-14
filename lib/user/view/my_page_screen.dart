@@ -47,28 +47,6 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
 
   // 후기 작성 권한
   bool isReviewWriteEnable = true;
-  List reviewList = [
-    {
-      'imagePath':
-          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      'nationalList': <String>[
-        'kr',
-        'er',
-        'ch',
-        'fj',
-        'gb',
-        'gd',
-      ],
-    },
-    {
-      'imagePath':
-          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      'nationalList': <String>[
-        'kr',
-        'er',
-      ],
-    },
-  ];
 
   @override
   void initState() {
@@ -77,7 +55,6 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
       if (scrollController.offset >
               scrollController.position.maxScrollExtent - 300 &&
           tabController.index == 1) {
-        logger.d('scrolll');
         ref.read(reviewProvider.notifier).fetchItems();
       }
     });
@@ -189,82 +166,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                 context,
                               );
                             } else {
-                              if (isReviewWriteEnable) {
-                                if (reviewList.isEmpty) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                    ),
-                                    child:
-                                        _buildReviewWriteCard(context: context),
-                                  );
-                                } else {
-                                  double width = (size.width - 40 - 8) / 2;
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                    ),
-                                    child: Wrap(
-                                      alignment: WrapAlignment.spaceBetween,
-                                      runSpacing: 8,
-                                      children: [
-                                        _buildReviewWriteCard(
-                                          context: context,
-                                          width: width,
-                                        ),
-                                        ...reviewList
-                                            .map((e) => GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const ReviewViewScreen(),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: ReviewCardWidget(
-                                                    width: width,
-                                                    imagePath: e['imagePath'],
-                                                    reviewImgType: ReviewImgType
-                                                        .networkImage,
-                                                    flagCodeList:
-                                                        e['nationalList']
-                                                            as List<String>,
-                                                    isShowDelete: true,
-                                                    isShowFlag: true,
-                                                    isShowLock: true,
-                                                    isShowLogo: true,
-                                                  ),
-                                                ))
-                                            .toList(),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              } else {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 164,
-                                        child: Center(
-                                          child: Text(
-                                            '모임에 참여하고 후기를 남겨보세요',
-                                            style:
-                                                getTsBody14Sb(context).copyWith(
-                                              color: kColorContentWeakest,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }
+                              return _buildReview(size);
                             }
                           },
                         ),
@@ -275,6 +177,87 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
         ],
       ),
     );
+  }
+
+  Widget _buildReview(Size size) {
+    final reviewState = ref.watch(reviewProvider);
+    if (isReviewWriteEnable) {
+      if (reviewState.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: _buildReviewWriteCard(context: context),
+        );
+      } else {
+        double width = (size.width - 40 - 8) / 2;
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 8,
+            children: [
+              _buildReviewWriteCard(
+                context: context,
+                width: width,
+              ),
+              ...reviewState
+                  .map((e) => GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewViewScreen(
+                                model: e,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: '$kReviewTagName/${e.id}',
+                          child: ReviewCardWidget(
+                            width: width,
+                            imagePath: e.image_url,
+                            reviewImgType: ReviewImgType.networkImage,
+                            flagCodeList: e.creator.user_nationality
+                                .map((e) => e.nationality.code)
+                                .toList(),
+                            isShowDelete: false,
+                            isShowFlag: true,
+                            isShowLock: false,
+                            isShowLogo: false,
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ],
+          ),
+        );
+      }
+    } else {
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 164,
+              child: Center(
+                child: Text(
+                  '모임에 참여하고 후기를 남겨보세요',
+                  style: getTsBody14Sb(context).copyWith(
+                    color: kColorContentWeakest,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   Container _buildMeetings(
@@ -388,6 +371,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
         textColor: profileMeetingState.profileMeetingStatus == status
             ? kColorContentInverse
             : null,
+        selectedTextColor: kColorContentInverse,
         isSelected: profileMeetingState.profileMeetingStatus == status,
         selectedColor: profileMeetingState.profileMeetingStatus == status
             ? kColorBgInverseWeak

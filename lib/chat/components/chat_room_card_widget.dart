@@ -57,10 +57,11 @@ class _ChatRoomCardWidgetState extends State<ChatRoomCardWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const ThumbnailIconWidget(
-              iconUrl: 'assets/icons/ic_restaurant_fill_48.svg',
-              isCircle: false,
-            ),
+            // TODO
+            // const ThumbnailIconWidget(
+            //   iconUrl: 'assets/icons/ic_restaurant_fill_48.svg',
+            //   isCircle: false,
+            // ),
             const SizedBox(
               width: 12,
             ),

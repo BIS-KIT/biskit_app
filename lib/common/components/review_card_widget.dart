@@ -53,7 +53,7 @@ class ReviewCardWidget extends StatelessWidget {
               borderRadius: const BorderRadius.all(
                 Radius.circular(8),
               ),
-              image: imagePath == null
+              image: imagePath == null || imagePath!.isEmpty
                   ? null
                   : DecorationImage(
                       image: NetworkImage(

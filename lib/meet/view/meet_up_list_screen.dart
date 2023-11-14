@@ -252,7 +252,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           });
         },
         padding: const EdgeInsets.only(
-          top: 8,
+          top: 16,
           left: 20,
           right: 20,
           bottom: 8,
@@ -279,19 +279,22 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
         emptyDataWidget: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/icons/ic_person_fill_24.svg',
-              width: 56,
-              height: 56,
+            Image.asset(
+              'assets/images/img_empty_states.png',
+              width: 100,
+              height: 100,
             ),
             const SizedBox(
               height: 8,
             ),
             Text(
               filterState.isFilterSelected ? '조건에 맞는 모임이 없어요' : '모임이 없어요',
-              style: getTsBody16Rg(context).copyWith(
-                color: kColorContentWeakest,
+              style: getTsBody16Sb(context).copyWith(
+                color: kColorContentPlaceholder,
               ),
+            ),
+            const SizedBox(
+              height: 180,
             ),
           ],
         ),

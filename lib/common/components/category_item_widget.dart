@@ -18,10 +18,24 @@ class CategoryItemWidget extends StatelessWidget {
       width: 88,
       child: Column(
         children: [
-          ThumbnailIconWidget(
-            sizeType: ThumbnailIconSizeType.medium,
-            iconColor: kColorContentDefault,
-            iconUrl: iconPath,
+          // TODO
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: kColorBorderWeak,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+            child: ThumbnailIconWidget(
+              size: 64,
+              iconPath: iconPath,
+              isSelected: false,
+              radius: 16,
+              backgroundColor: kColorBgDefault,
+            ),
           ),
           const SizedBox(
             height: 4,

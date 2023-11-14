@@ -71,21 +71,19 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    color: kColorBgElevation2,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: kColorBgPrimaryWeak,
                     borderRadius: BorderRadius.all(
-                      Radius.circular(12),
+                      Radius.circular(
+                        widget.sizeType == MeetUpCardSizeType.L ? 12 : 8,
+                      ),
                     ),
                   ),
                   child: SvgPicture.asset(
                     'assets/icons/ic_hobby_fill_48.svg',
-                    width: 28,
-                    height: 28,
-                    colorFilter: const ColorFilter.mode(
-                      kColorContentSecondary,
-                      BlendMode.srcIn,
-                    ),
+                    width: widget.sizeType == MeetUpCardSizeType.L ? 44 : 32,
+                    height: widget.sizeType == MeetUpCardSizeType.L ? 44 : 32,
                   ),
                 ),
                 Row(
@@ -155,7 +153,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         ? Container(
                             padding: const EdgeInsets.all(4),
                             decoration: const BoxDecoration(
-                              color: kColorBgSecondary,
+                              color: kColorBgSecondaryWeak,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
                               ),
@@ -163,7 +161,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             child: Text(
                               widget.model.participants_status,
                               style: getTsCaption12Sb(context).copyWith(
-                                color: kColorContentInverse,
+                                color: kColorContentSecondary,
                               ),
                             ),
                           )
@@ -291,7 +289,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       Row(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/ic_pin_line_24.svg',
+                            'assets/icons/ic_pin_fill_24.svg',
                             width: 16,
                             height: 16,
                             colorFilter: const ColorFilter.mode(

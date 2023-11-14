@@ -219,7 +219,9 @@ class RouteProvider extends ChangeNotifier {
             GoRoute(
               path: 'reviewView',
               name: ReviewViewScreen.routeName,
-              builder: (context, state) => const ReviewViewScreen(),
+              builder: (context, state) {
+                return const ReviewViewScreen();
+              },
             ),
           ],
         ),
