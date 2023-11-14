@@ -4,10 +4,12 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
+import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -260,12 +262,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                const OutlinedButtonWidget(
-                                  text: '모임 만들기',
-                                  isEnable: true,
-                                  height: 44,
-                                  leftIconPath:
-                                      'assets/icons/ic_plus_line_24.svg',
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      createUpDownRoute(
+                                        const MeetUpCreateScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const OutlinedButtonWidget(
+                                    text: '모임 만들기',
+                                    isEnable: true,
+                                    height: 44,
+                                    leftIconPath:
+                                        'assets/icons/ic_plus_line_24.svg',
+                                  ),
                                 ),
                               ],
                             ),
