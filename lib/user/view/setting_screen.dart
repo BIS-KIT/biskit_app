@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'SettingScreen';
   const SettingScreen({super.key});
 
   @override
