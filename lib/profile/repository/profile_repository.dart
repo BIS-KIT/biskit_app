@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -187,8 +188,13 @@ class ProfileRepository {
     return path;
   }
 
-  getMyMeetings(String status) async {
-    List<MeetUpModel> data = [];
+  getMyMeetings({
+    required String status,
+    required int skip,
+    int limit = 20,
+  }) async {
+    CursorPagination<MeetUpModel>? cursorPagination;
+    // List<MeetUpModel> data = [];
     Response? res;
     final user = ref.watch(userMeProvider);
     if (user is UserModel) {
@@ -204,17 +210,31 @@ class ProfileRepository {
           ),
           queryParameters: {
             'status': status,
+            'skip': skip,
+            'limit': limit,
           },
         );
 
         if (res.statusCode == 200) {
-          // logger.d(res);
-          data = List.from(res.data.map((e) => MeetUpModel.fromMap(e)));
+          logger.d(res);
+          if ((res.data as Map).containsKey('total_count')) {
+            int totalCount = res.data['total_count'];
+            int count = (res.data['meetings'] as List).length;
+            cursorPagination = CursorPagination<MeetUpModel>(
+              meta: CursorPaginationMeta(
+                count: count,
+                totalCount: totalCount,
+                hasMore: (skip + count < totalCount),
+              ),
+              data: List.from(
+                  res.data['meetings'].map((e) => MeetUpModel.fromMap(e))),
+            );
+          }
         }
       } catch (e) {
         logger.e(e.toString());
       }
     }
-    return data;
+    return cursorPagination;
   }
 }
