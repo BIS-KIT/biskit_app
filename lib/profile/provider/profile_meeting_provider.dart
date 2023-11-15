@@ -48,12 +48,14 @@ class ProfileMeetingStateNotifier extends StateNotifier<ProfileMeetingState> {
     );
   }
 
-  // TODO 개발용 나의 모임 가져오기
-  getMyMeeting() async {
+  getMyMeeting({
+    required int skip,
+    int limit = 20,
+  }) async {
     return await profileRepository.getMyMeetings(
-      status: ProfileMeetingStatus.APPROVE.name,
-      skip: 0,
-      limit: 5,
+      status: ProfileMeetingStatus.PAST.name,
+      skip: skip,
+      limit: limit,
     );
   }
 
