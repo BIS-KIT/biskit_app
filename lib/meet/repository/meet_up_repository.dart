@@ -249,16 +249,17 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     // }
   }
 
-  createReview({
+  Future<int?> createReview({
     required int meetingId,
     required String imageUrl,
     required String context,
   }) async {
-    Response? res;
+    int? id;
+    // ResReviewModel? model;
     final user = ref.watch(userMeProvider);
     if (user is UserModel) {
       try {
-        res = await dio.post(
+        Response? res = await dio.post(
           '$baseUrl/$meetingId/reviews',
           options: Options(
             headers: {
@@ -276,19 +277,22 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
 
         if (res.statusCode == 200) {
           logger.d(res);
+          id = res.data['id'];
+          // model = ResReviewModel.fromMap(res.data);
         }
       } catch (e) {
         logger.e(e.toString());
       }
     }
-    return res;
+    return id;
   }
 
   getMeetingAllReviews({
     required int skip,
     required int limit,
   }) async {
-    List<ResReviewModel> list = [];
+    CursorPagination<ResReviewModel>? cursorPagination;
+    // List<ResReviewModel> list = [];
     final user = ref.watch(userMeProvider);
     if (user is UserModel) {
       try {
@@ -309,13 +313,25 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
 
         if (res.statusCode == 200) {
           // logger.d(res);
-          list = List.from(res.data.map((e) => ResReviewModel.fromMap(e)));
+          if ((res.data as Map).containsKey('total_count')) {
+            int totalCount = res.data['total_count'];
+            int count = (res.data['reviews'] as List).length;
+            cursorPagination = CursorPagination<ResReviewModel>(
+              meta: CursorPaginationMeta(
+                count: count,
+                totalCount: totalCount,
+                hasMore: (skip + count < totalCount),
+              ),
+              data: List.from(
+                  res.data['reviews'].map((e) => ResReviewModel.fromMap(e))),
+            );
+          }
         }
       } catch (e) {
         logger.e(e.toString());
       }
     }
-    return list;
+    return cursorPagination;
   }
 
   getMeeting(int id) async {

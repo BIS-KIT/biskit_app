@@ -139,7 +139,13 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                               horizontal: 16,
                             ),
                             onTap: (value) {
+                              if (value == 1) {
+                                ref.read(reviewProvider.notifier).fetchItems(
+                                      forceRefetch: true,
+                                    );
+                              }
                               setState(() {});
+                              // ref.read(reviewProvider.notifier).fetchItems();
                             },
                             tabs: const [
                               Tab(
@@ -182,7 +188,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   Widget _buildReview(Size size) {
     final reviewState = ref.watch(reviewProvider);
     if (isReviewWriteEnable) {
-      if (reviewState.isEmpty) {
+      if (reviewState.data.isEmpty) {
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
@@ -203,7 +209,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                 context: context,
                 width: width,
               ),
-              ...reviewState
+              ...reviewState.data
                   .map((e) => GestureDetector(
                         onTap: () {
                           Navigator.push(

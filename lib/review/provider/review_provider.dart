@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,8 +7,8 @@ import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/repository/review_repository.dart';
 
-final reviewProvider =
-    StateNotifierProvider<ReviewStateNotifier, List<ResReviewModel>>(
+final reviewProvider = StateNotifierProvider<ReviewStateNotifier,
+    CursorPagination<ResReviewModel>>(
   (ref) => ReviewStateNotifier(
     reviewRepository: ref.watch(reviewRepositoryProvider),
     meetUpRepository: ref.watch(
@@ -17,29 +18,36 @@ final reviewProvider =
 );
 
 class _PaginationInfo {
-  final int skip;
   final int limit;
+  final bool forceRefetch;
   _PaginationInfo({
-    this.skip = 0,
     this.limit = 20,
+    this.forceRefetch = false,
   });
 }
 
-class ReviewStateNotifier extends StateNotifier<List<ResReviewModel>> {
+class ReviewStateNotifier
+    extends StateNotifier<CursorPagination<ResReviewModel>> {
   final ReviewRepository reviewRepository;
   final MeetUpRepository meetUpRepository;
   final paginationThrottle = Throttle(
     const Duration(seconds: 3),
     initialValue: _PaginationInfo(
       limit: 20,
-      skip: 0,
     ),
     checkEquality: false,
   );
   ReviewStateNotifier({
     required this.reviewRepository,
     required this.meetUpRepository,
-  }) : super([]) {
+  }) : super(CursorPagination<ResReviewModel>(
+          data: [],
+          meta: CursorPaginationMeta(
+            count: 0,
+            totalCount: 0,
+            hasMore: true,
+          ),
+        )) {
     fetchItems();
     paginationThrottle.values.listen(
       (state) {
@@ -49,27 +57,45 @@ class ReviewStateNotifier extends StateNotifier<List<ResReviewModel>> {
   }
 
   fetchItems({
-    int skip = 0,
     int limit = 20,
+    bool forceRefetch = false,
   }) async {
     paginationThrottle.setValue(_PaginationInfo(
-      skip: skip,
       limit: limit,
+      forceRefetch: forceRefetch,
     ));
   }
 
   _throttledPagination(_PaginationInfo info) async {
-    logger.d(info);
-    int skip = info.skip;
+    if (info.forceRefetch) {
+      state = CursorPagination<ResReviewModel>(
+        data: [],
+        meta: CursorPaginationMeta(
+          count: 0,
+          totalCount: 0,
+          hasMore: true,
+        ),
+      );
+    }
+
+    if (!state.meta.hasMore) return;
+    // int skip = info.skip;
     int limit = info.limit;
 
-    final List<ResReviewModel> result =
+    final CursorPagination<ResReviewModel>? cursorPagination =
         await meetUpRepository.getMeetingAllReviews(
-      skip: skip,
+      skip: state.data.length,
       limit: limit,
     );
-    // TODO 나중에 페이지 네이션 해야함
-    state = result;
+    if (cursorPagination != null) {
+      state = state.copyWith(
+        meta: cursorPagination.meta,
+        data: [
+          ...state.data,
+          ...cursorPagination.data,
+        ],
+      );
+    }
   }
 
   createReview({
@@ -88,7 +114,10 @@ class ReviewStateNotifier extends StateNotifier<List<ResReviewModel>> {
 
   deleteReview({required int id}) async {
     final result = await reviewRepository.deleteReview(id);
-    logger.d(result);
-    // TODO 삭제 성공시 state 지워주기
+    if (result) {
+      state = state.copyWith(
+        data: state.data.where((element) => element.id != id).toList(),
+      );
+    }
   }
 }

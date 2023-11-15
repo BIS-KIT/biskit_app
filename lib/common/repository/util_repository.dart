@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
@@ -126,5 +130,57 @@ class UtilRepository {
     list = List.from((res.data as List).map((e) => TagModel.fromMap(e)));
 
     return list;
+  }
+
+  uploadImage({
+    required PhotoModel photo,
+    required UploadImageType uploadImageType,
+  }) async {
+    String? path;
+    File? file;
+
+    if (photo.photoType == PhotoType.asset) {
+      file = await photo.assetEntity!.originFile;
+    } else {
+      file = File(photo.cameraXfile!.path);
+    }
+
+    Response? res;
+
+    try {
+      // create
+      res = await dio.post(
+        '$baseUrl/upload/image',
+        options: Options(
+          headers: {
+            'Content-Type':
+                file == null ? 'application/json' : 'multipart/form-data',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'image_source': uploadImageType.name,
+        },
+        data: file == null
+            ? null
+            : FormData.fromMap({
+                'photo': [
+                  await MultipartFile.fromFile(
+                    file.path,
+                    filename: file.path.split('/').last,
+                  ),
+                ],
+              }),
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        path = res.data['image_url'];
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return path;
   }
 }

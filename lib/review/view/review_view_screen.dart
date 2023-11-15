@@ -1,29 +1,32 @@
-import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/common/const/data.dart';
-import 'package:biskit_app/common/view/photo_view_screen.dart';
-import 'package:biskit_app/meet/model/meet_up_model.dart';
-import 'package:biskit_app/meet/repository/meet_up_repository.dart';
-import 'package:biskit_app/review/provider/review_provider.dart';
+import 'package:biskit_app/review/repository/review_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/common/view/photo_view_screen.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/review/model/res_review_model.dart';
+import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_edit_screen.dart';
 
 class ReviewViewScreen extends ConsumerStatefulWidget {
   static String get routeName => 'reviewView';
   final ResReviewModel? model;
+  final int? id;
   const ReviewViewScreen({
     Key? key,
     this.model,
+    this.id,
   }) : super(key: key);
 
   @override
@@ -34,6 +37,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
   final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
   final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
   MeetUpModel? meetUpModel;
+  ResReviewModel? resReviewModel;
 
   @override
   void initState() {
@@ -42,9 +46,15 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
   }
 
   init() async {
+    if (widget.id != null) {
+      resReviewModel =
+          await ref.read(reviewRepositoryProvider).getReview(widget.id!);
+    } else {
+      resReviewModel = widget.model;
+    }
     meetUpModel = await ref
         .read(meetUpRepositoryProvider)
-        .getMeeting(widget.model!.meeting_id);
+        .getMeeting(resReviewModel!.meeting_id);
     setState(() {});
   }
 
@@ -73,10 +83,10 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
           },
           leftButton: '취소',
           rightCall: () async {
-            if (widget.model == null) return;
+            if (resReviewModel == null) return;
             // TODO 삭제처리
             await ref.read(reviewProvider.notifier).deleteReview(
-                  id: widget.model!.id,
+                  id: resReviewModel!.id,
                 );
             if (!context.mounted) return;
             Navigator.pop(context);
@@ -138,7 +148,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
           left: 20,
           right: 20,
         ),
-        child: widget.model == null
+        child: resReviewModel == null
             ? const Center(
                 child: CustomLoading(),
               )
@@ -147,25 +157,25 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      if (widget.model!.image_url.isEmpty) return;
+                      if (resReviewModel!.image_url.isEmpty) return;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => PhotoViewScreen(
-                            imageUrl: widget.model!.image_url,
+                            imageUrl: resReviewModel!.image_url,
                           ),
                         ),
                       );
                     },
                     child: Hero(
-                      tag: '$kReviewTagName/${widget.model!.id}',
+                      tag: '$kReviewTagName/${resReviewModel!.id}',
                       child: ReviewCardWidget(
                         width: size.width - 40,
-                        imagePath: widget.model!.image_url,
+                        imagePath: resReviewModel!.image_url,
                         reviewImgType: ReviewImgType.networkImage,
                         isShowLogo: true,
                         isShowFlag: true,
-                        flagCodeList: widget.model!.creator.user_nationality
+                        flagCodeList: resReviewModel!.creator.user_nationality
                             .map((e) => e.nationality.code)
                             .toList(),
                       ),
@@ -280,7 +290,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                     height: 20,
                   ),
                   Text(
-                    widget.model!.context,
+                    resReviewModel!.context,
                     style: getTsBody16Rg(context).copyWith(
                       color: kColorContentWeaker,
                     ),

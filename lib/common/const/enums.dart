@@ -13,3 +13,11 @@ enum SnsType {
   google,
   apple,
 }
+
+/// Upload image source
+enum UploadImageType {
+  PROFILE,
+  STUDENT_CARD,
+  REVIEW,
+  CHATTING,
+}

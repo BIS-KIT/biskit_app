@@ -1,4 +1,8 @@
+import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/repository/review_repository.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:flutter/material.dart';
@@ -185,14 +189,26 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
 
   onTapCreateReview() async {
     // TODO Image upload
-    String imageUrl = '';
-    final result = await ref.read(meetUpRepositoryProvider).createReview(
-          meetingId: widget.meetUpModel.id,
-          imageUrl: imageUrl,
-          context: textEditingController.text,
+    final String? uploadResult =
+        await ref.read(utilRepositoryProvider).uploadImage(
+              photo: widget.photoModel!,
+              uploadImageType: UploadImageType.REVIEW,
+            );
+    if (uploadResult != null) {
+      final int? createId =
+          await ref.read(meetUpRepositoryProvider).createReview(
+                meetingId: widget.meetUpModel.id,
+                imageUrl: uploadResult,
+                context: textEditingController.text,
+              );
+      logger.d(createId);
+      if (createId != null) {
+        if (!mounted) return;
+        context.goNamed(
+          ReviewViewScreen.routeName,
+          extra: createId,
         );
-
-    if (!mounted) return;
-    context.goNamed(ReviewViewScreen.routeName);
+      }
+    }
   }
 }
