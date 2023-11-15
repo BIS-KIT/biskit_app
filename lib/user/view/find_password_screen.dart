@@ -102,7 +102,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
             });
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => SetPasswordScreen(
-                      title: "비밀번호 재설정",
+                      pageType: PageType.find,
                       token: res['token'],
                     )));
           } else {

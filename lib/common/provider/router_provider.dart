@@ -98,7 +98,7 @@ class RouteProvider extends ChangeNotifier {
                           path: 'signUpPassword',
                           name: SetPasswordScreen.routeName,
                           builder: (_, state) => SetPasswordScreen(
-                            title: '',
+                            pageType: PageType.register,
                             signUpModel: state.extra as SignUpModel,
                           ),
                           routes: [
@@ -197,7 +197,7 @@ class RouteProvider extends ChangeNotifier {
               path: 'resetPassword',
               name: 'resetPassword',
               builder: (context, state) =>
-                  const SetPasswordScreen(title: '비밀번호 재설정'),
+                  const SetPasswordScreen(pageType: PageType.find),
             ),
           ],
         ),
