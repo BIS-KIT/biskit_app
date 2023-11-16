@@ -10,7 +10,6 @@ import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
 import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
-import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';

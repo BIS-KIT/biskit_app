@@ -16,6 +16,7 @@ class MeetUpCardWidget extends StatefulWidget {
   final MeetUpModel model;
   final VoidCallback onTapMeetUp;
   final MeetUpCardSizeType sizeType;
+  final double width;
   final bool isHostTag;
   final bool isParticipantsStatusTag;
   const MeetUpCardWidget({
@@ -23,6 +24,7 @@ class MeetUpCardWidget extends StatefulWidget {
     required this.model,
     required this.onTapMeetUp,
     this.sizeType = MeetUpCardSizeType.L,
+    this.width = 277,
     this.isHostTag = false,
     this.isParticipantsStatusTag = true,
   }) : super(key: key);
@@ -43,7 +45,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
         widget.onTapMeetUp();
       },
       child: Container(
-        width: widget.sizeType == MeetUpCardSizeType.L ? null : 248,
+        width: widget.sizeType == MeetUpCardSizeType.L ? null : widget.width,
         height: widget.sizeType == MeetUpCardSizeType.L ? null : 182,
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(

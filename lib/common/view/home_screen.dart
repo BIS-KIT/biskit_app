@@ -2,19 +2,12 @@ import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/model/national_flag_model.dart';
-import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
-import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
-import 'package:biskit_app/meet/model/meet_up_model.dart';
-import 'package:biskit_app/meet/model/tag_model.dart';
-import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/model/user_nationality_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,65 +21,16 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  List<TopicModel> fixTopics = [];
-  MeetUpModel testModel = MeetUpModel(
-    current_participants: 1,
-    korean_count: 1,
-    foreign_count: 0,
-    name: '모임 밋업 비스킷 채팅 우아악',
-    location: '서울시청',
-    description: 'asdf',
-    meeting_time: '2023-11-07T01:55:05.72773',
-    max_participants: 2,
-    image_url: null,
-    is_active: true,
-    id: 60,
-    created_time: '2023-11-07T01:55:05.72773',
-    creator: MeetUpCreatorModel(
-      id: 65,
-      name: 'TATAT',
-      birth: '1999-11-11',
-      user_nationality: [
-        UserNationalityModel(
-          id: 0,
-          nationality: NationalFlagModel(
-            code: 'kr',
-            en_name: '',
-            kr_name: '',
-            id: 0,
-          ),
-          user_id: -1,
-        ),
-      ],
-      gender: 'male',
-    ),
-    participants_status: '외국인 모집',
-    tags: [
-      TagModel(
-        id: 1,
-        kr_name: '영어 못해도 괜찮아요',
-        en_name: '',
-        is_custom: false,
-      ),
-    ],
-  );
-
   @override
   void initState() {
-    init();
     super.initState();
-  }
-
-  init() async {
-    fixTopics = await ref.read(utilRepositoryProvider).getTopics(
-          isCustom: false,
-        );
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final userState = ref.watch(userMeProvider);
+    final homeState = ref.watch(homeProvider);
 
     return SafeArea(
       bottom: false,
@@ -123,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             alignment: WrapAlignment.center,
                             runSpacing: 16,
                             children: [
-                              ...fixTopics
+                              ...homeState.fixTopics
                                   .map(
                                     (e) => CategoryItemWidget(
                                       iconPath: e.icon_url,
@@ -145,76 +89,86 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Column(
                         children: [
                           // Meetup
-                          SizedBox(
-                            height: 230,
-                            child: Column(
-                              children: [
-                                // Title area
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '우리학교에서 개설된 모임',
-                                          style:
-                                              getTsHeading18(context).copyWith(
-                                            color: kColorContentDefault,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6),
-                                        child: SvgPicture.asset(
-                                          'assets/icons/ic_chevron_right_line_24.svg',
-                                          width: 24,
-                                          height: 24,
-                                          colorFilter: const ColorFilter.mode(
-                                            kColorContentWeakest,
-                                            BlendMode.srcIn,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                const SizedBox(
-                                  height: 8,
-                                ),
-
-                                SizedBox(
-                                  height: 182,
-                                  child: ListView.separated(
+                          if (homeState.meetings.isNotEmpty)
+                            SizedBox(
+                              height: 230 + 36,
+                              child: Column(
+                                children: [
+                                  // Title area
+                                  Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 20,
                                     ),
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                        MeetUpCardWidget(
-                                      model: testModel,
-                                      sizeType: MeetUpCardSizeType.M,
-                                      onTapMeetUp: () {},
-                                    ),
-                                    separatorBuilder: (context, index) =>
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '우리학교에서 개설된 모임',
+                                            style: getTsHeading18(context)
+                                                .copyWith(
+                                              color: kColorContentDefault,
+                                            ),
+                                          ),
+                                        ),
                                         const SizedBox(
-                                      width: 12,
+                                          width: 8,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(6),
+                                          child: SvgPicture.asset(
+                                            'assets/icons/ic_chevron_right_line_24.svg',
+                                            width: 24,
+                                            height: 24,
+                                            colorFilter: const ColorFilter.mode(
+                                              kColorContentWeakest,
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    itemCount: 4,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
 
-                          const SizedBox(
-                            height: 36,
-                          ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+
+                                  SizedBox(
+                                    height: 182,
+                                    child: homeState.meetings.length == 1
+                                        ? MeetUpCardWidget(
+                                            model: homeState.meetings[0],
+                                            sizeType: MeetUpCardSizeType.M,
+                                            width: size.width - 40,
+                                            onTapMeetUp: () {},
+                                          )
+                                        : ListView.separated(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                            ),
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) =>
+                                                MeetUpCardWidget(
+                                              model: homeState.meetings[index],
+                                              sizeType: MeetUpCardSizeType.M,
+                                              width: size.width - 80,
+                                              onTapMeetUp: () {},
+                                            ),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    const SizedBox(
+                                              width: 12,
+                                            ),
+                                            itemCount:
+                                                homeState.meetings.length,
+                                          ),
+                                  ),
+                                  const SizedBox(
+                                    height: 36,
+                                  ),
+                                ],
+                              ),
+                            ),
 
                           // Tag
                           Padding(
@@ -238,34 +192,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                const Wrap(
+                                Wrap(
                                   spacing: 8,
                                   runSpacing: 8,
                                   children: [
-                                    BtnTagWidget(
-                                      label: '비건',
-                                      emoji: '🌱',
-                                    ),
-                                    BtnTagWidget(
-                                      label: '크리스마스에 놀아요',
-                                      emoji: '🎄',
-                                    ),
-                                    BtnTagWidget(
-                                      label: '영어 못해도 괜찮아요',
-                                      emoji: '🥺',
-                                    ),
-                                    BtnTagWidget(
-                                      label: '점심식사',
-                                      emoji: '🍚',
-                                    ),
-                                    BtnTagWidget(
-                                      label: '함께 스터디해요',
-                                      emoji: '👩🏽‍💻',
-                                    ),
-                                    BtnTagWidget(
-                                      label: '뒷풀이',
-                                      emoji: '🍺',
-                                    ),
+                                    ...homeState.tags
+                                        .map(
+                                          (t) => BtnTagWidget(
+                                            label: t.kr_name,
+                                            emoji: '',
+                                          ),
+                                        )
+                                        .toList(),
                                   ],
                                 ),
                               ],
@@ -348,18 +286,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SvgPicture.asset(
-                  'assets/icons/ic_notifications_line_24.svg',
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    kColorContentDefault,
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
+              // 홈에서 알림 아이콘 삭제
+              // Padding(
+              //   padding: const EdgeInsets.all(10),
+              //   child: SvgPicture.asset(
+              //     'assets/icons/ic_notifications_line_24.svg',
+              //     width: 24,
+              //     height: 24,
+              //     colorFilter: const ColorFilter.mode(
+              //       kColorContentDefault,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              // ),
               GestureDetector(
                 onTap: () {},
                 child: Padding(
