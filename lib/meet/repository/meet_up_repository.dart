@@ -206,6 +206,38 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     );
   }
 
+  Future<List<MeetUpModel>?> getMeetings({
+    required int skip,
+    int limit = 20,
+  }) async {
+    List<MeetUpModel>? meetings;
+    try {
+      Response res = await dio.get(
+        '${baseUrl}s',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+        },
+      );
+      // logger.d(res.data);
+      if (res.statusCode == 200) {
+        if ((res.data as Map).containsKey('total_count')) {
+          meetings = List.from((res.data['meetings'] as List)
+              .map((e) => MeetUpModel.fromMap(e)));
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return meetings;
+  }
+
   createMeetUp(CreateMeetUpModel createMeetUpModel) async {
     Response? res;
     try {

@@ -9,7 +9,6 @@ import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';

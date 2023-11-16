@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:photo_manager/photo_manager.dart';
 
