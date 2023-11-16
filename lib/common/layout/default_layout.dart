@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
@@ -52,7 +53,13 @@ class DefaultLayout extends StatelessWidget {
           backgroundColor: backgroundImageSrc != null
               ? Colors.transparent
               : backgroundColor ?? kColorBgDefault,
-          body: child,
+          body: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.dark,
+            ),
+            child: child,
+          ),
           appBar: renderAppBar(context),
           bottomNavigationBar: bottomNavigationBar,
           floatingActionButton: floatingActionButton,

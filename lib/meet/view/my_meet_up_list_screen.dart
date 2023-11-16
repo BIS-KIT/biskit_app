@@ -8,6 +8,7 @@ import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/review/view/review_write_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -103,83 +104,89 @@ class _MyMeetUpListScreenState extends ConsumerState<MyMeetUpListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kColorBgElevation2,
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 2,
-                    left: 10,
-                    bottom: 2,
-                  ),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SvgPicture.asset(
-                            'assets/icons/ic_arrow_back_ios_line_24.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentDefault,
-                              BlendMode.srcIn,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 2,
+                      left: 10,
+                      bottom: 2,
+                    ),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_arrow_back_ios_line_24.svg',
+                              width: 24,
+                              height: 24,
+                              colorFilter: const ColorFilter.mode(
+                                kColorContentDefault,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 20,
-                    bottom: 8,
-                    right: 20,
-                  ),
-                  child: Text(
-                    '어떤 모임의\n인증샷을 남길까요?',
-                    style: getTsHeading20(context).copyWith(
-                      color: kColorContentDefault,
+                        const Spacer(),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: isLoading
-                  ? const Center(
-                      child: CustomLoading(),
-                    )
-                  : ListView.separated(
-                      controller: scrollController,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 20,
-                      ),
-                      itemBuilder: (context, index) => MeetUpCardWidget(
-                        model: list[index],
-                        onTapMeetUp: () {
-                          onTapMeetUpCard(list[index]);
-                        },
-                      ),
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 12,
-                      ),
-                      itemCount: list.length,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 4,
+                      left: 20,
+                      bottom: 8,
+                      right: 20,
                     ),
-            ),
-          ],
+                    child: Text(
+                      '어떤 모임의\n인증샷을 남길까요?',
+                      style: getTsHeading20(context).copyWith(
+                        color: kColorContentDefault,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: isLoading
+                    ? const Center(
+                        child: CustomLoading(),
+                      )
+                    : ListView.separated(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 20,
+                        ),
+                        itemBuilder: (context, index) => MeetUpCardWidget(
+                          model: list[index],
+                          onTapMeetUp: () {
+                            onTapMeetUpCard(list[index]);
+                          },
+                        ),
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 12,
+                        ),
+                        itemCount: list.length,
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

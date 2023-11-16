@@ -1,6 +1,7 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
@@ -61,137 +62,143 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
       },
       child: Scaffold(
         backgroundColor: kColorBgDefault,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  Text(
-                    '무엇을 할건가요?',
-                    style: getTsHeading18(context).copyWith(
-                      color: kColorContentDefault,
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 32,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    '3개까지 선택 가능해요',
-                    style: getTsBody14Rg(context).copyWith(
-                      color: kColorContentWeaker,
+                    Text(
+                      '무엇을 할건가요?',
+                      style: getTsHeading18(context).copyWith(
+                        color: kColorContentDefault,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  if (createMeetUpState != null)
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 8,
-                      children: [
-                        ...topicList
-                            .map(
-                              (e) => ChipWidget(
-                                text: e.kr_name,
-                                isSelected:
-                                    createMeetUpState.topic_ids.contains(e.id),
-                                onClickSelect: () {
-                                  ref
-                                      .read(createMeetUpProvider.notifier)
-                                      .onTapTopic(e.id);
-                                },
-                              ),
-                            )
-                            .toList(),
-                        ...createMeetUpState.custom_topics.map(
-                          (e) => ChipWidget(
-                            text: e,
-                            isSelected:
-                                createMeetUpState.custom_topics.contains(e),
-                            onClickSelect: () {
-                              ref
-                                  .read(createMeetUpProvider.notifier)
-                                  .onTapDeleteCustomTopic(e);
-                            },
-                            onTapDelete: () {
-                              ref
-                                  .read(createMeetUpProvider.notifier)
-                                  .onTapDeleteCustomTopic(e);
-                            },
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      '3개까지 선택 가능해요',
+                      style: getTsBody14Rg(context).copyWith(
+                        color: kColorContentWeaker,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    if (createMeetUpState != null)
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 8,
+                        children: [
+                          ...topicList
+                              .map(
+                                (e) => ChipWidget(
+                                  text: e.kr_name,
+                                  isSelected: createMeetUpState.topic_ids
+                                      .contains(e.id),
+                                  onClickSelect: () {
+                                    ref
+                                        .read(createMeetUpProvider.notifier)
+                                        .onTapTopic(e.id);
+                                  },
+                                ),
+                              )
+                              .toList(),
+                          ...createMeetUpState.custom_topics.map(
+                            (e) => ChipWidget(
+                              text: e,
+                              isSelected:
+                                  createMeetUpState.custom_topics.contains(e),
+                              onClickSelect: () {
+                                ref
+                                    .read(createMeetUpProvider.notifier)
+                                    .onTapDeleteCustomTopic(e);
+                              },
+                              onTapDelete: () {
+                                ref
+                                    .read(createMeetUpProvider.notifier)
+                                    .onTapDeleteCustomTopic(e);
+                              },
+                            ),
                           ),
-                        ),
-                        ChipWidget(
-                          text: "직접입력",
-                          isSelected: false,
-                          onTapEnter: (e) {
-                            ref
-                                .read(createMeetUpProvider.notifier)
-                                .onTapAddCustomTopic(
-                                    customTopicController.text);
-                            setState(() {
-                              customTopicController.text = '';
-                            });
+                          ChipWidget(
+                            text: "직접입력",
+                            isSelected: false,
+                            onTapEnter: (e) {
+                              ref
+                                  .read(createMeetUpProvider.notifier)
+                                  .onTapAddCustomTopic(
+                                      customTopicController.text);
+                              setState(() {
+                                customTopicController.text = '';
+                              });
+                            },
+                            onTapAdd: (e) {
+                              customTopicFocusNode.requestFocus();
+                            },
+                            focusNode: customTopicFocusNode,
+                            controller: customTopicController,
+                          ),
+                        ],
+                      ),
+                    const SizedBox(
+                      height: 48,
+                    ),
+                    Text(
+                      '어디서 만날까요?',
+                      style: getTsHeading18(context).copyWith(
+                        color: kColorContentDefault,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        final location = await showBiskitBottomSheet(
+                          context: context,
+                          title: '장소 검색',
+                          rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                          height: MediaQuery.of(context).size.height -
+                              widget.topPadding -
+                              48,
+                          contentWidget: PlaceSearchScreen(
+                            isEng: context.locale.languageCode == kEn,
+                          ),
+                          onRightTap: () {
+                            Navigator.pop(context);
                           },
-                          onTapAdd: (e) {
-                            customTopicFocusNode.requestFocus();
-                          },
-                          focusNode: customTopicFocusNode,
-                          controller: customTopicController,
-                        ),
-                      ],
+                        );
+                        logger.d(location);
+                        if (location != null) {
+                          ref
+                              .read(createMeetUpProvider.notifier)
+                              .setLocation(location);
+                        }
+                      },
+                      child: OutlinedButtonWidget(
+                        height: 52,
+                        text: createMeetUpState!.location == null
+                            ? '장소 선택'
+                            : createMeetUpState.location ?? '',
+                        isEnable: true,
+                      ),
                     ),
-                  const SizedBox(
-                    height: 48,
-                  ),
-                  Text(
-                    '어디서 만날까요?',
-                    style: getTsHeading18(context).copyWith(
-                      color: kColorContentDefault,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      final location = await showBiskitBottomSheet(
-                        context: context,
-                        title: '장소 검색',
-                        rightIcon: 'assets/icons/ic_cancel_line_24.svg',
-                        height: MediaQuery.of(context).size.height -
-                            widget.topPadding -
-                            48,
-                        contentWidget: PlaceSearchScreen(
-                          isEng: context.locale.languageCode == kEn,
-                        ),
-                        onRightTap: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                      logger.d(location);
-                      if (location != null) {
-                        ref
-                            .read(createMeetUpProvider.notifier)
-                            .setLocation(location);
-                      }
-                    },
-                    child: OutlinedButtonWidget(
-                      height: 52,
-                      text: createMeetUpState!.location == null
-                          ? '장소 선택'
-                          : createMeetUpState.location ?? '',
-                      isEnable: true,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
