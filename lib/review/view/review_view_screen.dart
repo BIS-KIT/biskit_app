@@ -84,7 +84,6 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
           leftButton: '취소',
           rightCall: () async {
             if (resReviewModel == null) return;
-            // TODO 삭제처리
             await ref.read(reviewProvider.notifier).deleteReview(
                   id: resReviewModel!.id,
                 );
@@ -212,10 +211,16 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                       ),
                       child: Row(
                         children: [
-                          // TODO
-                          // const ThumbnailIconWidget(
-                          //   isCircle: false,
-                          // ),
+                          ThumbnailIconWidget(
+                            size: 40,
+                            isSelected: false,
+                            radius: 8,
+                            iconSize: 32,
+                            padding: 4,
+                            iconPath:
+                                meetUpModel!.image_url ?? kCategoryDefaultPath,
+                            thumbnailIconType: ThumbnailIconType.network,
+                          ),
                           const SizedBox(
                             width: 12,
                           ),

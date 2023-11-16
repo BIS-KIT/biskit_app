@@ -15,6 +15,8 @@ const kS3Flag43Path = '/flag/4-3';
 
 const String kReviewTagName = 'review';
 
+const String kCategoryDefaultPath =
+    'https://biskit-bucket.s3.ap-northeast-2.amazonaws.com/default_icon/ic_talk_fill_48.png';
 const List<Map<String, String>> kCategoryList = [
   {'value': '식사', 'imgUrl': 'assets/icons/ic_food_fill_48.svg'},
   {'value': '언어교환', 'imgUrl': 'assets/icons/ic_language_exchange_fill_48.svg'},

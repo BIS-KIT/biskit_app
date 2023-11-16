@@ -44,12 +44,14 @@ class ChatRepository {
   Future<String> createChatRoom({
     required String title,
     required int userId,
+    String? imagePath,
   }) async {
     String chatRoomId = firebaseFirestore.collection('ChatRoom').doc().id;
     logger.d('Create chatRoomId : $chatRoomId');
     await firebaseFirestore.collection('ChatRoom').doc(chatRoomId).set(
           ChatRoomModel(
             uid: chatRoomId,
+            roomImagePath: imagePath,
             title: title,
             joinUsers: [userId],
             connectingUsers: [],

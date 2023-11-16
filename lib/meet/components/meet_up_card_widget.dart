@@ -1,3 +1,6 @@
+import 'package:biskit_app/common/components/flag_widget.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
@@ -70,22 +73,31 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: kColorBgPrimaryWeak,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        widget.sizeType == MeetUpCardSizeType.L ? 12 : 8,
-                      ),
-                    ),
-                  ),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic_hobby_fill_48.svg',
-                    width: widget.sizeType == MeetUpCardSizeType.L ? 44 : 32,
-                    height: widget.sizeType == MeetUpCardSizeType.L ? 44 : 32,
-                  ),
+                ThumbnailIconWidget(
+                  size: 52,
+                  iconSize: 44,
+                  padding: 4,
+                  isSelected: false,
+                  radius: 12,
+                  iconPath: widget.model.image_url ?? kCategoryDefaultPath,
+                  thumbnailIconType: ThumbnailIconType.network,
                 ),
+                // Container(
+                //   padding: const EdgeInsets.all(4),
+                //   decoration: BoxDecoration(
+                //     color: kColorBgPrimaryWeak,
+                //     borderRadius: BorderRadius.all(
+                //       Radius.circular(
+                //         widget.sizeType == MeetUpCardSizeType.L ? 12 : 8,
+                //       ),
+                //     ),
+                //   ),
+                //   child: SvgPicture.asset(
+                //     'assets/icons/ic_hobby_fill_48.svg',
+                //     width: widget.sizeType == MeetUpCardSizeType.L ? 44 : 32,
+                //     height: widget.sizeType == MeetUpCardSizeType.L ? 44 : 32,
+                //   ),
+                // ),
                 Row(
                   children: [
                     SvgPicture.asset(
@@ -191,10 +203,15 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     alignment: WrapAlignment.start,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      const CircleAvatar(
-                        radius: 8,
-                        backgroundColor: Colors.amber,
+                      FlagWidget(
+                        flagCode: widget
+                            .model.creator.user_nationality[0].nationality.code,
+                        size: 16,
                       ),
+                      // const CircleAvatar(
+                      //   radius: 8,
+                      //   backgroundColor: Colors.amber,
+                      // ),
                       const SizedBox(
                         width: 4,
                       ),

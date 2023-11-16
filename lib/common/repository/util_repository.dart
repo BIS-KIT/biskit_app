@@ -96,7 +96,9 @@ class UtilRepository {
     return list;
   }
 
-  Future<List<TopicModel>> getTopics() async {
+  /// read Topics
+  /// None : All, true : 사용자가 생성한 것
+  Future<List<TopicModel>> getTopics({bool? isCustom}) async {
     List<TopicModel> list = [];
     final res = await dio.get(
       '$baseUrl/topics',
@@ -106,6 +108,11 @@ class UtilRepository {
           'Accept': 'application/json',
         },
       ),
+      queryParameters: isCustom == null
+          ? null
+          : {
+              'is_custom': isCustom,
+            },
     );
 
     logger.d(res.toString());

@@ -12,11 +12,11 @@ import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 
 class MeetUpCreateStep1Tab extends ConsumerStatefulWidget {
-  final List<TopicModel> fixTopics;
+  final List<TopicModel> topics;
   final double topPadding;
   const MeetUpCreateStep1Tab({
     super.key,
-    required this.fixTopics,
+    required this.topics,
     required this.topPadding,
   });
 
@@ -46,7 +46,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
   @override
   Widget build(BuildContext context) {
     final createMeetUpState = ref.watch(createMeetUpProvider);
-    List<TopicModel> topicList = widget.fixTopics;
+    List<TopicModel> topicList = widget.topics;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

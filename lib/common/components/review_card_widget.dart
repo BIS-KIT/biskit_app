@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/components/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -143,17 +144,23 @@ class ReviewCardWidget extends StatelessWidget {
                     children: [
                       if (flagCodeList != null && isShowFlag)
                         ...flagCodeList!
-                            .map((e) => ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(16),
-                                  ),
-                                  child: SvgPicture.network(
-                                    '$kS3Url$kS3Flag11Path/$e.svg',
-                                    width: 16,
-                                    height: 16,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ))
+                            .map(
+                              (e) => FlagWidget(
+                                flagCode: e,
+                                size: 16,
+                              ),
+                              // ClipRRect(
+                              //       borderRadius: const BorderRadius.all(
+                              //         Radius.circular(16),
+                              //       ),
+                              //       child: SvgPicture.network(
+                              //         '$kS3Url$kS3Flag11Path/$e.svg',
+                              //         width: 16,
+                              //         height: 16,
+                              //         fit: BoxFit.cover,
+                              //       ),
+                              //     ),
+                            )
                             .toList(),
                     ],
                   ),

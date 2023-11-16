@@ -188,7 +188,6 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
   }
 
   onTapCreateReview() async {
-    // TODO Image upload
     final String? uploadResult =
         await ref.read(utilRepositoryProvider).uploadImage(
               photo: widget.photoModel!,

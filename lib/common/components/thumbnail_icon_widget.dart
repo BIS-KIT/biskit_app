@@ -3,30 +3,37 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
 
+enum ThumbnailIconType { assets, network }
+
 class ThumbnailIconWidget extends StatelessWidget {
   final double size;
+  final double iconSize;
+  final double padding;
   final bool isSelected;
   final double radius;
-  final String iconPath;
+  final String? iconPath;
   final Color backgroundColor;
   final Color selectedBackgroundColor;
+  final ThumbnailIconType thumbnailIconType;
   const ThumbnailIconWidget({
     Key? key,
     required this.size,
+    this.iconSize = 72,
+    this.padding = 8,
     required this.isSelected,
     required this.radius,
     required this.iconPath,
     this.backgroundColor = kColorBgPrimaryWeak,
     this.selectedBackgroundColor = kColorBgPrimaryWeak,
+    this.thumbnailIconType = ThumbnailIconType.assets,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const double padding = 8;
     return Container(
       width: size,
       height: size,
-      padding: const EdgeInsets.all(padding),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: isSelected ? selectedBackgroundColor : backgroundColor,
         borderRadius: BorderRadius.all(
@@ -39,9 +46,18 @@ class ThumbnailIconWidget extends StatelessWidget {
               )
             : null,
       ),
-      child: SvgPicture.asset(
-        iconPath,
-      ),
+      child: iconPath == null
+          ? null
+          : thumbnailIconType == ThumbnailIconType.assets
+              ? SvgPicture.asset(
+                  iconPath!,
+                )
+              : Image.network(
+                  iconPath!,
+                  width: iconSize,
+                  height: iconSize,
+                  fit: BoxFit.fitWidth,
+                ),
     );
   }
 }

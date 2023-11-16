@@ -5,6 +5,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,18 +21,38 @@ class MeetUpCreateStep4Tab extends ConsumerStatefulWidget {
 }
 
 class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
-  dynamic selectedSubject = {};
+  // dynamic selectedSubject = {};
 
   late final FocusNode meetupDescriptionFocusNode;
   late final TextEditingController meetupDescriptionController;
   bool showMeetupDescription = false;
   String buttonText = '모임설명 추가';
+  List<TopicModel>? fixTopics;
+  TopicModel? selectedTopic;
 
   @override
   void initState() {
     super.initState();
     meetupDescriptionFocusNode = FocusNode();
     meetupDescriptionController = TextEditingController();
+    init();
+  }
+
+  init() {
+    setState(() {
+      fixTopics = ref.read(createMeetUpProvider.notifier).fixTopics;
+    });
+
+    // 선택한 주제중에 fixTopics중에 있다면 주제 선택
+    List<int> selectedTopicIds = ref.read(createMeetUpProvider)!.topic_ids;
+    for (var element in fixTopics!) {
+      if (selectedTopicIds.contains(element.id)) {
+        setState(() {
+          selectedTopic = element;
+        });
+        break;
+      }
+    }
   }
 
   @override
@@ -99,27 +120,28 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Wrap(
                       children: [
-                        ...kCategoryList.map(
-                          (e) => GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedSubject = e;
-                              });
-                              context.pop();
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: ThumbnailIconWidget(
-                                iconPath: e['imgUrl']!,
-                                backgroundColor: kColorBgElevation1,
-                                radius: 100,
-                                size: 88,
-                                isSelected:
-                                    selectedSubject['value'] == e['value'],
+                        if (fixTopics != null)
+                          ...fixTopics!.map(
+                            (e) => GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedTopic = e;
+                                });
+                                context.pop();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: ThumbnailIconWidget(
+                                  thumbnailIconType: ThumbnailIconType.network,
+                                  iconPath: e.icon_url,
+                                  backgroundColor: kColorBgElevation1,
+                                  radius: 100,
+                                  size: 88,
+                                  isSelected: selectedTopic == e,
+                                ),
                               ),
                             ),
                           ),
-                        )
                       ],
                     ),
                   ),
@@ -129,9 +151,10 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                 alignment: Alignment.center,
                 children: [
                   ThumbnailIconWidget(
-                    iconPath: selectedSubject['value'] != null
-                        ? selectedSubject['imgUrl']
-                        : kCategoryList[0]['imgUrl'],
+                    thumbnailIconType: ThumbnailIconType.network,
+                    iconPath: selectedTopic == null
+                        ? kCategoryDefaultPath
+                        : selectedTopic!.icon_url,
                     radius: 100,
                     size: 88,
                     isSelected: false,
