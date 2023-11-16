@@ -26,17 +26,21 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   final UtilRepository utilRepository;
   final MeetUpRepository meetUpRepository;
   final ChatRepository chatRepository;
+  List<TopicModel> fixTopics = [];
+  List<TagModel> tags = [];
   CreateMeetUpStateNotifier({
     required this.userModelBase,
     required this.utilRepository,
     required this.meetUpRepository,
     required this.chatRepository,
+    // this.fixTopics,
+    // this.tags,
   }) : super(null) {
     //
     init();
   }
 
-  void init() {
+  void init() async {
     if (userModelBase != null && userModelBase is UserModel) {
       state = CreateMeetUpModel(
         creator_id: (userModelBase as UserModel).id,
@@ -46,12 +50,22 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
         custom_tags: [],
         custom_topics: [],
       );
+      fixTopics = await getTopics(
+        isCustom: false,
+      );
+      // tags = await getTags();
     }
   }
 
-  Future<List<TopicModel>> getTopics() async {
+  setFixData({
+    required List<TagModel> tags,
+  }) {
+    this.tags = tags;
+  }
+
+  Future<List<TopicModel>> getTopics({bool? isCustom}) async {
     List<TopicModel> list = [];
-    list = await utilRepository.getTopics();
+    list = await utilRepository.getTopics(isCustom: isCustom);
     return list;
   }
 
@@ -243,21 +257,56 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   createMeetUp() async {
     bool result = false;
     if (state != null) {
+      String? imageUrl;
+      for (var topic in fixTopics) {
+        if (state!.topic_ids.contains(topic.id)) {
+          imageUrl = topic.icon_url;
+          break;
+        }
+      }
+
       // firebase chat room create
       String chatRoomUid = await chatRepository.createChatRoom(
         title: state!.name ?? '',
         userId: state!.creator_id,
+        imagePath: imageUrl,
       );
 
       if (chatRoomUid.isEmpty) {
         return false;
       }
 
-      result = await meetUpRepository.createMeetUp(state!.copyWith(
-        chat_id: chatRoomUid,
-      ));
+      result = await meetUpRepository.createMeetUp(
+        state!.copyWith(
+          chat_id: chatRoomUid,
+          image_url: imageUrl,
+        ),
+      );
       init();
     }
     return result;
+  }
+}
+
+class CreateMeetUpStateModel {
+  final CreateMeetUpModel? createMeetUpModel;
+  final List<TopicModel> fixTopics;
+  final List<TagModel> tags;
+  CreateMeetUpStateModel({
+    this.createMeetUpModel,
+    required this.fixTopics,
+    required this.tags,
+  });
+
+  CreateMeetUpStateModel copyWith({
+    CreateMeetUpModel? createMeetUpModel,
+    List<TopicModel>? fixTopics,
+    List<TagModel>? tags,
+  }) {
+    return CreateMeetUpStateModel(
+      createMeetUpModel: createMeetUpModel ?? this.createMeetUpModel,
+      fixTopics: fixTopics ?? this.fixTopics,
+      tags: tags ?? this.tags,
+    );
   }
 }

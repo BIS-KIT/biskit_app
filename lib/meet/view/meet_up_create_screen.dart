@@ -26,7 +26,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
   late TabController controller;
   int pageIndex = 0;
 
-  List<TopicModel> fixTopics = [];
+  List<TopicModel> topics = [];
   List<TagModel> tags = [];
 
   @override
@@ -47,9 +47,12 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     List<TagModel> tempTagList =
         await ref.read(createMeetUpProvider.notifier).getTags();
     setState(() {
-      fixTopics = tempList;
+      topics = tempList;
       tags = tempTagList;
     });
+    ref.read(createMeetUpProvider.notifier).setFixData(
+          tags: tags,
+        );
   }
 
   // checkTempWrite() {
@@ -176,7 +179,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                 controller: controller,
                 children: [
                   MeetUpCreateStep1Tab(
-                    fixTopics: fixTopics,
+                    topics: topics,
                     topPadding: padding.top,
                   ),
                   const MeetUpCreateStep2Tab(),

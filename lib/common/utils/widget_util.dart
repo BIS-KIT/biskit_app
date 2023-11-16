@@ -16,6 +16,7 @@ showReviewMoreBottomSheet({
 }) {
   return showModalBottomSheet(
     context: context,
+    elevation: 0,
     backgroundColor: Colors.transparent,
     barrierColor: kColorBgDimmed.withOpacity(0.5),
     builder: (context) {

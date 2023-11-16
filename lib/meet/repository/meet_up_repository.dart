@@ -10,6 +10,7 @@ import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
+import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
@@ -248,16 +249,17 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     // }
   }
 
-  createReview({
+  Future<int?> createReview({
     required int meetingId,
     required String imageUrl,
     required String context,
   }) async {
-    Response? res;
+    int? id;
+    // ResReviewModel? model;
     final user = ref.watch(userMeProvider);
     if (user is UserModel) {
       try {
-        res = await dio.post(
+        Response? res = await dio.post(
           '$baseUrl/$meetingId/reviews',
           options: Options(
             headers: {
@@ -275,11 +277,83 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
 
         if (res.statusCode == 200) {
           logger.d(res);
+          id = res.data['id'];
+          // model = ResReviewModel.fromMap(res.data);
         }
       } catch (e) {
         logger.e(e.toString());
       }
     }
-    return res;
+    return id;
+  }
+
+  getMeetingAllReviews({
+    required int skip,
+    required int limit,
+  }) async {
+    CursorPagination<ResReviewModel>? cursorPagination;
+    // List<ResReviewModel> list = [];
+    final user = ref.watch(userMeProvider);
+    if (user is UserModel) {
+      try {
+        final res = await dio.get(
+          '$baseUrl/reviews/${user.id}',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'skip': skip,
+            'limit': limit,
+          },
+        );
+
+        if (res.statusCode == 200) {
+          // logger.d(res);
+          if ((res.data as Map).containsKey('total_count')) {
+            int totalCount = res.data['total_count'];
+            int count = (res.data['reviews'] as List).length;
+            cursorPagination = CursorPagination<ResReviewModel>(
+              meta: CursorPaginationMeta(
+                count: count,
+                totalCount: totalCount,
+                hasMore: (skip + count < totalCount),
+              ),
+              data: List.from(
+                  res.data['reviews'].map((e) => ResReviewModel.fromMap(e))),
+            );
+          }
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+    return cursorPagination;
+  }
+
+  getMeeting(int id) async {
+    try {
+      final res = await dio.get(
+        '$baseUrl/$id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        return MeetUpModel.fromMap(res.data);
+        // list = List.from(res.data.map((e) => ResReviewModel.fromMap(e)));
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
   }
 }

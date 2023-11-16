@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:biskit_app/common/components/tooltip_widget.dart';
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/model/student_card_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
@@ -53,11 +54,10 @@ class _ProfileIdConfirmScreenState
     if (isPhoto) {
       if (selectedPhotoModel != null) {
         try {
-          studentCardPhoto =
-              await ref.read(profileRepositoryProvider).postProfilePhoto(
-                    profilePhoto: selectedPhotoModel!,
-                    isProfile: false,
-                  );
+          studentCardPhoto = await ref.read(utilRepositoryProvider).uploadImage(
+                photo: selectedPhotoModel!,
+                uploadImageType: UploadImageType.STUDENT_CARD,
+              );
         } finally {}
         logger.d('uploadFilePath : $studentCardPhoto');
       } else {

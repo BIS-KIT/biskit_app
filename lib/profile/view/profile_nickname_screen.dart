@@ -5,8 +5,10 @@ import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -132,11 +134,10 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
       if (selectedPhotoModel != null) {
         context.loaderOverlay.show();
         try {
-          profilePhoto =
-              await ref.read(profileRepositoryProvider).postProfilePhoto(
-                    profilePhoto: selectedPhotoModel!,
-                    isProfile: true,
-                  );
+          profilePhoto = await ref.read(utilRepositoryProvider).uploadImage(
+                photo: selectedPhotoModel!,
+                uploadImageType: UploadImageType.PROFILE,
+              );
         } finally {
           context.loaderOverlay.hide();
         }

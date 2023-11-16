@@ -159,14 +159,15 @@ class _PaginationListViewState<T extends IModelWithId>
                   child: Center(
                     child: cp is CursorPaginationFetchingMore
                         ? const CustomLoading()
-                        : cp.meta.totalCount != 0
-                            ? Text(
-                                '더 이상 데이터가 없습니다',
-                                style: getTsCaption12Rg(context).copyWith(
-                                  color: kColorContentWeaker,
-                                ),
-                              )
-                            : Container(),
+                        : Container(),
+                    // cp.meta.totalCount != 0
+                    //     ? Text(
+                    //         '더 이상 데이터가 없습니다',
+                    //         style: getTsCaption12Rg(context).copyWith(
+                    //           color: kColorContentWeaker,
+                    //         ),
+                    //       )
+                    //     : Container(),
                   ),
                 );
               }

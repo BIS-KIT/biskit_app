@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:biskit_app/meet/model/meet_up_model.dart';
@@ -34,17 +35,28 @@ class ProfileMeetingStateNotifier extends StateNotifier<ProfileMeetingState> {
       dataList: [],
     );
 
+    CursorPagination<MeetUpModel>? cursorPagination =
+        await profileRepository.getMyMeetings(
+      skip: 0,
+      limit: 5,
+      status: state.profileMeetingStatus.name,
+    );
+
     state = state.copyWith(
       isLoading: false,
-      dataList: await profileRepository
-          .getMyMeetings(state.profileMeetingStatus.name),
+      dataList: cursorPagination == null ? [] : cursorPagination.data,
     );
   }
 
-  // TODO 개발용 나의 모임 가져오기
-  getMyMeeting() async {
-    return await profileRepository
-        .getMyMeetings(ProfileMeetingStatus.APPROVE.name);
+  getMyMeeting({
+    required int skip,
+    int limit = 20,
+  }) async {
+    return await profileRepository.getMyMeetings(
+      status: ProfileMeetingStatus.PAST.name,
+      skip: skip,
+      limit: limit,
+    );
   }
 
   void onTapStatus(ProfileMeetingStatus status) {

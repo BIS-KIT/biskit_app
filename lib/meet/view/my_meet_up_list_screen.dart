@@ -1,6 +1,7 @@
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
@@ -19,38 +20,13 @@ class MyMeetUpListScreen extends ConsumerStatefulWidget {
 }
 
 class _MyMeetUpListScreenState extends ConsumerState<MyMeetUpListScreen> {
+  final ScrollController scrollController = ScrollController();
   List<MeetUpModel> list = [];
   bool isLoading = false;
-  // MeetUpModel testModel = MeetUpModel(
-  //   current_participants: 1,
-  //   korean_count: 1,
-  //   foreign_count: 0,
-  //   name: '모임 밋업 비스킷 채팅 우아악',
-  //   location: '서울시청',
-  //   description: 'asdf',
-  //   meeting_time: '2023-11-07T01:55:05.72773',
-  //   max_participants: 2,
-  //   image_url: null,
-  //   is_active: true,
-  //   id: 60,
-  //   created_time: '2023-11-07T01:55:05.72773',
-  //   creator: MeetUpCreatorModel(
-  //     id: 65,
-  //     name: 'TATAT',
-  //     birth: '1999-11-11',
-  //     gender: 'male',
-  //     user_nationality: [],
-  //   ),
-  //   participants_status: '외국인 모집',
-  //   tags: [
-  //     TagModel(
-  //       id: 1,
-  //       kr_name: '영어 못해도 괜찮아요',
-  //       en_name: '',
-  //       is_custom: false,
-  //     ),
-  //   ],
-  // );
+  int skip = 0;
+  final int limit = 20;
+  int totalCount = 0;
+  bool hasMore = true;
 
   @override
   initState() {
@@ -58,17 +34,43 @@ class _MyMeetUpListScreenState extends ConsumerState<MyMeetUpListScreen> {
     init();
   }
 
+  @override
+  dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
+
   init() async {
+    await fetchItems();
+  }
+
+  fetchItems() async {
+    if (!hasMore) return;
     setState(() {
       isLoading = true;
     });
 
-    final List<MeetUpModel> data =
-        await ref.read(profileMeetingProvider.notifier).getMyMeeting();
-
+    final CursorPagination<MeetUpModel>? cursorPagination =
+        await ref.read(profileMeetingProvider.notifier).getMyMeeting(
+              skip: skip,
+              limit: limit,
+            );
+    if (cursorPagination != null) {
+      list = [
+        ...list,
+        ...cursorPagination.data,
+      ];
+      totalCount = cursorPagination.meta.totalCount;
+      skip = list.length;
+      hasMore = cursorPagination.meta.hasMore;
+    } else {
+      list = [];
+      totalCount = 0;
+      skip = 0;
+      hasMore = false;
+    }
     setState(() {
       isLoading = false;
-      list = data;
     });
   }
 
@@ -160,6 +162,7 @@ class _MyMeetUpListScreenState extends ConsumerState<MyMeetUpListScreen> {
                       child: CustomLoading(),
                     )
                   : ListView.separated(
+                      controller: scrollController,
                       padding: const EdgeInsets.symmetric(
                         vertical: 12,
                         horizontal: 20,

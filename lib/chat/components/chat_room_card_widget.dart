@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/chat/model/chat_msg_model.dart';
@@ -57,9 +58,15 @@ class _ChatRoomCardWidgetState extends State<ChatRoomCardWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const ThumbnailIconWidget(
-              iconUrl: 'assets/icons/ic_restaurant_fill_48.svg',
-              isCircle: false,
+            ThumbnailIconWidget(
+              iconPath:
+                  widget.chatRoomModel.roomImagePath ?? kCategoryDefaultPath,
+              thumbnailIconType: ThumbnailIconType.network,
+              isSelected: false,
+              radius: 12,
+              size: 52,
+              iconSize: 44,
+              padding: 4,
             ),
             const SizedBox(
               width: 12,
