@@ -4,7 +4,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 
 class CategoryItemWidget extends StatelessWidget {
-  final String iconPath;
+  final String? iconPath;
   final String text;
   const CategoryItemWidget({
     Key? key,
@@ -18,7 +18,6 @@ class CategoryItemWidget extends StatelessWidget {
       width: 88,
       child: Column(
         children: [
-          // TODO
           Container(
             decoration: BoxDecoration(
               border: Border.all(
@@ -32,6 +31,7 @@ class CategoryItemWidget extends StatelessWidget {
             child: ThumbnailIconWidget(
               size: 64,
               iconPath: iconPath,
+              thumbnailIconType: ThumbnailIconType.network,
               isSelected: false,
               radius: 16,
               backgroundColor: kColorBgDefault,

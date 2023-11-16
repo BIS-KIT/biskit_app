@@ -4,13 +4,17 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/model/national_flag_model.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
+import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/model/user_nationality_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +28,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  List<TopicModel> fixTopics = [];
   MeetUpModel testModel = MeetUpModel(
     current_participants: 1,
     korean_count: 1,
@@ -41,7 +46,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       id: 65,
       name: 'TATAT',
       birth: '1999-11-11',
-      user_nationality: [],
+      user_nationality: [
+        UserNationalityModel(
+          id: 0,
+          nationality: NationalFlagModel(
+            code: 'kr',
+            en_name: '',
+            kr_name: '',
+            id: 0,
+          ),
+          user_id: -1,
+        ),
+      ],
       gender: 'male',
     ),
     participants_status: '외국인 모집',
@@ -54,9 +70,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     ],
   );
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  init() async {
+    fixTopics = await ref.read(utilRepositoryProvider).getTopics(
+          isCustom: false,
+        );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
+
     return SafeArea(
       bottom: false,
       child: Column(
@@ -92,11 +123,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             alignment: WrapAlignment.center,
                             runSpacing: 16,
                             children: [
-                              ...kCategoryList
+                              ...fixTopics
                                   .map(
                                     (e) => CategoryItemWidget(
-                                      iconPath: e['imgUrl']!,
-                                      text: e['value']!,
+                                      iconPath: e.icon_url,
+                                      text: e.kr_name,
                                     ),
                                   )
                                   .toList(),
