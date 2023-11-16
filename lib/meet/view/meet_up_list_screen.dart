@@ -5,7 +5,6 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
-import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
@@ -175,11 +174,15 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
 
   Padding _buildFilter() {
     final filterState = ref.watch(meetUpFilterProvider);
-    final List<MeetUpFilterModel> filterList = [];
+    final List<MeetUpFilterGroup> groupList = [];
 
-    for (var element in filterState.filterGroupList) {
-      filterList
-          .addAll(element.filterList.where((element) => element.isSeleted));
+    for (var element in filterState.filterGroupList
+        .where((g) => g.filterList.where((f) => f.isSeleted).isNotEmpty)) {
+      groupList.add(element);
+    }
+    for (var element in filterState.filterGroupList
+        .where((g) => g.filterList.where((f) => f.isSeleted).isEmpty)) {
+      groupList.add(element);
     }
 
     return Padding(
@@ -207,31 +210,43 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             rightIcon: 'assets/icons/ic_chevron_down_line_24.svg',
             rightIconColor: kColorContentWeaker,
           ),
-          if (filterState.isFilterSelected)
-            Expanded(
-              child: SizedBox(
-                height: 36,
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(
-                    left: 4,
-                    right: 20,
-                  ),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return ChipWidget(
-                      text: filterList[index].text,
-                      isSelected: true,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      width: 4,
-                    );
-                  },
-                  itemCount: filterList.length,
+          // if (filterState.isFilterSelected)
+          Expanded(
+            child: SizedBox(
+              height: 36,
+              child: ListView.separated(
+                padding: const EdgeInsets.only(
+                  left: 4,
+                  right: 20,
                 ),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return ChipWidget(
+                    text: groupList[index]
+                            .filterList
+                            .where((element) => element.isSeleted)
+                            .isEmpty
+                        ? groupList[index].groupText
+                        : groupList[index]
+                            .filterList
+                            .where((element) => element.isSeleted)
+                            .map((e) => e.text)
+                            .join(', '),
+                    isSelected: groupList[index]
+                        .filterList
+                        .where((element) => element.isSeleted)
+                        .isNotEmpty,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    width: 4,
+                  );
+                },
+                itemCount: groupList.length,
               ),
             ),
+          ),
         ],
       ),
     );
