@@ -38,13 +38,16 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
 
   Future<List<MeetUpFilterGroup>> getInitFixFilterGroupList() async {
     List<TopicModel> topicList =
-        await ref.read(createMeetUpProvider.notifier).getTopics();
+        await ref.read(createMeetUpProvider.notifier).getTopics(
+              isCustom: false,
+            );
     List<TagModel> tagList =
         await ref.read(createMeetUpProvider.notifier).getTags();
     return [
       MeetUpFilterGroup(
         groupText: '날짜',
         filterType: MeetUpFilterType.time,
+        filterViewType: MeetUpFilterViewType.days,
         filterList: [
           MeetUpFilterModel(
             text: '오늘',
@@ -71,6 +74,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       MeetUpFilterGroup(
         groupText: '요일',
         filterType: MeetUpFilterType.time,
+        filterViewType: MeetUpFilterViewType.week,
         filterList: [
           MeetUpFilterModel(
             text: '월',
@@ -112,6 +116,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       MeetUpFilterGroup(
         groupText: '시간',
         filterType: MeetUpFilterType.time,
+        filterViewType: MeetUpFilterViewType.time,
         filterList: [
           MeetUpFilterModel(
             text: '오전',
@@ -133,6 +138,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       MeetUpFilterGroup(
         groupText: '주최자 국적',
         filterType: MeetUpFilterType.national,
+        filterViewType: MeetUpFilterViewType.national,
         filterList: [
           MeetUpFilterModel(text: '한국인', isSeleted: false, value: 'KOREAN'),
           MeetUpFilterModel(text: '외국인', isSeleted: false, value: 'FOREIGNER'),
@@ -141,6 +147,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       MeetUpFilterGroup(
         groupText: '모임 주제',
         filterType: MeetUpFilterType.topic,
+        filterViewType: MeetUpFilterViewType.topic,
         filterList: topicList
             .map(
               (e) => MeetUpFilterModel(
@@ -154,6 +161,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       MeetUpFilterGroup(
         groupText: '태그',
         filterType: MeetUpFilterType.tag,
+        filterViewType: MeetUpFilterViewType.tag,
         filterList: tagList
             .map(
               (e) => MeetUpFilterModel(
@@ -234,24 +242,30 @@ class MeetUpState {
 
 enum MeetUpFilterType { tag, topic, time, national }
 
+enum MeetUpFilterViewType { tag, topic, time, days, week, national }
+
 class MeetUpFilterGroup {
   final String groupText;
   final MeetUpFilterType filterType;
+  final MeetUpFilterViewType filterViewType;
   final List<MeetUpFilterModel> filterList;
   MeetUpFilterGroup({
     required this.groupText,
     required this.filterType,
+    required this.filterViewType,
     required this.filterList,
   });
 
   MeetUpFilterGroup copyWith({
     String? groupText,
     MeetUpFilterType? filterType,
+    MeetUpFilterViewType? filterViewType,
     List<MeetUpFilterModel>? filterList,
   }) {
     return MeetUpFilterGroup(
       groupText: groupText ?? this.groupText,
       filterType: filterType ?? this.filterType,
+      filterViewType: filterViewType ?? this.filterViewType,
       filterList: filterList ?? this.filterList,
     );
   }
