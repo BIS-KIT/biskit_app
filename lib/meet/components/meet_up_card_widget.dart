@@ -268,9 +268,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     children: [
                       Row(
                         children: [
-                          const CircleAvatar(
-                            radius: 8,
-                            backgroundColor: Colors.amber,
+                          FlagWidget(
+                            flagCode: widget.model.creator.user_nationality[0]
+                                .nationality.code,
+                            size: 16,
                           ),
                           const SizedBox(
                             width: 4,

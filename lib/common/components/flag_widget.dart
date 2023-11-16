@@ -15,6 +15,9 @@ class FlagWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: size,
+      height: size,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(size),
