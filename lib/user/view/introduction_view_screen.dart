@@ -3,6 +3,7 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -19,80 +20,87 @@ class IntroductionViewScreen extends ConsumerWidget {
     final userState = ref.watch(userMeProvider);
     return Scaffold(
       backgroundColor: kColorBgElevation2,
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            // Appbar
-            _buildAppBar(context, (userState as UserModel)),
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              // Appbar
+              _buildAppBar(context, (userState as UserModel)),
 
-            // content
-            // if (userState is UserModel)
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 20,
-                ),
-                child: ListView.separated(
-                  itemBuilder: (context, index) => Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
-                      color: kColorBgDefault,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12),
+              // content
+              // if (userState is UserModel)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 20,
+                  ),
+                  child: ListView.separated(
+                    itemBuilder: (context, index) => Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: const BoxDecoration(
+                        color: kColorBgDefault,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x11495B7D),
+                            blurRadius: 20,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                          BoxShadow(
+                            color: Color(0x07495B7D),
+                            blurRadius: 1,
+                            offset: Offset(0, 0),
+                            spreadRadius: 0,
+                          )
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x11495B7D),
-                          blurRadius: 20,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x07495B7D),
-                          blurRadius: 1,
-                          offset: Offset(0, 0),
-                          spreadRadius: 0,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          userState.profile!.introductions[index].keyword,
-                          style: getTsBody16Sb(context).copyWith(
-                            color: kColorContentDefault,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            userState.profile!.introductions[index].keyword,
+                            style: getTsBody16Sb(context).copyWith(
+                              color: kColorContentDefault,
+                            ),
                           ),
-                        ),
-                        if (userState
-                            .profile!.introductions[index].context.isNotEmpty)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                userState.profile!.introductions[index].context,
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                          if (userState
+                              .profile!.introductions[index].context.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ),
-                            ],
-                          ),
-                      ],
+                                Text(
+                                  userState
+                                      .profile!.introductions[index].context,
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
                     ),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 12,
+                    ),
+                    itemCount: userState.profile!.introductions.length,
                   ),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 12,
-                  ),
-                  itemCount: userState.profile!.introductions.length,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
