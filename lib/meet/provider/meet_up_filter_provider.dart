@@ -211,6 +211,37 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     );
     await paginate();
   }
+
+  void onTapTopicAndTag({
+    required MeetUpFilterType type,
+    required int id,
+  }) async {
+    List<MeetUpFilterGroup> filterGroupList = await getInitFixFilterGroupList();
+    filterGroupList = filterGroupList.map(
+      (e) {
+        if (e.filterType == type) {
+          return e.copyWith(
+            filterList: e.filterList.map((f) {
+              if (f.value == '$id') {
+                return f.copyWith(
+                  isSeleted: true,
+                );
+              }
+              return f;
+            }).toList(),
+          );
+        } else {
+          return e;
+        }
+      },
+    ).toList();
+
+    await saveFilter(
+      filterGroupList: filterGroupList,
+      isSelected: true,
+      totalCount: await getMeetingsCount(filterGroupList),
+    );
+  }
 }
 
 class MeetUpState {

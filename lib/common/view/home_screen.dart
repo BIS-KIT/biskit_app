@@ -4,8 +4,12 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
+import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
+import 'package:biskit_app/meet/model/tag_model.dart';
+import 'package:biskit_app/meet/model/topic_model.dart';
+import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -24,6 +28,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void onTapCategory(TopicModel topicModel) {
+    ref.read(rootProvider.notifier).onTapBottomNav(1);
+    ref.read(meetUpFilterProvider.notifier).onTapTopicAndTag(
+          type: MeetUpFilterType.topic,
+          id: topicModel.id,
+        );
+  }
+
+  void onTapTag(TagModel tagModel) {
+    ref.read(rootProvider.notifier).onTapBottomNav(1);
+    ref.read(meetUpFilterProvider.notifier).onTapTopicAndTag(
+          type: MeetUpFilterType.tag,
+          id: tagModel.id,
+        );
   }
 
   @override
@@ -69,9 +89,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             children: [
                               ...homeState.fixTopics
                                   .map(
-                                    (e) => CategoryItemWidget(
-                                      iconPath: e.icon_url,
-                                      text: e.kr_name,
+                                    (e) => GestureDetector(
+                                      onTap: () {
+                                        onTapCategory(e);
+                                      },
+                                      child: CategoryItemWidget(
+                                        iconPath: e.icon_url,
+                                        text: e.kr_name,
+                                      ),
                                     ),
                                   )
                                   .toList(),
@@ -198,9 +223,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   children: [
                                     ...homeState.tags
                                         .map(
-                                          (t) => BtnTagWidget(
-                                            label: t.kr_name,
-                                            emoji: '',
+                                          (t) => GestureDetector(
+                                            onTap: () {
+                                              onTapTag(t);
+                                            },
+                                            child: BtnTagWidget(
+                                              label: t.kr_name,
+                                              emoji: '',
+                                            ),
                                           ),
                                         )
                                         .toList(),
