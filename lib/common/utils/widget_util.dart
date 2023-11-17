@@ -8,6 +8,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../components/filled_button_widget.dart';
 import '../const/colors.dart';
 
+/// widget 사이즈 반환
+Size? getWidgetSize(GlobalKey key) {
+  Size? size;
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    size = renderBox.size;
+  }
+  return size;
+}
+
 /// more 버튼 바텀 시트
 showReviewMoreBottomSheet({
   required BuildContext context,
