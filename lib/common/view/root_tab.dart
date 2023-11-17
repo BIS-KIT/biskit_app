@@ -1,6 +1,7 @@
 import 'package:biskit_app/chat/view/chat_room_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/home_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
@@ -20,10 +21,7 @@ class RootTab extends ConsumerStatefulWidget {
 
 class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
-  int index = 0;
   late TabController controller;
-  Color scafoldBackgroundColor = kColorBgElevation1;
-  // final DateFormat dayFormat = DateFormat('MM월 dd일', 'ko');
 
   @override
   void initState() {
@@ -32,6 +30,7 @@ class _RootTabState extends ConsumerState<RootTab>
     controller = TabController(length: 5, vsync: this);
 
     controller.addListener(tabListener);
+    ref.read(rootProvider.notifier).setTabController(controller);
   }
 
   @override
@@ -42,26 +41,15 @@ class _RootTabState extends ConsumerState<RootTab>
   }
 
   void tabListener() {
-    setState(() {
-      index = controller.index;
-      if (index == 3) {
-        scafoldBackgroundColor = kColorBgDefault;
-      } else if (index == 0) {
-        scafoldBackgroundColor = kColorBgDefault;
-      } else if (index == 1) {
-        scafoldBackgroundColor = kColorBgElevation1;
-      } else {
-        scafoldBackgroundColor = kColorBgElevation2;
-      }
-    });
+    ref.read(rootProvider.notifier).tabListener(controller.index);
   }
 
   @override
   Widget build(BuildContext context) {
-    // final userState = ref.watch(userMeProvider);
-    // logger.d((userState as UserModel).toJson());
+    final rootState = ref.watch(rootProvider);
+
     return DefaultLayout(
-      backgroundColor: scafoldBackgroundColor,
+      backgroundColor: rootState.scafoldBackgroundColor,
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,
@@ -89,10 +77,11 @@ class _RootTabState extends ConsumerState<RootTab>
               );
               return;
             } else {
-              controller.animateTo(index);
+              ref.read(rootProvider.notifier).onTapBottomNav(index);
+              // controller.animateTo(index);
             }
           },
-          currentIndex: index,
+          currentIndex: rootState.index,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           items: [
