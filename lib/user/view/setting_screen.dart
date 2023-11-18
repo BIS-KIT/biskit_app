@@ -3,6 +3,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/view/account_setting_screen.dart';
+import 'package:biskit_app/user/view/language_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -61,7 +62,14 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ListWidget(
               text: '언어',
               selectText: '한국어',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LanguageSettingScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '알림',
