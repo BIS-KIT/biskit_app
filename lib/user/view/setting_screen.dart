@@ -4,6 +4,8 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/view/account_setting_screen.dart';
 import 'package:biskit_app/user/view/language_setting_screen.dart';
+import 'package:biskit_app/user/view/notification_setting_screen.dart';
+import 'package:biskit_app/user/view/user_block_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -73,12 +75,26 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '알림',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationSettingScreen(),
+                  ),
+                );
+              },
             ),
             _buildDivider(),
             ListWidget(
               text: '차단 사용자 관리',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserBlockListScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '경고 내역',
