@@ -3,9 +3,12 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/view/account_setting_screen.dart';
+import 'package:biskit_app/user/view/announcement_screen.dart';
 import 'package:biskit_app/user/view/language_setting_screen.dart';
 import 'package:biskit_app/user/view/notification_setting_screen.dart';
+import 'package:biskit_app/user/view/terms_and_policies_screen.dart';
 import 'package:biskit_app/user/view/user_block_list_screen.dart';
+import 'package:biskit_app/user/view/warning_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -98,12 +101,26 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '경고 내역',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WarningHistoryScreen(),
+                  ),
+                );
+              },
             ),
             _buildDivider(),
             ListWidget(
               text: '공지사항',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AnnouncementScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '이용 가이드',
@@ -119,7 +136,14 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '약관 및 정책',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TermsAndPoliciesScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '앱 버전',
