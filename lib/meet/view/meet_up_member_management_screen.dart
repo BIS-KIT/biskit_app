@@ -261,15 +261,48 @@ class _MeetUpMemberManagementScreenState
                 const SizedBox(
                   height: 8,
                 ),
-                ...users.map(
-                  (e) => ProfileCardWidget(
-                    userNationalityModel: e.user_nationality[0],
-                    name: e.profile!.nick_name,
-                    profilePath: e.profile!.profile_photo,
-                    isCreator: widget.meetUpDetailModel.creator.id == e.id,
-                    onTap: () {
-                      onTapProfile(e);
-                    },
+                ...users.mapIndexed(
+                  (index, e) => Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ProfileCardWidget(
+                              userNationalityModel: e.user_nationality[0],
+                              name: e.profile!.nick_name,
+                              profilePath: e.profile!.profile_photo,
+                              isCreator:
+                                  widget.meetUpDetailModel.creator.id == e.id,
+                              onTap: () {
+                                // TODO 프로필 상세보기
+                              },
+                            ),
+                          ),
+                          if (widget.meetUpDetailModel.creator.id != e.id)
+                            GestureDetector(
+                              onTap: () {
+                                onTapProfile(e);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(6),
+                                child: SvgPicture.asset(
+                                  'assets/icons/ic_more_vertical_line_24.svg',
+                                  width: 24,
+                                  height: 24,
+                                  colorFilter: const ColorFilter.mode(
+                                    kColorContentWeakest,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (index != users.length - 1)
+                        const SizedBox(
+                          height: 4,
+                        ),
+                    ],
                   ),
                 ),
               ],

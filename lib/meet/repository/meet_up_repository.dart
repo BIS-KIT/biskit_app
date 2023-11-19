@@ -507,7 +507,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         isOk = true;
 
         // 채팅방 join
-        await ref.read(chatRepositoryProvider).goInChatRoom(
+        await ref.read(chatRepositoryProvider).inChatRoomUser(
               chatRoomUid: chatRoomUid,
               userId: userId,
             );
