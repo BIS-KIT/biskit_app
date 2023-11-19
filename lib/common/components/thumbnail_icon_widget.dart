@@ -52,7 +52,7 @@ class ThumbnailIconWidget extends StatelessWidget {
               ? SvgPicture.asset(
                   iconPath!,
                 )
-              : Image.network(
+              : SvgPicture.network(
                   iconPath!,
                   width: iconSize,
                   height: iconSize,

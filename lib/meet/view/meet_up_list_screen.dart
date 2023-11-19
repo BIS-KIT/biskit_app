@@ -9,7 +9,7 @@ import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
-import 'package:biskit_app/meet/view/meet_up_screen.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -280,8 +280,8 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MeetUpScreen(
-                    meetUpId: meetUpModel.id,
+                  builder: (context) => MeetUpDetailScreen(
+                    meetUpModel: meetUpModel,
                   ),
                 ),
               );

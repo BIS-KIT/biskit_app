@@ -101,8 +101,10 @@ class UserModel extends UserModelBase {
       sns_id: map['sns_id'],
       profile:
           map['profile'] != null ? ProfileModel.fromMap(map['profile']) : null,
-      user_nationality: List<UserNationalityModel>.from(
-          map['user_nationality']?.map((x) => UserNationalityModel.fromMap(x))),
+      user_nationality: map['user_nationality'] == null
+          ? []
+          : List<UserNationalityModel>.from(map['user_nationality']
+              ?.map((x) => UserNationalityModel.fromMap(x))),
     );
   }
 
