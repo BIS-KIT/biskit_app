@@ -1,6 +1,10 @@
+import 'package:biskit_app/chat/repository/chat_repository.dart';
+import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/components/badge_emoji_widget.dart';
 import 'package:biskit_app/common/components/badge_widget.dart';
+import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/number_badge_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -8,8 +12,11 @@ import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_member_management_screen.dart';
 import 'package:biskit_app/profile/components/profile_card_with_subtext_widget.dart';
+import 'package:biskit_app/profile/model/available_language_model.dart';
+import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +43,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   UserModel? userState;
   MeetUpDetailModel? meetUpDetailModel;
+  List<AvailableLanguageModel> availableLangList = [];
+  Set<LanguageModel> langSet = <LanguageModel>{};
   final ScrollController scrollController = ScrollController();
   bool isTitleView = false;
 
@@ -59,17 +68,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         }
         setState(() {});
       }
-      // if (scrollController.offset > 140 && !isTitleView) {
-      //   setState(() {
-      //     isTitleView = true;
-      //   });
-      // }
-
-      // if (scrollController.offset < 140 && isTitleView) {
-      //   setState(() {
-      //     isTitleView = false;
-      //   });
-      // }
     });
     super.initState();
   }
@@ -78,6 +76,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     meetUpDetailModel = await ref
         .read(meetUpRepositoryProvider)
         .getMeetUpDetail(widget.meetUpModel.id);
+
+    for (var u in meetUpDetailModel!.participants) {
+      availableLangList.addAll(u.profile!.available_languages);
+    }
+    for (var lang in availableLangList) {
+      langSet.add(lang.language);
+    }
     setState(() {});
   }
 
@@ -97,14 +102,132 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   // 참여신청
   onTapJoin() async {
-    await ref.read(meetUpRepositoryProvider).postJoinRequest(
-          meeting_id: widget.meetUpModel.id,
-          user_id: userState!.id,
-        );
+    showConfirmModal(
+      context: context,
+      title: '참여하시겠어요?',
+      leftButton: '취소',
+      leftCall: () {
+        Navigator.pop(context);
+      },
+      rightButton: '참여신청',
+      rightBackgroundColor: kColorBgPrimary,
+      rightTextColor: kColorContentOnBgPrimary,
+      rightCall: () async {
+        await ref.read(meetUpRepositoryProvider).postJoinRequest(
+              meeting_id: widget.meetUpModel.id,
+              user_id: userState!.id,
+            );
+        if (!mounted) return;
+        Navigator.pop(context);
+      },
+    );
   }
 
   // 프로필 선택
-  onTapProfile(UserModel userModel) {}
+  onTapProfile(UserModel userModel) {
+    // TODO
+  }
+
+  // 채팅하기 버튼
+  onTapChatting() async {
+    if (meetUpDetailModel == null || userState == null) return;
+    await ref.read(chatRepositoryProvider).goChatRoom(
+          chatRoomUid: meetUpDetailModel!.chat_id,
+          user: userState!,
+        );
+
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          chatRoomUid: meetUpDetailModel!.chat_id,
+        ),
+      ),
+    );
+  }
+
+  onTapMore() {
+    if (userState!.id == widget.meetUpModel.creator.id) {
+      // 모임장
+      showMoreBottomSheet(
+        context: context,
+        list: [
+          MoreButton(
+            text: '공유하기',
+            color: kColorContentDefault,
+            onTap: () {
+              // TODO
+            },
+          ),
+          MoreButton(
+            text: '수정하기',
+            color: kColorContentDefault,
+            onTap: () {
+              // TODO
+            },
+          ),
+          MoreButton(
+            text: '삭제하기',
+            color: kColorContentError,
+            onTap: () {
+              // TODO
+            },
+          ),
+        ],
+      );
+    } else if (meetUpDetailModel!.participants
+        .any((element) => element.id == userState!.id)) {
+      // 참여자
+      showMoreBottomSheet(
+        context: context,
+        list: [
+          MoreButton(
+            text: '공유하기',
+            color: kColorContentDefault,
+            onTap: () {
+              // TODO
+            },
+          ),
+          MoreButton(
+            text: '모임 나가기',
+            color: kColorContentError,
+            onTap: () {
+              // TODO
+            },
+          ),
+          MoreButton(
+            text: '신고하기',
+            color: kColorContentError,
+            onTap: () {
+              // TODO
+            },
+          ),
+        ],
+      );
+    } else {
+      // 비참가인
+      showMoreBottomSheet(
+        context: context,
+        list: [
+          MoreButton(
+            text: '공유하기',
+            color: kColorContentDefault,
+            onTap: () {
+              // TODO
+            },
+          ),
+          MoreButton(
+            text: '신고하기',
+            color: kColorContentError,
+            onTap: () {
+              // TODO
+            },
+          ),
+        ],
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -224,9 +347,71 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
                           // TODO
                           // 모임 참가자들의 언어 레벨
-                          const Padding(
-                            padding: EdgeInsets.all(20),
-                          ),
+                          if (availableLangList.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      "모임 참가자들의 언어 레벨",
+                                      style: getTsHeading18(context).copyWith(
+                                        color: kColorContentDefault,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    height: 36,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) =>
+                                          ChipWidget(
+                                        text: langSet.elementAt(index).kr_name,
+                                        isSelected: meetUpDetailModel!.languages
+                                            .map((e) => e.id)
+                                            .contains(
+                                                langSet.elementAt(index).id),
+                                        selectedColor: kColorBgInverseWeak,
+                                        selectedBorderColor:
+                                            kColorBgInverseWeak,
+                                        selectedTextColor: kColorContentInverse,
+                                      ),
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                        width: 6,
+                                      ),
+                                      itemCount: langSet.length,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 24, horizontal: 20),
+                                    decoration: const BoxDecoration(
+                                        color: kColorBgElevation1,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(12))),
+                                    child: Column(
+                                      children: [
+                                        // TODO: 차트
+                                        const SizedBox(height: 24),
+                                        Text(
+                                          "한국어가 능숙한 사람이 가장 많아요",
+                                          style: getTsBody16Sb(context)
+                                              .copyWith(
+                                                  color: kColorContentWeak),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                         ],
                       )
                     ],
@@ -255,37 +440,46 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     );
   }
 
-  GestureDetector _buildBottomButton() {
-    if (userState!.id == widget.meetUpModel.creator.id) {
-      return GestureDetector(
-        onTap: () {
-          onTapMembersManagement();
-        },
-        child: const FilledButtonWidget(
-          text: '모임원 관리',
-          isEnable: true,
-        ),
-      );
-    } else if (meetUpDetailModel!.participants
-        .any((element) => element.id == userState!.id)) {
-      return GestureDetector(
-        onTap: () {
-          onTapMembersManagement();
-        },
-        child: const FilledButtonWidget(
-          text: '채팅하기',
-          isEnable: true,
-        ),
-      );
+  Widget _buildBottomButton() {
+    if (meetUpDetailModel == null) return Container();
+
+    if (meetUpDetailModel!.is_active) {
+      if (userState!.id == widget.meetUpModel.creator.id) {
+        return GestureDetector(
+          onTap: () {
+            onTapMembersManagement();
+          },
+          child: const FilledButtonWidget(
+            text: '모임원 관리',
+            isEnable: true,
+          ),
+        );
+      } else if (meetUpDetailModel!.participants
+          .any((element) => element.id == userState!.id)) {
+        return GestureDetector(
+          onTap: () {
+            onTapChatting();
+          },
+          child: const FilledButtonWidget(
+            text: '채팅하기',
+            isEnable: true,
+          ),
+        );
+      } else {
+        return GestureDetector(
+          onTap: () {
+            onTapJoin();
+          },
+          child: const FilledButtonWidget(
+            text: '참여신청',
+            isEnable: true,
+          ),
+        );
+      }
     } else {
-      return GestureDetector(
-        onTap: () {
-          onTapJoin();
-        },
-        child: const FilledButtonWidget(
-          text: '참여신청',
-          isEnable: true,
-        ),
+      return const FilledButtonWidget(
+        text: '종료된 모임이에요',
+        isEnable: false,
       );
     }
   }
@@ -354,23 +548,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           ),
           GestureDetector(
             onTap: () {
-              showMoreBottomSheet(
-                context: context,
-                list: [
-                  MoreButton(
-                    text: '공유하기',
-                    color: kColorContentDefault,
-                  ),
-                  MoreButton(
-                    text: '수정하기',
-                    color: kColorContentDefault,
-                  ),
-                  MoreButton(
-                    text: '삭제하기',
-                    color: kColorContentError,
-                  ),
-                ],
-              );
+              onTapMore();
             },
             child: Container(
               width: 44,
@@ -506,18 +684,19 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             style:
                 getTsHeading18(context).copyWith(color: kColorContentDefault),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          if (meetUpDetailModel != null)
+          if (meetUpDetailModel != null &&
+              meetUpDetailModel!.description.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.only(top: 8),
               child: Text(
                 meetUpDetailModel!.description,
                 style:
                     getTsBody16Rg(context).copyWith(color: kColorContentWeaker),
               ),
             ),
+          const SizedBox(
+            height: 16,
+          ),
           Wrap(
             spacing: 6,
             runSpacing: 8,
@@ -713,7 +892,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              if (widget.meetUpModel.participants_status != '')
+                              if (widget
+                                  .meetUpModel.participants_status.isNotEmpty)
                                 BadgeWidget(
                                   text: widget.meetUpModel.participants_status,
                                   textColor: kColorContentSecondary,
@@ -732,7 +912,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         padding: const EdgeInsets.all(2),
@@ -754,12 +934,25 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             runSpacing: 6,
                             maxLines: 2,
                             children: [
-                              ...meetUpDetailModel!.languages.map(
-                                (lang) => Text(
-                                  lang.kr_name,
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
+                              ...meetUpDetailModel!.languages.mapIndexed(
+                                (index, lang) => Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    NumberBadgeWidget(
+                                      number: index + 1,
+                                      backgroundColor: kColorBgElevation2,
+                                      numberColor: kColorContentWeaker,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      lang.kr_name,
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeak,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

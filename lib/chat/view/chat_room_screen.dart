@@ -23,29 +23,20 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
     required ChatRoomModel chatRoom,
     required UserModel user,
   }) async {
-    // 마지막 메시지 읽음으로 변경
-    ref.read(chatRepositoryProvider).lastMsgRead(
-          chatRoom: chatRoom,
-          userId: user.id,
+    await ref.read(chatRepositoryProvider).goChatRoom(
+          chatRoomUid: chatRoom.uid,
+          user: user,
         );
-
-    if (!chatRoom.firstUserInfoList
-        .any((element) => element.userId == user.id)) {
-      // 최초 채팅방 입장시 처리
-      await ref.read(chatRepositoryProvider).firstJoin(
-            chatRoom: chatRoom,
-            user: user,
-          );
-    }
 
     if (!mounted) return;
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatScreen(
-            chatRoomUid: chatRoom.uid,
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          chatRoomUid: chatRoom.uid,
+        ),
+      ),
+    );
   }
 
   @override

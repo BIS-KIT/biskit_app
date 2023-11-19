@@ -73,7 +73,7 @@ class ChatRepository {
         );
   }
 
-  goInChatRoom({required String chatRoomUid, required int userId}) async {
+  inChatRoomUser({required String chatRoomUid, required int userId}) async {
     await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
       'joinUsers': FieldValue.arrayUnion([userId])
     });
@@ -297,5 +297,30 @@ class ChatRepository {
       }
     }
     return path;
+  }
+
+  goChatRoom({
+    required String chatRoomUid,
+    required UserModel user,
+  }) async {
+    final DocumentSnapshot chatDoc = await getChatRoomById(chatRoomUid);
+    logger.d(chatDoc.data());
+    ChatRoomModel? chatRoomModel =
+        ChatRoomModel.fromMap((chatDoc.data() as Map<String, dynamic>));
+
+    // 마지막 메시지 읽음으로 변경
+    lastMsgRead(
+      chatRoom: chatRoomModel,
+      userId: user.id,
+    );
+
+    if (!chatRoomModel.firstUserInfoList
+        .any((element) => element.userId == user.id)) {
+      // 최초 채팅방 입장시 처리
+      await firstJoin(
+        chatRoom: chatRoomModel,
+        user: user,
+      );
+    }
   }
 }

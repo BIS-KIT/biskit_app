@@ -10,6 +10,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
@@ -333,7 +334,17 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                       model: e,
                                       isHostTag: userState.id == e.creator.id,
                                       isParticipantsStatusTag: false,
-                                      onTapMeetUp: () {},
+                                      onTapMeetUp: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                MeetUpDetailScreen(
+                                              meetUpModel: e,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                     if (index !=
                                         profileMeetingState.dataList.length - 1)
