@@ -17,6 +17,13 @@ class RootStateNotifier extends StateNotifier<RootState> {
     //
   }
 
+  init() {
+    state = state.copyWith(
+      index: 0,
+      scafoldBackgroundColor: kColorBgDefault,
+    );
+  }
+
   setTabController(TabController controller) {
     tabController = controller;
   }
