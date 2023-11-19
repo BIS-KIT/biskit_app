@@ -11,6 +11,7 @@ import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +166,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             model: homeState.meetings[0],
                                             sizeType: MeetUpCardSizeType.M,
                                             width: size.width - 40,
-                                            onTapMeetUp: () {},
+                                            onTapMeetUp: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MeetUpDetailScreen(
+                                                    meetUpModel:
+                                                        homeState.meetings[0],
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           )
                                         : ListView.separated(
                                             padding: const EdgeInsets.symmetric(
@@ -177,7 +189,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                               model: homeState.meetings[index],
                                               sizeType: MeetUpCardSizeType.M,
                                               width: size.width - 80,
-                                              onTapMeetUp: () {},
+                                              onTapMeetUp: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MeetUpDetailScreen(
+                                                      meetUpModel: homeState
+                                                          .meetings[index],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                             separatorBuilder:
                                                 (context, index) =>

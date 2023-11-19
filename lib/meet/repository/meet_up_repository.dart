@@ -1,3 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
@@ -9,6 +12,7 @@ import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/model/meet_up_request_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -387,5 +391,130 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     } catch (e) {
       logger.e(e.toString());
     }
+  }
+
+  postJoinRequest({
+    required int meeting_id,
+    required int user_id,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/join/request',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: {
+          'meeting_id': meeting_id,
+          'user_id': user_id,
+        },
+      );
+
+      if (res.statusCode == 201) {
+        logger.d(res);
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
+  }
+
+  /// 모임 참가 신청 리스트
+  Future<List<MeetUpRequestModel>> getMeetingRequests(int id) async {
+    List<MeetUpRequestModel> list = [];
+    try {
+      final res = await dio.get(
+        '${baseUrl}s/$id/requests',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'skip': 0,
+          'limit': 20,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        list = List.from(
+            res.data['requests'].map((e) => MeetUpRequestModel.fromMap(e)));
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return list;
+  }
+
+  postJoinReject(int id) async {
+    bool isOk = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/join/reject',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'obj_id': id,
+        },
+      );
+
+      logger.d(res);
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
+  }
+
+  postJoinApprove({
+    required int id,
+    required String chatRoomUid,
+    required int userId,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/join/approve',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'obj_id': id,
+        },
+      );
+
+      logger.d(res);
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        isOk = true;
+
+        // 채팅방 join
+        await ref.read(chatRepositoryProvider).goInChatRoom(
+              chatRoomUid: chatRoomUid,
+              userId: userId,
+            );
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
   }
 }

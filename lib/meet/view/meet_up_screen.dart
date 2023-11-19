@@ -558,78 +558,80 @@ Container _participants(BuildContext context, MeetUpDetailModel meetUpDetail) {
             ),
 
             // profileList
-            ...meetUpDetail.participants.map((participant) => (Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Builder(
-                        builder: (context) {
-                          return AvatarWithFlagWidget(
-                            flagPath: participant.user_nationality.isEmpty
-                                ? null
-                                : '$kS3Url$kS3Flag43Path/${participant.user_nationality[0].nationality.code}.svg',
-                          );
-                        },
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    participant.name,
-                                    style: getTsBody16Sb(context)
-                                        .copyWith(color: kColorContentWeak),
-                                  ),
-                                  if (participant.id == meetUpDetail.creator.id)
-                                    SvgPicture.asset(
-                                      'assets/icons/ic_crown_circle_fill_24.svg',
-                                      width: 24,
-                                      height: 24,
-                                      colorFilter: const ColorFilter.mode(
-                                        kColorContentPrimary,
-                                        BlendMode.srcIn,
-                                      ),
+            ...meetUpDetail.participants.map(
+              (participant) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Builder(
+                      builder: (context) {
+                        return AvatarWithFlagWidget(
+                          flagPath: participant.user_nationality.isEmpty
+                              ? null
+                              : '$kS3Url$kS3Flag43Path/${participant.user_nationality[0].nationality.code}.svg',
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  participant.name,
+                                  style: getTsBody16Sb(context)
+                                      .copyWith(color: kColorContentWeak),
+                                ),
+                                if (participant.id == meetUpDetail.creator.id)
+                                  SvgPicture.asset(
+                                    'assets/icons/ic_crown_circle_fill_24.svg',
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: const ColorFilter.mode(
+                                      kColorContentPrimary,
+                                      BlendMode.srcIn,
                                     ),
-                                ],
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              "${participant.profile?.user_university.university.kr_name} · ${participant.profile?.user_university.department} ${participant.profile?.user_university.education_status}",
+                              style: getTsBody14Rg(context)
+                                  .copyWith(color: kColorContentWeaker),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        ExtendedWrap(
+                          spacing: 4,
+                          runSpacing: 4,
+                          maxLines: 2,
+                          children: [
+                            ...participant.profile!.introductions.map(
+                              (introduction) => BadgeWidget(
+                                text: introduction.keyword,
+                                backgroundColor: kColorBgElevation1,
+                                textColor: kColorContentWeaker,
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                "${participant.profile?.user_university.university.kr_name} · ${participant.profile?.user_university.department} ${participant.profile?.user_university.education_status}",
-                                style: getTsBody14Rg(context)
-                                    .copyWith(color: kColorContentWeaker),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          ExtendedWrap(
-                            spacing: 4,
-                            runSpacing: 4,
-                            maxLines: 2,
-                            children: [
-                              ...participant.profile!.introductions.map(
-                                (introduction) => (BadgeWidget(
-                                  text: introduction.keyword,
-                                  backgroundColor: kColorBgElevation1,
-                                  textColor: kColorContentWeaker,
-                                )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )))
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ],
