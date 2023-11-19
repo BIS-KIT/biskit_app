@@ -1,12 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
 
@@ -15,6 +17,7 @@ final userMeProvider =
   final storage = ref.watch(secureStorageProvider);
 
   return UserMeStateNotifier(
+    ref: ref,
     authRepository: ref.watch(authRepositoryProvider),
     repository: ref.watch(usersRepositoryProvider),
     storage: storage,
@@ -22,10 +25,12 @@ final userMeProvider =
 });
 
 class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
+  final Ref ref;
   final AuthRepository authRepository;
   final UsersRepository repository;
   final FlutterSecureStorage storage;
   UserMeStateNotifier({
+    required this.ref,
     required this.authRepository,
     required this.repository,
     required this.storage,
@@ -124,6 +129,7 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
 
   Future<void> logout() async {
     state = null;
+    ref.read(rootProvider.notifier).init();
 
     await Future.wait(
       [
