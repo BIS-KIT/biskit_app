@@ -368,7 +368,7 @@ showConfirmModal({
   String rightButton = '확인',
   Color rightBackgroundColor = kColorContentError,
   Color rightTextColor = kColorBgDefault,
-  required Function leftCall,
+  Function? leftCall,
   required Function rightCall,
 }) {
   return showDialog(
@@ -427,21 +427,23 @@ showConfirmModal({
         actions: [
           Row(
             children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    leftCall();
-                  },
-                  child: OutlinedButtonWidget(
-                    text: leftButton,
-                    isEnable: true,
-                    height: 44,
+              if (leftCall != null)
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      leftCall();
+                    },
+                    child: OutlinedButtonWidget(
+                      text: leftButton,
+                      isEnable: true,
+                      height: 44,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
+              if (leftCall != null)
+                const SizedBox(
+                  width: 8,
+                ),
               Expanded(
                 child: GestureDetector(
                   onTap: () {

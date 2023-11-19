@@ -336,7 +336,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const SetPasswordScreen(
-                          title: '',
+                          pageType: PageType.register,
                         ),
                       ));
                 },

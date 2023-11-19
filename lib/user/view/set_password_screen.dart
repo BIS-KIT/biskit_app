@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
+import 'package:biskit_app/user/view/setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,18 +20,21 @@ import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/set_password_completed_screen.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+// 비밀번호 설정 페이지로 이동하는 페이지 1. 가입 2. 찾기 3. 재설정
+enum PageType { register, find, reset }
+
 class SetPasswordScreen extends ConsumerStatefulWidget {
   static String get routeName => 'setPassword';
 
   final SignUpModel? signUpModel;
+  final PageType pageType;
 
-  final String title;
   final String? token;
   const SetPasswordScreen({
     super.key,
     this.signUpModel,
     this.token,
-    required this.title,
+    required this.pageType,
   });
 
   @override
@@ -60,7 +66,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
     confirmPasswordFocusNode.dispose();
   }
 
-  changePassword() async {
+  findAndResetPassword() async {
     context.loaderOverlay.show();
     try {
       bool? res = await ref
@@ -78,10 +84,32 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
     }
   }
 
+  changePassword() async {
+    context.loaderOverlay.show();
+    try {
+      bool? res = await ref
+          .read(authRepositoryProvider)
+          .changePassword(newPassword: password);
+      if (res) {
+        context.pushReplacementNamed(SettingScreen.routeName);
+      } else {
+        setState(() {
+          confirmPasswordError = '비밀번호 재설정에 실패했습니다.';
+        });
+      }
+    } finally {
+      context.loaderOverlay.hide();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-        title: widget.title,
+        title: widget.pageType == PageType.register
+            ? ''
+            : widget.pageType == PageType.find
+                ? '비밀번호 재설정'
+                : '비밀번호 변경',
         child: SafeArea(
           child: Column(
             children: [
@@ -110,8 +138,12 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                             }
                           },
                           child: TextInputWidget(
-                            title: '비밀번호',
-                            hintText: '비밀번호를 입력해주세요',
+                            title: widget.pageType == PageType.register
+                                ? '비밀번호'
+                                : '새 비밀번호',
+                            hintText: widget.pageType == PageType.register
+                                ? '비밀번호를 입력해주세요'
+                                : '새 비밀번호를 입력해주세요',
                             errorText: passwordError,
                             onChanged: (value) {
                               setState(() {
@@ -212,29 +244,38 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                 child: GestureDetector(
                   onTap: () {
                     if (!isActiveConfirmButton) return;
-                    if (widget.title.isEmpty) {
-                      // 회원가입시
+                    // 회원가입
+                    if (widget.pageType == PageType.register) {
                       context.pushNamed(
                         NameBirthGenderScreen.routeName,
                         extra: widget.signUpModel!.copyWith(
                           password: password,
                         ),
                       );
-                    } else {
-                      // 비밀번호 재설정
+                    }
+                    // 비밀번호 찾기
+                    else if (widget.pageType == PageType.find) {
+                      findAndResetPassword();
+                    }
+                    // 비밀번호 재설정
+                    else if (widget.pageType == PageType.reset) {
                       changePassword();
                     }
                   },
                   child: MediaQuery.of(context).viewInsets.bottom != 0
                       ? FullBleedButtonWidget(
-                          text: widget.title.isEmpty ? '다음' : '완료',
+                          text: widget.pageType == PageType.register
+                              ? '다음'
+                              : '완료',
                           isEnable: isActiveConfirmButton,
                         )
                       : Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 34),
                           child: FilledButtonWidget(
-                              text: widget.title.isEmpty ? '다음' : '완료',
+                              text: widget.pageType == PageType.register
+                                  ? '다음'
+                                  : '완료',
                               isEnable: isActiveConfirmButton),
                         ),
                 ),

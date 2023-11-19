@@ -4,6 +4,8 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:biskit_app/user/view/account_delete_step_1_screen.dart';
+import 'package:biskit_app/user/view/current_password_verify_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -95,7 +97,14 @@ class AccountSettingScreen extends ConsumerWidget {
           ),
           ListWidget(
             text: '비밀번호 변경',
-            onTapCallback: () {},
+            onTapCallback: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CurrentPasswordVerifyScreen(),
+                ),
+              );
+            },
           ),
           ListWidget(
             text: '로그아웃',
@@ -123,19 +132,30 @@ class AccountSettingScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: 16,
-                      bottom: 16,
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: Text(
-                      '계정 삭제',
-                      style: getTsBody14Rg(context).copyWith(
-                        color: kColorContentWeakest,
-                        decoration: TextDecoration.underline,
-                        decorationColor: kColorContentWeakest,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AccountDeleteStep1Screen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                        top: 16,
+                        bottom: 16,
+                        left: 20,
+                        right: 20,
+                      ),
+                      child: Text(
+                        '계정 삭제',
+                        style: getTsBody14Rg(context).copyWith(
+                          color: kColorContentWeakest,
+                          decoration: TextDecoration.underline,
+                          decorationColor: kColorContentWeakest,
+                        ),
                       ),
                     ),
                   ),

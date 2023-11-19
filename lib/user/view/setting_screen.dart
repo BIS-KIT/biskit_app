@@ -3,11 +3,18 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/view/account_setting_screen.dart';
+import 'package:biskit_app/user/view/announcement_screen.dart';
+import 'package:biskit_app/user/view/language_setting_screen.dart';
+import 'package:biskit_app/user/view/notification_setting_screen.dart';
+import 'package:biskit_app/user/view/terms_and_policies_screen.dart';
+import 'package:biskit_app/user/view/user_block_list_screen.dart';
+import 'package:biskit_app/user/view/warning_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'SettingScreen';
   const SettingScreen({super.key});
 
   @override
@@ -60,25 +67,60 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ListWidget(
               text: '언어',
               selectText: '한국어',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LanguageSettingScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '알림',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationSettingScreen(),
+                  ),
+                );
+              },
             ),
             _buildDivider(),
             ListWidget(
               text: '차단 사용자 관리',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserBlockListScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '경고 내역',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WarningHistoryScreen(),
+                  ),
+                );
+              },
             ),
             _buildDivider(),
             ListWidget(
               text: '공지사항',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AnnouncementScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '이용 가이드',
@@ -94,7 +136,14 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '약관 및 정책',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TermsAndPoliciesScreen(),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '앱 버전',
