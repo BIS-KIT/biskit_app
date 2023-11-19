@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, constant_identifier_names
 
+/// 인증상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
 enum VerificationStatus {
   PENDING,
   VERIFIED,

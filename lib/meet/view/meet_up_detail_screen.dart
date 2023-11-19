@@ -3,11 +3,13 @@ import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_member_management_screen.dart';
+import 'package:biskit_app/profile/components/profile_card_with_subtext_widget.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
   final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
 
+  UserModel? userState;
   MeetUpDetailModel? meetUpDetailModel;
   final ScrollController scrollController = ScrollController();
   bool isTitleView = false;
@@ -78,6 +81,31 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     setState(() {});
   }
 
+  // 모임원 관리
+  onTapMembersManagement() async {
+    if (meetUpDetailModel == null) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MeetUpMemberManagementScreen(
+          meetUpDetailModel: meetUpDetailModel!,
+        ),
+      ),
+    );
+    await init();
+  }
+
+  // 참여신청
+  onTapJoin() async {
+    await ref.read(meetUpRepositoryProvider).postJoinRequest(
+          meeting_id: widget.meetUpModel.id,
+          user_id: userState!.id,
+        );
+  }
+
+  // 프로필 선택
+  onTapProfile(UserModel userModel) {}
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -86,7 +114,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    userState = ref.watch(userMeProvider) as UserModel;
+    // final size = MediaQuery.of(context).size;
     final paddig = MediaQuery.of(context).padding;
     return Scaffold(
       backgroundColor: kColorBgDefault,
@@ -162,70 +191,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                   ),
 
                                   // location
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Container(
-                                      decoration: ShapeDecoration(
-                                        color: kColorBgDefault,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        shadows: const [
-                                          BoxShadow(
-                                            color: Color(0x11495B7D),
-                                            blurRadius: 20,
-                                            offset: Offset(0, 4),
-                                            spreadRadius: 0,
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0x07495B7D),
-                                            blurRadius: 1,
-                                            offset: Offset(0, 0),
-                                            spreadRadius: 0,
-                                          )
-                                        ],
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                        horizontal: 16,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/icons/ic_pin_fill_24.svg',
-                                            width: 20,
-                                            height: 20,
-                                            colorFilter: const ColorFilter.mode(
-                                              kColorContentWeaker,
-                                              BlendMode.srcIn,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              widget.meetUpModel.location,
-                                              maxLines: 1,
-                                              style: getTsBody14Rg(context)
-                                                  .copyWith(
-                                                color: kColorContentWeak,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          SvgPicture.asset(
-                                            'assets/icons/ic_chevron_right_line_24.svg',
-                                            width: 24,
-                                            height: 24,
-                                            colorFilter: const ColorFilter.mode(
-                                              kColorContentWeakest,
-                                              BlendMode.srcIn,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                  _buildLocation(context),
 
                                   const SizedBox(
                                     height: 24,
@@ -247,50 +213,28 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                           )
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          bottom: 20,
-                          right: 20,
-                        ),
-                        color: kColorBgDefault,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              "모임 소개",
-                              style: getTsHeading18(context)
-                                  .copyWith(color: kColorContentDefault),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            if (meetUpDetailModel != null)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: Text(
-                                  meetUpDetailModel!.description,
-                                  style: getTsBody16Rg(context)
-                                      .copyWith(color: kColorContentWeaker),
-                                ),
-                              ),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 8,
-                              children: [
-                                ...widget.meetUpModel.tags.map(
-                                  (tag) => BadgeEmojiWidget(
-                                    label: tag.kr_name,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // 모임 소개
+                          _buildIntroArea(context),
+
+                          // 참가자
+                          _buildJoinList(context),
+
+                          // TODO
+                          // 모임 참가자들의 언어 레벨
+                          const Padding(
+                            padding: EdgeInsets.all(20),
+                          ),
+                        ],
                       )
                     ],
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 26,
               ),
               Container(
                 padding: const EdgeInsets.only(
@@ -299,98 +243,358 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                   bottom: 20,
                   right: 20,
                 ),
-                child: const FilledButtonWidget(
-                  text: '참여신청',
-                  isEnable: true,
-                ),
+                child: _buildBottomButton(),
               ),
             ],
           ),
-          Container(
-            padding: EdgeInsets.only(
-              top: 2 + paddig.top,
-              bottom: 2,
-              left: 10,
-              right: 10,
+
+          // Appbar
+          _buildAppBar(paddig, context),
+        ],
+      ),
+    );
+  }
+
+  GestureDetector _buildBottomButton() {
+    if (userState!.id == widget.meetUpModel.creator.id) {
+      return GestureDetector(
+        onTap: () {
+          onTapMembersManagement();
+        },
+        child: const FilledButtonWidget(
+          text: '모임원 관리',
+          isEnable: true,
+        ),
+      );
+    } else if (meetUpDetailModel!.participants
+        .any((element) => element.id == userState!.id)) {
+      return GestureDetector(
+        onTap: () {
+          onTapMembersManagement();
+        },
+        child: const FilledButtonWidget(
+          text: '채팅하기',
+          isEnable: true,
+        ),
+      );
+    } else {
+      return GestureDetector(
+        onTap: () {
+          onTapJoin();
+        },
+        child: const FilledButtonWidget(
+          text: '참여신청',
+          isEnable: true,
+        ),
+      );
+    }
+  }
+
+  Container _buildAppBar(EdgeInsets paddig, BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: 2 + paddig.top,
+        bottom: 2,
+        left: 10,
+        right: 10,
+      ),
+      decoration: BoxDecoration(
+        color: kColorBgDefault.withOpacity(opacity),
+        border: opacity < 0.2
+            ? null
+            : Border(
+                bottom: BorderSide(
+                  width: opacity,
+                  color: kColorBorderDefalut,
+                ),
+              ),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              width: 44,
+              height: 44,
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(10),
+              child: SvgPicture.asset(
+                'assets/icons/ic_arrow_back_ios_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentDefault,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
-            decoration: BoxDecoration(
-              color: kColorBgDefault.withOpacity(opacity),
-              border: opacity < 0.2
-                  ? null
-                  : Border(
-                      bottom: BorderSide(
-                        width: opacity,
-                        color: kColorBorderDefalut,
-                      ),
-                    ),
+          ),
+          const SizedBox(
+            width: 44,
+          ),
+          Expanded(
+            child: Opacity(
+              // duration: const Duration(seconds: 1),
+              opacity: opacity,
+              child: Text(
+                widget.meetUpModel.name,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: getTsBody16Sb(context).copyWith(
+                  color: kColorContentDefault,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 44,
+          ),
+          GestureDetector(
+            onTap: () {
+              showMoreBottomSheet(
+                context: context,
+                list: [
+                  MoreButton(
+                    text: '공유하기',
+                    color: kColorContentDefault,
+                  ),
+                  MoreButton(
+                    text: '수정하기',
+                    color: kColorContentDefault,
+                  ),
+                  MoreButton(
+                    text: '삭제하기',
+                    color: kColorContentError,
+                  ),
+                ],
+              );
+            },
+            child: Container(
+              width: 44,
+              height: 44,
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(10),
+              child: SvgPicture.asset(
+                'assets/icons/ic_more_horiz_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentDefault,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _buildJoinList(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
             ),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    constraints: const BoxConstraints(),
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_arrow_back_ios_line_24.svg',
-                      width: 24,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentDefault,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
+                Text(
+                  "참가자",
+                  style: getTsHeading18(context)
+                      .copyWith(color: kColorContentDefault),
                 ),
                 const SizedBox(
-                  width: 44,
+                  width: 4,
                 ),
-                Expanded(
-                  child: Opacity(
-                    // duration: const Duration(seconds: 1),
-                    opacity: opacity,
-                    child: Text(
-                      'asdf asdfasfasdfasdfasf s fasfasf asf sdf sdf sd fsdfsd',
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      style: getTsBody16Sb(context).copyWith(
-                        color: kColorContentDefault,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 44,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    constraints: const BoxConstraints(),
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_more_horiz_line_24.svg',
-                      width: 24,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentDefault,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                Text(
+                  widget.meetUpModel.current_participants.toString(),
+                  style: getTsHeading18(context).copyWith(
+                    color: kColorContentSecondary,
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(
+            height: 8,
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              top: 16,
+              left: 16,
+              bottom: 24,
+              right: 16,
+            ),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12),
+              ),
+              color: kColorBgElevation1,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 9.57,
+                    left: 6.05,
+                    bottom: 9.53,
+                    right: 6.01,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_person_one.svg',
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                // TODO 외국인인지 한국인인지 판단처리
+                Text(
+                  "첫 한국인 참가자가 되어보세요",
+                  style: getTsBody16Sb(context)
+                      .copyWith(color: kColorContentPlaceholder),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          if (meetUpDetailModel != null)
+            // 참가자 리스트
+            Column(
+              children: [
+                ...meetUpDetailModel!.participants.map(
+                  (e) => ProfileCardWithSubtextWidget(
+                    userNationalityModel: e.user_nationality[0],
+                    name: e.profile!.nick_name,
+                    profilePath: e.profile!.profile_photo,
+                    isCreator: e.id == widget.meetUpModel.creator.id,
+                    subText:
+                        '${e.profile!.user_university.university.kr_name} · ${e.profile!.user_university.department} ${e.profile!.user_university.education_status}',
+                    introductions: e.profile!.introductions,
+                    onTap: () {
+                      onTapProfile(e);
+                    },
+                  ),
+                ),
+              ],
+            ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildIntroArea(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        bottom: 20,
+        right: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            "모임 소개",
+            style:
+                getTsHeading18(context).copyWith(color: kColorContentDefault),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          if (meetUpDetailModel != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(
+                meetUpDetailModel!.description,
+                style:
+                    getTsBody16Rg(context).copyWith(color: kColorContentWeaker),
+              ),
+            ),
+          Wrap(
+            spacing: 6,
+            runSpacing: 8,
+            children: [
+              ...widget.meetUpModel.tags.map(
+                (tag) => BadgeEmojiWidget(
+                  label: tag.kr_name,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  GestureDetector _buildLocation(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        decoration: ShapeDecoration(
+          color: kColorBgDefault,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x11495B7D),
+              blurRadius: 20,
+              offset: Offset(0, 4),
+              spreadRadius: 0,
+            ),
+            BoxShadow(
+              color: Color(0x07495B7D),
+              blurRadius: 1,
+              offset: Offset(0, 0),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 16,
+        ),
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              'assets/icons/ic_pin_fill_24.svg',
+              width: 20,
+              height: 20,
+              colorFilter: const ColorFilter.mode(
+                kColorContentWeaker,
+                BlendMode.srcIn,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                widget.meetUpModel.location,
+                maxLines: 1,
+                style: getTsBody14Rg(context).copyWith(
+                  color: kColorContentWeak,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            SvgPicture.asset(
+              'assets/icons/ic_chevron_right_line_24.svg',
+              width: 24,
+              height: 24,
+              colorFilter: const ColorFilter.mode(
+                kColorContentWeakest,
+                BlendMode.srcIn,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,9 +1,10 @@
-import 'package:biskit_app/common/components/outlined_button_widget.dart';
-import 'package:biskit_app/common/components/time_picker_widget.dart';
-import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/time_picker_widget.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 
 import '../components/filled_button_widget.dart';
 import '../const/colors.dart';
@@ -17,6 +18,103 @@ Size? getWidgetSize(GlobalKey key) {
     size = renderBox.size;
   }
   return size;
+}
+
+class MoreButton {
+  final String text;
+  final Color color;
+  final Function()? onTap;
+  MoreButton({
+    required this.text,
+    required this.color,
+    this.onTap,
+  });
+}
+
+/// 모임원관리 버튼 바텀 시트
+showMoreBottomSheet({
+  required BuildContext context,
+  required List<MoreButton> list,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    barrierColor: kColorBgDimmed.withOpacity(0.5),
+    builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: kColorBgDefault,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: list
+                    .map((e) => GestureDetector(
+                          onTap: e.onTap,
+                          child: Container(
+                            width: double.infinity,
+                            height: 56,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              e.text,
+                              style: getTsBody16Rg(context).copyWith(
+                                color: e.color,
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 56,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: kColorBgDefault,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '취소',
+                  style: getTsBody16Rg(context).copyWith(
+                    color: kColorContentDefault,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 /// more 버튼 바텀 시트

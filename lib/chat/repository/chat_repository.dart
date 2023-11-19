@@ -73,9 +73,8 @@ class ChatRepository {
         );
   }
 
-  void goInChatRoom(
-      {required ChatRoomModel chatRoom, required int userId}) async {
-    await firebaseFirestore.collection('ChatRoom').doc(chatRoom.uid).update({
+  goInChatRoom({required String chatRoomUid, required int userId}) async {
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update({
       'joinUsers': FieldValue.arrayUnion([userId])
     });
   }
