@@ -204,24 +204,41 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         context: context,
         list: [
           MoreButton(
-            text: '공유하기',
-            color: kColorContentDefault,
-            onTap: () {
-              // TODO
-            },
-          ),
-          MoreButton(
             text: '수정하기',
             color: kColorContentDefault,
-            onTap: () {
+            onTap: () async {
               // TODO
             },
           ),
           MoreButton(
             text: '삭제하기',
             color: kColorContentError,
-            onTap: () {
-              // TODO
+            onTap: () async {
+              Navigator.pop(context);
+              showConfirmModal(
+                context: context,
+                title: '모임을 삭제하시겠어요?',
+                content: '모임 삭제시 채팅방이\n함께 삭제되며 복구할 수 없어요',
+                leftButton: '취소',
+                leftCall: () {
+                  Navigator.pop(context);
+                },
+                rightButton: '삭제',
+                rightBackgroundColor: kColorBgError,
+                rightTextColor: kColorContentError,
+                rightCall: () async {
+                  if (meetUpDetailModel != null) {
+                    final bool isOk = await ref
+                        .read(meetUpRepositoryProvider)
+                        .deleteMeeting(meetUpDetailModel!);
+                    if (!mounted) return;
+                    if (isOk) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+              );
             },
           ),
         ],
@@ -232,13 +249,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
       showMoreBottomSheet(
         context: context,
         list: [
-          MoreButton(
-            text: '공유하기',
-            color: kColorContentDefault,
-            onTap: () {
-              // TODO
-            },
-          ),
           MoreButton(
             text: '모임 나가기',
             color: kColorContentError,
@@ -260,13 +270,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
       showMoreBottomSheet(
         context: context,
         list: [
-          MoreButton(
-            text: '공유하기',
-            color: kColorContentDefault,
-            onTap: () {
-              // TODO
-            },
-          ),
           MoreButton(
             text: '신고하기',
             color: kColorContentError,
@@ -800,7 +803,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   GestureDetector _buildLocation(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        if (meetUpDetailModel != null) {
+        if (meetUpDetailModel != null &&
+            meetUpDetailModel!.place_url.isNotEmpty) {
           await launchUrl(Uri.parse(meetUpDetailModel!.place_url));
         }
       },

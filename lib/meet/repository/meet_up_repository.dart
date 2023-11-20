@@ -14,6 +14,7 @@ import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/meet_up_request_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
+import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -516,6 +517,39 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
               chatRoomUid: chatRoomUid,
               userId: userId,
             );
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
+  }
+
+  deleteMeeting(MeetUpDetailModel meetUpDetailModel) async {
+    bool isOk = false;
+    try {
+      final res = await dio.delete(
+        '$baseUrl/${meetUpDetailModel.id}',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+
+      logger.d(res);
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        isOk = true;
+
+        // 채팅방 삭제
+        ref.read(chatRepositoryProvider).deleteChatRoom(
+              chatRoomUid: meetUpDetailModel.chat_id,
+            );
+        // 미팅 리스트 삭제된 미팅 삭제
+        ref.read(meetUpFilterProvider.notifier).paginate();
+        // 프로필 미팅 리스트 조회
+        ref.read(profileMeetingProvider.notifier).fetch();
       }
     } catch (e) {
       logger.e(e.toString());
