@@ -144,7 +144,7 @@ class AuthRepository {
             'Accept': 'application/json',
           },
         ),
-        data: signUpModel.toJson(),
+        data: signUpModel.toMap(),
       );
 
       logger.d(res);

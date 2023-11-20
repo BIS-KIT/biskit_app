@@ -17,7 +17,6 @@ class DefaultLayout extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final VoidCallback? onTapLeading;
   final bool borderShape;
-  final String? backgroundImageSrc;
 
   final ShapeBorder? shape;
   const DefaultLayout({
@@ -34,37 +33,23 @@ class DefaultLayout extends StatelessWidget {
     this.shape,
     this.onTapLeading,
     this.borderShape = true,
-    this.backgroundImageSrc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        if (backgroundImageSrc != null)
-          Image.asset(
-            backgroundImageSrc!,
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          ),
-        Scaffold(
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-          backgroundColor: backgroundImageSrc != null
-              ? Colors.transparent
-              : backgroundColor ?? kColorBgDefault,
-          body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: const SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: Brightness.dark,
-            ),
-            child: child,
-          ),
-          appBar: renderAppBar(context),
-          bottomNavigationBar: bottomNavigationBar,
-          floatingActionButton: floatingActionButton,
+    return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      backgroundColor: backgroundColor ?? kColorBgDefault,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
         ),
-      ],
+        child: child,
+      ),
+      appBar: renderAppBar(context),
+      bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
     );
   }
 
@@ -75,9 +60,7 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         toolbarHeight: 48,
-        backgroundColor: backgroundImageSrc != ''
-            ? Colors.transparent
-            : appBarBackgroundColor ?? kColorBgDefault,
+        backgroundColor: appBarBackgroundColor ?? kColorBgDefault,
         surfaceTintColor: appBarBackgroundColor ?? kColorBgDefault,
         elevation: 0,
         centerTitle: true,
@@ -104,15 +87,17 @@ class DefaultLayout extends StatelessWidget {
             ),
             padding: const EdgeInsets.all(10),
             constraints: const BoxConstraints(),
-            child: SvgPicture.asset(
-              leadingIconPath!,
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentDefault,
-                BlendMode.srcIn,
-              ),
-            ),
+            child: leadingIconPath == null
+                ? null
+                : SvgPicture.asset(
+                    leadingIconPath!,
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentDefault,
+                      BlendMode.srcIn,
+                    ),
+                  ),
           ),
         ),
         actions: actions,
