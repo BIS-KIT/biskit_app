@@ -19,6 +19,9 @@ class CreateMeetUpModel {
   final List<int> topic_ids;
   final List<int> language_ids;
   final String? chat_id;
+  final String? x_coord;
+  final String? y_coord;
+  final String? place_url;
   CreateMeetUpModel({
     this.name,
     this.location,
@@ -34,6 +37,9 @@ class CreateMeetUpModel {
     required this.topic_ids,
     required this.language_ids,
     this.chat_id,
+    this.x_coord,
+    this.y_coord,
+    this.place_url,
   });
 
   CreateMeetUpModel copyWith({
@@ -51,6 +57,9 @@ class CreateMeetUpModel {
     List<int>? topic_ids,
     List<int>? language_ids,
     String? chat_id,
+    String? x_coord,
+    String? y_coord,
+    String? place_url,
   }) {
     return CreateMeetUpModel(
       name: name ?? this.name,
@@ -67,6 +76,9 @@ class CreateMeetUpModel {
       topic_ids: topic_ids ?? this.topic_ids,
       language_ids: language_ids ?? this.language_ids,
       chat_id: chat_id ?? this.chat_id,
+      x_coord: x_coord ?? this.x_coord,
+      y_coord: y_coord ?? this.y_coord,
+      place_url: place_url ?? this.place_url,
     );
   }
 
@@ -86,6 +98,9 @@ class CreateMeetUpModel {
       'topic_ids': topic_ids,
       'language_ids': language_ids,
       'chat_id': chat_id,
+      'x_coord': x_coord,
+      'y_coord': y_coord,
+      'place_url': place_url,
     };
   }
 
@@ -105,6 +120,9 @@ class CreateMeetUpModel {
       topic_ids: List<int>.from(map['topic_ids']),
       language_ids: List<int>.from(map['language_ids']),
       chat_id: map['chat_id'],
+      x_coord: map['x_coord'],
+      y_coord: map['y_coord'],
+      place_url: map['place_url'],
     );
   }
 
@@ -115,7 +133,7 @@ class CreateMeetUpModel {
 
   @override
   String toString() {
-    return 'CreateMeetUpModel(name: $name, location: $location, description: $description, meeting_time: $meeting_time, max_participants: $max_participants, image_url: $image_url, is_active: $is_active, custom_tags: $custom_tags, custom_topics: $custom_topics, creator_id: $creator_id, tag_ids: $tag_ids, topic_ids: $topic_ids, language_ids: $language_ids, chat_id: $chat_id)';
+    return 'CreateMeetUpModel(name: $name, location: $location, description: $description, meeting_time: $meeting_time, max_participants: $max_participants, image_url: $image_url, is_active: $is_active, custom_tags: $custom_tags, custom_topics: $custom_topics, creator_id: $creator_id, tag_ids: $tag_ids, topic_ids: $topic_ids, language_ids: $language_ids, chat_id: $chat_id, x_coord: $x_coord, y_coord: $y_coord, place_url: $place_url)';
   }
 
   @override
@@ -136,7 +154,10 @@ class CreateMeetUpModel {
         listEquals(other.tag_ids, tag_ids) &&
         listEquals(other.topic_ids, topic_ids) &&
         listEquals(other.language_ids, language_ids) &&
-        other.chat_id == chat_id;
+        other.chat_id == chat_id &&
+        other.x_coord == x_coord &&
+        other.y_coord == y_coord &&
+        other.place_url == place_url;
   }
 
   @override
@@ -154,6 +175,9 @@ class CreateMeetUpModel {
         tag_ids.hashCode ^
         topic_ids.hashCode ^
         language_ids.hashCode ^
-        chat_id.hashCode;
+        chat_id.hashCode ^
+        x_coord.hashCode ^
+        y_coord.hashCode ^
+        place_url.hashCode;
   }
 }

@@ -89,6 +89,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
         queryParameters: {
@@ -173,6 +174,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
         queryParameters: {
@@ -222,6 +224,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
         queryParameters: {
@@ -246,11 +249,12 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     Response? res;
     try {
       res = await dio.post(
-        '$baseUrl/create',
+        baseUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
         data: createMeetUpModel.toMap(),
@@ -274,6 +278,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
     );

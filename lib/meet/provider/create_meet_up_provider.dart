@@ -141,6 +141,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
       // 검색된 장소가 있는 경우
       state = state!.copyWith(
         location: location.place_name,
+        x_coord: location.x,
+        y_coord: location.y,
+        place_url: location.place_url,
       );
     }
   }
@@ -282,7 +285,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
           image_url: imageUrl,
         ),
       );
-      init();
+      if (result) {
+        init();
+      }
     }
     return result;
   }
