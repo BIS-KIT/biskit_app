@@ -323,4 +323,8 @@ class ChatRepository {
       );
     }
   }
+
+  deleteChatRoom({required String chatRoomUid}) async {
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).delete();
+  }
 }

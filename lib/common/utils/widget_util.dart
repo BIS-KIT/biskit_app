@@ -61,6 +61,7 @@ showMoreBottomSheet({
                 children: list
                     .map((e) => GestureDetector(
                           onTap: e.onTap,
+                          behavior: HitTestBehavior.opaque,
                           child: Container(
                             width: double.infinity,
                             height: 56,
