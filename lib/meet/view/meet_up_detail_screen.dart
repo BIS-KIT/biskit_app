@@ -1,3 +1,12 @@
+import 'package:biskit_app/common/utils/string_util.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:extended_wrap/extended_wrap.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/components/badge_emoji_widget.dart';
@@ -9,6 +18,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_member_management_screen.dart';
 import 'package:biskit_app/profile/components/profile_card_with_subtext_widget.dart';
@@ -16,14 +26,7 @@ import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:collection/collection.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:extended_wrap/extended_wrap.dart';
-import 'package:flutter/material.dart';
-
-import 'package:biskit_app/meet/model/meet_up_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MeetUpDetailScreen extends ConsumerStatefulWidget {
   final MeetUpModel meetUpModel;
@@ -34,6 +37,24 @@ class MeetUpDetailScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<MeetUpDetailScreen> createState() => _MeetUpDetailScreenState();
+}
+
+class ChartDataListModel {
+  LanguageModel lang;
+  List<ChartDataModel> dataList;
+  ChartDataListModel({
+    required this.lang,
+    required this.dataList,
+  });
+}
+
+class ChartDataModel {
+  final String title;
+  final int value;
+  ChartDataModel({
+    required this.title,
+    required this.value,
+  });
 }
 
 class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
@@ -49,6 +70,10 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   bool isTitleView = false;
 
   double opacity = 0;
+
+  int chartLangSelectedIndex = 0;
+  int chartTouchedIndex = 0;
+  List<ChartDataListModel> chartDatas = [];
 
   @override
   void initState() {
@@ -83,7 +108,32 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     for (var lang in availableLangList) {
       langSet.add(lang.language);
     }
+    setChartDatas();
     setState(() {});
+  }
+
+  setChartDatas() {
+    for (var l in langSet) {
+      List<ChartDataModel> list = [];
+
+      Set<String> levelSet = availableLangList
+          .where((element) => element.language.id == l.id)
+          .map((e) => e.level)
+          .toSet();
+      for (var level in levelSet) {
+        list.add(ChartDataModel(
+          title: getLevelServerValueToKrString(level),
+          value: availableLangList
+              .where((element) =>
+                  element.language.id == l.id && element.level == level)
+              .length,
+        ));
+      }
+      chartDatas.add(ChartDataListModel(
+        lang: l,
+        dataList: list,
+      ));
+    }
   }
 
   // 모임원 관리
@@ -345,73 +395,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                           // 참가자
                           _buildJoinList(context),
 
-                          // TODO
                           // 모임 참가자들의 언어 레벨
-                          if (availableLangList.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Text(
-                                      "모임 참가자들의 언어 레벨",
-                                      style: getTsHeading18(context).copyWith(
-                                        color: kColorContentDefault,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  SizedBox(
-                                    height: 36,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) =>
-                                          ChipWidget(
-                                        text: langSet.elementAt(index).kr_name,
-                                        isSelected: meetUpDetailModel!.languages
-                                            .map((e) => e.id)
-                                            .contains(
-                                                langSet.elementAt(index).id),
-                                        selectedColor: kColorBgInverseWeak,
-                                        selectedBorderColor:
-                                            kColorBgInverseWeak,
-                                        selectedTextColor: kColorContentInverse,
-                                      ),
-                                      separatorBuilder: (context, index) =>
-                                          const SizedBox(
-                                        width: 6,
-                                      ),
-                                      itemCount: langSet.length,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 24, horizontal: 20),
-                                    decoration: const BoxDecoration(
-                                        color: kColorBgElevation1,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(12))),
-                                    child: Column(
-                                      children: [
-                                        // TODO: 차트
-                                        const SizedBox(height: 24),
-                                        Text(
-                                          "한국어가 능숙한 사람이 가장 많아요",
-                                          style: getTsBody16Sb(context)
-                                              .copyWith(
-                                                  color: kColorContentWeak),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          if (chartDatas.isNotEmpty) _buildChart(context),
                         ],
                       )
                     ],
@@ -435,6 +420,105 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
           // Appbar
           _buildAppBar(paddig, context),
+        ],
+      ),
+    );
+  }
+
+  Padding _buildChart(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              "모임 참가자들의 언어 레벨",
+              style: getTsHeading18(context).copyWith(
+                color: kColorContentDefault,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 36,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => ChipWidget(
+                text: chartDatas[index].lang.kr_name,
+                isSelected: index == chartLangSelectedIndex,
+                selectedColor: kColorBgInverseWeak,
+                selectedBorderColor: kColorBgInverseWeak,
+                selectedTextColor: kColorContentInverse,
+                onClickSelect: () {
+                  setState(() {
+                    chartLangSelectedIndex = index;
+                    chartTouchedIndex = 0;
+                  });
+                },
+              ),
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 6,
+              ),
+              itemCount: chartDatas.length,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+            decoration: const BoxDecoration(
+              color: kColorBgElevation1,
+              borderRadius: BorderRadius.all(
+                Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 154,
+                  width: 154,
+                  child: PieChart(
+                    PieChartData(
+                      centerSpaceRadius: 30,
+                      startDegreeOffset: 270,
+                      pieTouchData: PieTouchData(
+                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                          setState(() {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              // chartTouchedIndex = -1;
+                              return;
+                            }
+                            if (chartTouchedIndex ==
+                                pieTouchResponse
+                                    .touchedSection!.touchedSectionIndex) {
+                              chartTouchedIndex = -1;
+                            } else {
+                              chartTouchedIndex = pieTouchResponse
+                                  .touchedSection!.touchedSectionIndex;
+                            }
+                          });
+                        },
+                      ),
+                      sectionsSpace: 2,
+                      sections: showingSections(),
+                    ),
+                    swapAnimationDuration: const Duration(milliseconds: 150),
+                    swapAnimationCurve: Curves.linear,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  "한국어가 능숙한 사람이 가장 많아요",
+                  style:
+                      getTsBody16Sb(context).copyWith(color: kColorContentWeak),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -715,7 +799,11 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   GestureDetector _buildLocation(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () async {
+        if (meetUpDetailModel != null) {
+          await launchUrl(Uri.parse(meetUpDetailModel!.place_url));
+        }
+      },
       child: Container(
         decoration: ShapeDecoration(
           color: kColorBgDefault,
@@ -734,7 +822,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               blurRadius: 1,
               offset: Offset(0, 0),
               spreadRadius: 0,
-            )
+            ),
           ],
         ),
         padding: const EdgeInsets.symmetric(
@@ -967,5 +1055,45 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         ],
       ),
     );
+  }
+
+  showingSections() {
+    List<PieChartSectionData> list = [];
+    for (int i = 0;
+        i < chartDatas[chartLangSelectedIndex].dataList.length;
+        i++) {
+      PieChartSectionData pieChartSectionData = PieChartSectionData(
+        color: kColorBgElevation2,
+        value: chartDatas[chartLangSelectedIndex].dataList[i].value.toDouble(),
+        badgeWidget: null,
+        showTitle: false,
+        radius: 46,
+      );
+      if (i == chartTouchedIndex) {
+        pieChartSectionData = pieChartSectionData.copyWith(
+          color: kColorBgSecondary,
+          badgeWidget: Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 12,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(4),
+              ),
+              color: kColorBgOverlay.withOpacity(0.7),
+            ),
+            child: Text(
+              '${chartDatas[chartLangSelectedIndex].dataList[i].title} ${chartDatas[chartLangSelectedIndex].dataList[i].value}명',
+              style: getTsCaption12Rg(context).copyWith(
+                color: kColorContentInverse,
+              ),
+            ),
+          ),
+        );
+      }
+      list.add(pieChartSectionData);
+    }
+    return list;
   }
 }

@@ -16,4 +16,4 @@ const kS3Flag43Path = '/flag/4-3';
 const String kReviewTagName = 'review';
 
 const String kCategoryDefaultPath =
-    'https://biskit-bucket.s3.ap-northeast-2.amazonaws.com/default_icon/ic_talk_fill_48.png';
+    'https://biskit-bucket.s3.ap-northeast-2.amazonaws.com/default_icon/ic_talk_fill_48.svg';
