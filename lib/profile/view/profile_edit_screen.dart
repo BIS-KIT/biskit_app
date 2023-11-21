@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:biskit_app/common/model/university_graduate_status_model.dart';
+import 'package:biskit_app/common/model/university_student_status_model.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/components/lang_list_widget.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
@@ -57,6 +59,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   List<UseLanguageModel>? useLangState = [];
   // List<AvailableLanguageModel> available_languages = [];
   StudentVerificationModel? student_verification;
+  UniversityStudentStatusModel? selectedStudentStatusModel;
+  UniversityGraduateStatusModel? selectedGraduateStatusModel;
 
   @override
   void initState() {
@@ -79,10 +83,18 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             isChecked: true,
           ))
     ];
-    student_verification = widget.profile.student_verification;
     introductions = widget.profile.introductions
         .map((e) => KeywordModel(keyword: e.keyword, reason: e.context))
         .toList();
+    student_verification = widget.profile.student_verification;
+    selectedStudentStatusModel = UniversityStudentStatusModel(
+      ename: widget.profile.user_university.department,
+      kname: widget.profile.user_university.department,
+    );
+    selectedGraduateStatusModel = UniversityGraduateStatusModel(
+      ename: widget.profile.user_university.education_status,
+      kname: widget.profile.user_university.education_status,
+    );
   }
 
   onSearchChanged(String value) {
@@ -678,12 +690,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                widget.user_university.department,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (selectedStudentStatusModel != null)
+                                Text(
+                                  selectedStudentStatusModel!.kname,
+                                  style: getTsBody16Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -708,12 +721,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                widget.user_university.education_status,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (selectedGraduateStatusModel != null)
+                                Text(
+                                  selectedGraduateStatusModel!.kname,
+                                  style: getTsBody16Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
