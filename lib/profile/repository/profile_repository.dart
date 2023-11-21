@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
@@ -49,22 +51,26 @@ class ProfileRepository {
   Future<bool> getCheckNickName(String nickName) async {
     bool isOk = false;
 
-    final res = await dio.get(
-      '$baseUrl/nick-name',
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+    try {
+      final res = await dio.get(
+        '$baseUrl/nick-name',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        queryParameters: {
+          'nick_name': nickName,
         },
-      ),
-      queryParameters: {
-        'nick_name': nickName,
-      },
-    );
+      );
 
-    logger.d(res.toString());
-    if (res.statusCode == 200 && res.data != null) {
-      isOk = (res.data['status'] ?? '') == 'Nick_name is available.';
+      logger.d(res.toString());
+      if (res.statusCode == 200 && res.data != null) {
+        isOk = (res.data['status'] ?? '') == 'Nick_name is available.';
+      }
+    } catch (e) {
+      logger.e(e.toString());
     }
 
     return isOk;
@@ -233,5 +239,34 @@ class ProfileRepository {
       }
     }
     return cursorPagination;
+  }
+
+  updateProfile({
+    required int profile_id,
+    required Map<String, dynamic> data,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.put(
+        '$baseUrl/$profile_id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: data,
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        isOk = true;
+        // ref.read(userMeProvider.notifier).getMe();
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
   }
 }

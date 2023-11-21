@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/components/btn_icon_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
@@ -81,33 +82,52 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomTextFormField(
-              controller: keywordController,
-              focusNode: keywordFocusNode,
-              onChanged: (value) {
-                // logger.d(value.contains('\n'));
-              },
-              hintText: '좋아하는 것을 알려주세요',
-              keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
-              maxLines: null,
-              autofocus: true,
-              suffixIcon: keywordController.text.isNotEmpty
-                  ? GestureDetector(
-                      onTap: () {
-                        keywordController.clear();
-                      },
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_cancel_fill_16.svg',
-                        width: 16,
-                        height: 16,
-                        colorFilter: const ColorFilter.mode(
-                          kColorContentDisabled,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    )
-                  : null,
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomTextFormField(
+                    controller: keywordController,
+                    focusNode: keywordFocusNode,
+                    onChanged: (value) {
+                      // logger.d(value.contains('\n'));
+                    },
+                    hintText: '좋아하는 것을 알려주세요',
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    maxLines: null,
+                    autofocus: true,
+                    suffixIcon: keywordController.text.isNotEmpty
+                        ? GestureDetector(
+                            onTap: () {
+                              keywordController.clear();
+                            },
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_cancel_fill_16.svg',
+                              width: 16,
+                              height: 16,
+                              colorFilter: const ColorFilter.mode(
+                                kColorContentDisabled,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                BtnIconWidget(
+                  iconPath: 'assets/icons/ic_plus_line_24.svg',
+                  isDisable: keywordController.text.isEmpty,
+                  onTap: () {
+                    setState(() {
+                      isReasonView = true;
+                      reasonFocusNode.requestFocus();
+                    });
+                  },
+                ),
+              ],
             ),
           ),
           isReasonView

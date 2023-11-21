@@ -39,6 +39,7 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
     });
     setState(() {
       univerisyStudentStatusList = [
+        // TODO 영어명
         UniversityStudentStatusModel(
           ename: '학부',
           kname: '학부',

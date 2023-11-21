@@ -12,6 +12,7 @@ class ProfileModel {
   final int id;
   final int user_id;
   final String nick_name;
+  final String? context;
   final String? profile_photo;
   final List<AvailableLanguageModel> available_languages;
   final List<IntroductionModel> introductions;
@@ -21,6 +22,7 @@ class ProfileModel {
     required this.id,
     required this.user_id,
     required this.nick_name,
+    this.context,
     required this.profile_photo,
     required this.available_languages,
     required this.introductions,
@@ -32,6 +34,7 @@ class ProfileModel {
     int? id,
     int? user_id,
     String? nick_name,
+    String? context,
     String? profile_photo,
     List<AvailableLanguageModel>? available_languages,
     List<IntroductionModel>? introductions,
@@ -42,6 +45,7 @@ class ProfileModel {
       id: id ?? this.id,
       user_id: user_id ?? this.user_id,
       nick_name: nick_name ?? this.nick_name,
+      context: context ?? this.context,
       profile_photo: profile_photo ?? this.profile_photo,
       available_languages: available_languages ?? this.available_languages,
       introductions: introductions ?? this.introductions,
@@ -55,6 +59,7 @@ class ProfileModel {
       'id': id,
       'user_id': user_id,
       'nick_name': nick_name,
+      'context': context,
       'profile_photo': profile_photo,
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
       'introductions': introductions.map((x) => x.toMap()).toList(),
@@ -68,6 +73,7 @@ class ProfileModel {
       id: map['id']?.toInt() ?? 0,
       user_id: map['user_id']?.toInt() ?? 0,
       nick_name: map['nick_name'] ?? '',
+      context: map['context'],
       profile_photo: map['profile_photo'],
       available_languages: List<AvailableLanguageModel>.from(
           map['available_languages']
@@ -88,7 +94,7 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, user_university: $user_university, student_verification: $student_verification)';
+    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, context: $context, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, user_university: $user_university, student_verification: $student_verification)';
   }
 
   @override
@@ -99,6 +105,7 @@ class ProfileModel {
         other.id == id &&
         other.user_id == user_id &&
         other.nick_name == nick_name &&
+        other.context == context &&
         other.profile_photo == profile_photo &&
         listEquals(other.available_languages, available_languages) &&
         listEquals(other.introductions, introductions) &&
@@ -111,6 +118,7 @@ class ProfileModel {
     return id.hashCode ^
         user_id.hashCode ^
         nick_name.hashCode ^
+        context.hashCode ^
         profile_photo.hashCode ^
         available_languages.hashCode ^
         introductions.hashCode ^

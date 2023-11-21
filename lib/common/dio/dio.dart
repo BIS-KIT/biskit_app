@@ -37,8 +37,6 @@ class CustomInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // logger.d(
-    //     'options.path:${options.path}\noptions.queryParameters:${options.queryParameters.toString()}\noptions.data:${options.data.toString()}');
     logger.d('[REQ] [${options.method}] ${options.uri}');
 
     if (options.headers['accessToken'] == 'true') {
@@ -80,7 +78,11 @@ class CustomInterceptor extends Interceptor {
   // 3) 에러가 났을때
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    logger.d('[ERR] [${err.requestOptions.method}] ${err.requestOptions.uri}');
+    logger.d([
+      '[ERR] [${err.requestOptions.method}] ${err.requestOptions.uri}',
+      '[BODY] ${err.requestOptions.data}',
+    ]);
+
     // TODO 리프레시 토큰 처리
 
     final refreshToken = await storage.read(key: kREFRESH_TOKEN_KEY);

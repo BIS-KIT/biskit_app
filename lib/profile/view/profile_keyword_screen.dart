@@ -18,7 +18,7 @@ class ProfileKeywordScreen extends StatefulWidget {
   static String get routeName => 'profileKeyword';
   final ProfileCreateModel? profileCreateModel;
   final bool isEditorMode;
-  final Function? editorCallback;
+  final Function(List<KeywordModel> keywordList)? editorCallback;
   final List<KeywordModel>? introductions;
   final String? userNickName;
   const ProfileKeywordScreen({
@@ -46,7 +46,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   init() {
     if (widget.isEditorMode) {
       setState(() {
-        keywordList = widget.introductions!;
+        keywordList = [...widget.introductions!];
         // keywordList = List<KeywordModel>.from(
         //   widget.introductions!
         //       .map(
@@ -83,23 +83,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   onTapNext() {
     if (keywordList.isNotEmpty) {
       if (widget.isEditorMode) {
-        widget.editorCallback!.call(keywordList);
-        // if (widget.isProfileEditorMode) {
-        //   Navigator.pop(context, keywordList);
-        //   return;
-        // }
-        // TODO 에디트 모드
-
-        // 실패시 토스트 처리
-        // showSnackBar(
-        //   context: context,
-        //   text: '저장에 실패했어요. 다시 시도해주세요.',
-        //   margin: const EdgeInsets.only(
-        //     left: 12,
-        //     right: 12,
-        //     bottom: 102,
-        //   ),
-        // );
+        widget.editorCallback!(keywordList);
       } else {
         // 회원가입 진행
         context.pushNamed(
