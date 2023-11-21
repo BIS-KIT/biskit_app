@@ -316,4 +316,56 @@ class AuthRepository {
 
     return isConfirmed;
   }
+
+  Future<bool> deleteUserAccount({
+    required int userId,
+  }) async {
+    bool isDeleted = false;
+    try {
+      final res = await dio.delete(
+        '$baseUrl/user/$userId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+      logger.d('deleteUserRes: $res, statusCode: ${res.statusCode}');
+      if (res.statusCode == 200) {
+        isDeleted = true;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+    return isDeleted;
+  }
+
+  Future<bool> requestDeleteUserAccountReason({
+    required String reason,
+  }) async {
+    bool isRequested = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/deletion-requests',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'reason': reason,
+        }),
+      );
+      if (res.statusCode == 200) {
+        isRequested = true;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+    return isRequested;
+  }
 }

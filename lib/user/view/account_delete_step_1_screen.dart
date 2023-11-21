@@ -49,12 +49,12 @@ class _MeetUpCreateStep1TabState
                   height: 56,
                   child: GestureDetector(
                     onTap: () {
-                      // TODO: 탈퇴 사유 id(index) 저장
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AccountDeleteStep2Screen(),
+                          builder: (context) => AccountDeleteStep2Screen(
+                            accountDeleteReason: reasons[index],
+                          ),
                         ),
                       );
                     },
