@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -357,4 +359,48 @@ class KeywordModel {
     required this.keyword,
     required this.reason,
   });
+
+  KeywordModel copyWith({
+    String? keyword,
+    String? reason,
+  }) {
+    return KeywordModel(
+      keyword: keyword ?? this.keyword,
+      reason: reason ?? this.reason,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'keyword': keyword,
+      'reason': reason,
+    };
+  }
+
+  factory KeywordModel.fromMap(Map<String, dynamic> map) {
+    return KeywordModel(
+      keyword: map['keyword'] ?? '',
+      reason: map['reason'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory KeywordModel.fromJson(String source) =>
+      KeywordModel.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'KeywordModel(keyword: $keyword, reason: $reason)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is KeywordModel &&
+        other.keyword == keyword &&
+        other.reason == reason;
+  }
+
+  @override
+  int get hashCode => keyword.hashCode ^ reason.hashCode;
 }

@@ -2,8 +2,11 @@
 
 import 'dart:async';
 
+import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
+import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/components/lang_list_widget.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
@@ -24,9 +27,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
-import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/profile_model.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
@@ -56,8 +57,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
 
   List<KeywordModel> introductions = [];
   List<UseLanguageModel> useLanguageModelList = [];
-  List<UseLanguageModel>? useLangState = [];
-  // List<AvailableLanguageModel> available_languages = [];
+  // List<UseLanguageModel>? useLangState = [];
   StudentVerificationModel? student_verification;
   UniversityStudentStatusModel? selectedStudentStatusModel;
   UniversityGraduateStatusModel? selectedGraduateStatusModel;
@@ -95,6 +95,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       ename: widget.profile.user_university.education_status,
       kname: widget.profile.user_university.education_status,
     );
+    setState(() {});
   }
 
   onSearchChanged(String value) {
@@ -160,20 +161,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     }
     if (nickNameController.text.trim() != widget.profile.nick_name ||
         contextController.text.trim() != (widget.profile.context ?? '') ||
-        !listEquals(
-            widget.profile.introductions
-                .map((e) => KeywordModel(keyword: e.keyword, reason: e.context))
-                .toList(),
-            introductions) ||
-        !listEquals(
-            widget.profile.available_languages
-                .map((e) => UseLanguageModel(
-                      languageModel: e.language,
-                      level: getLevelServerValueToInt(e.level),
-                      isChecked: true,
-                    ))
-                .toList(),
-            useLanguageModelList)) {
+        !checkEqualLang() ||
+        !checkEqualIntroduction()) {
       // 수정여부 확인
       setState(() {
         isSaveEnable = true;
@@ -735,8 +724,59 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           height: 16,
                         ),
                         GestureDetector(
-                          onTap: () {
-                            // TODO
+                          onTap: () async {
+                            final result1 = await showBiskitBottomSheet(
+                              context: context,
+                              title: '소속상태 선택',
+                              leftIcon:
+                                  'assets/icons/ic_arrow_back_ios_line_24.svg',
+                              isDismissible: false,
+                              onLeftTap: () async {
+                                Navigator.pop(context);
+                                // await onTapStartSelectedUniv();
+                              },
+                              rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                              onRightTap: () {
+                                Navigator.pop(context);
+                              },
+                              contentWidget: UnivStudentStatusListWidget(
+                                selectedUnivStudentStatusModel:
+                                    selectedStudentStatusModel,
+                                onTap: (model) async {},
+                              ),
+                            );
+
+                            if (result1 != null && mounted) {
+                              final result2 = await showBiskitBottomSheet(
+                                context: context,
+                                title: '학적상태 선택',
+                                leftIcon:
+                                    'assets/icons/ic_arrow_back_ios_line_24.svg',
+                                isDismissible: false,
+                                onLeftTap: () async {
+                                  Navigator.pop(context);
+                                },
+                                rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                                onRightTap: () {
+                                  Navigator.pop(context);
+                                },
+                                contentWidget: UnivGraduateStatusListWidget(
+                                  selectedStudentStatusModel: result1!,
+                                  selectedGraduateStatusModel:
+                                      selectedGraduateStatusModel,
+                                  onTap: (model) {},
+                                  submit: () {},
+                                ),
+                              );
+
+                              if (result2 != null) {
+                                setState(() {
+                                  selectedStudentStatusModel = result1;
+                                  selectedGraduateStatusModel = result2;
+                                });
+                              }
+                            }
+                            checkValue();
                           },
                           child: const OutlinedButtonWidget(
                             text: '수정하기',
@@ -769,5 +809,32 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       useLanguageModelList.remove(languageModel);
     });
     checkValue();
+  }
+
+  bool checkEqualLang() {
+    List<UseLanguageModel> list1 = widget.profile.available_languages
+        .map(
+          (e) => UseLanguageModel(
+            languageModel: e.language,
+            level: getLevelServerValueToInt(e.level),
+            isChecked: true,
+          ),
+        )
+        .toList();
+    return listEquals(list1, useLanguageModelList);
+  }
+
+  bool checkEqualIntroduction() {
+    List<KeywordModel> list1 = widget.profile.introductions
+        .map(
+          (e) => KeywordModel(
+            keyword: e.keyword,
+            reason: e.context,
+          ),
+        )
+        .toList();
+    logger.d(list1);
+    logger.d(introductions);
+    return listEquals(list1, introductions);
   }
 }

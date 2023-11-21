@@ -12,11 +12,13 @@ import 'package:biskit_app/common/model/university_student_status_model.dart';
 
 class UnivGraduateStatusListWidget extends StatefulWidget {
   final UniversityStudentStatusModel selectedStudentStatusModel;
+  final UniversityGraduateStatusModel? selectedGraduateStatusModel;
   final Function(UniversityGraduateStatusModel) onTap;
   final Function() submit;
   const UnivGraduateStatusListWidget({
     Key? key,
     required this.selectedStudentStatusModel,
+    this.selectedGraduateStatusModel,
     required this.onTap,
     required this.submit,
   }) : super(key: key);
@@ -72,6 +74,9 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
     });
 
     setState(() {
+      if (widget.selectedGraduateStatusModel != null) {
+        selectedModel = widget.selectedGraduateStatusModel;
+      }
       isLoading = false;
     });
   }

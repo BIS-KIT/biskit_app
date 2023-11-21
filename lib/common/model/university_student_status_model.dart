@@ -3,22 +3,18 @@ import 'dart:convert';
 class UniversityStudentStatusModel {
   final String ename;
   final String kname;
-  final bool isCheck;
   UniversityStudentStatusModel({
     required this.ename,
     required this.kname,
-    this.isCheck = false,
   });
 
   UniversityStudentStatusModel copyWith({
     String? ename,
     String? kname,
-    bool? isCheck,
   }) {
     return UniversityStudentStatusModel(
       ename: ename ?? this.ename,
       kname: kname ?? this.kname,
-      isCheck: isCheck ?? this.isCheck,
     );
   }
 
@@ -26,7 +22,6 @@ class UniversityStudentStatusModel {
     return {
       'ename': ename,
       'kname': kname,
-      'isCheck': isCheck,
     };
   }
 
@@ -34,7 +29,6 @@ class UniversityStudentStatusModel {
     return UniversityStudentStatusModel(
       ename: map['ename'] ?? '',
       kname: map['kname'] ?? '',
-      isCheck: map['isCheck'] ?? false,
     );
   }
 
@@ -45,7 +39,7 @@ class UniversityStudentStatusModel {
 
   @override
   String toString() =>
-      'UniversityStudentStatusModel(ename: $ename, kname: $kname, isCheck: $isCheck)';
+      'UniversityStudentStatusModel(ename: $ename, kname: $kname)';
 
   @override
   bool operator ==(Object other) {
@@ -53,10 +47,9 @@ class UniversityStudentStatusModel {
 
     return other is UniversityStudentStatusModel &&
         other.ename == ename &&
-        other.kname == kname &&
-        other.isCheck == isCheck;
+        other.kname == kname;
   }
 
   @override
-  int get hashCode => ename.hashCode ^ kname.hashCode ^ isCheck.hashCode;
+  int get hashCode => ename.hashCode ^ kname.hashCode;
 }
