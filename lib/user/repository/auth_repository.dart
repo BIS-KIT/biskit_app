@@ -285,4 +285,35 @@ class AuthRepository {
 
     return isChanged;
   }
+
+  Future<bool> confirmPassword({
+    required int userId,
+    required String password,
+  }) async {
+    bool isConfirmed = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/confirm-password',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'user_id': userId,
+          'password': password,
+        }),
+      );
+
+      if (res.statusCode == 200) {
+        isConfirmed = true;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+
+    return isConfirmed;
+  }
 }
