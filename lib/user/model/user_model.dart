@@ -27,6 +27,7 @@ class UserModel extends UserModelBase {
   final bool is_admin;
   final String? sns_type;
   final String? sns_id;
+  final String created_time;
   final ProfileModel? profile;
   final List<UserNationalityModel> user_nationality;
 
@@ -40,6 +41,7 @@ class UserModel extends UserModelBase {
     required this.is_admin,
     this.sns_type,
     this.sns_id,
+    required this.created_time,
     required this.profile,
     required this.user_nationality,
   });
@@ -54,6 +56,7 @@ class UserModel extends UserModelBase {
     bool? is_admin,
     String? sns_type,
     String? sns_id,
+    String? created_time,
     ProfileModel? profile,
     List<UserNationalityModel>? user_nationality,
   }) {
@@ -67,6 +70,7 @@ class UserModel extends UserModelBase {
       is_admin: is_admin ?? this.is_admin,
       sns_type: sns_type ?? this.sns_type,
       sns_id: sns_id ?? this.sns_id,
+      created_time: created_time ?? this.created_time,
       profile: profile ?? this.profile,
       user_nationality: user_nationality ?? this.user_nationality,
     );
@@ -83,6 +87,7 @@ class UserModel extends UserModelBase {
       'is_admin': is_admin,
       'sns_type': sns_type,
       'sns_id': sns_id,
+      'created_time': created_time,
       'profile': profile?.toMap(),
       'user_nationality': user_nationality.map((x) => x.toMap()).toList(),
     };
@@ -99,6 +104,7 @@ class UserModel extends UserModelBase {
       is_admin: map['is_admin'] ?? false,
       sns_type: map['sns_type'],
       sns_id: map['sns_id'],
+      created_time: map['created_time'],
       profile:
           map['profile'] != null ? ProfileModel.fromMap(map['profile']) : null,
       user_nationality: map['user_nationality'] == null
@@ -132,6 +138,7 @@ class UserModel extends UserModelBase {
         other.is_admin == is_admin &&
         other.sns_type == sns_type &&
         other.sns_id == sns_id &&
+        other.created_time == created_time &&
         other.profile == profile &&
         listEquals(other.user_nationality, user_nationality);
   }
@@ -147,6 +154,7 @@ class UserModel extends UserModelBase {
         is_admin.hashCode ^
         sns_type.hashCode ^
         sns_id.hashCode ^
+        created_time.hashCode ^
         profile.hashCode ^
         user_nationality.hashCode;
   }
