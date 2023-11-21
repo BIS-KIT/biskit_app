@@ -2,8 +2,15 @@
 
 import 'dart:async';
 
+import 'package:biskit_app/common/model/university_graduate_status_model.dart';
+import 'package:biskit_app/common/model/university_student_status_model.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/profile/components/lang_list_widget.dart';
+import 'package:biskit_app/profile/model/use_language_model.dart';
+import 'package:biskit_app/profile/provider/use_language_provider.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,6 +47,7 @@ class ProfileEditScreen extends ConsumerStatefulWidget {
 
 class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   late final TextEditingController nickNameController;
+  late final TextEditingController contextController;
   String? nickNameError;
   bool isNickNameOk = false;
   Timer? _debounce;
@@ -47,23 +55,46 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   bool isSaveEnable = false;
 
   List<KeywordModel> introductions = [];
-  List<AvailableLanguageModel> available_languages = [];
+  List<UseLanguageModel> useLanguageModelList = [];
+  List<UseLanguageModel>? useLangState = [];
+  // List<AvailableLanguageModel> available_languages = [];
   StudentVerificationModel? student_verification;
+  UniversityStudentStatusModel? selectedStudentStatusModel;
+  UniversityGraduateStatusModel? selectedGraduateStatusModel;
 
   @override
   void initState() {
-    logger.d('initState>>>${widget.profile.toJson()}');
+    // logger.d('initState>>>${widget.profile.toJson()}');
+    init();
     super.initState();
+  }
 
+  init() {
     nickNameController = TextEditingController(text: widget.profile.nick_name)
       ..addListener(() {
         onSearchChanged(nickNameController.text);
       });
-    available_languages = [...widget.profile.available_languages];
-    student_verification = widget.profile.student_verification;
+    contextController =
+        TextEditingController(text: widget.profile.context ?? '');
+    useLanguageModelList = [
+      ...widget.profile.available_languages.map((e) => UseLanguageModel(
+            languageModel: e.language,
+            level: getLevelServerValueToInt(e.level),
+            isChecked: true,
+          ))
+    ];
     introductions = widget.profile.introductions
         .map((e) => KeywordModel(keyword: e.keyword, reason: e.context))
         .toList();
+    student_verification = widget.profile.student_verification;
+    selectedStudentStatusModel = UniversityStudentStatusModel(
+      ename: widget.profile.user_university.department,
+      kname: widget.profile.user_university.department,
+    );
+    selectedGraduateStatusModel = UniversityGraduateStatusModel(
+      ename: widget.profile.user_university.education_status,
+      kname: widget.profile.user_university.education_status,
+    );
   }
 
   onSearchChanged(String value) {
@@ -79,10 +110,14 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     }
     _debounce = Timer(const Duration(milliseconds: 300), () async {
       // logger.d('$value : ${value.isNickName()}');
+      if (value == widget.profile.nick_name) {
+        checkValue();
+        return;
+      }
       if (value.isNickName()) {
-        if (!await ref
-            .read(profileRepositoryProvider)
-            .getCheckNickName(value)) {
+        bool isOk =
+            await ref.read(profileRepositoryProvider).getCheckNickName(value);
+        if (!isOk) {
           // 이미 사용중일 때
           setState(() {
             nickNameError = '이미 사용중인 닉네임이에요';
@@ -94,7 +129,6 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             nickNameError = null;
             isNickNameOk = true;
           });
-          return;
         }
       } else {
         if (value.length < 2) {
@@ -102,22 +136,69 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             nickNameError = '2자 이상 입력해주세요';
             isNickNameOk = false;
           });
-          return;
         } else {
           setState(() {
             nickNameError = '한글/영문/숫자만 사용가능해요';
             isNickNameOk = false;
           });
-          return;
         }
       }
+      checkValue();
     });
+  }
+
+  // 저장 가능 여부 확인
+  checkValue() {
+    if (useLanguageModelList.isEmpty ||
+        nickNameController.text.isEmpty ||
+        useLanguageModelList.isEmpty) {
+      // 필수 입력 확인
+      setState(() {
+        isSaveEnable = false;
+      });
+      return;
+    }
+    if (nickNameController.text.trim() != widget.profile.nick_name ||
+        contextController.text.trim() != (widget.profile.context ?? '') ||
+        !listEquals(
+            widget.profile.introductions
+                .map((e) => KeywordModel(keyword: e.keyword, reason: e.context))
+                .toList(),
+            introductions) ||
+        !listEquals(
+            widget.profile.available_languages
+                .map((e) => UseLanguageModel(
+                      languageModel: e.language,
+                      level: getLevelServerValueToInt(e.level),
+                      isChecked: true,
+                    ))
+                .toList(),
+            useLanguageModelList)) {
+      // 수정여부 확인
+      setState(() {
+        isSaveEnable = true;
+      });
+      return;
+    }
+
+    setState(() {
+      isSaveEnable = false;
+    });
+    return;
+  }
+
+  // 저장
+  onTapSave() {
+    if (!isSaveEnable) return;
+
+    // TODO 프로필 업데이트
   }
 
   @override
   void dispose() {
     super.dispose();
     nickNameController.dispose();
+    contextController.dispose();
     _debounce?.cancel();
   }
 
@@ -131,15 +212,21 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
         title: '프로필 수정',
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-            ),
-            child: Text(
-              '저장',
-              style: getTsBody16Sb(context).copyWith(
-                color:
-                    isSaveEnable ? kColorContentDefault : kColorContentDisabled,
+          GestureDetector(
+            onTap: () {
+              onTapSave();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+              ),
+              child: Text(
+                '저장',
+                style: getTsBody16Sb(context).copyWith(
+                  color: isSaveEnable
+                      ? kColorContentDefault
+                      : kColorContentDisabled,
+                ),
               ),
             ),
           )
@@ -278,6 +365,10 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                             color: kColorBgElevation1,
                           ),
                           child: TextFormField(
+                            controller: contextController,
+                            onChanged: (value) {
+                              checkValue();
+                            },
                             maxLines: 5,
                             maxLength: 300,
                             decoration: InputDecoration(
@@ -358,6 +449,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                   introductions = keywordList;
                                 });
                                 Navigator.pop(context);
+                                checkValue();
                               },
                               introductions: introductions,
                               userNickName: widget.profile.nick_name,
@@ -395,81 +487,139 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     const SizedBox(
                       height: 24,
                     ),
-                    Column(
-                      children: available_languages
-                          .mapIndexed((index, element) => Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 4,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                    useLanguageModelList.isEmpty
+                        ? Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              color: kColorBgError,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              '사용가능언어를\n1개 이상 선택해주세요',
+                              textAlign: TextAlign.center,
+                              style: getTsBody16Rg(context).copyWith(
+                                color: kColorContentError,
+                              ),
+                            ),
+                          )
+                        : Column(
+                            children: useLanguageModelList
+                                .mapIndexed((index, element) => Column(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              element.language.kr_name,
-                                              style: getTsBody16Sb(context)
-                                                  .copyWith(
-                                                color: kColorContentWeak,
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 4,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    element
+                                                        .languageModel.kr_name,
+                                                    style:
+                                                        getTsBody16Sb(context)
+                                                            .copyWith(
+                                                      color: kColorContentWeak,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 12,
+                                                  ),
+                                                  Text(
+                                                    getLevelTitle(
+                                                        element.level),
+                                                    style:
+                                                        getTsBody16Sb(context)
+                                                            .copyWith(
+                                                      color:
+                                                          kColorContentSecondary,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  LevelBarWidget(
+                                                    level: element.level,
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                            Text(
-                                              getLevelServerValueToKrString(
-                                                  element.level),
-                                              style: getTsBody16Sb(context)
-                                                  .copyWith(
-                                                color: kColorContentSecondary,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  onTapLangDelete(element);
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(6),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/ic_cancel_line_24.svg',
+                                                    width: 24,
+                                                    height: 24,
+                                                    colorFilter:
+                                                        const ColorFilter.mode(
+                                                      kColorContentWeakest,
+                                                      BlendMode.srcIn,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            LevelBarWidget(
-                                              level: getLevelServerValueToInt(
-                                                  element.level),
-                                            ),
-                                          ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            onTapLangDelete(element);
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: SvgPicture.asset(
-                                              'assets/icons/ic_cancel_line_24.svg',
-                                              width: 24,
-                                              height: 24,
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                kColorContentWeakest,
-                                                BlendMode.srcIn,
-                                              ),
-                                            ),
+                                            ],
                                           ),
                                         ),
+                                        if (index !=
+                                            useLanguageModelList.length - 1)
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4),
+                                            child: Divider(
+                                              height: 1,
+                                              thickness: 1,
+                                              color: kColorBorderDefalut,
+                                            ),
+                                          )
                                       ],
-                                    ),
-                                  ),
-                                  if (index != available_languages.length - 1)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 4),
-                                      child: Divider(
-                                        height: 1,
-                                        thickness: 1,
-                                        color: kColorBorderDefalut,
-                                      ),
-                                    )
-                                ],
-                              ))
-                          .toList(),
+                                    ))
+                                .toList(),
+                          ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(useLanguageProvider.notifier)
+                            .setSelectedList(useLanguageModelList);
+                        showDefaultModalBottomSheet(
+                          context: context,
+                          title: '언어 선택',
+                          titleRightButton: true,
+                          enableDrag: false,
+                          isDismissible: false,
+                          contentWidget: LangListWidget(
+                            callback: () {
+                              setState(() {
+                                useLanguageModelList = ref
+                                    .read(useLanguageProvider.notifier)
+                                    .getSelectedList();
+                              });
+                              ref.read(useLanguageProvider.notifier).init();
+                              checkValue();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                      },
+                      child: const OutlinedButtonWidget(
+                        text: '수정하기',
+                        isEnable: true,
+                        height: 44,
+                      ),
                     ),
                   ],
                 ),
@@ -540,12 +690,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                widget.user_university.department,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (selectedStudentStatusModel != null)
+                                Text(
+                                  selectedStudentStatusModel!.kname,
+                                  style: getTsBody16Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -570,22 +721,28 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                widget.user_university.education_status,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (selectedGraduateStatusModel != null)
+                                Text(
+                                  selectedGraduateStatusModel!.kname,
+                                  style: getTsBody16Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                        const OutlinedButtonWidget(
-                          text: '수정하기',
-                          isEnable: true,
-                          height: 44,
+                        GestureDetector(
+                          onTap: () {
+                            // TODO
+                          },
+                          child: const OutlinedButtonWidget(
+                            text: '수정하기',
+                            isEnable: true,
+                            height: 44,
+                          ),
                         ),
                       ],
                     ),
@@ -607,9 +764,10 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     );
   }
 
-  void onTapLangDelete(AvailableLanguageModel languageModel) {
+  void onTapLangDelete(UseLanguageModel languageModel) {
     setState(() {
-      available_languages.remove(languageModel);
+      useLanguageModelList.remove(languageModel);
     });
+    checkValue();
   }
 }
