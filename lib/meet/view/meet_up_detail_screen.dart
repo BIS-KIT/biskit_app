@@ -309,72 +309,96 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                         children: [
                           Opacity(
                             opacity: 1,
-                            child: Container(
-                              key: _mainBoxKey,
-                              width: double.infinity,
-                              padding: const EdgeInsets.only(
-                                top: 24,
-                                left: 20,
-                                right: 20,
-                                bottom: 32,
-                              ),
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    'assets/images/bg_food.png',
+                            child: Builder(builder: (context) {
+                              String bgImagePath = 'assets/images/bg_food.png';
+                              if ((widget.meetUpModel.image_url ?? '')
+                                  .contains('activity')) {
+                                bgImagePath = 'assets/images/bg_active.png';
+                              } else if ((widget.meetUpModel.image_url ?? '')
+                                  .contains('study')) {
+                                bgImagePath = 'assets/images/bg_study.png';
+                              } else if ((widget.meetUpModel.image_url ?? '')
+                                  .contains('sports')) {
+                                bgImagePath = 'assets/images/bg_sports.png';
+                              } else if ((widget.meetUpModel.image_url ?? '')
+                                  .contains('lang')) {
+                                bgImagePath = 'assets/images/bg_lang.png';
+                              } else if ((widget.meetUpModel.image_url ?? '')
+                                  .contains('culture')) {
+                                bgImagePath = 'assets/images/bg_culture.png';
+                              } else if ((widget.meetUpModel.image_url ?? '')
+                                  .contains('hobby')) {
+                                bgImagePath = 'assets/images/bg_hobby.png';
+                              } else {
+                                bgImagePath = 'assets/images/bg_talk.png';
+                              }
+                              return Container(
+                                key: _mainBoxKey,
+                                width: double.infinity,
+                                padding: const EdgeInsets.only(
+                                  top: 24,
+                                  left: 20,
+                                  right: 20,
+                                  bottom: 32,
+                                ),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                      bgImagePath,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    height: 48,
-                                  ),
-                                  if (meetUpDetailModel != null)
-                                    ExtendedWrap(
-                                      spacing: 4,
-                                      maxLines: 1,
-                                      children: [
-                                        ...meetUpDetailModel!.topics.map(
-                                          (topic) => BadgeWidget(
-                                            text: topic.kr_name,
-                                            backgroundColor:
-                                                kColorBgInverseWeak,
-                                            textColor: kColorContentInverse,
-                                          ),
-                                        ),
-                                      ],
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      height: 48,
                                     ),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                  Text(
-                                    widget.meetUpModel.name,
-                                    style: getTsHeading20(context)
-                                        .copyWith(color: kColorContentDefault),
-                                  ),
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
+                                    if (meetUpDetailModel != null)
+                                      ExtendedWrap(
+                                        spacing: 4,
+                                        maxLines: 1,
+                                        children: [
+                                          ...meetUpDetailModel!.topics.map(
+                                            (topic) => BadgeWidget(
+                                              text: topic.kr_name,
+                                              backgroundColor:
+                                                  kColorBgInverseWeak,
+                                              textColor: kColorContentInverse,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    Text(
+                                      widget.meetUpModel.name,
+                                      style: getTsHeading20(context).copyWith(
+                                          color: kColorContentDefault),
+                                    ),
+                                    const SizedBox(
+                                      height: 24,
+                                    ),
 
-                                  // infoBox
-                                  _buildInfoBox(context),
+                                    // infoBox
+                                    _buildInfoBox(context),
 
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
 
-                                  // location
-                                  _buildLocation(context),
+                                    // location
+                                    _buildLocation(context),
 
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
-                                ],
-                              ),
-                            ),
+                                    const SizedBox(
+                                      height: 24,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                           ),
                           Container(
                             width: double.infinity,

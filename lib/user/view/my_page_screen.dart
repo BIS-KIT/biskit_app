@@ -4,6 +4,7 @@ import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
 import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -592,6 +593,46 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                   style: getTsBody14Rg(context).copyWith(
                                     color: kColorContentWeaker,
                                   ),
+                                ),
+                              ],
+                            );
+                          } else if (studentVerification.verification_status ==
+                              VerificationStatus.PENDING.name) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  '학교 인증 대기중',
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeaker,
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else if (studentVerification.verification_status ==
+                              VerificationStatus.UNVERIFIED.name) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  '학교를 인증해주세요',
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeaker,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                const FilledButtonWidget(
+                                  text: '학교 인증하기',
+                                  height: 40,
+                                  isEnable: true,
                                 ),
                               ],
                             );

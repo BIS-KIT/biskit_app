@@ -311,600 +311,602 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Photo,Name,Intro
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  children: [
-                    // Avatar
-                    GestureDetector(
-                      onTap: () async {
-                        final List result = await Navigator.push(
-                              context,
-                              createUpDownRoute(
-                                const PhotoManagerScreen(
-                                  isCamera: true,
-                                  maxCnt: 1,
-                                ),
-                              ),
-                            ) ??
-                            [];
-                        logger.d(result);
-                        if (result.length == 1) {
-                          setState(() {
-                            selectedPhotoModel = result[0];
-                          });
-                          checkValue();
-                        }
-                      },
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 44,
-                            backgroundImage: const AssetImage(
-                              'assets/images/88.png',
-                            ),
-                            foregroundImage: selectedPhotoModel == null
-                                ? (widget.profile.profile_photo == null
-                                    ? null
-                                    : NetworkImage(
-                                        widget.profile.profile_photo!))
-                                : selectedPhotoModel!.photoType ==
-                                        PhotoType.asset
-                                    ? AssetEntityImageProvider(
-                                        selectedPhotoModel!.assetEntity!,
-                                        isOriginal: true,
-                                      )
-                                    : Image.file(
-                                        File(
-                                          selectedPhotoModel!.cameraXfile!.path,
-                                        ),
-                                      ).image,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: kColorBgInverseWeak,
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_pencil_fill_16.svg',
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 24,
-                    ),
-
-                    // Nickname
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextInputWidget(
-                          controller: nickNameController,
-                          title: '닉네임',
-                          titleStyle: getTsBody16Sb(context).copyWith(
-                            color: kColorContentDefault,
-                          ),
-                          hintText: '닉네임을 입력해주세요',
-                          maxLength: 12,
-                          // onChanged: onSearchChanged,
-                          errorText: nickNameError,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9]'))
-                          ],
-                          suffixIcon: nickNameController.text.isNotEmpty
-                              ? GestureDetector(
-                                  onTap: () {
-                                    nickNameController.clear();
-                                  },
-                                  child: SvgPicture.asset(
-                                    'assets/icons/ic_cancel_fill_16.svg',
-                                    width: 16,
-                                    height: 16,
-                                    colorFilter: const ColorFilter.mode(
-                                      kColorContentWeakest,
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                )
-                              : null,
-                        ),
-                        if (nickNameError == null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              isNickNameOk ? '사용 가능한 닉네임이에요' : '한글/영문/숫자 2자 이상',
-                              style: getTsCaption12Rg(context).copyWith(
-                                color: isNickNameOk
-                                    ? kColorContentSeccess
-                                    : kColorContentWeakest,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-
-                    const SizedBox(
-                      height: 24,
-                    ),
-
-                    // Intro
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '자기소개',
-                          style: getTsBody16Sb(context).copyWith(
-                            color: kColorContentDefault,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: kColorBorderDefalut,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(6),
-                            ),
-                            color: kColorBgElevation1,
-                          ),
-                          child: TextFormField(
-                            controller: contextController,
-                            onChanged: (value) {
-                              checkValue();
-                            },
-                            maxLines: 5,
-                            maxLength: 300,
-                            decoration: InputDecoration(
-                              counterText: '',
-                              hintText: '나에 대해 소개해볼까요?',
-                              hintStyle: getTsBody16Rg(context).copyWith(
-                                color: kColorContentPlaceholder,
-                              ),
-                              contentPadding: EdgeInsets.zero,
-                              border: InputBorder.none,
-                              isDense: true,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${contextController.text.length}/300',
-                              style: getTsCaption11Rg(context).copyWith(
-                                color: kColorContentWeakest,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              _buildPhotoNameIntro(context),
               _buildDivider(),
 
               // Like
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '좋아하는 것',
-                      style: getTsBody16Sb(context).copyWith(
-                        color: kColorContentDefault,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Wrap(
-                      spacing: 6,
-                      children: introductions
-                          .map(
-                            (e) => BadgeWidget(
-                              text: e.keyword,
-                              backgroundColor: kColorBgSecondary,
-                              textColor: kColorContentInverse,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileKeywordScreen(
-                              isEditorMode: true,
-                              editorCallback: (List<KeywordModel> keywordList) {
-                                setState(() {
-                                  introductions = keywordList;
-                                });
-                                Navigator.pop(context);
-                                checkValue();
-                              },
-                              introductions: introductions,
-                              userNickName: widget.profile.nick_name,
-                            ),
-                          ),
-                        );
-                      },
-                      child: const OutlinedButtonWidget(
-                        text: '수정하기',
-                        isEnable: true,
-                        height: 44,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildLike(context),
 
               _buildDivider(),
 
               // Language
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '사용가능언어',
-                      style: getTsBody16Sb(context).copyWith(
-                        color: kColorContentDefault,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    useLanguageModelList.isEmpty
-                        ? Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                              color: kColorBgError,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              '사용가능언어를\n1개 이상 선택해주세요',
-                              textAlign: TextAlign.center,
-                              style: getTsBody16Rg(context).copyWith(
-                                color: kColorContentError,
-                              ),
-                            ),
-                          )
-                        : Column(
-                            children: useLanguageModelList
-                                .mapIndexed((index, element) => Column(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 4,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    element
-                                                        .languageModel.kr_name,
-                                                    style:
-                                                        getTsBody16Sb(context)
-                                                            .copyWith(
-                                                      color: kColorContentWeak,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 12,
-                                                  ),
-                                                  Text(
-                                                    getLevelTitle(
-                                                        element.level),
-                                                    style:
-                                                        getTsBody16Sb(context)
-                                                            .copyWith(
-                                                      color:
-                                                          kColorContentSecondary,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 8,
-                                                  ),
-                                                  LevelBarWidget(
-                                                    level: element.level,
-                                                  ),
-                                                ],
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  onTapLangDelete(element);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(6),
-                                                  child: SvgPicture.asset(
-                                                    'assets/icons/ic_cancel_line_24.svg',
-                                                    width: 24,
-                                                    height: 24,
-                                                    colorFilter:
-                                                        const ColorFilter.mode(
-                                                      kColorContentWeakest,
-                                                      BlendMode.srcIn,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        if (index !=
-                                            useLanguageModelList.length - 1)
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4),
-                                            child: Divider(
-                                              height: 1,
-                                              thickness: 1,
-                                              color: kColorBorderDefalut,
-                                            ),
-                                          )
-                                      ],
-                                    ))
-                                .toList(),
-                          ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        ref
-                            .read(useLanguageProvider.notifier)
-                            .setSelectedList(useLanguageModelList);
-                        showDefaultModalBottomSheet(
-                          context: context,
-                          title: '언어 선택',
-                          titleRightButton: true,
-                          enableDrag: false,
-                          isDismissible: false,
-                          contentWidget: LangListWidget(
-                            callback: () {
-                              setState(() {
-                                useLanguageModelList = ref
-                                    .read(useLanguageProvider.notifier)
-                                    .getSelectedList();
-                              });
-                              ref.read(useLanguageProvider.notifier).init();
-                              checkValue();
-                              Navigator.pop(context);
-                            },
-                          ),
-                        );
-                      },
-                      child: const OutlinedButtonWidget(
-                        text: '수정하기',
-                        isEnable: true,
-                        height: 44,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildLang(context),
 
               _buildDivider(),
 
               // University
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              _buildUniv(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container _buildUniv(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 24,
+        horizontal: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '학교 정보',
+            style: getTsBody16Sb(context).copyWith(
+              color: kColorContentDefault,
+            ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Column(
+            children: [
+              SizedBox(
+                height: 44,
+                child: Row(
                   children: [
                     Text(
-                      '학교 정보',
+                      '학교',
                       style: getTsBody16Sb(context).copyWith(
-                        color: kColorContentDefault,
+                        color: kColorContentDisabled,
                       ),
                     ),
                     const SizedBox(
-                      height: 24,
+                      width: 8,
                     ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 44,
-                          child: Row(
-                            children: [
-                              Text(
-                                '학교',
-                                style: getTsBody16Sb(context).copyWith(
-                                  color: kColorContentDisabled,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                widget.user_university.university.kr_name,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentDisabled,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Divider(
-                            height: 1,
-                            thickness: 1,
-                            color: kColorBorderDefalut,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 44,
-                          child: Row(
-                            children: [
-                              Text(
-                                '소속',
-                                style: getTsBody16Sb(context).copyWith(
-                                  color: kColorContentWeak,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              if (selectedStudentStatusModel != null)
-                                Text(
-                                  selectedStudentStatusModel!.kname,
-                                  style: getTsBody16Rg(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Divider(
-                            height: 1,
-                            thickness: 1,
-                            color: kColorBorderDefalut,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 44,
-                          child: Row(
-                            children: [
-                              Text(
-                                '학적상태',
-                                style: getTsBody16Sb(context).copyWith(
-                                  color: kColorContentWeak,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              if (selectedGraduateStatusModel != null)
-                                Text(
-                                  selectedGraduateStatusModel!.kname,
-                                  style: getTsBody16Rg(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            final result1 = await showBiskitBottomSheet(
-                              context: context,
-                              title: '소속상태 선택',
-                              leftIcon:
-                                  'assets/icons/ic_arrow_back_ios_line_24.svg',
-                              isDismissible: false,
-                              onLeftTap: () async {
-                                Navigator.pop(context);
-                                // await onTapStartSelectedUniv();
-                              },
-                              rightIcon: 'assets/icons/ic_cancel_line_24.svg',
-                              onRightTap: () {
-                                Navigator.pop(context);
-                              },
-                              contentWidget: UnivStudentStatusListWidget(
-                                selectedUnivStudentStatusModel:
-                                    selectedStudentStatusModel,
-                                onTap: (model) async {},
-                              ),
-                            );
-
-                            if (result1 != null && mounted) {
-                              final result2 = await showBiskitBottomSheet(
-                                context: context,
-                                title: '학적상태 선택',
-                                leftIcon:
-                                    'assets/icons/ic_arrow_back_ios_line_24.svg',
-                                isDismissible: false,
-                                onLeftTap: () async {
-                                  Navigator.pop(context);
-                                },
-                                rightIcon: 'assets/icons/ic_cancel_line_24.svg',
-                                onRightTap: () {
-                                  Navigator.pop(context);
-                                },
-                                contentWidget: UnivGraduateStatusListWidget(
-                                  selectedStudentStatusModel: result1!,
-                                  selectedGraduateStatusModel:
-                                      selectedGraduateStatusModel,
-                                  onTap: (model) {},
-                                  submit: () {},
-                                ),
-                              );
-
-                              if (result2 != null) {
-                                setState(() {
-                                  selectedStudentStatusModel = result1;
-                                  selectedGraduateStatusModel = result2;
-                                });
-                              }
-                            }
-                            checkValue();
-                          },
-                          child: const OutlinedButtonWidget(
-                            text: '수정하기',
-                            isEnable: true,
-                            height: 44,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      widget.user_university.university.kr_name,
+                      style: getTsBody16Rg(context).copyWith(
+                        color: kColorContentDisabled,
+                      ),
                     ),
                   ],
                 ),
               ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: kColorBorderDefalut,
+                ),
+              ),
+              SizedBox(
+                height: 44,
+                child: Row(
+                  children: [
+                    Text(
+                      '소속',
+                      style: getTsBody16Sb(context).copyWith(
+                        color: kColorContentWeak,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    if (selectedStudentStatusModel != null)
+                      Text(
+                        selectedStudentStatusModel!.kname,
+                        style: getTsBody16Rg(context).copyWith(
+                          color: kColorContentWeak,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: kColorBorderDefalut,
+                ),
+              ),
+              SizedBox(
+                height: 44,
+                child: Row(
+                  children: [
+                    Text(
+                      '학적상태',
+                      style: getTsBody16Sb(context).copyWith(
+                        color: kColorContentWeak,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    if (selectedGraduateStatusModel != null)
+                      Text(
+                        selectedGraduateStatusModel!.kname,
+                        style: getTsBody16Rg(context).copyWith(
+                          color: kColorContentWeak,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final result1 = await showBiskitBottomSheet(
+                    context: context,
+                    title: '소속상태 선택',
+                    leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+                    isDismissible: false,
+                    onLeftTap: () async {
+                      Navigator.pop(context);
+                      // await onTapStartSelectedUniv();
+                    },
+                    rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                    onRightTap: () {
+                      Navigator.pop(context);
+                    },
+                    contentWidget: UnivStudentStatusListWidget(
+                      selectedUnivStudentStatusModel:
+                          selectedStudentStatusModel,
+                      onTap: (model) async {},
+                    ),
+                  );
+
+                  if (result1 != null && mounted) {
+                    final result2 = await showBiskitBottomSheet(
+                      context: context,
+                      title: '학적상태 선택',
+                      leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+                      isDismissible: false,
+                      onLeftTap: () async {
+                        Navigator.pop(context);
+                      },
+                      rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                      onRightTap: () {
+                        Navigator.pop(context);
+                      },
+                      contentWidget: UnivGraduateStatusListWidget(
+                        selectedStudentStatusModel: result1!,
+                        selectedGraduateStatusModel:
+                            selectedGraduateStatusModel,
+                        onTap: (model) {},
+                        submit: () {},
+                      ),
+                    );
+
+                    if (result2 != null) {
+                      setState(() {
+                        selectedStudentStatusModel = result1;
+                        selectedGraduateStatusModel = result2;
+                      });
+                    }
+                  }
+                  checkValue();
+                },
+                child: const OutlinedButtonWidget(
+                  text: '수정하기',
+                  isEnable: true,
+                  height: 44,
+                ),
+              ),
             ],
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildLang(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 24,
+        horizontal: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '사용가능언어',
+            style: getTsBody16Sb(context).copyWith(
+              color: kColorContentDefault,
+            ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          useLanguageModelList.isEmpty
+              ? Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    color: kColorBgError,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    '사용가능언어를\n1개 이상 선택해주세요',
+                    textAlign: TextAlign.center,
+                    style: getTsBody16Rg(context).copyWith(
+                      color: kColorContentError,
+                    ),
+                  ),
+                )
+              : Column(
+                  children: useLanguageModelList
+                      .mapIndexed((index, element) => Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          element.languageModel.kr_name,
+                                          style:
+                                              getTsBody16Sb(context).copyWith(
+                                            color: kColorContentWeak,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                          getLevelTitle(element.level),
+                                          style:
+                                              getTsBody16Sb(context).copyWith(
+                                            color: kColorContentSecondary,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        LevelBarWidget(
+                                          level: element.level,
+                                        ),
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        onTapLangDelete(element);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6),
+                                        child: SvgPicture.asset(
+                                          'assets/icons/ic_cancel_line_24.svg',
+                                          width: 24,
+                                          height: 24,
+                                          colorFilter: const ColorFilter.mode(
+                                            kColorContentWeakest,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (index != useLanguageModelList.length - 1)
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                  child: Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    color: kColorBorderDefalut,
+                                  ),
+                                )
+                            ],
+                          ))
+                      .toList(),
+                ),
+          const SizedBox(
+            height: 16,
+          ),
+          GestureDetector(
+            onTap: () {
+              ref
+                  .read(useLanguageProvider.notifier)
+                  .setSelectedList(useLanguageModelList);
+              showDefaultModalBottomSheet(
+                context: context,
+                title: '언어 선택',
+                titleRightButton: true,
+                enableDrag: false,
+                isDismissible: false,
+                contentWidget: LangListWidget(
+                  callback: () {
+                    setState(() {
+                      useLanguageModelList = ref
+                          .read(useLanguageProvider.notifier)
+                          .getSelectedList();
+                    });
+                    ref.read(useLanguageProvider.notifier).init();
+                    checkValue();
+                    Navigator.pop(context);
+                  },
+                ),
+              );
+            },
+            child: const OutlinedButtonWidget(
+              text: '수정하기',
+              isEnable: true,
+              height: 44,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildLike(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 24,
+        horizontal: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '좋아하는 것',
+            style: getTsBody16Sb(context).copyWith(
+              color: kColorContentDefault,
+            ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Wrap(
+            spacing: 6,
+            children: introductions
+                .map(
+                  (e) => BadgeWidget(
+                    text: e.keyword,
+                    backgroundColor: kColorBgSecondary,
+                    textColor: kColorContentInverse,
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileKeywordScreen(
+                    isEditorMode: true,
+                    editorCallback: (List<KeywordModel> keywordList) {
+                      setState(() {
+                        introductions = keywordList;
+                      });
+                      Navigator.pop(context);
+                      checkValue();
+                    },
+                    introductions: introductions,
+                    userNickName: widget.profile.nick_name,
+                  ),
+                ),
+              );
+            },
+            child: const OutlinedButtonWidget(
+              text: '수정하기',
+              isEnable: true,
+              height: 44,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildPhotoNameIntro(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 24,
+        horizontal: 20,
+      ),
+      child: Column(
+        children: [
+          // Avatar
+          GestureDetector(
+            onTap: () async {
+              final List result = await Navigator.push(
+                    context,
+                    createUpDownRoute(
+                      const PhotoManagerScreen(
+                        isCamera: true,
+                        maxCnt: 1,
+                      ),
+                    ),
+                  ) ??
+                  [];
+              logger.d(result);
+              if (result.length == 1) {
+                setState(() {
+                  selectedPhotoModel = result[0];
+                });
+                checkValue();
+              }
+            },
+            child: Stack(
+              children: [
+                CircleAvatar(
+                  radius: 44,
+                  backgroundImage: const AssetImage(
+                    'assets/images/88.png',
+                  ),
+                  foregroundImage: selectedPhotoModel == null
+                      ? (widget.profile.profile_photo == null
+                          ? null
+                          : NetworkImage(widget.profile.profile_photo!))
+                      : selectedPhotoModel!.photoType == PhotoType.asset
+                          ? AssetEntityImageProvider(
+                              selectedPhotoModel!.assetEntity!,
+                              isOriginal: true,
+                            )
+                          : Image.file(
+                              File(
+                                selectedPhotoModel!.cameraXfile!.path,
+                              ),
+                            ).image,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: kColorBgInverseWeak,
+                      shape: BoxShape.circle,
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_pencil_fill_16.svg',
+                      width: 16,
+                      height: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(
+            height: 24,
+          ),
+
+          // Nickname
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextInputWidget(
+                controller: nickNameController,
+                title: '닉네임',
+                titleStyle: getTsBody16Sb(context).copyWith(
+                  color: kColorContentDefault,
+                ),
+                hintText: '닉네임을 입력해주세요',
+                maxLength: 12,
+                // onChanged: onSearchChanged,
+                errorText: nickNameError,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9]'))
+                ],
+                suffixIcon: nickNameController.text.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () {
+                          nickNameController.clear();
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_cancel_fill_16.svg',
+                          width: 16,
+                          height: 16,
+                          colorFilter: const ColorFilter.mode(
+                            kColorContentWeakest,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
+              if (nickNameError == null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    isNickNameOk ? '사용 가능한 닉네임이에요' : '한글/영문/숫자 2자 이상',
+                    style: getTsCaption12Rg(context).copyWith(
+                      color: isNickNameOk
+                          ? kColorContentSeccess
+                          : kColorContentWeakest,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+
+          const SizedBox(
+            height: 24,
+          ),
+
+          // Intro
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '자기소개',
+                style: getTsBody16Sb(context).copyWith(
+                  color: kColorContentDefault,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: kColorBorderDefalut,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(6),
+                  ),
+                  color: kColorBgElevation1,
+                ),
+                child: TextFormField(
+                  controller: contextController,
+                  onChanged: (value) {
+                    checkValue();
+                  },
+                  maxLines: 5,
+                  maxLength: 300,
+                  decoration: InputDecoration(
+                    counterText: '',
+                    hintText: '나에 대해 소개해볼까요?',
+                    hintStyle: getTsBody16Rg(context).copyWith(
+                      color: kColorContentPlaceholder,
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                    border: InputBorder.none,
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '${contextController.text.length}/300',
+                    style: getTsCaption11Rg(context).copyWith(
+                      color: kColorContentWeakest,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
