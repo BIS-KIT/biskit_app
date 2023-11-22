@@ -2,7 +2,7 @@
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
-import 'package:biskit_app/user/view/setting_screen.dart';
+import 'package:biskit_app/setting/view/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -90,8 +90,12 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
       bool? res = await ref
           .read(authRepositoryProvider)
           .changePassword(newPassword: password);
-      if (res) {
-        context.pushReplacementNamed(SettingScreen.routeName);
+      if (res && mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const SettingScreen(),
+          ),
+        );
       } else {
         setState(() {
           confirmPasswordError = '비밀번호 재설정에 실패했습니다.';

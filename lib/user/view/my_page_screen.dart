@@ -21,7 +21,7 @@ import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/introduction_view_screen.dart';
-import 'package:biskit_app/user/view/setting_screen.dart';
+import 'package:biskit_app/setting/view/setting_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
