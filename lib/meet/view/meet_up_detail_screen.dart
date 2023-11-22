@@ -313,7 +313,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                               String bgImagePath = 'assets/images/bg_food.png';
                               if ((widget.meetUpModel.image_url ?? '')
                                   .contains('activity')) {
-                                bgImagePath = 'assets/images/bg_active.png';
+                                bgImagePath = 'assets/images/bg_activity.png';
                               } else if ((widget.meetUpModel.image_url ?? '')
                                   .contains('study')) {
                                 bgImagePath = 'assets/images/bg_study.png';
