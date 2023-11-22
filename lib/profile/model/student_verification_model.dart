@@ -5,7 +5,7 @@ import 'dart:convert';
 
 class StudentVerificationModel {
   final int id;
-  final String student_card;
+  final String? student_card;
   // 인증상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
   final String verification_status;
   StudentVerificationModel({
@@ -37,7 +37,7 @@ class StudentVerificationModel {
   factory StudentVerificationModel.fromMap(Map<String, dynamic> map) {
     return StudentVerificationModel(
       id: map['id'] as int,
-      student_card: map['student_card'] as String,
+      student_card: map['student_card'] as String?,
       verification_status: map['verification_status'] as String,
     );
   }
