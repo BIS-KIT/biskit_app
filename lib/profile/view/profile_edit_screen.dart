@@ -1,9 +1,25 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
+import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
+import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/model/university_graduate_status_model.dart';
+import 'package:biskit_app/common/model/university_student_status_model.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/profile/components/lang_list_widget.dart';
+import 'package:biskit_app/profile/model/available_language_create_model.dart';
+import 'package:biskit_app/profile/model/use_language_model.dart';
+import 'package:biskit_app/profile/provider/use_language_provider.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,13 +33,12 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
-import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/profile_model.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/user/model/user_university_model.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
   final ProfileModel profile;
@@ -40,30 +55,55 @@ class ProfileEditScreen extends ConsumerStatefulWidget {
 
 class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   late final TextEditingController nickNameController;
+  late final TextEditingController contextController;
   String? nickNameError;
   bool isNickNameOk = false;
   Timer? _debounce;
 
   bool isSaveEnable = false;
 
+  PhotoModel? selectedPhotoModel;
   List<KeywordModel> introductions = [];
-  List<AvailableLanguageModel> available_languages = [];
+  List<UseLanguageModel> useLanguageModelList = [];
+  // List<UseLanguageModel>? useLangState = [];
   StudentVerificationModel? student_verification;
+  UniversityStudentStatusModel? selectedStudentStatusModel;
+  UniversityGraduateStatusModel? selectedGraduateStatusModel;
 
   @override
   void initState() {
-    logger.d('initState>>>${widget.profile.toJson()}');
+    // logger.d('initState>>>${widget.profile.toJson()}');
+    init();
     super.initState();
+  }
 
+  init() {
     nickNameController = TextEditingController(text: widget.profile.nick_name)
       ..addListener(() {
         onSearchChanged(nickNameController.text);
       });
-    available_languages = [...widget.profile.available_languages];
-    student_verification = widget.profile.student_verification;
+    contextController =
+        TextEditingController(text: widget.profile.context ?? '');
+    useLanguageModelList = [
+      ...widget.profile.available_languages.map((e) => UseLanguageModel(
+            languageModel: e.language,
+            level: getLevelServerValueToInt(e.level),
+            isChecked: true,
+          ))
+    ];
     introductions = widget.profile.introductions
-        .map((e) => KeywordModel(keyword: e.keyword, reason: e.context))
+        .map((e) => KeywordModel(keyword: e.keyword, context: e.context))
         .toList();
+    student_verification = widget.profile.student_verification;
+    selectedStudentStatusModel = UniversityStudentStatusModel(
+      ename: widget.profile.user_university.department,
+      kname: widget.profile.user_university.department,
+    );
+    selectedGraduateStatusModel = UniversityGraduateStatusModel(
+      ename: widget.profile.user_university.education_status,
+      kname: widget.profile.user_university.education_status,
+    );
+    setState(() {});
   }
 
   onSearchChanged(String value) {
@@ -79,10 +119,14 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     }
     _debounce = Timer(const Duration(milliseconds: 300), () async {
       // logger.d('$value : ${value.isNickName()}');
+      if (value == widget.profile.nick_name) {
+        checkValue();
+        return;
+      }
       if (value.isNickName()) {
-        if (!await ref
-            .read(profileRepositoryProvider)
-            .getCheckNickName(value)) {
+        bool isOk =
+            await ref.read(profileRepositoryProvider).getCheckNickName(value);
+        if (!isOk) {
           // 이미 사용중일 때
           setState(() {
             nickNameError = '이미 사용중인 닉네임이에요';
@@ -94,7 +138,6 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             nickNameError = null;
             isNickNameOk = true;
           });
-          return;
         }
       } else {
         if (value.length < 2) {
@@ -102,22 +145,128 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             nickNameError = '2자 이상 입력해주세요';
             isNickNameOk = false;
           });
-          return;
         } else {
           setState(() {
             nickNameError = '한글/영문/숫자만 사용가능해요';
             isNickNameOk = false;
           });
-          return;
         }
       }
+      checkValue();
     });
+  }
+
+  // 저장 가능 여부 확인
+  checkValue() {
+    if (useLanguageModelList.isEmpty ||
+        nickNameController.text.isEmpty ||
+        useLanguageModelList.isEmpty) {
+      // 필수 입력 확인
+      setState(() {
+        isSaveEnable = false;
+      });
+      return;
+    }
+    if (selectedPhotoModel != null ||
+        nickNameController.text.trim() != widget.profile.nick_name ||
+        contextController.text.trim() != (widget.profile.context ?? '') ||
+        !checkEqualLang() ||
+        !checkEqualIntroduction() ||
+        !checkEqualUniv()) {
+      // 수정여부 확인
+      setState(() {
+        isSaveEnable = true;
+      });
+      return;
+    }
+
+    setState(() {
+      isSaveEnable = false;
+    });
+    return;
+  }
+
+  // 저장
+  onTapSave() async {
+    FocusScope.of(context).unfocus();
+    if (!isSaveEnable) return;
+
+    Map<String, dynamic> data = {};
+
+    // 프로필 사진
+    if (selectedPhotoModel != null) {
+      // profile image upload
+      String? profilePhoto = await ref.read(utilRepositoryProvider).uploadImage(
+            photo: selectedPhotoModel!,
+            uploadImageType: UploadImageType.PROFILE,
+          );
+      data.addEntries(<String, dynamic>{
+        'profile_photo': profilePhoto,
+      }.entries);
+    }
+
+    // 닉네임
+    if (nickNameController.text != widget.profile.nick_name) {
+      data.addEntries(<String, dynamic>{
+        'nick_name': nickNameController.text,
+      }.entries);
+    }
+
+    // 자기소개
+    if (contextController.text != (widget.profile.context ?? '')) {
+      data.addEntries(<String, dynamic>{
+        'context': contextController.text,
+      }.entries);
+    }
+
+    // 좋아하는 것
+    if (!checkEqualIntroduction()) {
+      data.addEntries(<String, dynamic>{
+        'introductions': introductions.map((x) => x.toMap()).toList(),
+      }.entries);
+    }
+
+    // 사용가능언어
+    if (!checkEqualLang()) {
+      List<AvailableLanguageCreateModel> langList = useLanguageModelList
+          .map((x) => AvailableLanguageCreateModel(
+                language_id: x.languageModel.id,
+                level: getLevelServerValue(x.level),
+              ))
+          .toList();
+      data.addEntries(<String, dynamic>{
+        'available_languages': langList.map((x) => x.toMap()).toList(),
+      }.entries);
+    }
+
+    // 학교 정보
+    if (!checkEqualUniv() &&
+        selectedStudentStatusModel != null &&
+        selectedGraduateStatusModel != null) {
+      data.addEntries(<String, dynamic>{
+        'university_info': {
+          "department": selectedStudentStatusModel!.kname,
+          "education_status": selectedGraduateStatusModel!.kname,
+        },
+      }.entries);
+    }
+
+    logger.d(data);
+    final bool isOk = await ref.read(profileRepositoryProvider).updateProfile(
+          profile_id: widget.profile.id,
+          data: data,
+        );
+    if (isOk && mounted) {
+      ref.read(userMeProvider.notifier).getMe();
+      Navigator.pop(context);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
     nickNameController.dispose();
+    contextController.dispose();
     _debounce?.cancel();
   }
 
@@ -131,15 +280,21 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
         title: '프로필 수정',
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-            ),
-            child: Text(
-              '저장',
-              style: getTsBody16Sb(context).copyWith(
-                color:
-                    isSaveEnable ? kColorContentDefault : kColorContentDisabled,
+          GestureDetector(
+            onTap: () {
+              onTapSave();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+              ),
+              child: Text(
+                '저장',
+                style: getTsBody16Sb(context).copyWith(
+                  color: isSaveEnable
+                      ? kColorContentDefault
+                      : kColorContentDisabled,
+                ),
               ),
             ),
           )
@@ -164,34 +319,68 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 child: Column(
                   children: [
                     // Avatar
-                    Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 44,
-                          backgroundImage: const AssetImage(
-                            'assets/images/88.png',
-                          ),
-                          foregroundImage: widget.profile.profile_photo == null
-                              ? null
-                              : NetworkImage(widget.profile.profile_photo!),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: kColorBgInverseWeak,
-                              shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () async {
+                        final List result = await Navigator.push(
+                              context,
+                              createUpDownRoute(
+                                const PhotoManagerScreen(
+                                  isCamera: true,
+                                  maxCnt: 1,
+                                ),
+                              ),
+                            ) ??
+                            [];
+                        logger.d(result);
+                        if (result.length == 1) {
+                          setState(() {
+                            selectedPhotoModel = result[0];
+                          });
+                          checkValue();
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 44,
+                            backgroundImage: const AssetImage(
+                              'assets/images/88.png',
                             ),
-                            child: SvgPicture.asset(
-                              'assets/icons/ic_pencil_fill_16.svg',
-                              width: 16,
-                              height: 16,
+                            foregroundImage: selectedPhotoModel == null
+                                ? (widget.profile.profile_photo == null
+                                    ? null
+                                    : NetworkImage(
+                                        widget.profile.profile_photo!))
+                                : selectedPhotoModel!.photoType ==
+                                        PhotoType.asset
+                                    ? AssetEntityImageProvider(
+                                        selectedPhotoModel!.assetEntity!,
+                                        isOriginal: true,
+                                      )
+                                    : Image.file(
+                                        File(
+                                          selectedPhotoModel!.cameraXfile!.path,
+                                        ),
+                                      ).image,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: kColorBgInverseWeak,
+                                shape: BoxShape.circle,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/icons/ic_pencil_fill_16.svg',
+                                width: 16,
+                                height: 16,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
 
                     const SizedBox(
@@ -278,6 +467,10 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                             color: kColorBgElevation1,
                           ),
                           child: TextFormField(
+                            controller: contextController,
+                            onChanged: (value) {
+                              checkValue();
+                            },
                             maxLines: 5,
                             maxLength: 300,
                             decoration: InputDecoration(
@@ -299,7 +492,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              '0/300',
+                              '${contextController.text.length}/300',
                               style: getTsCaption11Rg(context).copyWith(
                                 color: kColorContentWeakest,
                               ),
@@ -358,6 +551,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                   introductions = keywordList;
                                 });
                                 Navigator.pop(context);
+                                checkValue();
                               },
                               introductions: introductions,
                               userNickName: widget.profile.nick_name,
@@ -395,81 +589,139 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     const SizedBox(
                       height: 24,
                     ),
-                    Column(
-                      children: available_languages
-                          .mapIndexed((index, element) => Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 4,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                    useLanguageModelList.isEmpty
+                        ? Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              color: kColorBgError,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              '사용가능언어를\n1개 이상 선택해주세요',
+                              textAlign: TextAlign.center,
+                              style: getTsBody16Rg(context).copyWith(
+                                color: kColorContentError,
+                              ),
+                            ),
+                          )
+                        : Column(
+                            children: useLanguageModelList
+                                .mapIndexed((index, element) => Column(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              element.language.kr_name,
-                                              style: getTsBody16Sb(context)
-                                                  .copyWith(
-                                                color: kColorContentWeak,
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 4,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    element
+                                                        .languageModel.kr_name,
+                                                    style:
+                                                        getTsBody16Sb(context)
+                                                            .copyWith(
+                                                      color: kColorContentWeak,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 12,
+                                                  ),
+                                                  Text(
+                                                    getLevelTitle(
+                                                        element.level),
+                                                    style:
+                                                        getTsBody16Sb(context)
+                                                            .copyWith(
+                                                      color:
+                                                          kColorContentSecondary,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  LevelBarWidget(
+                                                    level: element.level,
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 12,
-                                            ),
-                                            Text(
-                                              getLevelServerValueToKrString(
-                                                  element.level),
-                                              style: getTsBody16Sb(context)
-                                                  .copyWith(
-                                                color: kColorContentSecondary,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  onTapLangDelete(element);
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(6),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/ic_cancel_line_24.svg',
+                                                    width: 24,
+                                                    height: 24,
+                                                    colorFilter:
+                                                        const ColorFilter.mode(
+                                                      kColorContentWeakest,
+                                                      BlendMode.srcIn,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            LevelBarWidget(
-                                              level: getLevelServerValueToInt(
-                                                  element.level),
-                                            ),
-                                          ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            onTapLangDelete(element);
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: SvgPicture.asset(
-                                              'assets/icons/ic_cancel_line_24.svg',
-                                              width: 24,
-                                              height: 24,
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                kColorContentWeakest,
-                                                BlendMode.srcIn,
-                                              ),
-                                            ),
+                                            ],
                                           ),
                                         ),
+                                        if (index !=
+                                            useLanguageModelList.length - 1)
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4),
+                                            child: Divider(
+                                              height: 1,
+                                              thickness: 1,
+                                              color: kColorBorderDefalut,
+                                            ),
+                                          )
                                       ],
-                                    ),
-                                  ),
-                                  if (index != available_languages.length - 1)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 4),
-                                      child: Divider(
-                                        height: 1,
-                                        thickness: 1,
-                                        color: kColorBorderDefalut,
-                                      ),
-                                    )
-                                ],
-                              ))
-                          .toList(),
+                                    ))
+                                .toList(),
+                          ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(useLanguageProvider.notifier)
+                            .setSelectedList(useLanguageModelList);
+                        showDefaultModalBottomSheet(
+                          context: context,
+                          title: '언어 선택',
+                          titleRightButton: true,
+                          enableDrag: false,
+                          isDismissible: false,
+                          contentWidget: LangListWidget(
+                            callback: () {
+                              setState(() {
+                                useLanguageModelList = ref
+                                    .read(useLanguageProvider.notifier)
+                                    .getSelectedList();
+                              });
+                              ref.read(useLanguageProvider.notifier).init();
+                              checkValue();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                      },
+                      child: const OutlinedButtonWidget(
+                        text: '수정하기',
+                        isEnable: true,
+                        height: 44,
+                      ),
                     ),
                   ],
                 ),
@@ -540,12 +792,13 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                widget.user_university.department,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (selectedStudentStatusModel != null)
+                                Text(
+                                  selectedStudentStatusModel!.kname,
+                                  style: getTsBody16Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -570,22 +823,79 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                widget.user_university.education_status,
-                                style: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (selectedGraduateStatusModel != null)
+                                Text(
+                                  selectedGraduateStatusModel!.kname,
+                                  style: getTsBody16Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                        const OutlinedButtonWidget(
-                          text: '수정하기',
-                          isEnable: true,
-                          height: 44,
+                        GestureDetector(
+                          onTap: () async {
+                            final result1 = await showBiskitBottomSheet(
+                              context: context,
+                              title: '소속상태 선택',
+                              leftIcon:
+                                  'assets/icons/ic_arrow_back_ios_line_24.svg',
+                              isDismissible: false,
+                              onLeftTap: () async {
+                                Navigator.pop(context);
+                                // await onTapStartSelectedUniv();
+                              },
+                              rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                              onRightTap: () {
+                                Navigator.pop(context);
+                              },
+                              contentWidget: UnivStudentStatusListWidget(
+                                selectedUnivStudentStatusModel:
+                                    selectedStudentStatusModel,
+                                onTap: (model) async {},
+                              ),
+                            );
+
+                            if (result1 != null && mounted) {
+                              final result2 = await showBiskitBottomSheet(
+                                context: context,
+                                title: '학적상태 선택',
+                                leftIcon:
+                                    'assets/icons/ic_arrow_back_ios_line_24.svg',
+                                isDismissible: false,
+                                onLeftTap: () async {
+                                  Navigator.pop(context);
+                                },
+                                rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                                onRightTap: () {
+                                  Navigator.pop(context);
+                                },
+                                contentWidget: UnivGraduateStatusListWidget(
+                                  selectedStudentStatusModel: result1!,
+                                  selectedGraduateStatusModel:
+                                      selectedGraduateStatusModel,
+                                  onTap: (model) {},
+                                  submit: () {},
+                                ),
+                              );
+
+                              if (result2 != null) {
+                                setState(() {
+                                  selectedStudentStatusModel = result1;
+                                  selectedGraduateStatusModel = result2;
+                                });
+                              }
+                            }
+                            checkValue();
+                          },
+                          child: const OutlinedButtonWidget(
+                            text: '수정하기',
+                            isEnable: true,
+                            height: 44,
+                          ),
                         ),
                       ],
                     ),
@@ -607,9 +917,44 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     );
   }
 
-  void onTapLangDelete(AvailableLanguageModel languageModel) {
+  void onTapLangDelete(UseLanguageModel languageModel) {
     setState(() {
-      available_languages.remove(languageModel);
+      useLanguageModelList.remove(languageModel);
     });
+    checkValue();
+  }
+
+  bool checkEqualLang() {
+    List<UseLanguageModel> list1 = widget.profile.available_languages
+        .map(
+          (e) => UseLanguageModel(
+            languageModel: e.language,
+            level: getLevelServerValueToInt(e.level),
+            isChecked: true,
+          ),
+        )
+        .toList();
+    return listEquals(list1, useLanguageModelList);
+  }
+
+  bool checkEqualIntroduction() {
+    List<KeywordModel> list1 = widget.profile.introductions
+        .map(
+          (e) => KeywordModel(
+            keyword: e.keyword,
+            context: e.context,
+          ),
+        )
+        .toList();
+    logger.d(list1);
+    logger.d(introductions);
+    return listEquals(list1, introductions);
+  }
+
+  bool checkEqualUniv() {
+    return selectedStudentStatusModel!.kname ==
+            widget.profile.user_university.department &&
+        selectedGraduateStatusModel!.kname ==
+            widget.profile.user_university.education_status;
   }
 }

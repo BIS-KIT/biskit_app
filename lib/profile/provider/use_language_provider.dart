@@ -29,6 +29,21 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguageModel>?> {
         .toList();
   }
 
+  setSelectedList(List<UseLanguageModel> list) {
+    state = state!.map((e) {
+      if (list.map((l) => l.languageModel.id).contains(e.languageModel.id)) {
+        return list
+            .where((element) => element.languageModel.id == e.languageModel.id)
+            .first;
+      } else {
+        return e.copyWith(
+          level: 0,
+          isChecked: false,
+        );
+      }
+    }).toList();
+  }
+
   getList() async {
     final List<LanguageModel> list = await utilRepository.getLanguages();
     state = list

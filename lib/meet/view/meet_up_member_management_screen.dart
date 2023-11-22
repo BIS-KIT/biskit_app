@@ -45,7 +45,7 @@ class _MeetUpMemberManagementScreenState
         .read(meetUpRepositoryProvider)
         .getMeetingRequests(widget.meetUpDetailModel.id);
     requests = requests
-        .where((e) => e.status == VerificationStatus.PENDING.name)
+        .where((e) => e.status == MyMeetingStatus.PENDING.name)
         .toList();
     setState(() {});
   }

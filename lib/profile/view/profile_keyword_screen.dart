@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +20,7 @@ class ProfileKeywordScreen extends StatefulWidget {
   static String get routeName => 'profileKeyword';
   final ProfileCreateModel? profileCreateModel;
   final bool isEditorMode;
-  final Function? editorCallback;
+  final Function(List<KeywordModel> keywordList)? editorCallback;
   final List<KeywordModel>? introductions;
   final String? userNickName;
   const ProfileKeywordScreen({
@@ -46,13 +48,13 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   init() {
     if (widget.isEditorMode) {
       setState(() {
-        keywordList = widget.introductions!;
+        keywordList = [...widget.introductions!];
         // keywordList = List<KeywordModel>.from(
         //   widget.introductions!
         //       .map(
         //         (e) => KeywordModel(
         //           keyword: e.keyword,
-        //           reason: e.context,
+        //           context: e.context,
         //         ),
         //       )
         //       .toList(),
@@ -83,23 +85,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   onTapNext() {
     if (keywordList.isNotEmpty) {
       if (widget.isEditorMode) {
-        widget.editorCallback!.call(keywordList);
-        // if (widget.isProfileEditorMode) {
-        //   Navigator.pop(context, keywordList);
-        //   return;
-        // }
-        // TODO 에디트 모드
-
-        // 실패시 토스트 처리
-        // showSnackBar(
-        //   context: context,
-        //   text: '저장에 실패했어요. 다시 시도해주세요.',
-        //   margin: const EdgeInsets.only(
-        //     left: 12,
-        //     right: 12,
-        //     bottom: 102,
-        //   ),
-        // );
+        widget.editorCallback!(keywordList);
       } else {
         // 회원가입 진행
         context.pushNamed(
@@ -109,7 +95,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
             keywordList.map(
               (e) => IntroductionCreateModel(
                 keyword: e.keyword,
-                context: e.reason,
+                context: e.context,
               ),
             ),
           )),
@@ -288,7 +274,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Text(
-                keywordList[index - 1].reason,
+                keywordList[index - 1].context,
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorBgElevation1,
                 ),
@@ -318,7 +304,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         if (result != null) {
           KeywordModel keywordModel = KeywordModel(
             keyword: result['keyword'],
-            reason: result['reason'],
+            context: result['context'],
           );
           setState(() {
             keywordList.insert(0, keywordModel);
@@ -368,9 +354,53 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
 
 class KeywordModel {
   final String keyword;
-  final String reason;
+  final String context;
   KeywordModel({
     required this.keyword,
-    required this.reason,
+    required this.context,
   });
+
+  KeywordModel copyWith({
+    String? keyword,
+    String? context,
+  }) {
+    return KeywordModel(
+      keyword: keyword ?? this.keyword,
+      context: context ?? this.context,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'keyword': keyword,
+      'context': context,
+    };
+  }
+
+  factory KeywordModel.fromMap(Map<String, dynamic> map) {
+    return KeywordModel(
+      keyword: map['keyword'] ?? '',
+      context: map['context'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory KeywordModel.fromJson(String source) =>
+      KeywordModel.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'KeywordModel(keyword: $keyword, context: $context)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is KeywordModel &&
+        other.keyword == keyword &&
+        other.context == context;
+  }
+
+  @override
+  int get hashCode => keyword.hashCode ^ context.hashCode;
 }

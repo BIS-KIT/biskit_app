@@ -1,3 +1,5 @@
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -10,13 +12,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 
-class IntroductionViewScreen extends ConsumerWidget {
+class IntroductionViewScreen extends ConsumerStatefulWidget {
   const IntroductionViewScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<IntroductionViewScreen> createState() =>
+      _IntroductionViewScreenState();
+}
+
+class _IntroductionViewScreenState
+    extends ConsumerState<IntroductionViewScreen> {
+  @override
+  Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
     return Scaffold(
       backgroundColor: kColorBgElevation2,
@@ -30,7 +39,10 @@ class IntroductionViewScreen extends ConsumerWidget {
           child: Column(
             children: [
               // Appbar
-              _buildAppBar(context, (userState as UserModel)),
+              _buildAppBar(
+                context,
+                (userState as UserModel),
+              ),
 
               // content
               // if (userState is UserModel)
@@ -106,7 +118,10 @@ class IntroductionViewScreen extends ConsumerWidget {
     );
   }
 
-  Padding _buildAppBar(BuildContext context, UserModel userState) {
+  Padding _buildAppBar(
+    BuildContext context,
+    UserModel userState,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 2,
@@ -146,10 +161,31 @@ class IntroductionViewScreen extends ConsumerWidget {
                     builder: (context) => ProfileKeywordScreen(
                       introductions: userState.profile!.introductions
                           .map((e) => KeywordModel(
-                              keyword: e.keyword, reason: e.context))
+                              keyword: e.keyword, context: e.context))
                           .toList(),
                       isEditorMode: true,
                       userNickName: userState.profile!.nick_name,
+                      editorCallback: (keywordList) async {
+                        logger.d(keywordList);
+                        bool isOk = await ref
+                            .read(profileRepositoryProvider)
+                            .updateProfile(
+                          profile_id: userState.profile!.id,
+                          data: {
+                            'introductions': keywordList
+                                .map((x) => {
+                                      'keyword': x.keyword,
+                                      'context': x.context,
+                                    })
+                                .toList(),
+                          },
+                        );
+                        if (isOk) {
+                          ref.read(userMeProvider.notifier).getMe();
+                          if (!mounted) return;
+                          Navigator.pop(context);
+                        }
+                      },
                     ),
                   ));
             },

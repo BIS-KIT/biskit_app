@@ -37,22 +37,24 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
     setState(() {
       isLoading = true;
     });
+
     setState(() {
       univerisyStudentStatusList = [
+        // TODO 영어명
         UniversityStudentStatusModel(
           ename: '학부',
           kname: '학부',
         ),
         UniversityStudentStatusModel(
-          ename: '학부',
+          ename: '대학원',
           kname: '대학원',
         ),
         UniversityStudentStatusModel(
-          ename: '학부',
+          ename: '교환학생',
           kname: '교환학생',
         ),
         UniversityStudentStatusModel(
-          ename: '학부',
+          ename: '어학당',
           kname: '어학당',
         ),
       ];
@@ -60,6 +62,7 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
     setState(() {
       selectedModel = widget.selectedUnivStudentStatusModel;
     });
+
     setState(() {
       isLoading = false;
     });
