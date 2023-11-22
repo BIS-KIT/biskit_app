@@ -1,17 +1,23 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
 import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/components/lang_list_widget.dart';
+import 'package:biskit_app/profile/model/available_language_create_model.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
 import 'package:biskit_app/profile/provider/use_language_provider.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +38,7 @@ import 'package:biskit_app/profile/model/profile_model.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/user/model/user_university_model.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
   final ProfileModel profile;
@@ -55,6 +62,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
 
   bool isSaveEnable = false;
 
+  PhotoModel? selectedPhotoModel;
   List<KeywordModel> introductions = [];
   List<UseLanguageModel> useLanguageModelList = [];
   // List<UseLanguageModel>? useLangState = [];
@@ -84,7 +92,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           ))
     ];
     introductions = widget.profile.introductions
-        .map((e) => KeywordModel(keyword: e.keyword, reason: e.context))
+        .map((e) => KeywordModel(keyword: e.keyword, context: e.context))
         .toList();
     student_verification = widget.profile.student_verification;
     selectedStudentStatusModel = UniversityStudentStatusModel(
@@ -159,10 +167,12 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       });
       return;
     }
-    if (nickNameController.text.trim() != widget.profile.nick_name ||
+    if (selectedPhotoModel != null ||
+        nickNameController.text.trim() != widget.profile.nick_name ||
         contextController.text.trim() != (widget.profile.context ?? '') ||
         !checkEqualLang() ||
-        !checkEqualIntroduction()) {
+        !checkEqualIntroduction() ||
+        !checkEqualUniv()) {
       // 수정여부 확인
       setState(() {
         isSaveEnable = true;
@@ -177,10 +187,79 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   }
 
   // 저장
-  onTapSave() {
+  onTapSave() async {
+    FocusScope.of(context).unfocus();
     if (!isSaveEnable) return;
 
-    // TODO 프로필 업데이트
+    Map<String, dynamic> data = {};
+
+    // 프로필 사진
+    if (selectedPhotoModel != null) {
+      // profile image upload
+      String? profilePhoto = await ref.read(utilRepositoryProvider).uploadImage(
+            photo: selectedPhotoModel!,
+            uploadImageType: UploadImageType.PROFILE,
+          );
+      data.addEntries(<String, dynamic>{
+        'profile_photo': profilePhoto,
+      }.entries);
+    }
+
+    // 닉네임
+    if (nickNameController.text != widget.profile.nick_name) {
+      data.addEntries(<String, dynamic>{
+        'nick_name': nickNameController.text,
+      }.entries);
+    }
+
+    // 자기소개
+    if (contextController.text != (widget.profile.context ?? '')) {
+      data.addEntries(<String, dynamic>{
+        'context': contextController.text,
+      }.entries);
+    }
+
+    // 좋아하는 것
+    if (!checkEqualIntroduction()) {
+      data.addEntries(<String, dynamic>{
+        'introductions': introductions.map((x) => x.toMap()).toList(),
+      }.entries);
+    }
+
+    // 사용가능언어
+    if (!checkEqualLang()) {
+      List<AvailableLanguageCreateModel> langList = useLanguageModelList
+          .map((x) => AvailableLanguageCreateModel(
+                language_id: x.languageModel.id,
+                level: getLevelServerValue(x.level),
+              ))
+          .toList();
+      data.addEntries(<String, dynamic>{
+        'available_languages': langList.map((x) => x.toMap()).toList(),
+      }.entries);
+    }
+
+    // 학교 정보
+    if (!checkEqualUniv() &&
+        selectedStudentStatusModel != null &&
+        selectedGraduateStatusModel != null) {
+      data.addEntries(<String, dynamic>{
+        'university_info': {
+          "department": selectedStudentStatusModel!.kname,
+          "education_status": selectedGraduateStatusModel!.kname,
+        },
+      }.entries);
+    }
+
+    logger.d(data);
+    final bool isOk = await ref.read(profileRepositoryProvider).updateProfile(
+          profile_id: widget.profile.id,
+          data: data,
+        );
+    if (isOk && mounted) {
+      ref.read(userMeProvider.notifier).getMe();
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -240,34 +319,68 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 child: Column(
                   children: [
                     // Avatar
-                    Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 44,
-                          backgroundImage: const AssetImage(
-                            'assets/images/88.png',
-                          ),
-                          foregroundImage: widget.profile.profile_photo == null
-                              ? null
-                              : NetworkImage(widget.profile.profile_photo!),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: kColorBgInverseWeak,
-                              shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () async {
+                        final List result = await Navigator.push(
+                              context,
+                              createUpDownRoute(
+                                const PhotoManagerScreen(
+                                  isCamera: true,
+                                  maxCnt: 1,
+                                ),
+                              ),
+                            ) ??
+                            [];
+                        logger.d(result);
+                        if (result.length == 1) {
+                          setState(() {
+                            selectedPhotoModel = result[0];
+                          });
+                          checkValue();
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 44,
+                            backgroundImage: const AssetImage(
+                              'assets/images/88.png',
                             ),
-                            child: SvgPicture.asset(
-                              'assets/icons/ic_pencil_fill_16.svg',
-                              width: 16,
-                              height: 16,
+                            foregroundImage: selectedPhotoModel == null
+                                ? (widget.profile.profile_photo == null
+                                    ? null
+                                    : NetworkImage(
+                                        widget.profile.profile_photo!))
+                                : selectedPhotoModel!.photoType ==
+                                        PhotoType.asset
+                                    ? AssetEntityImageProvider(
+                                        selectedPhotoModel!.assetEntity!,
+                                        isOriginal: true,
+                                      )
+                                    : Image.file(
+                                        File(
+                                          selectedPhotoModel!.cameraXfile!.path,
+                                        ),
+                                      ).image,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: kColorBgInverseWeak,
+                                shape: BoxShape.circle,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/icons/ic_pencil_fill_16.svg',
+                                width: 16,
+                                height: 16,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
 
                     const SizedBox(
@@ -379,7 +492,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              '0/300',
+                              '${contextController.text.length}/300',
                               style: getTsCaption11Rg(context).copyWith(
                                 color: kColorContentWeakest,
                               ),
@@ -829,12 +942,19 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         .map(
           (e) => KeywordModel(
             keyword: e.keyword,
-            reason: e.context,
+            context: e.context,
           ),
         )
         .toList();
     logger.d(list1);
     logger.d(introductions);
     return listEquals(list1, introductions);
+  }
+
+  bool checkEqualUniv() {
+    return selectedStudentStatusModel!.kname ==
+            widget.profile.user_university.department &&
+        selectedGraduateStatusModel!.kname ==
+            widget.profile.user_university.education_status;
   }
 }

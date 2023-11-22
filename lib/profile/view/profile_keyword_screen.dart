@@ -54,7 +54,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         //       .map(
         //         (e) => KeywordModel(
         //           keyword: e.keyword,
-        //           reason: e.context,
+        //           context: e.context,
         //         ),
         //       )
         //       .toList(),
@@ -95,7 +95,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
             keywordList.map(
               (e) => IntroductionCreateModel(
                 keyword: e.keyword,
-                context: e.reason,
+                context: e.context,
               ),
             ),
           )),
@@ -274,7 +274,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Text(
-                keywordList[index - 1].reason,
+                keywordList[index - 1].context,
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorBgElevation1,
                 ),
@@ -304,7 +304,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         if (result != null) {
           KeywordModel keywordModel = KeywordModel(
             keyword: result['keyword'],
-            reason: result['reason'],
+            context: result['context'],
           );
           setState(() {
             keywordList.insert(0, keywordModel);
@@ -354,33 +354,33 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
 
 class KeywordModel {
   final String keyword;
-  final String reason;
+  final String context;
   KeywordModel({
     required this.keyword,
-    required this.reason,
+    required this.context,
   });
 
   KeywordModel copyWith({
     String? keyword,
-    String? reason,
+    String? context,
   }) {
     return KeywordModel(
       keyword: keyword ?? this.keyword,
-      reason: reason ?? this.reason,
+      context: context ?? this.context,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'keyword': keyword,
-      'reason': reason,
+      'context': context,
     };
   }
 
   factory KeywordModel.fromMap(Map<String, dynamic> map) {
     return KeywordModel(
       keyword: map['keyword'] ?? '',
-      reason: map['reason'] ?? '',
+      context: map['context'] ?? '',
     );
   }
 
@@ -390,7 +390,7 @@ class KeywordModel {
       KeywordModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'KeywordModel(keyword: $keyword, reason: $reason)';
+  String toString() => 'KeywordModel(keyword: $keyword, context: $context)';
 
   @override
   bool operator ==(Object other) {
@@ -398,9 +398,9 @@ class KeywordModel {
 
     return other is KeywordModel &&
         other.keyword == keyword &&
-        other.reason == reason;
+        other.context == context;
   }
 
   @override
-  int get hashCode => keyword.hashCode ^ reason.hashCode;
+  int get hashCode => keyword.hashCode ^ context.hashCode;
 }

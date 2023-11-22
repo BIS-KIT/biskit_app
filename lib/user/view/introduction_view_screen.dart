@@ -161,7 +161,7 @@ class _IntroductionViewScreenState
                     builder: (context) => ProfileKeywordScreen(
                       introductions: userState.profile!.introductions
                           .map((e) => KeywordModel(
-                              keyword: e.keyword, reason: e.context))
+                              keyword: e.keyword, context: e.context))
                           .toList(),
                       isEditorMode: true,
                       userNickName: userState.profile!.nick_name,
@@ -175,7 +175,7 @@ class _IntroductionViewScreenState
                             'introductions': keywordList
                                 .map((x) => {
                                       'keyword': x.keyword,
-                                      'context': x.reason,
+                                      'context': x.context,
                                     })
                                 .toList(),
                           },

@@ -8,12 +8,15 @@ import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
+import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/profile/view/profile_edit_screen.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
@@ -488,6 +491,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                 color: kColorBgElevation1,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -560,32 +564,59 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                         height: 4,
                       ),
                       // SubText area
-                      Wrap(
-                        spacing: 4,
-                        children: [
-                          Text(
-                            userState
-                                .profile!.user_university.university.kr_name,
-                            style: getTsBody14Rg(context).copyWith(
-                              color: kColorContentWeaker,
-                            ),
-                          ),
-                          Text(
-                            '·',
-                            style: getTsBody14Rg(context).copyWith(
-                              color: kColorContentWeakest,
-                            ),
-                          ),
-                          Text(
-                            '${userState.profile!.user_university.department} ${userState.profile!.user_university.education_status}',
-                            style: getTsBody14Rg(context).copyWith(
-                              color: kColorContentWeaker,
-                            ),
-                          ),
-                        ],
-                      ),
+                      Builder(builder: (context) {
+                        StudentVerificationModel? studentVerification =
+                            userState.profile!.student_verification;
+                        if (studentVerification != null) {
+                          logger.d(studentVerification.toString());
+                          if (studentVerification.verification_status ==
+                              VerificationStatus.APPROVE.name) {
+                            return Wrap(
+                              spacing: 4,
+                              children: [
+                                Text(
+                                  userState.profile!.user_university.university
+                                      .kr_name,
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeaker,
+                                  ),
+                                ),
+                                Text(
+                                  '·',
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeakest,
+                                  ),
+                                ),
+                                Text(
+                                  '${userState.profile!.user_university.department} ${userState.profile!.user_university.education_status}',
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeaker,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        }
+                        return Container();
+                      }),
                     ],
                   ),
+                  if (userState.profile!.context != null &&
+                      userState.profile!.context!.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          userState.profile!.context!,
+                          style: getTsBody14Rg(context).copyWith(
+                            color: kColorContentWeaker,
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

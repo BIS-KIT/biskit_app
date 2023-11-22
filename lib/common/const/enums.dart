@@ -1,11 +1,17 @@
 // ignore_for_file: camel_case_types, constant_identifier_names
 
-/// 인증상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
+/// 미팅 참여자 인증상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
 enum VerificationStatus {
   PENDING,
-  VERIFIED,
+  APPROVE,
   REJECTED,
   UNVERIFIED,
+}
+
+enum MyMeetingStatus {
+  APPROVE,
+  PENDING,
+  PAST,
 }
 
 /// 로그인 sns 타입

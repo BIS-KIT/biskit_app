@@ -17,7 +17,7 @@ class KeywordInputWidget extends StatefulWidget {
 
 class _KeywordInputWidgetState extends State<KeywordInputWidget> {
   late final TextEditingController keywordController;
-  late final TextEditingController reasonController;
+  late final TextEditingController contextController;
   late final FocusNode keywordFocusNode;
   late final FocusNode reasonFocusNode;
 
@@ -49,13 +49,13 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
 
         setState(() {});
       });
-    reasonController = TextEditingController();
+    contextController = TextEditingController();
   }
 
   @override
   void dispose() {
     keywordController.dispose();
-    reasonController.dispose();
+    contextController.dispose();
     keywordFocusNode.dispose();
     reasonFocusNode.dispose();
     super.dispose();
@@ -63,14 +63,14 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
 
   getButtonEnable() {
     return keywordController.text.isNotEmpty &&
-        reasonController.text.isNotEmpty;
+        contextController.text.isNotEmpty;
   }
 
   onTapSubmit() {
     if (getButtonEnable()) {
       Navigator.pop(context, {
         'keyword': keywordController.text,
-        'reason': reasonController.text,
+        'context': contextController.text,
       });
     }
   }
@@ -155,7 +155,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                     ),
                                   ),
                                   child: TextFormField(
-                                    controller: reasonController,
+                                    controller: contextController,
                                     onChanged: (value) {
                                       if (value.isNotEmpty) {
                                         setState(() {});
@@ -191,7 +191,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                 height: 4,
                               ),
                               Text(
-                                '${reasonController.text.length}/300',
+                                '${contextController.text.length}/300',
                                 style: getTsCaption12Rg(context).copyWith(
                                   color: kColorContentWeakest,
                                 ),

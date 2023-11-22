@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/check_circle.dart';
