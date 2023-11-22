@@ -1,19 +1,23 @@
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AnnouncementScreen extends StatefulWidget {
+class AnnouncementScreen extends ConsumerStatefulWidget {
   const AnnouncementScreen({super.key});
 
   @override
-  State<AnnouncementScreen> createState() => _AnnouncementScreenState();
+  ConsumerState<AnnouncementScreen> createState() => _AnnouncementScreenState();
 }
 
-class _AnnouncementScreenState extends State<AnnouncementScreen> {
+class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
   @override
   Widget build(BuildContext context) {
+    bool isAdmin = (ref.watch(userMeProvider) as UserModel).is_admin;
     return DefaultLayout(
         title: '공지사항',
         shape: const Border(
@@ -22,6 +26,25 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
             color: kColorBorderDefalut,
           ),
         ),
+        actions: [
+          if (isAdmin)
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                width: 44,
+                height: 44,
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(right: 10),
+                child: SvgPicture.asset(
+                  'assets/icons/ic_plus_line_24.svg',
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+            )
+          else
+            Container(),
+        ],
         child: ListView.builder(
           itemCount: 4,
           itemBuilder: (BuildContext context, int index) {

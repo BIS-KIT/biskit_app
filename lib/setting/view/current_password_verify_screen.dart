@@ -3,32 +3,58 @@ import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CurrentPasswordVerifyScreen extends StatefulWidget {
+class CurrentPasswordVerifyScreen extends ConsumerStatefulWidget {
   const CurrentPasswordVerifyScreen({super.key});
 
   @override
-  State<CurrentPasswordVerifyScreen> createState() =>
+  ConsumerState<CurrentPasswordVerifyScreen> createState() =>
       _CurrentPasswordVerifyScreenState();
 }
 
 class _CurrentPasswordVerifyScreenState
-    extends State<CurrentPasswordVerifyScreen> {
+    extends ConsumerState<CurrentPasswordVerifyScreen> {
   String currentPassword = '';
   bool obscureText = true;
   String? currentPasswordError;
-  // TODO: api 연결 후 상태값 변경
   bool isButtonActive = true;
+
+  confirmCurrentPassword() async {
+    try {
+      logger.d('message');
+      bool? res = await ref.read(settingRepositoryProvider).confirmPassword(
+          userId: (ref.watch(userMeProvider) as UserModel).id,
+          password: currentPassword);
+      if (res && mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const SetPasswordScreen(pageType: PageType.reset),
+          ),
+        );
+      } else {
+        setState(() {
+          currentPasswordError = '비밀번호가 올바르지 않습니다';
+        });
+      }
+    } finally {}
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-        title: '비밀번호 변경',
-        child: SafeArea(
-            child: GestureDetector(
+      title: '비밀번호 변경',
+      child: SafeArea(
+        child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
           },
@@ -49,11 +75,13 @@ class _CurrentPasswordVerifyScreenState
                           hintText: "현재 비밀번호를 입력해주세요",
                           errorText: currentPasswordError,
                           onChanged: (value) {
+                            if (currentPasswordError!.isNotEmpty) {
+                              setState(() {
+                                currentPasswordError = null;
+                              });
+                            }
                             setState(() {
                               currentPassword = value;
-                              // if(currentPassword !== 실제 비밀번호) {
-                              //   currentPasswordError = '비밀번호가 올바르지 않습니다';
-                              // }
                             });
                           },
                           obscureText: obscureText,
@@ -85,13 +113,7 @@ class _CurrentPasswordVerifyScreenState
                 padding: const EdgeInsets.only(bottom: 0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const SetPasswordScreen(pageType: PageType.reset),
-                      ),
-                    );
+                    confirmCurrentPassword();
                   },
                   child: MediaQuery.of(context).viewInsets.bottom != 0
                       ? FullBleedButtonWidget(
@@ -108,6 +130,8 @@ class _CurrentPasswordVerifyScreenState
               ),
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

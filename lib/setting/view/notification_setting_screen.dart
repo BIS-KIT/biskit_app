@@ -1,23 +1,35 @@
-import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NotificationSettingScreen extends StatefulWidget {
+class NotificationSettingScreen extends ConsumerStatefulWidget {
   const NotificationSettingScreen({super.key});
 
   @override
-  State<NotificationSettingScreen> createState() =>
+  ConsumerState<NotificationSettingScreen> createState() =>
       _NotificationSettingScreenState();
 }
 
-class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
-  bool criticalNotification = false;
-  bool generalNotification = false;
+class _NotificationSettingScreenState
+    extends ConsumerState<NotificationSettingScreen> {
+  bool? criticalNotification;
+  bool? generalNotification;
+
   @override
   Widget build(BuildContext context) {
+    if (criticalNotification == null || generalNotification == null) {
+      setState(() {
+        criticalNotification =
+            (ref.watch(systemProvider) as UserSystemModel).main_alarm;
+        generalNotification =
+            (ref.watch(systemProvider) as UserSystemModel).etc_alarm;
+      });
+    }
     return DefaultLayout(
         title: '알림',
         shape: const Border(
@@ -26,6 +38,16 @@ class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
             color: kColorBorderDefalut,
           ),
         ),
+        onTapLeading: () async {
+          await ref.read(systemProvider.notifier).updateUserAlarm(
+                systemId: (ref.watch(systemProvider) as UserSystemModel).id,
+                mainAlarm: criticalNotification,
+                etcAlarm: generalNotification,
+              );
+          if (mounted) {
+            Navigator.pop(context);
+          }
+        },
         child: Column(
           children: [
             Padding(
@@ -56,7 +78,7 @@ class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
                     width: 4,
                   ),
                   CupertinoSwitch(
-                    value: criticalNotification,
+                    value: criticalNotification!,
                     activeColor: kColorBgPrimaryStrong,
                     onChanged: (bool? value) {
                       if (criticalNotification == false) {
@@ -69,11 +91,20 @@ class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
                             Navigator.pop(context);
                           },
                           rightButton: '알림 켜기',
-                          rightCall: () {
+                          rightCall: () async {
                             // TODO: 알림 설정으로 이동
                             setState(() {
                               criticalNotification = true;
                             });
+                            await ref
+                                .read(systemProvider.notifier)
+                                .updateUserAlarm(
+                                  systemId: (ref.watch(systemProvider)
+                                          as UserSystemModel)
+                                      .id,
+                                  mainAlarm: criticalNotification,
+                                  etcAlarm: generalNotification,
+                                );
                             Navigator.pop(context);
                           },
                           rightBackgroundColor: kColorBgPrimary,
@@ -117,7 +148,7 @@ class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
                     width: 4,
                   ),
                   CupertinoSwitch(
-                    value: generalNotification,
+                    value: generalNotification!,
                     activeColor: kColorBgPrimaryStrong,
                     onChanged: (bool? value) {
                       if (generalNotification == false) {
@@ -130,11 +161,20 @@ class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
                             Navigator.pop(context);
                           },
                           rightButton: '알림 켜기',
-                          rightCall: () {
+                          rightCall: () async {
                             // TODO: 알림 설정으로 이동
                             setState(() {
                               generalNotification = true;
                             });
+                            await ref
+                                .read(systemProvider.notifier)
+                                .updateUserAlarm(
+                                  systemId: (ref.watch(systemProvider)
+                                          as UserSystemModel)
+                                      .id,
+                                  mainAlarm: criticalNotification,
+                                  etcAlarm: generalNotification,
+                                );
                             Navigator.pop(context);
                           },
                           rightBackgroundColor: kColorBgPrimary,

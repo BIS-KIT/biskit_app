@@ -1,6 +1,6 @@
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/user/view/account_delete_step_2_screen.dart';
+import 'package:biskit_app/setting/view/account_delete_step_2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -49,12 +49,12 @@ class _MeetUpCreateStep1TabState
                   height: 56,
                   child: GestureDetector(
                     onTap: () {
-                      // TODO: 탈퇴 사유 id(index) 저장
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AccountDeleteStep2Screen(),
+                          builder: (context) => AccountDeleteStep2Screen(
+                            accountDeleteReason: reasons[index],
+                          ),
                         ),
                       );
                     },
