@@ -7,13 +7,14 @@ import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/repository/review_repository.dart';
 
-final reviewProvider = StateNotifierProvider<ReviewStateNotifier,
-    CursorPagination<ResReviewModel>>(
-  (ref) => ReviewStateNotifier(
+final reviewProvider = StateNotifierProvider.family<ReviewStateNotifier,
+    CursorPagination<ResReviewModel>, int?>(
+  (ref, id) => ReviewStateNotifier(
     reviewRepository: ref.watch(reviewRepositoryProvider),
     meetUpRepository: ref.watch(
       meetUpRepositoryProvider,
     ),
+    userId: id,
   ),
 );
 
@@ -30,6 +31,7 @@ class ReviewStateNotifier
     extends StateNotifier<CursorPagination<ResReviewModel>> {
   final ReviewRepository reviewRepository;
   final MeetUpRepository meetUpRepository;
+  final int? userId;
   final paginationThrottle = Throttle(
     const Duration(seconds: 3),
     initialValue: _PaginationInfo(
@@ -40,6 +42,7 @@ class ReviewStateNotifier
   ReviewStateNotifier({
     required this.reviewRepository,
     required this.meetUpRepository,
+    required this.userId,
   }) : super(CursorPagination<ResReviewModel>(
           data: [],
           meta: CursorPaginationMeta(
@@ -86,6 +89,7 @@ class ReviewStateNotifier
         await meetUpRepository.getMeetingAllReviews(
       skip: state.data.length,
       limit: limit,
+      userId: userId!,
     );
     if (cursorPagination != null) {
       state = state.copyWith(

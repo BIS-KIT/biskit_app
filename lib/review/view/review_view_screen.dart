@@ -1,12 +1,9 @@
-import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
-import 'package:biskit_app/review/repository/review_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/common/components/review_card_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
@@ -16,8 +13,11 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_view_screen.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
+import 'package:biskit_app/review/repository/review_repository.dart';
 import 'package:biskit_app/review/view/review_edit_screen.dart';
 
 class ReviewViewScreen extends ConsumerStatefulWidget {
@@ -94,7 +94,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
           leftButton: '취소',
           rightCall: () async {
             if (resReviewModel == null) return;
-            await ref.read(reviewProvider.notifier).deleteReview(
+            await ref.read(reviewProvider(null).notifier).deleteReview(
                   id: resReviewModel!.id,
                 );
             if (!context.mounted) return;

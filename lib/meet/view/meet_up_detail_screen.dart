@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/utils/string_util.dart';
+import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
@@ -21,7 +22,7 @@ import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_member_management_screen.dart';
-import 'package:biskit_app/profile/components/profile_card_with_subtext_widget.dart';
+import 'package:biskit_app/profile/components/profile_list_with_subtext_widget.dart';
 import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -175,7 +176,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   // 프로필 선택
   onTapProfile(UserModel userModel) {
-    // TODO
+    if (userModel.profile == null) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileViewScreen(userId: userModel.id),
+      ),
+    );
   }
 
   // 채팅하기 버튼
@@ -252,8 +259,17 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           MoreButton(
             text: '모임 나가기',
             color: kColorContentError,
-            onTap: () {
-              // TODO
+            onTap: () async {
+              bool isOk =
+                  await ref.read(meetUpRepositoryProvider).postExitMeeting(
+                        user_id: userState!.id,
+                        meeting_id: meetUpDetailModel!.id,
+                      );
+              if (isOk) {
+                await init();
+                if (!mounted) return;
+                Navigator.pop(context);
+              }
             },
           ),
           MoreButton(
@@ -760,7 +776,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             Column(
               children: [
                 ...meetUpDetailModel!.participants.map(
-                  (e) => ProfileCardWithSubtextWidget(
+                  (e) => ProfileListWithSubtextWidget(
                     userNationalityModel: e.user_nationality[0],
                     name: e.profile!.nick_name,
                     profilePath: e.profile!.profile_photo,
@@ -1052,6 +1068,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             children: [
                               ...meetUpDetailModel!.languages.mapIndexed(
                                 (index, lang) => Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     NumberBadgeWidget(
