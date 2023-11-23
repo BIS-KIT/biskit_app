@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/components/review_card_widget.dart';
+import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';

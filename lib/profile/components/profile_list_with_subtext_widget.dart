@@ -9,7 +9,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/profile/model/introduction_model.dart';
 import 'package:biskit_app/user/model/user_nationality_model.dart';
 
-class ProfileCardWithSubtextWidget extends StatefulWidget {
+class ProfileListWithSubtextWidget extends StatefulWidget {
   final UserNationalityModel userNationalityModel;
   final String name;
   final bool isCreator;
@@ -18,7 +18,7 @@ class ProfileCardWithSubtextWidget extends StatefulWidget {
   // final UserUniversityModel universityModel;
   final List<IntroductionModel> introductions;
   final VoidCallback onTap;
-  const ProfileCardWithSubtextWidget({
+  const ProfileListWithSubtextWidget({
     Key? key,
     required this.userNationalityModel,
     required this.name,
@@ -31,12 +31,12 @@ class ProfileCardWithSubtextWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProfileCardWithSubtextWidget> createState() =>
-      _ProfileCardWithSubtextWidgetState();
+  State<ProfileListWithSubtextWidget> createState() =>
+      _ProfileListWithSubtextWidgetState();
 }
 
-class _ProfileCardWithSubtextWidgetState
-    extends State<ProfileCardWithSubtextWidget> {
+class _ProfileListWithSubtextWidgetState
+    extends State<ProfileListWithSubtextWidget> {
   bool _pressed = false;
   @override
   Widget build(BuildContext context) {

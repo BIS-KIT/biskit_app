@@ -5,8 +5,9 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/meet_up_request_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
-import 'package:biskit_app/profile/components/profile_card_widget.dart';
-import 'package:biskit_app/profile/components/profile_card_with_subtext_widget.dart';
+import 'package:biskit_app/profile/components/profile_list_widget.dart';
+import 'package:biskit_app/profile/components/profile_list_with_subtext_widget.dart';
+import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -173,7 +174,7 @@ class _MeetUpMemberManagementScreenState
                                           CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
-                                          child: ProfileCardWithSubtextWidget(
+                                          child: ProfileListWithSubtextWidget(
                                             userNationalityModel:
                                                 model.user.user_nationality[0],
                                             name: model.user.profile!.nick_name,
@@ -183,7 +184,20 @@ class _MeetUpMemberManagementScreenState
                                             // TODO 모임 참가 신청 일자 해야함
                                             subText: '10.22(일) 오전 10:23 신청',
                                             introductions: const [],
-                                            onTap: () {},
+                                            onTap: () {
+                                              if (model.user.profile == null) {
+                                                return;
+                                              }
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileViewScreen(
+                                                    userId: model.user.id,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                         SvgPicture.asset(
@@ -267,14 +281,24 @@ class _MeetUpMemberManagementScreenState
                       Row(
                         children: [
                           Expanded(
-                            child: ProfileCardWidget(
+                            child: ProfileListWidget(
                               userNationalityModel: e.user_nationality[0],
                               name: e.profile!.nick_name,
                               profilePath: e.profile!.profile_photo,
                               isCreator:
                                   widget.meetUpDetailModel.creator.id == e.id,
                               onTap: () {
-                                // TODO 프로필 상세보기
+                                if (e.profile == null) {
+                                  return;
+                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileViewScreen(
+                                      userId: e.id,
+                                    ),
+                                  ),
+                                );
                               },
                             ),
                           ),

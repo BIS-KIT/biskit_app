@@ -332,47 +332,48 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   getMeetingAllReviews({
     required int skip,
     required int limit,
+    required int userId,
   }) async {
     CursorPagination<ResReviewModel>? cursorPagination;
     // List<ResReviewModel> list = [];
-    final user = ref.watch(userMeProvider);
-    if (user is UserModel) {
-      try {
-        final res = await dio.get(
-          '$baseUrl/reviews/${user.id}',
-          options: Options(
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'accessToken': 'true',
-            },
-          ),
-          queryParameters: {
-            'skip': skip,
-            'limit': limit,
+    // final user = ref.watch(userMeProvider);
+    // if (user is UserModel) {
+    try {
+      final res = await dio.get(
+        '$baseUrl/reviews/$userId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
           },
-        );
+        ),
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+        },
+      );
 
-        if (res.statusCode == 200) {
-          // logger.d(res);
-          if ((res.data as Map).containsKey('total_count')) {
-            int totalCount = res.data['total_count'];
-            int count = (res.data['reviews'] as List).length;
-            cursorPagination = CursorPagination<ResReviewModel>(
-              meta: CursorPaginationMeta(
-                count: count,
-                totalCount: totalCount,
-                hasMore: (skip + count < totalCount),
-              ),
-              data: List.from(
-                  res.data['reviews'].map((e) => ResReviewModel.fromMap(e))),
-            );
-          }
+      if (res.statusCode == 200) {
+        // logger.d(res);
+        if ((res.data as Map).containsKey('total_count')) {
+          int totalCount = res.data['total_count'];
+          int count = (res.data['reviews'] as List).length;
+          cursorPagination = CursorPagination<ResReviewModel>(
+            meta: CursorPaginationMeta(
+              count: count,
+              totalCount: totalCount,
+              hasMore: (skip + count < totalCount),
+            ),
+            data: List.from(
+                res.data['reviews'].map((e) => ResReviewModel.fromMap(e))),
+          );
         }
-      } catch (e) {
-        logger.e(e.toString());
       }
+    } catch (e) {
+      logger.e(e.toString());
     }
+    // }
     return cursorPagination;
   }
 
@@ -550,6 +551,33 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         ref.read(meetUpFilterProvider.notifier).paginate();
         // 프로필 미팅 리스트 조회
         ref.read(profileMeetingProvider.notifier).fetch();
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
+  }
+
+  postExitMeeting({
+    required int user_id,
+    required int meeting_id,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.delete(
+        '$baseUrl/$meeting_id/user/$user_id/exit',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+
+      logger.d(res);
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        isOk = true;
       }
     } catch (e) {
       logger.e(e.toString());

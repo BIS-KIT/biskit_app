@@ -1,9 +1,3 @@
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/profile/repository/profile_repository.dart';
-import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
-import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,10 +5,19 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 
 class IntroductionViewScreen extends ConsumerStatefulWidget {
+  final bool isEditorEnable;
+  final String? nickName;
   const IntroductionViewScreen({
     Key? key,
+    this.isEditorEnable = true,
+    this.nickName,
   }) : super(key: key);
 
   @override
@@ -118,92 +121,118 @@ class _IntroductionViewScreenState
     );
   }
 
-  Padding _buildAppBar(
+  Widget _buildAppBar(
     BuildContext context,
     UserModel userState,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 2,
-        horizontal: 10,
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: SvgPicture.asset(
-                'assets/icons/ic_arrow_back_ios_line_24.svg',
-                width: 24,
-                height: 24,
-                colorFilter: const ColorFilter.mode(
-                  kColorContentDefault,
-                  BlendMode.srcIn,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 2,
+            horizontal: 10,
+          ),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_arrow_back_ios_line_24.svg',
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentDefault,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Expanded(
+                child: Text(
+                  widget.isEditorEnable ? '좋아하는 것' : '',
+                  textAlign: TextAlign.center,
+                  style: getTsBody16Sb(context).copyWith(
+                    color: kColorContentDefault,
+                  ),
+                ),
+              ),
+              widget.isEditorEnable
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileKeywordScreen(
+                                introductions: userState.profile!.introductions
+                                    .map((e) => KeywordModel(
+                                        keyword: e.keyword, context: e.context))
+                                    .toList(),
+                                isEditorMode: true,
+                                userNickName: userState.profile!.nick_name,
+                                editorCallback: (keywordList) async {
+                                  logger.d(keywordList);
+                                  bool isOk = await ref
+                                      .read(profileRepositoryProvider)
+                                      .updateProfile(
+                                    profile_id: userState.profile!.id,
+                                    data: {
+                                      'introductions': keywordList
+                                          .map((x) => {
+                                                'keyword': x.keyword,
+                                                'context': x.context,
+                                              })
+                                          .toList(),
+                                    },
+                                  );
+                                  if (isOk) {
+                                    ref.read(userMeProvider.notifier).getMe();
+                                    if (!mounted) return;
+                                    Navigator.pop(context);
+                                  }
+                                },
+                              ),
+                            ));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_pencil_line_24.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: const ColorFilter.mode(
+                            kColorContentDefault,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(
+                      width: 44,
+                      height: 44,
+                    ),
+            ],
           ),
-          Expanded(
+        ),
+        if (!widget.isEditorEnable)
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 4,
+              left: 20,
+              bottom: 8,
+              right: 20,
+            ),
             child: Text(
-              '좋아하는 것',
-              textAlign: TextAlign.center,
-              style: getTsBody16Sb(context).copyWith(
+              '${widget.nickName ?? ''}님이\n좋아하는 것들이에요',
+              textAlign: TextAlign.left,
+              style: getTsHeading20(context).copyWith(
                 color: kColorContentDefault,
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileKeywordScreen(
-                      introductions: userState.profile!.introductions
-                          .map((e) => KeywordModel(
-                              keyword: e.keyword, context: e.context))
-                          .toList(),
-                      isEditorMode: true,
-                      userNickName: userState.profile!.nick_name,
-                      editorCallback: (keywordList) async {
-                        logger.d(keywordList);
-                        bool isOk = await ref
-                            .read(profileRepositoryProvider)
-                            .updateProfile(
-                          profile_id: userState.profile!.id,
-                          data: {
-                            'introductions': keywordList
-                                .map((x) => {
-                                      'keyword': x.keyword,
-                                      'context': x.context,
-                                    })
-                                .toList(),
-                          },
-                        );
-                        if (isOk) {
-                          ref.read(userMeProvider.notifier).getMe();
-                          if (!mounted) return;
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ));
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: SvgPicture.asset(
-                'assets/icons/ic_pencil_line_24.svg',
-                width: 24,
-                height: 24,
-                colorFilter: const ColorFilter.mode(
-                  kColorContentDefault,
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }
