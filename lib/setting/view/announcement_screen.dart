@@ -1,6 +1,7 @@
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/setting/view/write_announcement_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,14 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
         actions: [
           if (isAdmin)
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WriteAnnouncementScreen(),
+                  ),
+                );
+              },
               child: Container(
                 width: 44,
                 height: 44,
