@@ -1,7 +1,9 @@
 import 'package:biskit_app/chat/view/chat_room_screen.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/home_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
@@ -69,13 +71,17 @@ class _RootTabState extends ConsumerState<RootTab>
           unselectedFontSize: 0,
           backgroundColor: kColorBgDefault,
           type: BottomNavigationBarType.fixed,
-          onTap: (index) {
+          onTap: (index) async {
             if (index == 2) {
-              Navigator.push(
+              final List<dynamic>? result = await Navigator.push(
                 context,
                 createUpDownRoute(const MeetUpCreateScreen()),
               );
-              return;
+
+              logger.d(result);
+              if (result != null && result[0] as bool) {
+                ref.read(homeProvider.notifier).init();
+              }
             } else {
               ref.read(rootProvider.notifier).onTapBottomNav(index);
               // controller.animateTo(index);

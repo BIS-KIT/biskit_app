@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:biskit_app/common/components/progress_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -7,15 +10,19 @@ import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_1_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_2_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_3_tab.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/components/filled_button_widget.dart';
 import '../../common/layout/default_layout.dart';
 import 'meet_up_create_step_4_tab.dart';
 
 class MeetUpCreateScreen extends ConsumerStatefulWidget {
-  const MeetUpCreateScreen({super.key});
+  final bool isEditMode;
+  final int? editMeetingId;
+  const MeetUpCreateScreen({
+    super.key,
+    this.isEditMode = false,
+    this.editMeetingId,
+  });
 
   @override
   ConsumerState<MeetUpCreateScreen> createState() => _MeetUpCreateScreenState();
@@ -98,24 +105,45 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     if (pageIndex > 0) {
       controller.animateTo(pageIndex - 1);
     } else if (pageIndex == 0) {
-      await showConfirmModal(
-        context: context,
-        leftCall: () {
-          Navigator.pop(context);
-        },
-        leftButton: '취소',
-        rightCall: () {
-          isPop = true;
-          ref.read(createMeetUpProvider.notifier).init();
-          Navigator.pop(context);
-          Navigator.pop(context, [true]);
-        },
-        rightButton: '나가기',
-        rightBackgroundColor: kColorBgError,
-        rightTextColor: kColorContentError,
-        title: '나가시겠어요?',
-        content: '작성한 모임 정보가 모두 사라져요',
-      );
+      if (widget.isEditMode) {
+        await showConfirmModal(
+          context: context,
+          leftCall: () {
+            Navigator.pop(context);
+          },
+          leftButton: '계속 수정',
+          rightCall: () {
+            isPop = true;
+            ref.read(createMeetUpProvider.notifier).init();
+            Navigator.pop(context);
+            Navigator.pop(context, [true]);
+          },
+          rightButton: '수정 취소',
+          rightBackgroundColor: kColorBgError,
+          rightTextColor: kColorContentError,
+          title: '모임 수정을 취소하시겠어요?',
+          content: '저장하지 않은 수정 사항은 사라져요',
+        );
+      } else {
+        await showConfirmModal(
+          context: context,
+          leftCall: () {
+            Navigator.pop(context);
+          },
+          leftButton: '취소',
+          rightCall: () {
+            isPop = true;
+            ref.read(createMeetUpProvider.notifier).init();
+            Navigator.pop(context);
+            Navigator.pop(context, [true]);
+          },
+          rightButton: '나가기',
+          rightBackgroundColor: kColorBgError,
+          rightTextColor: kColorContentError,
+          title: '나가시겠어요?',
+          content: '작성한 모임 정보가 모두 사라져요',
+        );
+      }
     }
     return isPop;
   }
@@ -207,19 +235,31 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                         if (pageIndex >= 0 && pageIndex < 3) {
                           controller.animateTo(pageIndex + 1);
                         } else {
-                          final result = await ref
-                              .read(createMeetUpProvider.notifier)
-                              .createMeetUp();
+                          bool result = false;
+                          if (widget.isEditMode) {
+                            result = await ref
+                                .read(createMeetUpProvider.notifier)
+                                .putUpdateMeetUp(widget.editMeetingId!);
+                          } else {
+                            result = await ref
+                                .read(createMeetUpProvider.notifier)
+                                .createMeetUp();
+                          }
                           if (result) {
                             if (!mounted) return;
-                            Navigator.pop(context);
+                            Navigator.pop(
+                                context, widget.isEditMode ? true : [true]);
                           }
                         }
                       }
                     },
                     child: FilledButtonWidget(
                       height: 56,
-                      text: pageIndex == 3 ? '모임 만들기' : '다음',
+                      text: pageIndex == 3
+                          ? widget.isEditMode
+                              ? '수정하기'
+                              : '모임 만들기'
+                          : '다음',
                       isEnable: isButtonEnable(),
                     ),
                   ),
@@ -229,18 +269,30 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   return GestureDetector(
                     onTap: () async {
                       if (isButtonEnable()) {
-                        final result = await ref
-                            .read(createMeetUpProvider.notifier)
-                            .createMeetUp();
+                        bool result = false;
+                        if (widget.isEditMode) {
+                          result = await ref
+                              .read(createMeetUpProvider.notifier)
+                              .putUpdateMeetUp(widget.editMeetingId!);
+                        } else {
+                          result = await ref
+                              .read(createMeetUpProvider.notifier)
+                              .createMeetUp();
+                        }
                         if (result) {
                           if (!mounted) return;
-                          Navigator.pop(context);
+                          Navigator.pop(
+                              context, widget.isEditMode ? true : [true]);
                         }
                       }
                     },
                     child: FilledButtonWidget(
                       height: 56,
-                      text: pageIndex == 3 ? '모임 만들기' : '다음',
+                      text: pageIndex == 3
+                          ? widget.isEditMode
+                              ? '수정하기'
+                              : '모임 만들기'
+                          : '다음',
                       isEnable: isButtonEnable(),
                     ),
                   );

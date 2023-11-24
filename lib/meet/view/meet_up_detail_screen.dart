@@ -1,4 +1,8 @@
+import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
+import 'package:biskit_app/meet/model/create_meet_up_model.dart';
+import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
+import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -214,7 +218,55 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             text: '수정하기',
             color: kColorContentDefault,
             onTap: () async {
-              // TODO
+              if (meetUpDetailModel == null) return;
+
+              ref
+                  .read(createMeetUpProvider.notifier)
+                  .setCreateMeeupModel(CreateMeetUpModel(
+                    custom_tags: meetUpDetailModel!.tags
+                        .where((element) => element.is_custom)
+                        .map((e) => e.kr_name)
+                        .toList(),
+                    custom_topics: meetUpDetailModel!.topics
+                        .where((element) => element.is_custom)
+                        .map((e) => e.kr_name)
+                        .toList(),
+                    creator_id: meetUpDetailModel!.creator.id,
+                    tag_ids: meetUpDetailModel!.tags
+                        .where((element) => !element.is_custom)
+                        .map((e) => e.id)
+                        .toList(),
+                    topic_ids: meetUpDetailModel!.topics
+                        .where((element) => !element.is_custom)
+                        .map((e) => e.id)
+                        .toList(),
+                    language_ids:
+                        meetUpDetailModel!.languages.map((e) => e.id).toList(),
+                    location: meetUpDetailModel!.location,
+                    max_participants: meetUpDetailModel!.max_participants,
+                    meeting_time: meetUpDetailModel!.meeting_time,
+                    name: meetUpDetailModel!.name,
+                    description: meetUpDetailModel!.description,
+                    x_coord: meetUpDetailModel!.x_coord,
+                    y_coord: meetUpDetailModel!.y_coord,
+                    place_url: meetUpDetailModel!.place_url,
+                    chat_id: meetUpDetailModel!.chat_id,
+                    image_url: meetUpDetailModel!.image_url,
+                    is_active: meetUpDetailModel!.is_active,
+                  ));
+              Navigator.pop(context);
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MeetUpCreateScreen(
+                    isEditMode: true,
+                    editMeetingId: meetUpDetailModel!.id,
+                  ),
+                ),
+              );
+              if (result) {
+                await init();
+              }
             },
           ),
           MoreButton(
@@ -240,6 +292,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                         .deleteMeeting(meetUpDetailModel!);
                     if (!mounted) return;
                     if (isOk) {
+                      ref.read(homeProvider.notifier).init();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     }
@@ -327,26 +380,28 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             opacity: 1,
                             child: Builder(builder: (context) {
                               String bgImagePath = 'assets/images/bg_food.png';
-                              if ((widget.meetUpModel.image_url ?? '')
-                                  .contains('activity')) {
-                                bgImagePath = 'assets/images/bg_activity.png';
-                              } else if ((widget.meetUpModel.image_url ?? '')
-                                  .contains('study')) {
-                                bgImagePath = 'assets/images/bg_study.png';
-                              } else if ((widget.meetUpModel.image_url ?? '')
-                                  .contains('sports')) {
-                                bgImagePath = 'assets/images/bg_sports.png';
-                              } else if ((widget.meetUpModel.image_url ?? '')
-                                  .contains('lang')) {
-                                bgImagePath = 'assets/images/bg_lang.png';
-                              } else if ((widget.meetUpModel.image_url ?? '')
-                                  .contains('culture')) {
-                                bgImagePath = 'assets/images/bg_culture.png';
-                              } else if ((widget.meetUpModel.image_url ?? '')
-                                  .contains('hobby')) {
-                                bgImagePath = 'assets/images/bg_hobby.png';
-                              } else {
-                                bgImagePath = 'assets/images/bg_talk.png';
+                              if (meetUpDetailModel != null) {
+                                if ((meetUpDetailModel!.image_url)
+                                    .contains('activity')) {
+                                  bgImagePath = 'assets/images/bg_activity.png';
+                                } else if ((meetUpDetailModel!.image_url)
+                                    .contains('study')) {
+                                  bgImagePath = 'assets/images/bg_study.png';
+                                } else if ((meetUpDetailModel!.image_url)
+                                    .contains('sports')) {
+                                  bgImagePath = 'assets/images/bg_sports.png';
+                                } else if ((meetUpDetailModel!.image_url)
+                                    .contains('lang')) {
+                                  bgImagePath = 'assets/images/bg_lang.png';
+                                } else if ((meetUpDetailModel!.image_url)
+                                    .contains('culture')) {
+                                  bgImagePath = 'assets/images/bg_culture.png';
+                                } else if ((meetUpDetailModel!.image_url)
+                                    .contains('hobby')) {
+                                  bgImagePath = 'assets/images/bg_hobby.png';
+                                } else {
+                                  bgImagePath = 'assets/images/bg_talk.png';
+                                }
                               }
                               return Container(
                                 key: _mainBoxKey,
@@ -390,7 +445,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                       height: 12,
                                     ),
                                     Text(
-                                      widget.meetUpModel.name,
+                                      meetUpDetailModel?.name ?? '',
                                       style: getTsHeading20(context).copyWith(
                                           color: kColorContentDefault),
                                     ),
@@ -571,7 +626,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     if (meetUpDetailModel == null) return Container();
 
     if (meetUpDetailModel!.is_active) {
-      if (userState!.id == widget.meetUpModel.creator.id) {
+      if (userState!.id == meetUpDetailModel!.creator.id) {
         return GestureDetector(
           onTap: () {
             onTapMembersManagement();
@@ -660,7 +715,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               // duration: const Duration(seconds: 1),
               opacity: opacity,
               child: Text(
-                widget.meetUpModel.name,
+                meetUpDetailModel?.name ?? '',
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 maxLines: 1,
@@ -719,7 +774,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                   width: 4,
                 ),
                 Text(
-                  widget.meetUpModel.current_participants.toString(),
+                  (meetUpDetailModel?.current_participants ?? '').toString(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentSecondary,
                   ),
@@ -727,47 +782,47 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          Container(
-            padding: const EdgeInsets.only(
-              top: 16,
-              left: 16,
-              bottom: 24,
-              right: 16,
-            ),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
+          if (meetUpDetailModel != null &&
+              (meetUpDetailModel!.foreign_count == 0 ||
+                  meetUpDetailModel!.korean_count == 0))
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(
+                top: 16,
+                left: 16,
+                bottom: 24,
+                right: 16,
               ),
-              color: kColorBgElevation1,
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 9.57,
-                    left: 6.05,
-                    bottom: 9.53,
-                    right: 6.01,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+                color: kColorBgElevation1,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 9.57,
+                      left: 6.05,
+                      bottom: 9.53,
+                      right: 6.01,
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_person_one.svg',
+                    ),
                   ),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic_person_one.svg',
+                  const SizedBox(
+                    height: 8,
                   ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                // TODO 외국인인지 한국인인지 판단처리
-                Text(
-                  "첫 한국인 참가자가 되어보세요",
-                  style: getTsBody16Sb(context)
-                      .copyWith(color: kColorContentPlaceholder),
-                ),
-              ],
+                  Text(
+                    "첫 ${meetUpDetailModel!.foreign_count == 0 ? '외국인' : '한국인'} 참가자가 되어보세요",
+                    style: getTsBody16Sb(context)
+                        .copyWith(color: kColorContentPlaceholder),
+                  ),
+                ],
+              ),
             ),
-          ),
           const SizedBox(
             height: 16,
           ),
@@ -780,7 +835,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                     userNationalityModel: e.user_nationality[0],
                     name: e.profile!.nick_name,
                     profilePath: e.profile!.profile_photo,
-                    isCreator: e.id == widget.meetUpModel.creator.id,
+                    isCreator: e.id == meetUpDetailModel!.creator.id,
                     subText:
                         '${e.profile!.user_university.university.kr_name} · ${e.profile!.user_university.department} ${e.profile!.user_university.education_status}',
                     introductions: e.profile!.introductions,
@@ -824,17 +879,18 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           const SizedBox(
             height: 16,
           ),
-          Wrap(
-            spacing: 6,
-            runSpacing: 8,
-            children: [
-              ...widget.meetUpModel.tags.map(
-                (tag) => BadgeEmojiWidget(
-                  label: tag.kr_name,
+          if (meetUpDetailModel != null)
+            Wrap(
+              spacing: 6,
+              runSpacing: 8,
+              children: [
+                ...meetUpDetailModel!.tags.map(
+                  (tag) => BadgeEmojiWidget(
+                    label: tag.kr_name,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );
@@ -887,7 +943,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                widget.meetUpModel.location,
+                meetUpDetailModel?.location ?? '',
                 maxLines: 1,
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorContentWeak,
@@ -953,10 +1009,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                dateFormat1.format(
-                                  DateTime.parse(
-                                      widget.meetUpModel.meeting_time),
-                                ),
+                                meetUpDetailModel == null
+                                    ? ''
+                                    : dateFormat1.format(
+                                        DateTime.parse(
+                                            meetUpDetailModel!.meeting_time),
+                                      ),
                                 textAlign: TextAlign.center,
                                 style: getTsBody14Rg(context).copyWith(
                                   color: kColorContentWeak,
@@ -972,10 +1030,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                dateFormat2.format(
-                                  DateTime.parse(
-                                      widget.meetUpModel.meeting_time),
-                                ),
+                                meetUpDetailModel == null
+                                    ? ''
+                                    : dateFormat2.format(
+                                        DateTime.parse(
+                                            meetUpDetailModel!.meeting_time),
+                                      ),
                                 textAlign: TextAlign.center,
                                 style: getTsBody14Rg(context).copyWith(
                                   color: kColorContentWeak,
@@ -1009,32 +1069,34 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Expanded(
-                        child: SizedBox(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${widget.meetUpModel.current_participants}/${widget.meetUpModel.max_participants}명',
-                                textAlign: TextAlign.center,
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                      if (meetUpDetailModel != null)
+                        Expanded(
+                          child: SizedBox(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${meetUpDetailModel!.current_participants}/${meetUpDetailModel!.max_participants}명',
+                                  textAlign: TextAlign.center,
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              if (widget
-                                  .meetUpModel.participants_status.isNotEmpty)
-                                BadgeWidget(
-                                  text: widget.meetUpModel.participants_status,
-                                  textColor: kColorContentSecondary,
-                                  backgroundColor: kColorBgSecondaryWeak,
-                                ),
-                            ],
+                                const SizedBox(width: 8),
+                                if (meetUpDetailModel!
+                                    .participants_status.isNotEmpty)
+                                  BadgeWidget(
+                                    text:
+                                        meetUpDetailModel!.participants_status,
+                                    textColor: kColorContentSecondary,
+                                    backgroundColor: kColorBgSecondaryWeak,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
