@@ -291,6 +291,34 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     }
     return result;
   }
+
+  void setCreateMeeupModel(CreateMeetUpModel createMeetUpModel) {
+    state = createMeetUpModel;
+  }
+
+  putUpdateMeetUp(int meetingId) async {
+    bool result = false;
+    if (state != null) {
+      String? imageUrl;
+      for (var topic in fixTopics) {
+        if (state!.topic_ids.contains(topic.id)) {
+          imageUrl = topic.icon_url;
+          break;
+        }
+      }
+
+      result = await meetUpRepository.putUpdateMeetUp(
+        id: meetingId,
+        model: state!.copyWith(
+          image_url: imageUrl,
+        ),
+      );
+      if (result) {
+        init();
+      }
+    }
+    return result;
+  }
 }
 
 class CreateMeetUpStateModel {

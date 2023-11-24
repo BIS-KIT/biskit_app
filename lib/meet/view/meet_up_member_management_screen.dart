@@ -114,6 +114,18 @@ class _MeetUpMemberManagementScreenState
         MoreButton(
           text: '내보내기',
           color: kColorContentError,
+          onTap: () async {
+            bool isOk =
+                await ref.read(meetUpRepositoryProvider).postExitMeeting(
+                      user_id: userModel.id,
+                      meeting_id: widget.meetUpDetailModel.id,
+                    );
+            if (isOk) {
+              await fetchRequest();
+              if (!mounted) return;
+              Navigator.of(context).pop();
+            }
+          },
         ),
       ],
     );

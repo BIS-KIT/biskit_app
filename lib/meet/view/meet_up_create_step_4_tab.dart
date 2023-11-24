@@ -53,6 +53,15 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
         break;
       }
     }
+
+    meetupDescriptionController.text =
+        ref.read(createMeetUpProvider)?.description ?? '';
+
+    if (meetupDescriptionController.text.isNotEmpty) {
+      setState(() {
+        showMeetupDescription = true;
+      });
+    }
   }
 
   @override
@@ -199,6 +208,8 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                         .read(createMeetUpProvider.notifier)
                         .onChangedName(value);
                   },
+                  initialValue:
+                      createMeetUpState != null ? createMeetUpState.name : '',
                   errorText: (createMeetUpState != null &&
                           createMeetUpState.name != null &&
                           createMeetUpState.name!.length < 5)
@@ -238,6 +249,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                       onTap: () {
                         meetupDescriptionFocusNode.requestFocus();
                       },
+                      // initialValue: createMeetUpState?.description,
                       controller: meetupDescriptionController,
                       focusNode: meetupDescriptionFocusNode,
                       maxLines: null,

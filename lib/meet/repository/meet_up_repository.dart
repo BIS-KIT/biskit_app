@@ -584,4 +584,32 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     }
     return isOk;
   }
+
+  putUpdateMeetUp({
+    required int id,
+    required CreateMeetUpModel model,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.put(
+        '$baseUrl/$id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: model.toMap(),
+      );
+
+      logger.d(res);
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
+  }
 }
