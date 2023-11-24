@@ -20,7 +20,7 @@ class AccountSettingScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final userState = ref.watch(userMeProvider) as UserModel;
+    final userState = ref.watch(userMeProvider);
     final DateFormat dateFormat = DateFormat('yyyy/MM/dd', 'ko');
     return DefaultLayout(
       title: '계정',
@@ -57,59 +57,61 @@ class AccountSettingScreen extends ConsumerWidget {
                 ),
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      userState.sns_type == null
-                          ? 'assets/icons/ic_login_email.svg'
-                          // TODO: sns_type 에 따라 아이콘 다르게 처리
-                          : 'assets/icon/ic_login_kakao.svg',
-                      width: 40,
-                      height: 40,
-                    ),
+                    if (userState is UserModel)
+                      SvgPicture.asset(
+                        userState.sns_type == null
+                            ? 'assets/icons/ic_login_email.svg'
+                            // TODO: sns_type 에 따라 아이콘 다르게 처리
+                            : 'assets/icon/ic_login_kakao.svg',
+                        width: 40,
+                        height: 40,
+                      ),
                     const SizedBox(
                       width: 12,
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (userState.email != null)
-                            Text(
-                              '${userState.email}',
-                              style: getTsBody16Rg(context).copyWith(
-                                color: kColorContentWeak,
-                              ),
-                            ),
-                          if (userState.email != null)
-                            const SizedBox(
-                              height: 4,
-                            ),
-                          Row(
-                            children: [
+                    if (userState is UserModel)
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (userState.email != null)
                               Text(
-                                dateFormat.format(
-                                  DateTime.parse(userState.created_time),
-                                ),
-                                style: getTsCaption12Rg(context).copyWith(
-                                  color: kColorContentWeakest,
+                                '${userState.email}',
+                                style: getTsBody16Rg(context).copyWith(
+                                  color: kColorContentWeak,
                                 ),
                               ),
+                            if (userState.email != null)
                               const SizedBox(
-                                width: 4,
+                                height: 4,
                               ),
-                              Text(
-                                userState.sns_type == null
-                                    ? '이메일 회원가입'
-                                    // TODO: sns_type 에 따라 텍스트 다르게 처리
-                                    : '카카오 회원가입',
-                                style: getTsCaption12Rg(context).copyWith(
-                                  color: kColorContentWeakest,
+                            Row(
+                              children: [
+                                Text(
+                                  dateFormat.format(
+                                    DateTime.parse(userState.created_time),
+                                  ),
+                                  style: getTsCaption12Rg(context).copyWith(
+                                    color: kColorContentWeakest,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  userState.sns_type == null
+                                      ? '이메일 회원가입'
+                                      // TODO: sns_type 에 따라 텍스트 다르게 처리
+                                      : '카카오 회원가입',
+                                  style: getTsCaption12Rg(context).copyWith(
+                                    color: kColorContentWeakest,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ],
