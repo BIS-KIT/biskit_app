@@ -44,6 +44,7 @@ class AuthRepository {
     String? snsId,
   }) async {
     String? fcmToken = await firebaseMessaging.getToken();
+
     Object data = json.encode({
       'email': email,
       'password': password,
