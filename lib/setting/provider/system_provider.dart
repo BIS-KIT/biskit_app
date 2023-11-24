@@ -24,12 +24,16 @@ class SystemStateNotifier extends StateNotifier<UserSystemModelBase?> {
   }
   Future<void> getUserSystem() async {
     try {
+      UserModelBase? userState = ref.watch(userMeProvider);
       UserSystemModel? res =
           await ref.read(settingRepositoryProvider).getUserSystem(
-                userId: (ref.watch(userMeProvider) as UserModel).id,
+                userId: (userState as UserModel).id,
               );
       state = res;
     } catch (e) {
+      state = UserSystenModelError(
+        message: e.toString(),
+      );
       logger.e(e.toString());
     }
   }
