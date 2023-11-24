@@ -114,6 +114,7 @@ class SettingRepository {
   }
 
   Future<UserSystemModel?> getUserSystem({required int userId}) async {
+    UserSystemModel? userSystemModel;
     final res = await dio.get(
       '$baseUrl/system/$userId',
       options: Options(
@@ -124,7 +125,11 @@ class SettingRepository {
         },
       ),
     );
-    return UserSystemModel.fromMap(res.data);
+    if (res.statusCode == 200) {
+      userSystemModel = UserSystemModel.fromMap(res.data);
+    }
+
+    return userSystemModel;
   }
 
   Future<UserSystemModel> updateUserOSLanguage(

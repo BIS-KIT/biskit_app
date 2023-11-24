@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/list_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -26,28 +25,22 @@ class SettingScreen extends ConsumerStatefulWidget {
 
 class _SettingScreenState extends ConsumerState<SettingScreen> {
   String deviceVersion = '';
-  bool isLoading = true;
   @override
   void initState() {
     super.initState();
     init();
   }
 
-// XXX: 깜빡임 현상 있음
   init() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      isLoading = true;
       deviceVersion = packageInfo.version;
-    });
-    await ref.read(systemProvider.notifier).getUserSystem();
-    setState(() {
-      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(systemProvider);
     return DefaultLayout(
       title: '설정',
       appBarBackgroundColor: kColorBgDefault,
@@ -61,29 +54,26 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            isLoading
-                ? const Center(
-                    child: CustomLoading(),
-                  )
-                : ListWidget(
-                    text: '계정',
-                    onTapCallback: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AccountSettingScreen(),
-                        ),
-                      );
-                    },
+            ListWidget(
+              text: '계정',
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AccountSettingScreen(),
                   ),
+                );
+              },
+            ),
             _buildDivider(),
             ListWidget(
               text: '언어',
-              selectText: (ref.watch(systemProvider) as UserSystemModel)
-                          .system_language ==
-                      'en'
-                  ? '영어'
-                  : '한국어',
+              selectText: (state is UserSystenModelError ||
+                      state is UserSystemModelLoading)
+                  ? ''
+                  : (state as UserSystemModel).system_language == kEn
+                      ? '영어'
+                      : '한국어',
               onTapCallback: () {
                 Navigator.push(
                   context,
