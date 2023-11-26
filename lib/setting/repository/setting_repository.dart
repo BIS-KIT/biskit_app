@@ -3,6 +3,8 @@
 import 'dart:convert';
 
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
+import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
+import 'package:biskit_app/setting/model/blocked_user_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,5 +167,36 @@ class SettingRepository {
           'etc_alarm': etcAlarm,
         }));
     return UserSystemModel.fromMap(res.data);
+  }
+
+  Future<BlockedUserListModel> getBlockedUserList(
+      {required int userId, int? skip = 0, int? limit = 10}) async {
+    final res = await dio.get('$baseUrl/ban/$userId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'skip': userId,
+          'limit': skip,
+        }));
+    logger.d(res.data);
+    return BlockedUserListModel.fromMap(res.data);
+  }
+
+  Future<void> unblockUser({required List<int> ban_ids}) async {
+    final res = await dio.delete('$baseUrl/ban',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: ban_ids);
+    logger.d(res);
   }
 }
