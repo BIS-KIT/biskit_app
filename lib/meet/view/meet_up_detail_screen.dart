@@ -1,4 +1,6 @@
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
@@ -80,6 +82,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   int chartTouchedIndex = 0;
   List<ChartDataListModel> chartDatas = [];
 
+  String? participationStatus;
+
   @override
   void initState() {
     init();
@@ -113,8 +117,23 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     for (var lang in availableLangList) {
       langSet.add(lang.language);
     }
+    getParticipationStatus();
     setChartDatas();
     setState(() {});
+  }
+
+  // 참여자 신청 상태 가져오기
+  void getParticipationStatus() async {
+    UserModelBase? user = ref.watch(userMeProvider);
+    if (user is UserModel) {
+      participationStatus =
+          await ref.read(meetUpRepositoryProvider).getCheckMeetingRequestStatus(
+                meeting_id: widget.meetUpModel.id,
+                user_id: user.id,
+              );
+      logger.d(participationStatus);
+      setState(() {});
+    }
   }
 
   setChartDatas() {
@@ -648,15 +667,31 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           ),
         );
       } else {
-        return GestureDetector(
-          onTap: () {
-            onTapJoin();
-          },
-          child: const FilledButtonWidget(
-            text: '참여신청',
-            isEnable: true,
-          ),
-        );
+        if (participationStatus != null) {
+          if (participationStatus == VerificationStatus.PENDING.name) {
+            return const FilledButtonWidget(
+              text: '참여 수락 대기중',
+              isEnable: false,
+            );
+          } else if (participationStatus == VerificationStatus.PENDING.name) {
+            return const FilledButtonWidget(
+              text: '참여 수락 대기중',
+              isEnable: false,
+            );
+          } else {
+            return GestureDetector(
+              onTap: () {
+                onTapJoin();
+              },
+              child: const FilledButtonWidget(
+                text: '참여신청',
+                isEnable: true,
+              ),
+            );
+          }
+        } else {
+          return Container();
+        }
       }
     } else {
       return const FilledButtonWidget(

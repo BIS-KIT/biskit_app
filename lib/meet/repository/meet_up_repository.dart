@@ -612,4 +612,31 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     }
     return isOk;
   }
+
+  getCheckMeetingRequestStatus({
+    required int meeting_id,
+    required int user_id,
+  }) async {
+    String? status;
+    try {
+      final res = await dio.get(
+        '$baseUrl/$meeting_id/user/$user_id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+
+      logger.d(res);
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        status = res.data['status'];
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return status;
+  }
 }
