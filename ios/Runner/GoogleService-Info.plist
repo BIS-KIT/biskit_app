@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>713106577735-2upvrcmlqj1rgvoh6d7salkr3c97cgak.apps.googleusercontent.com</string>
+	<string>713106577735-hvtofqf29eovgp8rpm9uqveb046dt92p.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.713106577735-2upvrcmlqj1rgvoh6d7salkr3c97cgak</string>
+	<string>com.googleusercontent.apps.713106577735-hvtofqf29eovgp8rpm9uqveb046dt92p</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>713106577735-0jl6jioniasnr1c1d8gg3d0b15b81mtn.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDieoqdIpEWohfhgflcbOcPYOT3I3oWI1c</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.biskitApp</string>
+	<string>com.teambiskit.biskit</string>
 	<key>PROJECT_ID</key>
 	<string>biskit-prod</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:713106577735:ios:7c09d065e181c59a6d9462</string>
+	<string>1:713106577735:ios:1c7d6d1e0a5052ed6d9462</string>
 </dict>
 </plist>
