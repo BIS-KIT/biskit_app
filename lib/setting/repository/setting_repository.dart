@@ -6,6 +6,7 @@ import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
 import 'package:biskit_app/setting/model/blocked_user_model.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
+import 'package:biskit_app/setting/model/report_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -199,6 +200,26 @@ class SettingRepository {
         ),
         data: ban_ids);
     logger.d(res);
+  }
+
+  Future<List<ReportModel>> getReportHistory({required int user_id}) async {
+    final res = await dio.get(
+      '$baseUrl/user/66/report',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'accessToken': 'true',
+        },
+      ),
+    );
+    logger.d(res.data);
+    final List<Map<String, dynamic>> dataList =
+        List<Map<String, dynamic>>.from(res.data);
+
+    final List<ReportModel> reportList =
+        dataList.map((map) => ReportModel.fromMap(map)).toList();
+    return reportList;
   }
 
   Future<NoticeListModel> getNoticeList(
