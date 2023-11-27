@@ -204,7 +204,7 @@ class SettingRepository {
 
   Future<List<ReportModel>> getReportHistory({required int user_id}) async {
     final res = await dio.get(
-      '$baseUrl/user/66/report',
+      '$baseUrl/user/$user_id/report',
       options: Options(
         headers: {
           'Content-Type': 'application/json',

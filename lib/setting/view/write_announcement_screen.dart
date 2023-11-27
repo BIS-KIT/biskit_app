@@ -75,7 +75,7 @@ class _WriteAnnouncementScreenState
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '글쓰기',
+      title: widget.isEditMode ? '글 수정' : '글쓰기',
       shape: const Border(
         bottom: BorderSide(
           width: 1,
