@@ -14,6 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AnnouncementScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'announcement';
+
   const AnnouncementScreen({super.key});
 
   @override
@@ -55,13 +57,16 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
         actions: [
           if (isAdmin)
             GestureDetector(
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                final bool? refresh = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const WriteAnnouncementScreen(),
                   ),
                 );
+                if (refresh == true) {
+                  init();
+                }
               },
               child: Container(
                 width: 44,
@@ -95,8 +100,8 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
                       ),
                     ),
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        final bool? refresh = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => AnnouncementDetailScreen(
@@ -104,6 +109,9 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
                             ),
                           ),
                         );
+                        if (refresh == true) {
+                          init();
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
