@@ -2,11 +2,21 @@ import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/setting/model/notice_model.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WriteAnnouncementScreen extends ConsumerStatefulWidget {
-  const WriteAnnouncementScreen({super.key});
+  final bool isEditMode;
+  final NoticeModel? notice;
+  const WriteAnnouncementScreen({
+    Key? key,
+    this.isEditMode = false,
+    this.notice,
+  }) : super(key: key);
 
   @override
   ConsumerState<WriteAnnouncementScreen> createState() =>
@@ -21,6 +31,7 @@ class _WriteAnnouncementScreenState
   late final TextEditingController contentController;
   String title = '';
   String content = '';
+  bool isButtonEnable = false;
 
   @override
   void initState() {
@@ -29,6 +40,12 @@ class _WriteAnnouncementScreenState
     titleController = TextEditingController();
     contentFocusNode = FocusNode();
     contentController = TextEditingController();
+    if (widget.isEditMode) {
+      titleController.text = widget.notice!.title;
+      title = widget.notice!.title;
+      contentController.text = widget.notice!.content;
+      content = widget.notice!.content;
+    }
   }
 
   @override
@@ -38,6 +55,21 @@ class _WriteAnnouncementScreenState
     contentFocusNode.dispose();
     contentController.dispose();
     super.dispose();
+  }
+
+  void createNotice() async {
+    int userId = (ref.watch(userMeProvider) as UserModel).id;
+    await ref
+        .read(settingRepositoryProvider)
+        .createNotice(title: title, content: content, user_id: userId);
+  }
+
+  void updateNotice() async {
+    await ref.read(settingRepositoryProvider).updateNotice(
+        notice_id: widget.notice!.id,
+        user_id: widget.notice!.user.id,
+        title: title,
+        content: content);
   }
 
   @override
@@ -58,12 +90,23 @@ class _WriteAnnouncementScreenState
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: GestureDetector(
-              onTap: () {},
-              child: Text(
-                '저장',
-                style: getTsBody16Sb(context)
-                    .copyWith(color: kColorContentDefault),
-              )),
+            onTap: () async {
+              if (!isButtonEnable) return;
+              if (widget.isEditMode) {
+                updateNotice();
+              } else {
+                createNotice();
+              }
+              Navigator.pop(context, true);
+            },
+            child: Text(
+              '저장',
+              style: getTsBody16Sb(context).copyWith(
+                  color: isButtonEnable
+                      ? kColorContentDefault
+                      : kColorContentDisabled),
+            ),
+          ),
         ),
       ],
       child: Padding(
@@ -75,6 +118,15 @@ class _WriteAnnouncementScreenState
               hintText: '제목을 입력해주세요',
               onChanged: (value) {
                 title = value;
+                if (title.isNotEmpty && content.isNotEmpty) {
+                  setState(() {
+                    isButtonEnable = true;
+                  });
+                } else {
+                  setState(() {
+                    isButtonEnable = false;
+                  });
+                }
               },
               controller: titleController,
               focusNode: titleFocusNode,
@@ -98,7 +150,7 @@ class _WriteAnnouncementScreenState
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Container(
-                      height: 144,
+                      constraints: const BoxConstraints(minHeight: 267),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: kColorBgElevation1,
@@ -112,9 +164,16 @@ class _WriteAnnouncementScreenState
                       ),
                       child: TextFormField(
                         onChanged: (value) {
-                          setState(() {
-                            content = value;
-                          });
+                          content = value;
+                          if (title.isNotEmpty && content.isNotEmpty) {
+                            setState(() {
+                              isButtonEnable = true;
+                            });
+                          } else {
+                            setState(() {
+                              isButtonEnable = false;
+                            });
+                          }
                         },
                         onTap: () {
                           contentFocusNode.requestFocus();
