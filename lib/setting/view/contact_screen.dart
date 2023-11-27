@@ -3,6 +3,10 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/setting/view/announcement_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,6 +34,13 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
     contentFocusNode.dispose();
     contentController.dispose();
     super.dispose();
+  }
+
+  void createReport() async {
+    int userId = (ref.watch(userMeProvider) as UserModel).id;
+    await ref
+        .read(settingRepositoryProvider)
+        .createContact(content: content, user_id: userId);
   }
 
   @override
@@ -124,10 +135,13 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
             GestureDetector(
               onTap: () {
                 if (content.isEmpty) return;
+                createReport();
                 showConfirmModal(
                     context: context,
                     rightCall: () async {
                       Navigator.pop(context);
+                      Navigator.popAndPushNamed(
+                          context, AnnouncementScreen.routeName);
                     },
                     title: '문의가 접수되었습니다',
                     rightBackgroundColor: kColorBgPrimary,

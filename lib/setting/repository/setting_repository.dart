@@ -318,4 +318,29 @@ class SettingRepository {
       logger.e(e.toString());
     }
   }
+
+  Future<void> createContact({
+    required String content,
+    required int user_id,
+  }) async {
+    try {
+      final res = await dio.post(
+        '$baseUrl/contact',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'content': content,
+          'user_id': user_id,
+        }),
+      );
+      logger.d(res.data);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
 }
