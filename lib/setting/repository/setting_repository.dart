@@ -218,4 +218,83 @@ class SettingRepository {
     logger.d(res.data);
     return NoticeListModel.fromMap(res.data);
   }
+
+  Future<void> createNotice({
+    required String title,
+    required String content,
+    required int user_id,
+  }) async {
+    try {
+      final res = await dio.post(
+        '$baseUrl/notice',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'title': title,
+          'content': content,
+          'user_id': user_id,
+        }),
+      );
+      logger.d(res);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
+  Future<void> deleteNotice({
+    required int notice_id,
+    required int user_id,
+  }) async {
+    try {
+      final res = await dio.delete('$baseUrl/notice/$notice_id',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'user_id': user_id,
+          });
+      logger.d(res);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
+  Future<void> updateNotice({
+    required int notice_id,
+    required int user_id,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final res = await dio.put(
+        '$baseUrl/notice/$notice_id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'user_id': user_id,
+        },
+        data: json.encode({
+          'title': title,
+          'content': content,
+        }),
+      );
+      logger.d(res);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
 }
