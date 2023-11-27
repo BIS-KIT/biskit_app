@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
 import 'package:biskit_app/setting/model/blocked_user_model.dart';
+import 'package:biskit_app/setting/model/notice_list_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -179,10 +180,10 @@ class SettingRepository {
             'accessToken': 'true',
           },
         ),
-        data: json.encode({
-          'skip': userId,
-          'limit': skip,
-        }));
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+        });
     logger.d(res.data);
     return BlockedUserListModel.fromMap(res.data);
   }
@@ -198,5 +199,23 @@ class SettingRepository {
         ),
         data: ban_ids);
     logger.d(res);
+  }
+
+  Future<NoticeListModel> getNoticeList(
+      {int? skip = 0, int? limit = 10}) async {
+    final res = await dio.get('$baseUrl/notices',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+        });
+    logger.d(res.data);
+    return NoticeListModel.fromMap(res.data);
   }
 }
