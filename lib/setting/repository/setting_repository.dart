@@ -3,6 +3,10 @@
 import 'dart:convert';
 
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
+import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
+import 'package:biskit_app/setting/model/blocked_user_model.dart';
+import 'package:biskit_app/setting/model/notice_list_model.dart';
+import 'package:biskit_app/setting/model/report_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,5 +169,178 @@ class SettingRepository {
           'etc_alarm': etcAlarm,
         }));
     return UserSystemModel.fromMap(res.data);
+  }
+
+  Future<BlockedUserListModel> getBlockedUserList(
+      {required int userId, int? skip = 0, int? limit = 10}) async {
+    final res = await dio.get('$baseUrl/ban/$userId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+        });
+    logger.d(res.data);
+    return BlockedUserListModel.fromMap(res.data);
+  }
+
+  Future<void> unblockUser({required List<int> ban_ids}) async {
+    final res = await dio.delete('$baseUrl/ban',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: ban_ids);
+    logger.d(res);
+  }
+
+  Future<List<ReportModel>> getReportHistory({required int user_id}) async {
+    final res = await dio.get(
+      '$baseUrl/user/$user_id/report',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'accessToken': 'true',
+        },
+      ),
+    );
+    logger.d(res.data);
+    final List<Map<String, dynamic>> dataList =
+        List<Map<String, dynamic>>.from(res.data);
+
+    final List<ReportModel> reportList =
+        dataList.map((map) => ReportModel.fromMap(map)).toList();
+    return reportList;
+  }
+
+  Future<NoticeListModel> getNoticeList(
+      {int? skip = 0, int? limit = 10}) async {
+    final res = await dio.get('$baseUrl/notices',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+        });
+    logger.d(res.data);
+    return NoticeListModel.fromMap(res.data);
+  }
+
+  Future<void> createNotice({
+    required String title,
+    required String content,
+    required int user_id,
+  }) async {
+    try {
+      final res = await dio.post(
+        '$baseUrl/notice',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'title': title,
+          'content': content,
+          'user_id': user_id,
+        }),
+      );
+      logger.d(res);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
+  Future<void> deleteNotice({
+    required int notice_id,
+    required int user_id,
+  }) async {
+    try {
+      final res = await dio.delete('$baseUrl/notice/$notice_id',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'user_id': user_id,
+          });
+      logger.d(res);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
+  Future<void> updateNotice({
+    required int notice_id,
+    required int user_id,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final res = await dio.put(
+        '$baseUrl/notice/$notice_id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'user_id': user_id,
+        },
+        data: json.encode({
+          'title': title,
+          'content': content,
+        }),
+      );
+      logger.d(res);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
+  Future<void> createContact({
+    required String content,
+    required int user_id,
+  }) async {
+    try {
+      final res = await dio.post(
+        '$baseUrl/contact',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: json.encode({
+          'content': content,
+          'user_id': user_id,
+        }),
+      );
+      logger.d(res.data);
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
   }
 }

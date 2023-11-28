@@ -20,6 +20,7 @@ class UserSystemModelLoading extends UserSystemModelBase {}
 class UserSystemUserModel {
   final int id;
   final String? email;
+  final String? profile_photo;
   final String name;
   final String birth;
   final String gender;
@@ -27,6 +28,7 @@ class UserSystemUserModel {
   UserSystemUserModel({
     required this.id,
     this.email,
+    this.profile_photo,
     required this.name,
     required this.birth,
     required this.gender,
@@ -36,6 +38,7 @@ class UserSystemUserModel {
   UserSystemUserModel copyWith({
     int? id,
     ValueGetter<String?>? email,
+    ValueGetter<String?>? profile_photo,
     String? name,
     String? birth,
     String? gender,
@@ -44,6 +47,7 @@ class UserSystemUserModel {
     return UserSystemUserModel(
       id: id ?? this.id,
       email: email?.call() ?? this.email,
+      profile_photo: profile_photo?.call() ?? this.profile_photo,
       name: name ?? this.name,
       birth: birth ?? this.birth,
       gender: gender ?? this.gender,
@@ -55,6 +59,7 @@ class UserSystemUserModel {
     return {
       'id': id,
       'email': email,
+      'profile_photo': profile_photo,
       'name': name,
       'birth': birth,
       'gender': gender,
@@ -66,6 +71,7 @@ class UserSystemUserModel {
     return UserSystemUserModel(
       id: map['id']?.toInt() ?? 0,
       email: map['email'],
+      profile_photo: map['profile_photo'],
       name: map['name'] ?? '',
       birth: map['birth'] ?? '',
       gender: map['gender'] ?? '',
@@ -81,7 +87,7 @@ class UserSystemUserModel {
 
   @override
   String toString() {
-    return 'UserSystemUserModel(id: $id, email: $email, name: $name, birth: $birth, gender: $gender, user_nationality: $user_nationality)';
+    return 'UserSystemUserModel(id: $id, email: $email, profile_photo: $profile_photo, name: $name, birth: $birth, gender: $gender, user_nationality: $user_nationality)';
   }
 
   @override
@@ -91,6 +97,7 @@ class UserSystemUserModel {
     return other is UserSystemUserModel &&
         other.id == id &&
         other.email == email &&
+        other.profile_photo == profile_photo &&
         other.name == name &&
         other.birth == birth &&
         other.gender == gender &&
@@ -101,6 +108,7 @@ class UserSystemUserModel {
   int get hashCode {
     return id.hashCode ^
         email.hashCode ^
+        profile_photo.hashCode ^
         name.hashCode ^
         birth.hashCode ^
         gender.hashCode ^

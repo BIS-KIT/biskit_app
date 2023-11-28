@@ -11,6 +11,7 @@ import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
 import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
+import 'package:biskit_app/setting/view/announcement_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -231,6 +232,11 @@ class RouteProvider extends ChangeNotifier {
           path: '/photoManager',
           name: PhotoManagerScreen.routeName,
           builder: (context, state) => const PhotoManagerScreen(),
+        ),
+        GoRoute(
+          path: '/announcement',
+          name: AnnouncementScreen.routeName,
+          builder: (context, state) => const AnnouncementScreen(),
         ),
       ];
 
