@@ -423,8 +423,8 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         },
       );
 
-      if (res.statusCode == 201) {
-        logger.d(res);
+      logger.d(res);
+      if (res.statusCode == 200) {
         isOk = true;
       }
     } catch (e) {
@@ -636,8 +636,12 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
       if (res.statusCode == 201 || res.statusCode == 200) {
         status = res.data['status'];
       }
-    } catch (e) {
-      logger.e(e.toString());
+    } on DioException catch (e) {
+      if (e.response != null && e.response!.statusCode == 404) {
+        status = null;
+      } else {
+        logger.e(e.toString());
+      }
     }
     return status;
   }

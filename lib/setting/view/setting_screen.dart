@@ -9,7 +9,6 @@ import 'package:biskit_app/setting/view/announcement_screen.dart';
 import 'package:biskit_app/setting/view/contact_screen.dart';
 import 'package:biskit_app/setting/view/language_setting_screen.dart';
 import 'package:biskit_app/setting/view/notification_setting_screen.dart';
-import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/setting/view/terms_and_policies_screen.dart';
 import 'package:biskit_app/setting/view/user_block_list_screen.dart';
 import 'package:biskit_app/setting/view/warning_history_screen.dart';
@@ -146,17 +145,17 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                 );
               },
             ),
-            ListWidget(
-              text: '신고하기',
-              onTapCallback: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReportScreen(),
-                  ),
-                );
-              },
-            ),
+            // ListWidget(
+            //   text: '신고하기',
+            //   onTapCallback: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => const ReportScreen(),
+            //       ),
+            //     );
+            //   },
+            // ),
             ListWidget(
               text: '약관 및 정책',
               onTapCallback: () {

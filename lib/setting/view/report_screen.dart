@@ -1,13 +1,27 @@
+import 'package:biskit_app/setting/model/report_res_model.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// ignore: constant_identifier_names
+enum ReportContentType { Meeting, Review, User }
 
 class ReportScreen extends ConsumerStatefulWidget {
-  const ReportScreen({super.key});
+  final ReportContentType contentType;
+  final int contentId;
+  const ReportScreen({
+    super.key,
+    required this.contentType,
+    required this.contentId,
+  });
 
   @override
   ConsumerState<ReportScreen> createState() => _ReportScreenState();
@@ -122,20 +136,37 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
               height: 16,
             ),
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (content.isEmpty) return;
-                showConfirmModal(
-                    context: context,
-                    rightCall: () async {
-                      Navigator.pop(context);
-                    },
-                    title: '신고가 접수되었습니다',
-                    rightBackgroundColor: kColorBgPrimary,
-                    rightTextColor: kColorContentOnBgPrimary);
+                FocusScope.of(context).unfocus();
+                final UserModelBase? userModelBase = ref.watch(userMeProvider);
+                if (userModelBase != null && userModelBase is UserModel) {
+                  final ReportResModel? reportResModel = await ref
+                      .read(settingRepositoryProvider)
+                      .postCreateReport(
+                        reason: content,
+                        content_type: widget.contentType.name,
+                        content_id: widget.contentId,
+                        reporter_id: userModelBase.id,
+                      );
+                  if (reportResModel != null && mounted) {
+                    showConfirmModal(
+                      context: context,
+                      rightCall: () async {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      title: '신고가 접수되었습니다',
+                      rightBackgroundColor: kColorBgPrimary,
+                      rightTextColor: kColorContentOnBgPrimary,
+                    );
+                  }
+                }
               },
               child: FilledButtonWidget(
-                  text: '비스킷팀에게 보내기',
-                  isEnable: content.isNotEmpty ? true : false),
+                text: '비스킷팀에게 보내기',
+                isEnable: content.isNotEmpty,
+              ),
             )
           ],
         ),

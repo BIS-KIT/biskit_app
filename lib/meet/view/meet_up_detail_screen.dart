@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
+import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
@@ -133,7 +133,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 meeting_id: widget.meetUpModel.id,
                 user_id: user.id,
               );
-      logger.d(participationStatus);
+      // logger.d(participationStatus);
       setState(() {});
     }
   }
@@ -189,10 +189,14 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
       rightBackgroundColor: kColorBgPrimary,
       rightTextColor: kColorContentOnBgPrimary,
       rightCall: () async {
-        await ref.read(meetUpRepositoryProvider).postJoinRequest(
-              meeting_id: widget.meetUpModel.id,
-              user_id: userState!.id,
-            );
+        final bool isOk =
+            await ref.read(meetUpRepositoryProvider).postJoinRequest(
+                  meeting_id: widget.meetUpModel.id,
+                  user_id: userState!.id,
+                );
+        if (isOk) {
+          init();
+        }
         if (!mounted) return;
         Navigator.pop(context);
       },
@@ -350,7 +354,16 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             text: '신고하기',
             color: kColorContentError,
             onTap: () {
-              // TODO
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReportScreen(
+                    contentType: ReportContentType.Meeting,
+                    contentId: widget.meetUpModel.id,
+                  ),
+                ),
+              );
             },
           ),
         ],
@@ -364,7 +377,16 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             text: '신고하기',
             color: kColorContentError,
             onTap: () {
-              // TODO
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReportScreen(
+                    contentType: ReportContentType.Meeting,
+                    contentId: widget.meetUpModel.id,
+                  ),
+                ),
+              );
             },
           ),
         ],
@@ -681,21 +703,18 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               text: '참여 수락 대기중',
               isEnable: false,
             );
-          } else {
-            return GestureDetector(
-              onTap: () {
-                onTapJoin();
-              },
-              child: const FilledButtonWidget(
-                text: '참여신청',
-                isEnable: true,
-                height: 52,
-              ),
-            );
           }
-        } else {
-          return Container();
         }
+        return GestureDetector(
+          onTap: () {
+            onTapJoin();
+          },
+          child: const FilledButtonWidget(
+            text: '참여신청',
+            isEnable: true,
+            height: 52,
+          ),
+        );
       }
     } else {
       return const FilledButtonWidget(
@@ -1048,18 +1067,19 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                meetUpDetailModel == null
-                                    ? ''
-                                    : dateFormat1.format(
-                                        DateTime.parse(
-                                            meetUpDetailModel!.meeting_time),
-                                      ),
-                                textAlign: TextAlign.center,
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (meetUpDetailModel != null)
+                                Text(
+                                  meetUpDetailModel!.meeting_time.isEmpty
+                                      ? ''
+                                      : dateFormat1.format(
+                                          DateTime.parse(
+                                              meetUpDetailModel!.meeting_time),
+                                        ),
+                                  textAlign: TextAlign.center,
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                               const SizedBox(width: 4),
                               Text(
                                 '·',
@@ -1069,18 +1089,19 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              Text(
-                                meetUpDetailModel == null
-                                    ? ''
-                                    : dateFormat2.format(
-                                        DateTime.parse(
-                                            meetUpDetailModel!.meeting_time),
-                                      ),
-                                textAlign: TextAlign.center,
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
+                              if (meetUpDetailModel != null)
+                                Text(
+                                  meetUpDetailModel!.meeting_time.isEmpty
+                                      ? ''
+                                      : dateFormat2.format(
+                                          DateTime.parse(
+                                              meetUpDetailModel!.meeting_time),
+                                        ),
+                                  textAlign: TextAlign.center,
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeak,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
