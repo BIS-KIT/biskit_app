@@ -6,6 +6,7 @@ import 'package:biskit_app/profile/components/profile_card_widget.dart';
 import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
+import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +198,16 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
           text: '신고하기',
           color: kColorContentError,
           onTap: () async {
-            // TODO
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReportScreen(
+                  contentType: ReportContentType.User,
+                  contentId: widget.userId,
+                ),
+              ),
+            );
           },
         ),
         MoreButton(
