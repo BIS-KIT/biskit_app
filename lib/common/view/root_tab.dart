@@ -23,27 +23,35 @@ class RootTab extends ConsumerStatefulWidget {
 
 class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
-  late TabController controller;
+  // late TabController controller;
+
+  List<Widget> bodyList = [
+    const HomeScreen(),
+    const MeetUpListScreen(),
+    Container(),
+    const ChatRoomScreen(),
+    const MyPageScreen(),
+  ];
 
   @override
   void initState() {
     super.initState();
 
-    controller = TabController(length: 5, vsync: this);
+    // controller = TabController(length: 5, vsync: this);
 
-    controller.addListener(tabListener);
-    ref.read(rootProvider.notifier).setTabController(controller);
+    // controller.addListener(tabListener);
+    // ref.read(rootProvider.notifier).setTabController(controller);
   }
 
   @override
   void dispose() {
-    controller.removeListener(tabListener);
+    // controller.removeListener(tabListener);
 
     super.dispose();
   }
 
   void tabListener() {
-    ref.read(rootProvider.notifier).tabListener(controller.index);
+    // ref.read(rootProvider.notifier).tabListener(controller.index);
   }
 
   @override
@@ -52,76 +60,84 @@ class _RootTabState extends ConsumerState<RootTab>
 
     return DefaultLayout(
       backgroundColor: rootState.scafoldBackgroundColor,
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
         ),
-        decoration: const BoxDecoration(
-          color: kColorBgDefault,
-          border: Border(
-            top: BorderSide(
-              width: 1,
-              color: kColorBorderWeak,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+          ),
+          decoration: const BoxDecoration(
+            color: kColorBgDefault,
+            border: Border(
+              top: BorderSide(
+                width: 1,
+                color: kColorBorderWeak,
+              ),
             ),
           ),
-        ),
-        child: BottomNavigationBar(
-          elevation: 0,
-          selectedFontSize: 0,
-          unselectedFontSize: 0,
-          backgroundColor: kColorBgDefault,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) async {
-            if (index == 2) {
-              final List<dynamic>? result = await Navigator.push(
-                context,
-                createUpDownRoute(const MeetUpCreateScreen()),
-              );
+          child: BottomNavigationBar(
+            elevation: 0,
+            selectedFontSize: 0,
+            unselectedFontSize: 0,
+            backgroundColor: kColorBgDefault,
+            enableFeedback: false,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) async {
+              if (index == 2) {
+                final List<dynamic>? result = await Navigator.push(
+                  context,
+                  createUpDownRoute(const MeetUpCreateScreen()),
+                );
 
-              logger.d(result);
-              if (result != null && result[0] as bool) {
-                ref.read(homeProvider.notifier).init();
+                logger.d(result);
+                if (result != null && result[0] as bool) {
+                  ref.read(homeProvider.notifier).init();
+                }
+              } else {
+                ref.read(rootProvider.notifier).onTapBottomNav(index);
+                // controller.animateTo(index);
               }
-            } else {
-              ref.read(rootProvider.notifier).onTapBottomNav(index);
-              // controller.animateTo(index);
-            }
-          },
-          currentIndex: rootState.index,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: [
-            _buildBottomItem(
-              iconPath: 'assets/icons/ic_home_fill_24.svg',
-              label: '홈',
-            ),
-            _buildBottomItem(
-              iconPath: 'assets/icons/ic_search_line_24.svg',
-              label: '검색',
-            ),
-            _buildBottomCenterItem(),
-            _buildBottomItem(
-              iconPath: 'assets/icons/ic_chat_line_24.svg',
-              label: '채팅',
-            ),
-            _buildBottomItem(
-              iconPath: 'assets/icons/ic_face_line_24.svg',
-              label: '프로필',
-            ),
-          ],
+            },
+            currentIndex: rootState.index,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: [
+              _buildBottomItem(
+                iconPath: 'assets/icons/ic_home_fill_24.svg',
+                label: '홈',
+              ),
+              _buildBottomItem(
+                iconPath: 'assets/icons/ic_search_line_24.svg',
+                label: '검색',
+              ),
+              _buildBottomCenterItem(),
+              _buildBottomItem(
+                iconPath: 'assets/icons/ic_chat_line_24.svg',
+                label: '채팅',
+              ),
+              _buildBottomItem(
+                iconPath: 'assets/icons/ic_face_line_24.svg',
+                label: '프로필',
+              ),
+            ],
+          ),
         ),
       ),
-      child: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: controller,
-        children: [
-          const HomeScreen(),
-          const MeetUpListScreen(),
-          Container(),
-          const ChatRoomScreen(),
-          const MyPageScreen(),
-        ],
-      ),
+      child: bodyList[rootState.index],
+      // TabBarView(
+      //   physics: const NeverScrollableScrollPhysics(),
+      //   controller: controller,
+      //   children: [
+      //     const HomeScreen(),
+      //     const MeetUpListScreen(),
+      //     Container(),
+      //     const ChatRoomScreen(),
+      //     const MyPageScreen(),
+      //   ],
+      // ),
     );
   }
 

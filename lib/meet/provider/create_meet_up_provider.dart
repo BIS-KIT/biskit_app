@@ -279,13 +279,20 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
         return false;
       }
 
-      result = await meetUpRepository.createMeetUp(
+      int? createMeetupId = await meetUpRepository.createMeetUp(
         state!.copyWith(
           chat_id: chatRoomUid,
           image_url: imageUrl,
         ),
       );
-      if (result) {
+      if (createMeetupId != null) {
+        result = true;
+        await chatRepository.updateChatRoom(
+          chatRoomUid: chatRoomUid,
+          data: {
+            'meetupId': createMeetupId,
+          },
+        );
         init();
       }
     }

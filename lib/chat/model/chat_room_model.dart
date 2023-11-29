@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-// import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+
+// import 'package:collection/collection.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
@@ -61,6 +62,7 @@ class ChatRoomFirstUserInfo {
 
 class ChatRoomModel {
   final String uid;
+  final int? meetupId;
   final String title;
   final List<int> joinUsers;
   final List<int> connectingUsers;
@@ -75,6 +77,7 @@ class ChatRoomModel {
   final dynamic createDate;
   ChatRoomModel({
     required this.uid,
+    this.meetupId,
     required this.title,
     required this.joinUsers,
     required this.connectingUsers,
@@ -91,6 +94,7 @@ class ChatRoomModel {
 
   ChatRoomModel copyWith({
     String? uid,
+    int? meetupId,
     String? title,
     List<int>? joinUsers,
     List<int>? connectingUsers,
@@ -106,6 +110,7 @@ class ChatRoomModel {
   }) {
     return ChatRoomModel(
       uid: uid ?? this.uid,
+      meetupId: meetupId ?? this.meetupId,
       title: title ?? this.title,
       joinUsers: joinUsers ?? this.joinUsers,
       connectingUsers: connectingUsers ?? this.connectingUsers,
@@ -124,6 +129,7 @@ class ChatRoomModel {
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
+      'meetupId': meetupId,
       'title': title,
       'joinUsers': joinUsers,
       'connectingUsers': connectingUsers,
@@ -142,6 +148,7 @@ class ChatRoomModel {
   factory ChatRoomModel.fromMap(Map<String, dynamic> map) {
     return ChatRoomModel(
       uid: map['uid'] ?? '',
+      meetupId: map['meetupId']?.toInt(),
       title: map['title'] ?? '',
       joinUsers: List<int>.from(map['joinUsers']),
       connectingUsers: List<int>.from(map['connectingUsers']),
@@ -166,7 +173,7 @@ class ChatRoomModel {
 
   @override
   String toString() {
-    return 'ChatRoomModel(uid: $uid, title: $title, joinUsers: $joinUsers, connectingUsers: $connectingUsers, firstUserInfoList: $firstUserInfoList, roomImagePath: $roomImagePath, lastMsgUid: $lastMsgUid, lastMsg: $lastMsg, lastMsgType: $lastMsgType, lastMsgDate: $lastMsgDate, lastMsgReadUsers: $lastMsgReadUsers, createUserId: $createUserId, createDate: $createDate)';
+    return 'ChatRoomModel(uid: $uid, meetupId: $meetupId, title: $title, joinUsers: $joinUsers, connectingUsers: $connectingUsers, firstUserInfoList: $firstUserInfoList, roomImagePath: $roomImagePath, lastMsgUid: $lastMsgUid, lastMsg: $lastMsg, lastMsgType: $lastMsgType, lastMsgDate: $lastMsgDate, lastMsgReadUsers: $lastMsgReadUsers, createUserId: $createUserId, createDate: $createDate)';
   }
 
   @override
@@ -175,6 +182,7 @@ class ChatRoomModel {
 
     return other is ChatRoomModel &&
         other.uid == uid &&
+        other.meetupId == meetupId &&
         other.title == title &&
         listEquals(other.joinUsers, joinUsers) &&
         listEquals(other.connectingUsers, connectingUsers) &&
@@ -192,6 +200,7 @@ class ChatRoomModel {
   @override
   int get hashCode {
     return uid.hashCode ^
+        meetupId.hashCode ^
         title.hashCode ^
         joinUsers.hashCode ^
         connectingUsers.hashCode ^
