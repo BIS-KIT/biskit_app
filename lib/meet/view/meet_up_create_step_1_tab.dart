@@ -101,6 +101,24 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                         spacing: 6,
                         runSpacing: 8,
                         children: [
+                          ChipWidget(
+                            text: "직접입력",
+                            isSelected: false,
+                            onTapEnter: (e) {
+                              ref
+                                  .read(createMeetUpProvider.notifier)
+                                  .onTapAddCustomTopic(
+                                      customTopicController.text);
+                              setState(() {
+                                customTopicController.text = '';
+                              });
+                            },
+                            onTapAdd: (e) {
+                              customTopicFocusNode.requestFocus();
+                            },
+                            focusNode: customTopicFocusNode,
+                            controller: customTopicController,
+                          ),
                           ...topicList
                               .map(
                                 (e) => ChipWidget(
@@ -131,24 +149,6 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                                     .onTapDeleteCustomTopic(e);
                               },
                             ),
-                          ),
-                          ChipWidget(
-                            text: "직접입력",
-                            isSelected: false,
-                            onTapEnter: (e) {
-                              ref
-                                  .read(createMeetUpProvider.notifier)
-                                  .onTapAddCustomTopic(
-                                      customTopicController.text);
-                              setState(() {
-                                customTopicController.text = '';
-                              });
-                            },
-                            onTapAdd: (e) {
-                              customTopicFocusNode.requestFocus();
-                            },
-                            focusNode: customTopicFocusNode,
-                            controller: customTopicController,
                           ),
                         ],
                       ),

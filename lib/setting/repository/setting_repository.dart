@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
-import 'package:biskit_app/setting/model/blocked_user_model.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
 import 'package:biskit_app/setting/model/report_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';

@@ -156,6 +156,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                             text: '\'${searchController.text.trim()}\' 장소 입력',
                             isEnable: true,
                             alignment: null,
+                            height: 44,
                           ),
                         ),
                         SizedBox(

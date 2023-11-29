@@ -128,6 +128,8 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                   contentWidget: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
                       children: [
                         if (fixTopics != null)
                           ...fixTopics!.map(
@@ -139,7 +141,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                                 context.pop();
                               },
                               child: Padding(
-                                padding: const EdgeInsets.all(20),
+                                padding: const EdgeInsets.all(0),
                                 child: ThumbnailIconWidget(
                                   thumbnailIconType: ThumbnailIconType.network,
                                   iconPath: e.icon_url,
@@ -224,11 +226,11 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
             ),
             if (showMeetupDescription)
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
                     height: 144,
-                    margin: const EdgeInsets.only(top: 12),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: kColorBgElevation1,
@@ -319,6 +321,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                         ? 'assets/icons/ic_plus_line_24.svg'
                         : 'assets/icons/ic_cancel_line_24.svg',
                     isEnable: true,
+                    height: 44,
                   ),
                 ),
               ],

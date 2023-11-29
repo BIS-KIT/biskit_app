@@ -131,8 +131,9 @@ class _ProfileListWithSubtextWidgetState
                             ...widget.introductions.map(
                               (introduction) => BadgeWidget(
                                 text: introduction.keyword,
-                                backgroundColor: kColorBgElevation1,
+                                backgroundColor: kColorBgElevation2,
                                 textColor: kColorContentWeaker,
+                                sizeType: BadgeSizeType.M,
                               ),
                             ),
                           ],

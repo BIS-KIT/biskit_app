@@ -58,6 +58,7 @@ class ChipWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (order != null)
                   CircleAvatar(
@@ -96,27 +97,29 @@ class ChipWidget extends StatelessWidget {
                   )
                 else
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: SizedBox(
                           width: 57,
-                          height: 20,
+                          // height: 20,
                           child: TextFormField(
                             textInputAction: TextInputAction.go,
                             onFieldSubmitted: onTapEnter,
                             onChanged: onTapAdd,
                             focusNode: focusNode,
                             controller: controller,
-                            cursorHeight: 14,
                             style: getTsBody14Rg(context)
                                 .copyWith(color: kColorContentOnBgPrimary),
-                            decoration: InputDecoration.collapsed(
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
                               border: InputBorder.none,
                               hintText: '직접 입력',
                               hintStyle: getTsBody14Rg(context).copyWith(
                                 color: kColorContentOnBgPrimary,
                               ),
+                              isDense: true,
                             ),
                           ),
                         ),

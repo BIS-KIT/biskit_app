@@ -327,7 +327,10 @@ class ProfileCardWidget extends StatelessWidget {
                           // Badge
                           ...userState.profile!.introductions
                               .map(
-                                (e) => BadgeWidget(text: e.keyword),
+                                (e) => BadgeWidget(
+                                  text: e.keyword,
+                                  sizeType: BadgeSizeType.M,
+                                ),
                               )
                               .toList(),
                         ],

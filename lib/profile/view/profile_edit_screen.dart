@@ -683,6 +683,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     text: e.keyword,
                     backgroundColor: kColorBgSecondary,
                     textColor: kColorContentInverse,
+                    sizeType: BadgeSizeType.L,
                   ),
                 )
                 .toList(),

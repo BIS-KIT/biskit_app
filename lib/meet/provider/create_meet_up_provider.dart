@@ -84,6 +84,7 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
               state!.topic_ids.where((element) => element != id).toList(),
         );
       } else {
+        if (state!.topic_ids.length >= 3) return;
         state = state!.copyWith(
           topic_ids: [
             ...state!.topic_ids,
