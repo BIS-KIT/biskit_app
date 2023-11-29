@@ -184,6 +184,9 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
       onWillPop: onWillPop,
       child: DefaultLayout(
         title: '',
+        leadingIconPath: pageIndex == 0
+            ? 'assets/icons/ic_cancel_line_24.svg'
+            : 'assets/icons/ic_arrow_back_ios_line_24.svg',
         backgroundColor: kColorBgDefault,
         onTapLeading: onWillPop,
         child: Column(

@@ -46,7 +46,7 @@ class ReviewWriteCardWidget extends StatelessWidget {
               height: 8,
             ),
             Text(
-              '인생샷을 남겨보세요',
+              '인증샷을 남겨보세요',
               style: getTsBody14Sb(context).copyWith(
                 color: kColorContentWeaker,
               ),

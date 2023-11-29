@@ -255,7 +255,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                                     children: [
                                       Text(
                                         dateFormat1.format(DateTime.parse(
-                                            meetUpModel!.created_time)),
+                                            meetUpModel!.meeting_time)),
                                         style: getTsBody14Rg(context).copyWith(
                                           color: kColorContentWeaker,
                                         ),
@@ -274,7 +274,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                                       ),
                                       Text(
                                         dateFormat2.format(DateTime.parse(
-                                            meetUpModel!.created_time)),
+                                            meetUpModel!.meeting_time)),
                                         style: getTsBody14Rg(context).copyWith(
                                           color: kColorContentWeaker,
                                         ),

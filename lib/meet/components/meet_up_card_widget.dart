@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/flag_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/data.dart';
@@ -136,7 +137,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         ),
                         Text(
                           widget.model.max_participants.toString(),
-                          style: getTsCaption12Rg(context).copyWith(
+                          style: getTsCaption12Sb(context).copyWith(
                             color: kColorContentWeakest,
                           ),
                         ),
@@ -164,20 +165,11 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         : Container(),
                     widget.model.participants_status.isNotEmpty &&
                             widget.isParticipantsStatusTag
-                        ? Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: kColorBgSecondaryWeak,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              widget.model.participants_status,
-                              style: getTsCaption12Sb(context).copyWith(
-                                color: kColorContentSecondary,
-                              ),
-                            ),
+                        ? BadgeWidget(
+                            text: widget.model.participants_status,
+                            sizeType: BadgeSizeType.M,
+                            backgroundColor: kColorBgSecondaryWeak,
+                            textColor: kColorContentSecondary,
                           )
                         : Container(),
                   ],
@@ -218,8 +210,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         width: 4,
                       ),
                       Text(
-                        dateFormat1
-                            .format(DateTime.parse(widget.model.created_time)),
+                        widget.model.meeting_time.isEmpty
+                            ? ''
+                            : dateFormat1.format(
+                                DateTime.parse(widget.model.meeting_time)),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
                         ),
@@ -237,8 +231,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         width: 4,
                       ),
                       Text(
-                        dateFormat2
-                            .format(DateTime.parse(widget.model.created_time)),
+                        widget.model.meeting_time.isEmpty
+                            ? ''
+                            : dateFormat2.format(
+                                DateTime.parse(widget.model.meeting_time)),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
                         ),
@@ -279,8 +275,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             width: 4,
                           ),
                           Text(
-                            dateFormat1.format(
-                                DateTime.parse(widget.model.created_time)),
+                            widget.model.meeting_time.isEmpty
+                                ? ''
+                                : dateFormat1.format(
+                                    DateTime.parse(widget.model.meeting_time)),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),
@@ -298,8 +296,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             width: 4,
                           ),
                           Text(
-                            dateFormat2.format(
-                                DateTime.parse(widget.model.created_time)),
+                            widget.model.meeting_time.isEmpty
+                                ? ''
+                                : dateFormat2.format(
+                                    DateTime.parse(widget.model.meeting_time)),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),

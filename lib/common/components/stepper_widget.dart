@@ -1,18 +1,23 @@
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 
 class StepperWidget extends StatelessWidget {
   final Function() onClickMinus;
   final Function() onClickPlus;
   final int value;
+  final int maxValue;
+  final int minValue;
 
   const StepperWidget({
     Key? key,
     required this.onClickMinus,
     required this.onClickPlus,
     required this.value,
+    this.maxValue = 10,
+    this.minValue = 2,
   }) : super(key: key);
 
   @override
@@ -22,20 +27,25 @@ class StepperWidget extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: onClickMinus,
-          child: Container(
-            width: 40,
+          child: Padding(
             padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kColorBgElevation2,
-            ),
-            child: SvgPicture.asset(
-              'assets/icons/ic_minus_line_24.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentDefault,
-                BlendMode.srcIn,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    minValue == value ? kColorBgElevation1 : kColorBgElevation2,
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/ic_minus_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: ColorFilter.mode(
+                  minValue == value
+                      ? kColorContentDisabled
+                      : kColorContentDefault,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),
@@ -52,20 +62,25 @@ class StepperWidget extends StatelessWidget {
         ),
         GestureDetector(
           onTap: onClickPlus,
-          child: Container(
-            width: 40,
+          child: Padding(
             padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kColorBgElevation2,
-            ),
-            child: SvgPicture.asset(
-              'assets/icons/ic_plus_line_24.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentDefault,
-                BlendMode.srcIn,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    maxValue == value ? kColorBgElevation1 : kColorBgElevation2,
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/ic_plus_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: ColorFilter.mode(
+                  maxValue == value
+                      ? kColorContentDisabled
+                      : kColorContentDefault,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),

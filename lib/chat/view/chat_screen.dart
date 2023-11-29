@@ -1,11 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/chat/model/chat_room_model.dart';
 import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/photo_view_screen.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +43,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     with WidgetsBindingObserver {
   UserModelBase? userState;
   ChatRoomModel? chatRoomModel;
+  MeetUpModel? meetUpModel;
   List<ChatMsgModel> list = [];
   int _limit = 20;
   final int _limitIncrement = 20;
@@ -47,6 +52,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   late final ScrollController scrollController;
   final DateFormat msgDateFormat = DateFormat('a hh:mm', 'ko');
   final DateFormat dayFormat = DateFormat('yyyy년 MM월 dd일 EEE', 'ko');
+  final DateFormat infoDateFormat1 = DateFormat('MM/dd (EEE)', 'ko');
 
   @override
   void initState() {
@@ -55,7 +61,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addObserver(this);
     textEditingController = TextEditingController();
-    fetchChatRoom();
+    initFetchData();
+  }
+
+  initFetchData() async {
+    await fetchChatRoom();
+    await fetchMeetUp();
+    setState(() {});
+  }
+
+  fetchMeetUp() async {
+    meetUpModel = meetUpModel = await ref
+        .read(meetUpRepositoryProvider)
+        .getMeeting(chatRoomModel!.meetupId!);
   }
 
   _scrollListener() {
@@ -104,6 +122,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       await connectChatRoom();
       await fetchChatRoomUserProfile();
     }
+  }
+
+  void onTapMeetupCard() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MeetUpDetailScreen(
+            meetUpModel: meetUpModel!,
+          ),
+        ));
   }
 
   // 이미지 보내기
@@ -201,7 +229,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     super.dispose();
   }
 
-  void viewBottomSeet() {
+  void viewBottomSheet() {
     if (chatRoomModel != null) {
       showBiskitBottomSheet(
         context: context,
@@ -251,6 +279,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                     children: [
                                       AvatarWithFlagWidget(
                                         profilePath: e.profile_photo,
+                                        radius: 20,
+                                        flagRadius: 16,
                                         flagPath: e.nationalities.isEmpty
                                             ? null
                                             : '$kS3Url$kS3Flag43Path/${e.nationalities[0].code}.svg',
@@ -300,44 +330,49 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_logout_off_line_24.svg',
-                        width: 24,
-                        height: 24,
-                        colorFilter: const ColorFilter.mode(
-                          kColorContentWeaker,
-                          BlendMode.srcIn,
+                    GestureDetector(
+                      onTap: () {
+                        // TODO 모임 나가기 처리
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_logout_off_line_24.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: const ColorFilter.mode(
+                            kColorContentWeaker,
+                            BlendMode.srcIn,
+                          ),
                         ),
                       ),
                     ),
-                    Row(
+                    const Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SvgPicture.asset(
-                            'assets/icons/ic_notifications_line_24.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentWeaker,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SvgPicture.asset(
-                            'assets/icons/ic_siren_line_24.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentWeaker,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10),
+                        //   child: SvgPicture.asset(
+                        //     'assets/icons/ic_notifications_line_24.svg',
+                        //     width: 24,
+                        //     height: 24,
+                        //     colorFilter: const ColorFilter.mode(
+                        //       kColorContentWeaker,
+                        //       BlendMode.srcIn,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10),
+                        //   child: SvgPicture.asset(
+                        //     'assets/icons/ic_siren_line_24.svg',
+                        //     width: 24,
+                        //     height: 24,
+                        //     colorFilter: const ColorFilter.mode(
+                        //       kColorContentWeaker,
+                        //       BlendMode.srcIn,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],
@@ -373,7 +408,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         actions: [
           GestureDetector(
             onTap: () {
-              viewBottomSeet();
+              viewBottomSheet();
             },
             child: Container(
               width: 44,
@@ -394,7 +429,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             ? Stack(
                 children: [
                   Container(
-                    color: kColorBgElevation1,
+                    color: kColorBgElevation2,
                     child: Column(
                       children: [
                         Expanded(
@@ -540,7 +575,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                   },
                                 );
                               } else {
-                                return const Text('데이터 없음');
+                                return Container();
                               }
                             },
                           ),
@@ -549,109 +584,119 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       ],
                     ),
                   ),
-
-                  // 모임카드
-                  Container(
-                    margin: const EdgeInsets.only(
-                      top: 8,
-                      left: 20,
-                      right: 20,
-                    ),
-                    padding: const EdgeInsets.only(
-                      top: 12,
-                      left: 16,
-                      bottom: 12,
-                      right: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: kColorBgDefault,
-                      border: Border.all(
-                        width: 1,
-                        color: kColorBorderDefalut,
-                      ),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/ic_calendar_check_fill_24.svg',
-                          width: 20,
-                          height: 20,
-                          colorFilter: const ColorFilter.mode(
-                            kColorContentWeaker,
-                            BlendMode.srcIn,
+                  if (meetUpModel != null)
+                    // 모임카드
+                    GestureDetector(
+                      onTap: () {
+                        onTapMeetupCard();
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          top: 8,
+                          left: 20,
+                          right: 20,
+                        ),
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 16,
+                          bottom: 12,
+                          right: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: kColorBgDefault,
+                          border: Border.all(
+                            width: 1,
+                            color: kColorBorderDefalut,
                           ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                         ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Text(
-                                '10/16',
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
-                                ),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/ic_calendar_check_fill_24.svg',
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                kColorContentWeaker,
+                                BlendMode.srcIn,
                               ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                '·',
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeakest,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                '오후 2:00',
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeak,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                '·',
-                                style: getTsBody14Rg(context).copyWith(
-                                  color: kColorContentWeakest,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '장소명',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeak,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    infoDateFormat1.format(
+                                      DateTime.parse(meetUpModel!.created_time),
+                                    ),
+                                    style: getTsBody14Rg(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    '·',
+                                    style: getTsBody14Rg(context).copyWith(
+                                      color: kColorContentWeakest,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    msgDateFormat.format(
+                                      DateTime.parse(meetUpModel!.created_time),
+                                    ),
+                                    style: getTsBody14Rg(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    '·',
+                                    style: getTsBody14Rg(context).copyWith(
+                                      color: kColorContentWeakest,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      meetUpModel!.location,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeak,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            SvgPicture.asset(
+                              'assets/icons/ic_chevron_right_line_24.svg',
+                              width: 24,
+                              height: 24,
+                              colorFilter: const ColorFilter.mode(
+                                kColorContentWeakest,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        SvgPicture.asset(
-                          'assets/icons/ic_chevron_right_line_24.svg',
-                          width: 24,
-                          height: 24,
-                          colorFilter: const ColorFilter.mode(
-                            kColorContentWeakest,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
                 ],
               )
             : Container(),
@@ -707,10 +752,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (isProfileView && profilePhotoModel != null)
-                  Text(
-                    profilePhotoModel.nick_name,
-                    style: getTsBody14Rg(context).copyWith(
-                      color: kColorContentWeaker,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      profilePhotoModel.nick_name,
+                      style: getTsBody14Rg(context).copyWith(
+                        color: kColorContentWeaker,
+                      ),
                     ),
                   ),
                 Row(
@@ -875,31 +923,61 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   ) {
     // logger.d(chatRowType);
     return Flexible(
-      child: Container(
-        padding:
-            chatRowType == null || chatRowType == ChatRowType.noticeJoin.name
-                ? const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 8,
-                  )
-                : const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: kColorBgElevation2,
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              chatRowType == null || chatRowType == ChatRowType.noticeJoin.name
-                  ? 50
-                  : 12,
+      child: chatRowType == null || chatRowType == ChatRowType.noticeJoin.name
+          ? Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: 8,
+              ),
+              decoration: const BoxDecoration(
+                color: kColorBgElevation3,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    50,
+                  ),
+                ),
+              ),
+              child: Text(
+                text,
+                style: getTsCaption12Rg(context).copyWith(
+                  color: kColorContentWeaker,
+                ),
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                color: kColorBgDefault,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ThumbnailIconWidget(
+                    size: 32,
+                    isSelected: false,
+                    backgroundColor: kColorBgSecondaryWeak,
+                    iconColor: kColorBgSecondary,
+                    iconSize: 24,
+                    radius: 8,
+                    iconPath: 'assets/icons/ic_megaphone_fill_24.svg',
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: getTsBody14Rg(context).copyWith(
+                        color: kColorContentWeaker,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-        child: Text(
-          text,
-          style: getTsCaption12Rg(context).copyWith(
-            color: kColorContentWeakest,
-          ),
-        ),
-      ),
     );
   }
 

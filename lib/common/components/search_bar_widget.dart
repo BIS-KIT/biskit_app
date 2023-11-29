@@ -83,7 +83,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         borderRadius: const BorderRadius.all(Radius.circular(6)),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SvgPicture.asset(
             'assets/icons/ic_search_line_24.svg',

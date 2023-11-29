@@ -1,10 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/setting/view/setting_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';

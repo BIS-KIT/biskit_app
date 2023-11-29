@@ -59,10 +59,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           MediaQuery.of(context).padding.top -
           48,
       contentWidget: const Expanded(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: MeetUpFilterSheetWidget(),
-        ),
+        child: MeetUpFilterSheetWidget(),
       ),
     );
   }
@@ -188,7 +185,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     return Padding(
       padding: const EdgeInsets.only(
         top: 8,
-        // bottom: 8,
+        bottom: 8,
         left: 20,
       ),
       child: Row(
@@ -222,6 +219,9 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return ChipWidget(
+                    onClickSelect: () {
+                      onTapFilter();
+                    },
                     text: groupList[index]
                             .filterList
                             .where((element) => element.isSeleted)
@@ -267,7 +267,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           });
         },
         padding: const EdgeInsets.only(
-          top: 16,
+          top: 8,
           left: 20,
           right: 20,
           bottom: 8,

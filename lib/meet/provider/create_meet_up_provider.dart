@@ -84,6 +84,7 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
               state!.topic_ids.where((element) => element != id).toList(),
         );
       } else {
+        if (state!.topic_ids.length >= 3) return;
         state = state!.copyWith(
           topic_ids: [
             ...state!.topic_ids,
@@ -279,13 +280,20 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
         return false;
       }
 
-      result = await meetUpRepository.createMeetUp(
+      int? createMeetupId = await meetUpRepository.createMeetUp(
         state!.copyWith(
           chat_id: chatRoomUid,
           image_url: imageUrl,
         ),
       );
-      if (result) {
+      if (createMeetupId != null) {
+        result = true;
+        await chatRepository.updateChatRoom(
+          chatRoomUid: chatRoomUid,
+          data: {
+            'meetupId': createMeetupId,
+          },
+        );
         init();
       }
     }

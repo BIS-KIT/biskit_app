@@ -246,7 +246,8 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     return meetings;
   }
 
-  createMeetUp(CreateMeetUpModel createMeetUpModel) async {
+  Future<int?> createMeetUp(CreateMeetUpModel createMeetUpModel) async {
+    int? createMeetupId;
     Response? res;
     try {
       res = await dio.post(
@@ -263,12 +264,13 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
 
       if (res.statusCode == 200) {
         logger.d(res);
-        return true;
+        createMeetupId = res.data['id'];
+        // return true;
       }
     } catch (e) {
       logger.e(e.toString());
     }
-    return false;
+    return createMeetupId;
   }
 
   Future<MeetUpDetailModel> getMeetUpDetail(int meetUpId) async {

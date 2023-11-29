@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
@@ -389,6 +391,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
                   controller: scrollController,
                   child: Column(
                     children: [
@@ -426,7 +429,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 key: _mainBoxKey,
                                 width: double.infinity,
                                 padding: const EdgeInsets.only(
-                                  top: 24,
                                   left: 20,
                                   right: 20,
                                   bottom: 32,
@@ -442,8 +444,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    const SizedBox(
-                                      height: 48,
+                                    SizedBox(
+                                      height: 48 + 24 + paddig.top,
                                     ),
                                     if (meetUpDetailModel != null)
                                       ExtendedWrap(
@@ -456,6 +458,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                               backgroundColor:
                                                   kColorBgInverseWeak,
                                               textColor: kColorContentInverse,
+                                              sizeType: BadgeSizeType.L,
                                             ),
                                           ),
                                         ],
@@ -524,10 +527,10 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 height: 26,
               ),
               Container(
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                   top: 12,
                   left: 20,
-                  bottom: 20,
+                  bottom: Platform.isIOS ? 34 : 20,
                   right: 20,
                 ),
                 child: _buildBottomButton(),
@@ -686,6 +689,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               child: const FilledButtonWidget(
                 text: '참여신청',
                 isEnable: true,
+                height: 52,
               ),
             );
           }
@@ -697,6 +701,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
       return const FilledButtonWidget(
         text: '종료된 모임이에요',
         isEnable: false,
+        height: 52,
       );
     }
   }
@@ -1127,6 +1132,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                         meetUpDetailModel!.participants_status,
                                     textColor: kColorContentSecondary,
                                     backgroundColor: kColorBgSecondaryWeak,
+                                    sizeType: BadgeSizeType.M,
                                   ),
                               ],
                             ),

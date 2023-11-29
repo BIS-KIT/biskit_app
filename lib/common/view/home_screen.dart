@@ -63,6 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (userState is UserModel)
             Expanded(
               child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
                 child: Column(
                   children: [
                     // Category

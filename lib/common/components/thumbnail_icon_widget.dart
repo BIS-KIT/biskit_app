@@ -12,6 +12,7 @@ class ThumbnailIconWidget extends StatelessWidget {
   final bool isSelected;
   final double radius;
   final String? iconPath;
+  final Color? iconColor;
   final Color backgroundColor;
   final Color selectedBackgroundColor;
   final ThumbnailIconType thumbnailIconType;
@@ -19,6 +20,7 @@ class ThumbnailIconWidget extends StatelessWidget {
     Key? key,
     required this.size,
     this.iconSize = 72,
+    this.iconColor,
     this.padding = 8,
     required this.isSelected,
     required this.radius,
@@ -51,12 +53,27 @@ class ThumbnailIconWidget extends StatelessWidget {
           : thumbnailIconType == ThumbnailIconType.assets
               ? SvgPicture.asset(
                   iconPath!,
+                  width: iconSize,
+                  height: iconSize,
+                  fit: BoxFit.fitWidth,
+                  colorFilter: iconColor == null
+                      ? null
+                      : ColorFilter.mode(
+                          iconColor!,
+                          BlendMode.srcIn,
+                        ),
                 )
               : SvgPicture.network(
                   iconPath!,
                   width: iconSize,
                   height: iconSize,
                   fit: BoxFit.fitWidth,
+                  colorFilter: iconColor == null
+                      ? null
+                      : ColorFilter.mode(
+                          iconColor!,
+                          BlendMode.srcIn,
+                        ),
                 ),
     );
   }
