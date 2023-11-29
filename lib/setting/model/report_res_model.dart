@@ -4,25 +4,25 @@ import 'dart:convert';
 
 import 'package:biskit_app/setting/model/user_system_model.dart';
 
-class ReportModel {
+class ReportResModel {
   final int id;
   final String created_time;
   final UserSystemUserModel reporter;
   final String status;
-  ReportModel({
+  ReportResModel({
     required this.id,
     required this.created_time,
     required this.reporter,
     required this.status,
   });
 
-  ReportModel copyWith({
+  ReportResModel copyWith({
     int? id,
     String? created_time,
     UserSystemUserModel? reporter,
     String? status,
   }) {
-    return ReportModel(
+    return ReportResModel(
       id: id ?? this.id,
       created_time: created_time ?? this.created_time,
       reporter: reporter ?? this.reporter,
@@ -39,8 +39,8 @@ class ReportModel {
     };
   }
 
-  factory ReportModel.fromMap(Map<String, dynamic> map) {
-    return ReportModel(
+  factory ReportResModel.fromMap(Map<String, dynamic> map) {
+    return ReportResModel(
       id: map['id']?.toInt() ?? 0,
       created_time: map['created_time'] ?? '',
       reporter: UserSystemUserModel.fromMap(map['reporter']),
@@ -50,19 +50,19 @@ class ReportModel {
 
   String toJson() => json.encode(toMap());
 
-  factory ReportModel.fromJson(String source) =>
-      ReportModel.fromMap(json.decode(source));
+  factory ReportResModel.fromJson(String source) =>
+      ReportResModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, created_time: $created_time, reporter: $reporter, status: $status)';
+    return 'ReportResModel(id: $id, created_time: $created_time, reporter: $reporter, status: $status)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ReportModel &&
+    return other is ReportResModel &&
         other.id == id &&
         other.created_time == created_time &&
         other.reporter == reporter &&

@@ -1,3 +1,6 @@
+import 'package:biskit_app/setting/view/report_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,6 +42,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
   final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
   MeetUpModel? meetUpModel;
   ResReviewModel? resReviewModel;
+  UserModelBase? userState;
 
   @override
   void initState() {
@@ -69,67 +73,100 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
   }
 
   void onTapMore() {
-    showReviewMoreBottomSheet(
-      context: context,
-      onTapFix: () {
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ReviewEditScreen(
-              imagePath:
-                  'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              reviewText: 'asdf',
-            ),
-          ),
-        );
-      },
-      onTapDelete: () async {
-        Navigator.pop(context);
-        await showConfirmModal(
+    if (userState != null && userState is UserModel) {
+      if ((userState as UserModel).id == resReviewModel!.creator.id) {
+        // 작성자 모어 버튼
+        showReviewMoreBottomSheet(
           context: context,
-          leftCall: () {
+          onTapFix: () {
             Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ReviewEditScreen(
+                  imagePath:
+                      'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                  reviewText: 'asdf',
+                ),
+              ),
+            );
           },
-          leftButton: '취소',
-          rightCall: () async {
-            if (resReviewModel == null) return;
-            await ref.read(reviewProvider(null).notifier).deleteReview(
-                  id: resReviewModel!.id,
-                );
-            if (!context.mounted) return;
+          onTapDelete: () async {
             Navigator.pop(context);
-            Navigator.pop(context, [true]);
+            await showConfirmModal(
+              context: context,
+              leftCall: () {
+                Navigator.pop(context);
+              },
+              leftButton: '취소',
+              rightCall: () async {
+                if (resReviewModel == null) return;
+                await ref.read(reviewProvider(null).notifier).deleteReview(
+                      id: resReviewModel!.id,
+                    );
+                if (!context.mounted) return;
+                Navigator.pop(context);
+                Navigator.pop(context, [true]);
+              },
+              rightButton: '삭제',
+              rightBackgroundColor: kColorBgError,
+              rightTextColor: kColorContentError,
+              title: '모임 후기를 삭제하시겠어요?',
+              content: '삭제한 후기는 복구할 수 없어요',
+            );
           },
-          rightButton: '삭제',
-          rightBackgroundColor: kColorBgError,
-          rightTextColor: kColorContentError,
-          title: '모임 후기를 삭제하시겠어요?',
-          content: '삭제한 후기는 복구할 수 없어요',
         );
-      },
-    );
+      } else {
+        // 다른 사람이 모어 버튼
+        showMoreBottomSheet(
+          context: context,
+          list: [
+            MoreButton(
+              text: '신고하기',
+              color: kColorContentError,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReportScreen(
+                      contentType: ReportContentType.Review,
+                      contentId: resReviewModel!.id,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    userState = ref.watch(userMeProvider);
     final size = MediaQuery.of(context).size;
     return DefaultLayout(
       title: '후기',
       backgroundColor: kColorBgElevation1,
       actions: [
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: SvgPicture.asset(
-            'assets/icons/ic_ios_share_line_24.svg',
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              kColorContentDefault,
-              BlendMode.srcIn,
+        if (resReviewModel != null &&
+            userState != null &&
+            userState is UserModel &&
+            (userState as UserModel).id == resReviewModel!.creator.id)
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(
+              'assets/icons/ic_ios_share_line_24.svg',
+              width: 24,
+              height: 24,
+              colorFilter: const ColorFilter.mode(
+                kColorContentDefault,
+                BlendMode.srcIn,
+              ),
             ),
           ),
-        ),
         GestureDetector(
           onTap: () {
             onTapMore();

@@ -3,7 +3,7 @@ import 'package:biskit_app/common/components/thumbnail_icon_notify_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/setting/model/report_model.dart';
+import 'package:biskit_app/setting/model/report_res_model.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -19,7 +19,7 @@ class WarningHistoryScreen extends ConsumerStatefulWidget {
 }
 
 class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
-  List<ReportModel>? warningHistories;
+  List<ReportResModel>? warningHistories;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
 
   Future<void> init() async {
     int userId = (ref.watch(userMeProvider) as UserModel).id;
-    List<ReportModel>? res = await ref
+    List<ReportResModel>? res = await ref
         .read(settingRepositoryProvider)
         .getReportHistory(user_id: userId);
     setState(() {

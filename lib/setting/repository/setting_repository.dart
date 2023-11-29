@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
-import 'package:biskit_app/setting/model/report_model.dart';
+import 'package:biskit_app/setting/model/report_res_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -201,7 +201,7 @@ class SettingRepository {
     logger.d(res);
   }
 
-  Future<List<ReportModel>> getReportHistory({required int user_id}) async {
+  Future<List<ReportResModel>> getReportHistory({required int user_id}) async {
     final res = await dio.get(
       '$baseUrl/user/$user_id/report',
       options: Options(
@@ -216,8 +216,8 @@ class SettingRepository {
     final List<Map<String, dynamic>> dataList =
         List<Map<String, dynamic>>.from(res.data);
 
-    final List<ReportModel> reportList =
-        dataList.map((map) => ReportModel.fromMap(map)).toList();
+    final List<ReportResModel> reportList =
+        dataList.map((map) => ReportResModel.fromMap(map)).toList();
     return reportList;
   }
 
@@ -341,5 +341,39 @@ class SettingRepository {
     } on DioException catch (e) {
       logger.e(e.toString());
     }
+  }
+
+  postCreateReport({
+    required String reason,
+    required String content_type,
+    required int content_id,
+    required int reporter_id,
+  }) async {
+    ReportResModel? reportResModel;
+    try {
+      final res = await dio.post(
+        '$baseUrl/report',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: {
+          'reason': reason,
+          'content_type': content_type,
+          'content_id': content_id,
+          'reporter_id': reporter_id,
+        },
+      );
+      logger.d(res.data);
+      if (res.statusCode == 200) {
+        reportResModel = ReportResModel.fromMap(res.data);
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+    return reportResModel;
   }
 }
