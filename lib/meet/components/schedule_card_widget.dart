@@ -1,7 +1,12 @@
+import 'package:biskit_app/chat/repository/chat_repository.dart';
+import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
@@ -10,7 +15,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 
-class ScheduleCardWidget extends StatelessWidget {
+class ScheduleCardWidget extends ConsumerWidget {
   final MeetUpModel meetUpModel;
   final double width;
   const ScheduleCardWidget({
@@ -20,7 +25,10 @@ class ScheduleCardWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
     final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
 
@@ -178,10 +186,15 @@ class ScheduleCardWidget extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  const OutlinedButtonWidget(
-                    text: '채팅',
-                    isEnable: true,
-                    height: 40,
+                  GestureDetector(
+                    onTap: () {
+                      onTapChat(ref, context);
+                    },
+                    child: const OutlinedButtonWidget(
+                      text: '채팅',
+                      isEnable: true,
+                      height: 40,
+                    ),
                   ),
                 ],
               ),
@@ -190,5 +203,25 @@ class ScheduleCardWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onTapChat(WidgetRef ref, BuildContext context) async {
+    final userState = ref.watch(userMeProvider);
+    if (userState != null && userState is UserModel) {
+      await ref.read(chatRepositoryProvider).goChatRoom(
+            chatRoomUid: meetUpModel.chat_id,
+            user: userState,
+          );
+
+      if (!context.mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatScreen(
+            chatRoomUid: meetUpModel.chat_id,
+          ),
+        ),
+      );
+    }
   }
 }

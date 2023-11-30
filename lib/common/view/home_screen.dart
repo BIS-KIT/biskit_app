@@ -72,7 +72,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Column(
                         children: [
                           // Category
-                          _buildCategory(userState, context, homeState, true),
+                          _buildCategory(
+                            userState,
+                            context,
+                            homeState,
+                            true,
+                          ),
 
                           Container(
                             color: kColorBgElevation1,
@@ -83,10 +88,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               children: [
                                 // Meetup
                                 if (homeState.meetings.isNotEmpty)
-                                  _buildMeetupList(context, homeState, size),
+                                  _buildMeetupList(
+                                    context,
+                                    homeState,
+                                    size,
+                                  ),
 
                                 // Tag
-                                _buildTag(context, homeState),
+                                _buildTag(
+                                  context,
+                                  homeState,
+                                ),
 
                                 const SizedBox(
                                   height: 36,
@@ -137,8 +149,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           height: 57,
                                         ),
                                         // Category
-                                        _buildCategory(userState, context,
-                                            homeState, false),
+                                        _buildCategory(
+                                          userState,
+                                          context,
+                                          homeState,
+                                          false,
+                                        ),
 
                                         const SizedBox(
                                           height: 36,
@@ -146,10 +162,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         // Meetup
                                         if (homeState.meetings.isNotEmpty)
                                           _buildMeetupList(
-                                              context, homeState, size),
+                                            context,
+                                            homeState,
+                                            size,
+                                          ),
 
                                         // Tag
-                                        _buildTag(context, homeState),
+                                        _buildTag(
+                                          context,
+                                          homeState,
+                                        ),
 
                                         const SizedBox(
                                           height: 36,
@@ -170,79 +192,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     // title
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 4,
-                                            ),
-                                            child: Text(
-                                              '${userState.profile!.nick_name}님\n다가오는 모임이 있어요',
-                                              style: getTsHeading20(context)
-                                                  .copyWith(
-                                                color: kColorContentOnBgPrimary,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: SvgPicture.asset(
-                                              'assets/icons/ic_chevron_right_line_24.svg',
-                                              width: 24,
-                                              height: 24,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    _buildApproveTitle(
+                                      userState,
+                                      context,
                                     ),
                                     const SizedBox(
                                       height: 8,
                                     ),
 
                                     // Card area
-                                    SizedBox(
-                                      height: 249,
-                                      child: homeState.approveMeetings.length ==
-                                              1
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                              ),
-                                              child: ScheduleCardWidget(
-                                                meetUpModel: homeState
-                                                    .approveMeetings[0],
-                                                width: size.width - 40,
-                                              ),
-                                            )
-                                          : ListView.separated(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                              ),
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder: (context, index) =>
-                                                  ScheduleCardWidget(
-                                                meetUpModel: homeState
-                                                    .approveMeetings[index],
-                                                width: size.width - 80,
-                                              ),
-                                              separatorBuilder:
-                                                  (context, index) =>
-                                                      const SizedBox(
-                                                width: 12,
-                                              ),
-                                              itemCount: homeState
-                                                  .approveMeetings.length,
-                                            ),
+                                    _buildApproveCardArea(
+                                      homeState,
+                                      size,
                                     ),
                                   ],
                                 ),
@@ -255,6 +216,69 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
               ],
             ),
+    );
+  }
+
+  SizedBox _buildApproveCardArea(HomeState homeState, Size size) {
+    return SizedBox(
+      height: 249,
+      child: homeState.approveMeetings.length == 1
+          ? Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: ScheduleCardWidget(
+                meetUpModel: homeState.approveMeetings[0],
+                width: size.width - 40,
+              ),
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => ScheduleCardWidget(
+                meetUpModel: homeState.approveMeetings[index],
+                width: size.width - 80,
+              ),
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 12,
+              ),
+              itemCount: homeState.approveMeetings.length,
+            ),
+    );
+  }
+
+  Padding _buildApproveTitle(UserModel userState, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 4,
+            ),
+            child: Text(
+              '${userState.profile!.nick_name}님\n다가오는 모임이 있어요',
+              style: getTsHeading20(context).copyWith(
+                color: kColorContentOnBgPrimary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: SvgPicture.asset(
+              'assets/icons/ic_chevron_right_line_24.svg',
+              width: 24,
+              height: 24,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

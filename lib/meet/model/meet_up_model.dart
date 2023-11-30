@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:biskit_app/meet/model/meet_up_creator_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 
@@ -25,6 +25,7 @@ class MeetUpModel implements IModelWithId {
   final MeetUpCreatorModel creator;
   final String participants_status;
   final List<TagModel> tags;
+  final String chat_id;
   MeetUpModel({
     required this.current_participants,
     required this.korean_count,
@@ -41,6 +42,7 @@ class MeetUpModel implements IModelWithId {
     required this.creator,
     required this.participants_status,
     required this.tags,
+    required this.chat_id,
   });
 
   MeetUpModel copyWith({
@@ -59,6 +61,7 @@ class MeetUpModel implements IModelWithId {
     MeetUpCreatorModel? creator,
     String? participants_status,
     List<TagModel>? tags,
+    String? chat_id,
   }) {
     return MeetUpModel(
       current_participants: current_participants ?? this.current_participants,
@@ -76,6 +79,7 @@ class MeetUpModel implements IModelWithId {
       creator: creator ?? this.creator,
       participants_status: participants_status ?? this.participants_status,
       tags: tags ?? this.tags,
+      chat_id: chat_id ?? this.chat_id,
     );
   }
 
@@ -96,6 +100,7 @@ class MeetUpModel implements IModelWithId {
       'creator': creator.toMap(),
       'participants_status': participants_status,
       'tags': tags.map((x) => x.toMap()).toList(),
+      'chat_id': chat_id,
     };
   }
 
@@ -116,6 +121,7 @@ class MeetUpModel implements IModelWithId {
       creator: MeetUpCreatorModel.fromMap(map['creator']),
       participants_status: map['participants_status'] ?? '',
       tags: List<TagModel>.from(map['tags']?.map((x) => TagModel.fromMap(x))),
+      chat_id: map['chat_id'] ?? '',
     );
   }
 
@@ -126,7 +132,7 @@ class MeetUpModel implements IModelWithId {
 
   @override
   String toString() {
-    return 'MeetUpModel(current_participants: $current_participants, korean_count: $korean_count, foreign_count: $foreign_count, name: $name, location: $location, description: $description, meeting_time: $meeting_time, max_participants: $max_participants, image_url: $image_url, is_active: $is_active, id: $id, created_time: $created_time, creator: $creator, participants_status: $participants_status, tags: $tags)';
+    return 'MeetUpModel(current_participants: $current_participants, korean_count: $korean_count, foreign_count: $foreign_count, name: $name, location: $location, description: $description, meeting_time: $meeting_time, max_participants: $max_participants, image_url: $image_url, is_active: $is_active, id: $id, created_time: $created_time, creator: $creator, participants_status: $participants_status, tags: $tags, chat_id: $chat_id)';
   }
 
   @override
@@ -148,7 +154,8 @@ class MeetUpModel implements IModelWithId {
         other.created_time == created_time &&
         other.creator == creator &&
         other.participants_status == participants_status &&
-        listEquals(other.tags, tags);
+        listEquals(other.tags, tags) &&
+        other.chat_id == chat_id;
   }
 
   @override
@@ -167,6 +174,7 @@ class MeetUpModel implements IModelWithId {
         created_time.hashCode ^
         creator.hashCode ^
         participants_status.hashCode ^
-        tags.hashCode;
+        tags.hashCode ^
+        chat_id.hashCode;
   }
 }
