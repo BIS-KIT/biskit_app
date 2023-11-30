@@ -6,7 +6,7 @@ const Color kColorBiskitNavy = Color(0xFF0C1142);
 const Color kColorBaseBlack = Color(0xff000000);
 // Background Color
 const Color kColorBgPrimaryWeak = Color(0xfffdfade);
-const Color kColorBgPrimary = Color(0xfffef076);
+const Color kColorBgPrimary = Color(0xffffec6e);
 const Color kColorBgPrimaryStrong = Color(0xffffe433);
 const Color kColorBgSecondary = Color(0xff838ded);
 const Color kColorBgSecondaryWeak = Color(0xffEFEFFE);
