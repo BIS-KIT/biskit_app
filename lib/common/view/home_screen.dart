@@ -1,7 +1,6 @@
 import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
-import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
@@ -73,7 +72,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Column(
                         children: [
                           // Category
-                          _buildCategory(userState, context, homeState),
+                          _buildCategory(userState, context, homeState, true),
 
                           Container(
                             color: kColorBgElevation1,
@@ -125,8 +124,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     height: 372 - (48 + padding.top),
                                     color: kColorBgPrimary,
                                   ),
-                                  // Category
-                                  _buildCategory(userState, context, homeState)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 20,
+                                    ),
+                                    color: kColorBgElevation1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const SizedBox(
+                                          height: 57,
+                                        ),
+                                        // Category
+                                        _buildCategory(userState, context,
+                                            homeState, false),
+
+                                        const SizedBox(
+                                          height: 36,
+                                        ),
+                                        // Meetup
+                                        if (homeState.meetings.isNotEmpty)
+                                          _buildMeetupList(
+                                              context, homeState, size),
+
+                                        // Tag
+                                        _buildTag(context, homeState),
+
+                                        const SizedBox(
+                                          height: 36,
+                                        ),
+
+                                        // Make meetup card
+                                        _buildMakeMeetupCard(context),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
                               Container(
@@ -251,11 +284,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               );
             },
-            child: const OutlinedButtonWidget(
-              text: '모임 만들기',
-              isEnable: true,
-              height: 44,
-              leftIconPath: 'assets/icons/ic_plus_line_24.svg',
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButtonWidget(
+                  text: '모임 만들기',
+                  isEnable: true,
+                  height: 44,
+                  leftIconPath: 'assets/icons/ic_plus_line_24.svg',
+                ),
+              ],
             ),
           ),
         ],
@@ -405,27 +443,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Container _buildCategory(
-      UserModel userState, BuildContext context, HomeState homeState) {
-    return Container(
-      color: kColorBgDefault,
-      padding: const EdgeInsets.symmetric(
-        vertical: 24,
-        horizontal: 20,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            '${userState.profile!.nick_name}님\n새로운 모임을 찾아볼까요?',
-            style: getTsHeading20(context).copyWith(
-              color: kColorContentOnBgPrimary,
+  Widget _buildCategory(UserModel userState, BuildContext context,
+      HomeState homeState, bool isApproveEmpty) {
+    return isApproveEmpty
+        ? Container(
+            color: kColorBgDefault,
+            padding: const EdgeInsets.symmetric(
+              vertical: 24,
+              horizontal: 20,
             ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Wrap(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '${userState.profile!.nick_name}님\n새로운 모임을 찾아볼까요?',
+                  style: getTsHeading20(context).copyWith(
+                    color: kColorContentOnBgPrimary,
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: 16,
+                  children: [
+                    ...homeState.fixTopics
+                        .map(
+                          (e) => GestureDetector(
+                            onTap: () {
+                              onTapCategory(e);
+                            },
+                            child: CategoryItemWidget(
+                              iconPath: e.icon_url,
+                              text: e.kr_name,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ],
+                ),
+              ],
+            ),
+          )
+        : Wrap(
             alignment: WrapAlignment.center,
             runSpacing: 16,
             children: [
@@ -443,10 +504,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   )
                   .toList(),
             ],
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget _buildNavigatorBar(bool isApproveMeetupEmpty) {
