@@ -645,4 +645,50 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     }
     return status;
   }
+
+  getMeetingsSearch({
+    required int skip,
+    required int limit,
+    required String searchWord,
+  }) async {
+    CursorPagination<MeetUpModel>? cursorPagination;
+    try {
+      final res = await dio.get(
+        '${baseUrl}s',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'skip': skip,
+          'limit': limit,
+          'search_word': searchWord,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        if ((res.data as Map).containsKey('total_count')) {
+          int totalCount = res.data['total_count'];
+          int count = (res.data['meetings'] as List).length;
+          cursorPagination = CursorPagination<MeetUpModel>(
+            meta: CursorPaginationMeta(
+              count: count,
+              totalCount: totalCount,
+              hasMore: (skip + count < totalCount),
+            ),
+            data: List.from(
+                res.data['meetings'].map((e) => MeetUpModel.fromMap(e))),
+          );
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    // }
+    return cursorPagination;
+  }
 }

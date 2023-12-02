@@ -113,6 +113,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   color: kColorContentWeak,
                 ),
                 cursorColor: kColorContentWeak,
+                scrollPadding: EdgeInsets.zero,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
                   border: InputBorder.none,
