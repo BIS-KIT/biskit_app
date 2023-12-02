@@ -356,7 +356,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                               ),
                             ),
                             child: Text(
-                              e.kr_name,
+                              e.kr_name.isNotEmpty ? e.kr_name : e.en_name,
                               style: getTsCaption12Rg(context).copyWith(
                                 color: kColorContentWeaker,
                               ),
