@@ -451,7 +451,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
 
           SizedBox(
-            height: 182,
+            height: 186,
             child: homeState.meetings.length == 1
                 ? MeetUpCardWidget(
                     model: homeState.meetings[0],

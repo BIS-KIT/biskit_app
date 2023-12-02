@@ -104,7 +104,7 @@ class ProfileCardWidget extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              userState.name,
+                              userState.profile!.nick_name,
                               style: getTsHeading20(context).copyWith(
                                 color: kColorContentDefault,
                               ),
