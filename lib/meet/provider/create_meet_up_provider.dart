@@ -69,9 +69,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     return list;
   }
 
-  Future<List<TagModel>> getTags() async {
+  Future<List<TagModel>> getTags({bool? isCustom}) async {
     List<TagModel> list = [];
-    list = await utilRepository.getTags();
+    list = await utilRepository.getTags(isCustom: isCustom);
     return list;
   }
 

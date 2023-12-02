@@ -49,10 +49,11 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
   }
 
   init() async {
-    List<TopicModel> tempList =
-        await ref.read(createMeetUpProvider.notifier).getTopics();
+    List<TopicModel> tempList = await ref
+        .read(createMeetUpProvider.notifier)
+        .getTopics(isCustom: false);
     List<TagModel> tempTagList =
-        await ref.read(createMeetUpProvider.notifier).getTags();
+        await ref.read(createMeetUpProvider.notifier).getTags(isCustom: false);
     setState(() {
       topics = tempList;
       tags = tempTagList;
