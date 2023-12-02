@@ -109,6 +109,7 @@ class ChipWidget extends StatelessWidget {
                             onChanged: onTapAdd,
                             focusNode: focusNode,
                             controller: controller,
+                            maxLength: 10,
                             style: getTsBody14Rg(context)
                                 .copyWith(color: kColorContentOnBgPrimary),
                             decoration: InputDecoration(
@@ -119,6 +120,7 @@ class ChipWidget extends StatelessWidget {
                                 color: kColorContentOnBgPrimary,
                               ),
                               isDense: true,
+                              counterText: '',
                             ),
                           ),
                         ),
