@@ -189,6 +189,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                       },
                       child: OutlinedButtonWidget(
                         height: 52,
+                        maxLines: 1,
                         text: createMeetUpState!.location == null
                             ? '장소 선택'
                             : createMeetUpState.location ?? '',

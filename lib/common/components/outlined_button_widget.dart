@@ -11,13 +11,17 @@ class OutlinedButtonWidget extends StatelessWidget {
   final String? leftIconPath;
   final double height;
   final AlignmentGeometry? alignment;
+  final TextAlign? textAlign;
+  final int? maxLines;
   const OutlinedButtonWidget({
     Key? key,
     required this.text,
     required this.isEnable,
     this.leftIconPath,
     this.height = 56,
+    this.textAlign,
     this.alignment = Alignment.center,
+    this.maxLines = 2,
   }) : super(key: key);
 
   @override
@@ -58,7 +62,8 @@ class OutlinedButtonWidget extends StatelessWidget {
           Flexible(
             child: Text(
               text,
-              maxLines: 2,
+              textAlign: textAlign ?? textAlign,
+              maxLines: maxLines,
               overflow: TextOverflow.ellipsis,
               style: getTsBody16Sb(context).copyWith(
                 color: isEnable ? kColorContentWeak : kColorBorderStrong,
