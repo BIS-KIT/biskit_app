@@ -1,3 +1,5 @@
+import 'package:biskit_app/common/const/enums.dart';
+
 String getLevelTitle(int level) {
   switch (level) {
     case 5:
@@ -85,4 +87,28 @@ String getLevelSubTitle(int level) {
 
 DateTime getDateTimeByTimestamp(dynamic timestamp) {
   return timestamp.toDate().toLocal();
+}
+
+String getSnsTypeString(String? snsType) {
+  if (snsType == null) {
+    return '이메일';
+  } else if (snsType == SnsType.apple.name) {
+    return '애플';
+  } else if (snsType == SnsType.kakao.name) {
+    return '카카오';
+  } else {
+    return '구글';
+  }
+}
+
+String getSnsTypeIconPath(String? snsType) {
+  if (snsType == null) {
+    return 'assets/icons/ic_login_email.svg';
+  } else if (snsType == SnsType.apple.name) {
+    return 'assets/icons/ic_login_apple.svg';
+  } else if (snsType == SnsType.kakao.name) {
+    return 'assets/icons/ic_login_kakao.svg';
+  } else {
+    return 'assets/icons/ic_login_google.svg';
+  }
 }

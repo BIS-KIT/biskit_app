@@ -5,6 +5,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/schedule_card_widget.dart';
@@ -27,9 +28,37 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  Color _color = kColorBgPrimary;
+  late final ScrollController scrollController;
+
   @override
   void initState() {
+    scrollController = ScrollController();
+    scrollController.addListener(_scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  _scrollListener() {
+    logger.d(scrollController.offset);
+    if (scrollController.offset >= 270) {
+      if (_color != kColorBgElevation1) {
+        setState(() {
+          _color = kColorBgElevation1;
+        });
+      }
+    } else {
+      if (_color != kColorBgPrimary) {
+        setState(() {
+          _color = kColorBgPrimary;
+        });
+      }
+    }
   }
 
   void onTapCategory(TopicModel topicModel) {
@@ -64,7 +93,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Navigation bar
-                _buildNavigatorBar(true),
+                _buildNavigatorBar(
+                  isApproveMeetupEmpty: true,
+                ),
                 if (userState is UserModel)
                   Expanded(
                     child: SingleChildScrollView(
@@ -119,10 +150,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Navigation bar
-                _buildNavigatorBar(false),
+                _buildNavigatorBar(
+                  isApproveMeetupEmpty: false,
+                  color: _color,
+                ),
                 if (userState is UserModel)
                   Expanded(
                     child: SingleChildScrollView(
+                      controller: scrollController,
                       physics: const ClampingScrollPhysics(),
                       child: Column(
                         children: [
@@ -531,11 +566,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           );
   }
 
-  Widget _buildNavigatorBar(bool isApproveMeetupEmpty) {
+  Widget _buildNavigatorBar({
+    required bool isApproveMeetupEmpty,
+    Color? color,
+  }) {
     final padding = MediaQuery.of(context).padding;
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       padding: EdgeInsets.only(top: padding.top),
-      color: isApproveMeetupEmpty ? kColorBgDefault : kColorBgPrimary,
+      color: isApproveMeetupEmpty ? kColorBgDefault : color,
       height: 48 + padding.top,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

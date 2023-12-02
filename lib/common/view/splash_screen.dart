@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,7 +14,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     logger.d('SplashScreen build');
     return DefaultLayout(
-      backgroundColor: const Color(0xffFEF076),
+      backgroundColor: kColorBgPrimary,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

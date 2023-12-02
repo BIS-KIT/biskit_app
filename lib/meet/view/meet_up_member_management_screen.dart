@@ -1,3 +1,4 @@
+import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/enums.dart';
@@ -121,6 +122,10 @@ class _MeetUpMemberManagementScreenState
                       meeting_id: widget.meetUpDetailModel.id,
                     );
             if (isOk) {
+              await ref.read(chatRepositoryProvider).chatExist(
+                    chatRoomUid: widget.meetUpDetailModel.chat_id,
+                    userId: userModel.id,
+                  );
               await fetchRequest();
               if (!mounted) return;
               Navigator.of(context).pop();
