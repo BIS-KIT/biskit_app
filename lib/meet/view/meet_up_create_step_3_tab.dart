@@ -44,19 +44,19 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
     final createMeetUpState = ref.watch(createMeetUpProvider);
-    return SingleChildScrollView(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-          if (customTagController.text != '') {
-            ref
-                .read(createMeetUpProvider.notifier)
-                .onTapAddCustomTopic(customTagController.text);
-          }
-          setState(() {
-            customTagController.text = '';
-          });
-        },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        if (customTagController.text != '') {
+          ref
+              .read(createMeetUpProvider.notifier)
+              .onTapAddCustomTag(customTagController.text);
+        }
+        setState(() {
+          customTagController.text = '';
+        });
+      },
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
@@ -121,6 +121,23 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                     spacing: 6,
                     runSpacing: 8,
                     children: [
+                      ChipWidget(
+                        text: "직접입력",
+                        isSelected: false,
+                        onTapEnter: (e) {
+                          ref
+                              .read(createMeetUpProvider.notifier)
+                              .onTapAddCustomTag(customTagController.text);
+                          setState(() {
+                            customTagController.text = '';
+                          });
+                        },
+                        onTapAdd: (e) {
+                          customTagFocusNode.requestFocus();
+                        },
+                        focusNode: customTagFocusNode,
+                        controller: customTagController,
+                      ),
                       ...widget.tags.map(
                         (e) => ChipWidget(
                           text: e.kr_name,
@@ -145,23 +162,6 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                                 .onTapDeleteCustomTag(e);
                           },
                         ),
-                      ),
-                      ChipWidget(
-                        text: "직접입력",
-                        isSelected: false,
-                        onTapEnter: (e) {
-                          ref
-                              .read(createMeetUpProvider.notifier)
-                              .onTapAddCustomTag(customTagController.text);
-                          setState(() {
-                            customTagController.text = '';
-                          });
-                        },
-                        onTapAdd: (e) {
-                          customTagFocusNode.requestFocus();
-                        },
-                        focusNode: customTagFocusNode,
-                        controller: customTagController,
                       ),
                     ],
                   ),
