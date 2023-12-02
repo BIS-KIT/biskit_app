@@ -17,6 +17,7 @@ class DefaultLayout extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final VoidCallback? onTapLeading;
   final bool borderShape;
+  final Brightness? brightness;
 
   final ShapeBorder? shape;
   const DefaultLayout({
@@ -30,9 +31,10 @@ class DefaultLayout extends StatelessWidget {
     this.floatingActionButton,
     this.actions,
     this.resizeToAvoidBottomInset = true,
-    this.shape,
     this.onTapLeading,
     this.borderShape = true,
+    this.brightness = Brightness.dark,
+    this.shape,
   }) : super(key: key);
 
   @override
@@ -41,9 +43,9 @@ class DefaultLayout extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: backgroundColor ?? kColorBgDefault,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
+        value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
+          statusBarIconBrightness: brightness,
         ),
         child: child,
       ),

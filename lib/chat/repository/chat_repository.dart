@@ -327,4 +327,27 @@ class ChatRepository {
   deleteChatRoom({required String chatRoomUid}) async {
     await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).delete();
   }
+
+  chatExist({
+    required String chatRoomUid,
+    required int userId,
+  }) async {
+    final DocumentSnapshot chatDoc = await getChatRoomById(chatRoomUid);
+    logger.d(chatDoc.data());
+    ChatRoomModel? chatRoomModel =
+        ChatRoomModel.fromMap((chatDoc.data() as Map<String, dynamic>));
+    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update(
+      {
+        'connectingUsers': FieldValue.arrayRemove([userId]),
+        'joinUsers': FieldValue.arrayRemove([userId]),
+        'firstUserInfoList': FieldValue.arrayRemove(
+          chatRoomModel.firstUserInfoList
+              .where((element) => element.userId == userId)
+              .toList()
+              .map((e) => e.toMap())
+              .toList(),
+        ),
+      },
+    );
+  }
 }

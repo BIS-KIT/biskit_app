@@ -3,6 +3,7 @@
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
+import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -190,6 +191,46 @@ class ProfileRepository {
   //   }
   //   return path;
   // }
+
+  getMyApproveMeetings({
+    required int skip,
+    int limit = 20,
+  }) async {
+    List<MeetUpModel> list = [];
+    // List<MeetUpModel> data = [];
+    Response? res;
+    final user = ref.watch(userMeProvider);
+    if (user is UserModel) {
+      try {
+        res = await dio.get(
+          '$baseUrl/${user.id}/meetings',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'status': ProfileMeetingStatus.APPROVE.name,
+            'skip': skip,
+            'limit': limit,
+          },
+        );
+
+        if (res.statusCode == 200) {
+          logger.d(res);
+          if ((res.data as Map).containsKey('total_count')) {
+            list = List.from(
+                res.data['meetings'].map((e) => MeetUpModel.fromMap(e)));
+          }
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+    return list;
+  }
 
   getMyMeetings({
     required String status,

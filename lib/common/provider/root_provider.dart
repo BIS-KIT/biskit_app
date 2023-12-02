@@ -1,16 +1,20 @@
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/local_notification_util.dart';
 import 'package:biskit_app/common/utils/permission_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rootProvider = StateNotifierProvider<RootStateNotifier, RootState>(
-    (ref) => RootStateNotifier());
+    (ref) => RootStateNotifier(
+          ref: ref,
+        ));
 
 class RootStateNotifier extends StateNotifier<RootState> {
-  late TabController tabController;
-  RootStateNotifier()
-      : super(
+  final Ref ref;
+  RootStateNotifier({
+    required this.ref,
+  }) : super(
           RootState(
             scafoldBackgroundColor: kColorBgElevation1,
             index: 0,
@@ -36,32 +40,58 @@ class RootStateNotifier extends StateNotifier<RootState> {
     await foregroundFcm();
   }
 
-  setTabController(TabController controller) {
-    tabController = controller;
-  }
+  // setTabController(TabController controller) {
+  //   tabController = controller;
+  // }
 
-  void tabListener(int value) {
-    Color color = state.scafoldBackgroundColor;
-    if (value == 3) {
-      color = kColorBgDefault;
-    } else if (value == 0) {
-      color = kColorBgDefault;
-    } else if (value == 1) {
-      color = kColorBgElevation1;
+  // void tabListener(int value) {
+  //   Color color = state.scafoldBackgroundColor;
+  //   if (value == 3) {
+  //     color = kColorBgDefault;
+  //   } else if (value == 0) {
+  //     color = kColorBgDefault;
+  //   } else if (value == 1) {
+  //     color = kColorBgElevation1;
+  //   } else {
+  //     color = kColorBgElevation2;
+  //   }
+
+  //   state = state.copyWith(
+  //     scafoldBackgroundColor: color,
+  //   );
+  // }
+
+  void onTapBottomNav({
+    required final int index,
+    final Color color = kColorBgDefault,
+  }) {
+    Color? scafoldColor = color;
+    if (index == 3) {
+      scafoldColor = kColorBgDefault;
+    } else if (index == 0) {
+      if (ref.read(homeProvider).approveMeetings.isEmpty) {
+        scafoldColor = kColorBgDefault;
+      } else {
+        scafoldColor = Colors.transparent;
+      }
+    } else if (index == 1) {
+      scafoldColor = kColorBgElevation1;
     } else {
-      color = kColorBgElevation2;
+      scafoldColor = kColorBgElevation2;
     }
 
     state = state.copyWith(
-      scafoldBackgroundColor: color,
+      index: index,
+      scafoldBackgroundColor: scafoldColor,
     );
+    // tabController.animateTo(index);
+    // tabListener(index);
   }
 
-  void onTapBottomNav(int index) {
+  void setScaffoldColor(Color color) {
     state = state.copyWith(
-      index: index,
+      scafoldBackgroundColor: color,
     );
-    tabController.animateTo(index);
   }
 }
 

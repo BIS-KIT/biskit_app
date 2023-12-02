@@ -71,7 +71,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
   fetchMeetUp() async {
-    meetUpModel = meetUpModel = await ref
+    meetUpModel = await ref
         .read(meetUpRepositoryProvider)
         .getMeeting(chatRoomModel!.meetupId!);
   }
@@ -332,7 +332,47 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // TODO 모임 나가기 처리
+                        if (meetUpModel == null) return;
+                        DateTime meetDate =
+                            DateTime.parse(meetUpModel!.meeting_time);
+                        DateTime now = DateTime.now();
+
+                        if (now.isAfter(meetDate)) {
+                          // 모임 시간이 지난 경우
+                          showConfirmModal(
+                            context: context,
+                            title: '채팅방에서 나가시겠어요?',
+                            content: '대화 내용이 모두 사라져요',
+                            leftButton: '취소',
+                            leftCall: () {
+                              Navigator.pop(context);
+                            },
+                            rightButton: '나가기',
+                            rightTextColor: kColorContentError,
+                            rightBackgroundColor: kColorBgError,
+                            rightCall: () async {
+                              Navigator.pop(context);
+                              await ref.read(chatRepositoryProvider).chatExist(
+                                    chatRoomUid: widget.chatRoomUid,
+                                    userId: (userState as UserModel).id,
+                                  );
+                              if (!mounted) return;
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          );
+                        } else {
+                          // 모임이 안 끝난 경우
+                          showDefaultModal(
+                            context: context,
+                            title: '모임 종료 전에는 나갈 수 없어요',
+                            content:
+                                '모임 상세 > 더보기 > 모임 나가기로 나간 후에 채팅방에서 나갈 수 있어요',
+                            function: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10),

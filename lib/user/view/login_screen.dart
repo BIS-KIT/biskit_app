@@ -181,7 +181,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = MediaQuery.of(context).padding;
     return DefaultLayout(
+      brightness: Brightness.light,
       floatingActionButton: kDebugMode
           ? Stack(
               children: <Widget>[
@@ -220,78 +222,109 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ],
             )
-          // FloatingActionButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => const TestScreen(),
-          //           ));
-          //     },
-          //     child: const Text('Test'),
-          //   )
           : null,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 67,
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          '타이틀',
-                          style: getTsHeading24(context).copyWith(
-                            color: kColorContentDefault,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          '서비스 설명 텍스트',
-                          style: getTsBody16Rg(context).copyWith(
-                            color: kColorContentWeaker,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+              top: padding.top,
+            ),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  'assets/images/login-background.jpg',
                 ),
+                fit: BoxFit.cover,
               ),
-              GestureDetector(
-                onTap: signInWithGoogle,
-                child: _buildGoogle(context),
-              ),
-              GestureDetector(
-                onTap: signInWithKakao,
-                child: _buildKakao(context),
-              ),
-              if (Platform.isIOS)
-                GestureDetector(
-                  onTap: signInWithApple,
-                  child: _buildApple(context),
-                ),
-              GestureDetector(
-                onTap: () {
-                  context.goNamed(EmailLoginScreen.routeName);
-                },
-                child: _buildEmail(context),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-            ],
+            ),
           ),
-        ),
+          Container(
+            padding: EdgeInsets.only(
+              top: padding.top,
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: const Alignment(0, -1),
+                end: const Alignment(0, 1),
+                colors: [
+                  Colors.black.withOpacity(0.21),
+                  Colors.black.withOpacity(0.7),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: padding.top,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 40,
+                    horizontal: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        '글로벌한\n대학생활의 시작\nBISKIT',
+                        style: TextStyle(
+                          color: kColorContentInverse,
+                          fontSize: 32,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w700,
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        '우리 학교 다양한 국적의\n친구들과 만나보세요',
+                        style: getTsBody16Rg(context).copyWith(
+                          color: kColorContentInverse,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: Column(
+                    children: [
+                      if (Platform.isIOS)
+                        GestureDetector(
+                          onTap: signInWithApple,
+                          child: _buildApple(context),
+                        ),
+                      GestureDetector(
+                        onTap: signInWithKakao,
+                        child: _buildKakao(context),
+                      ),
+                      GestureDetector(
+                        onTap: signInWithGoogle,
+                        child: _buildGoogle(context),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          context.goNamed(EmailLoginScreen.routeName);
+                        },
+                        child: _buildEmail(context),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -353,34 +386,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // vertical: 14,
         horizontal: 16,
       ),
-      decoration: BoxDecoration(
-        color: kColorBgElevation1,
-        border: Border.all(
-          width: 1,
-          color: kColorBgElevation3,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(6),
-        ),
-      ),
+      decoration: const BoxDecoration(
+          // color: kColorBgElevation1,
+          // border: Border.all(
+          //   width: 1,
+          //   color: kColorBgElevation3,
+          // ),
+          // borderRadius: const BorderRadius.all(
+          //   Radius.circular(6),
+          // ),
+          ),
       alignment: Alignment.center,
       child: Row(
         children: [
-          SvgPicture.asset(
-            'assets/icons/ic_mail_line_24.svg',
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              kColorContentWeak,
-              BlendMode.srcIn,
-            ),
-          ),
+          // SvgPicture.asset(
+          //   'assets/icons/ic_mail_line_24.svg',
+          //   width: 24,
+          //   height: 24,
+          //   colorFilter: const ColorFilter.mode(
+          //     kColorContentWeak,
+          //     BlendMode.srcIn,
+          //   ),
+          // ),
           Expanded(
             child: Text(
               '이메일로 로그인',
               textAlign: TextAlign.center,
               style: getTsBody16Sb(context).copyWith(
-                color: kColorContentWeak,
+                color: kColorContentInverse,
+                decoration: TextDecoration.underline,
+                decorationColor: kColorContentInverse,
               ),
             ),
           ),
@@ -447,6 +482,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             horizontal: 16,
           ),
           decoration: BoxDecoration(
+            color: Colors.white,
             border: Border.all(
               width: 1,
               color: kColorBorderStrong,

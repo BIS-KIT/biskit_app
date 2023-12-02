@@ -97,7 +97,9 @@ class _RootTabState extends ConsumerState<RootTab>
                   ref.read(homeProvider.notifier).init();
                 }
               } else {
-                ref.read(rootProvider.notifier).onTapBottomNav(index);
+                ref.read(rootProvider.notifier).onTapBottomNav(
+                      index: index,
+                    );
                 // controller.animateTo(index);
               }
             },

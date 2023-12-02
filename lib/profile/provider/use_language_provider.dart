@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,11 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguageModel>?> {
   }
 
   setSelectedList(List<UseLanguageModel> list) {
+    logger.d(list);
+    list.sort(
+        (a, b) => a.languageModel.kr_name.compareTo(b.languageModel.kr_name));
+    list.sort((a, b) => b.level.compareTo(a.level));
+    logger.d(list);
     state = state!.map((e) {
       if (list.map((l) => l.languageModel.id).contains(e.languageModel.id)) {
         return list

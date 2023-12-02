@@ -588,7 +588,7 @@ showDefaultModal({
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        insetPadding: EdgeInsets.zero,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24),
         buttonPadding: EdgeInsets.zero,
         backgroundColor: kColorBgDefault,
         surfaceTintColor: kColorBgDefault,
