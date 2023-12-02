@@ -10,6 +10,7 @@ import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -368,15 +369,25 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SvgPicture.asset(
-                  'assets/icons/ic_search_line_24.svg',
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    kColorContentDefault,
-                    BlendMode.srcIn,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MeetUpSearchScreen(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_search_line_24.svg',
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentDefault,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),

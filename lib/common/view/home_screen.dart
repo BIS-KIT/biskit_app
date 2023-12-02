@@ -14,6 +14,7 @@ import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
+    // final padding = MediaQuery.of(context).padding;
 
     final userState = ref.watch(userMeProvider);
     final homeState = ref.watch(homeProvider);
@@ -168,7 +169,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 children: [
                                   Container(
                                     width: double.infinity,
-                                    height: 372 - (48 + padding.top),
+                                    height: 280,
                                     color: kColorBgPrimary,
                                   ),
                                   Container(
@@ -181,7 +182,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           CrossAxisAlignment.stretch,
                                       children: [
                                         const SizedBox(
-                                          height: 57,
+                                          height: 73,
                                         ),
                                         // Category
                                         _buildCategory(
@@ -611,7 +612,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MeetUpSearchScreen(),
+                    ),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: SvgPicture.asset(
