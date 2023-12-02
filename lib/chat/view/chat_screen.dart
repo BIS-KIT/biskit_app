@@ -12,6 +12,7 @@ import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -271,44 +272,58 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         child: Column(
                           children: profilePhotoList
                               .map(
-                                (e) => Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      AvatarWithFlagWidget(
-                                        profilePath: e.profile_photo,
-                                        radius: 20,
-                                        flagRadius: 16,
-                                        flagPath: e.nationalities.isEmpty
-                                            ? null
-                                            : '$kS3Url$kS3Flag43Path/${e.nationalities[0].code}.svg',
-                                      ),
-                                      const SizedBox(
-                                        width: 12,
-                                      ),
-                                      Text(
-                                        e.nick_name,
-                                        style: getTsBody16Rg(context).copyWith(
-                                          color: kColorContentWeak,
+                                (e) => GestureDetector(
+                                  onTap: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileViewScreen(
+                                          userId: e.user_id,
                                         ),
                                       ),
-                                      if (chatRoomModel!.createUserId ==
-                                          e.user_id)
-                                        Row(
-                                          children: [
-                                            const SizedBox(
-                                              width: 4,
-                                            ),
-                                            SvgPicture.asset(
-                                              'assets/icons/ic_crown_circle_fill_24.svg',
-                                              width: 24,
-                                              height: 24,
-                                            ),
-                                          ],
+                                    );
+                                    // TODO 차단처리한 사용자 채팅 안나오게 하기
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        AvatarWithFlagWidget(
+                                          profilePath: e.profile_photo,
+                                          radius: 20,
+                                          flagRadius: 16,
+                                          flagPath: e.nationalities.isEmpty
+                                              ? null
+                                              : '$kS3Url$kS3Flag43Path/${e.nationalities[0].code}.svg',
                                         ),
-                                    ],
+                                        const SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                          e.nick_name,
+                                          style:
+                                              getTsBody16Rg(context).copyWith(
+                                            color: kColorContentWeak,
+                                          ),
+                                        ),
+                                        if (chatRoomModel!.createUserId ==
+                                            e.user_id)
+                                          Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              SvgPicture.asset(
+                                                'assets/icons/ic_crown_circle_fill_24.svg',
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               )

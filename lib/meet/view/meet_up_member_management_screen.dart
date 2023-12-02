@@ -11,6 +11,7 @@ import 'package:biskit_app/profile/components/profile_list_with_subtext_widget.d
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/const/colors.dart';
@@ -33,6 +34,7 @@ class MeetUpMemberManagementScreen extends ConsumerStatefulWidget {
 
 class _MeetUpMemberManagementScreenState
     extends ConsumerState<MeetUpMemberManagementScreen> {
+  final DateFormat dateFormat = DateFormat('MM/dd(EEE) a hh:mm', 'ko');
   List<MeetUpRequestModel> requests = [];
   List<UserModel> users = [];
   @override
@@ -126,7 +128,10 @@ class _MeetUpMemberManagementScreenState
                     chatRoomUid: widget.meetUpDetailModel.chat_id,
                     userId: userModel.id,
                   );
-              await fetchRequest();
+
+              users =
+                  users.where((element) => element.id != userModel.id).toList();
+              setState(() {});
               if (!mounted) return;
               Navigator.of(context).pop();
             }
@@ -198,8 +203,8 @@ class _MeetUpMemberManagementScreenState
                                             profilePath: model
                                                 .user.profile!.profile_photo,
                                             isCreator: false,
-                                            // TODO 모임 참가 신청 일자 해야함
-                                            subText: '10.22(일) 오전 10:23 신청',
+                                            subText:
+                                                '${dateFormat.format(DateTime.parse(model.created_time))} 신청',
                                             introductions: const [],
                                             onTap: () {
                                               if (model.user.profile == null) {

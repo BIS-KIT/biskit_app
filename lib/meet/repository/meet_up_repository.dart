@@ -566,7 +566,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   }) async {
     bool isOk = false;
     try {
-      final res = await dio.delete(
+      final res = await dio.post(
         '$baseUrl/$meeting_id/user/$user_id/exit',
         options: Options(
           headers: {

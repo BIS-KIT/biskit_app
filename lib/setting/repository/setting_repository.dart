@@ -188,6 +188,39 @@ class SettingRepository {
     return BlockedUserListModel.fromMap(res.data);
   }
 
+  // target_id 차단하려는 id
+  // reporter_id 자기자신
+  Future<bool> blockUser({
+    required int target_id,
+    required int reporter_id,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/ban',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: {
+          'target_id': target_id,
+          'reporter_id': reporter_id,
+        },
+      );
+      logger.d(res);
+      if (res.statusCode == 200) {
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+
+    return isOk;
+  }
+
   Future<void> unblockUser({required List<int> ban_ids}) async {
     final res = await dio.delete('$baseUrl/ban',
         options: Options(

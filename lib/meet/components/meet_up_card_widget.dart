@@ -47,7 +47,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
       },
       child: Container(
         width: widget.sizeType == MeetUpCardSizeType.L ? null : widget.width,
-        height: widget.sizeType == MeetUpCardSizeType.L ? null : 182,
+        height: widget.sizeType == MeetUpCardSizeType.L ? null : 186,
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: kColorBgDefault,

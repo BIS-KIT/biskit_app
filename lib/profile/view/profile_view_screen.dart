@@ -6,8 +6,10 @@ import 'package:biskit_app/profile/components/profile_card_widget.dart';
 import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +27,8 @@ class ProfileViewScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
-  UserModel? userState;
+  UserModel? profileUserModel;
+  UserModelBase? userState;
 
   @override
   void initState() {
@@ -34,13 +37,14 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
   }
 
   init() async {
-    userState =
+    profileUserModel =
         await ref.read(usersRepositoryProvider).getReadUser(widget.userId);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    userState = ref.watch(userMeProvider);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kColorBgElevation2,
@@ -51,7 +55,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
           children: [
             // Appbar
             _buildAppbar(context),
-            if (userState != null)
+            if (profileUserModel != null)
               // content
               Expanded(
                 child: SingleChildScrollView(
@@ -62,7 +66,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                   child: Column(
                     children: [
                       ProfileCardWidget(
-                        userState: userState!,
+                        userState: profileUserModel!,
                         isMe: false,
                       ),
                       const SizedBox(
@@ -80,7 +84,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
   }
 
   Widget _buildReview(Size size) {
-    final reviewState = ref.watch(reviewProvider(userState!.id));
+    final reviewState = ref.watch(reviewProvider(profileUserModel!.id));
 
     if (reviewState.data.isEmpty) {
       return Container(
@@ -107,43 +111,46 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
       double width = (size.width - 40 - 8) / 2;
       return Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 0,
+          horizontal: 20,
         ),
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          runSpacing: 8,
-          spacing: 8,
-          children: [
-            ...reviewState.data
-                .map((e) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReviewViewScreen(
-                              model: e,
+        child: SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 8,
+            spacing: 8,
+            children: [
+              ...reviewState.data
+                  .map((e) => GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewViewScreen(
+                                model: e,
+                              ),
                             ),
+                          );
+                        },
+                        child: Hero(
+                          tag: '$kReviewTagName/${e.id}',
+                          child: ReviewCardWidget(
+                            width: width,
+                            imagePath: e.image_url,
+                            reviewImgType: ReviewImgType.networkImage,
+                            flagCodeList: e.creator.user_nationality
+                                .map((e) => e.nationality.code)
+                                .toList(),
+                            isShowDelete: false,
+                            isShowFlag: true,
+                            isShowLock: false,
+                            isShowLogo: false,
                           ),
-                        );
-                      },
-                      child: Hero(
-                        tag: '$kReviewTagName/${e.id}',
-                        child: ReviewCardWidget(
-                          width: width,
-                          imagePath: e.image_url,
-                          reviewImgType: ReviewImgType.networkImage,
-                          flagCodeList: e.creator.user_nationality
-                              .map((e) => e.nationality.code)
-                              .toList(),
-                          isShowDelete: false,
-                          isShowFlag: true,
-                          isShowLock: false,
-                          isShowLogo: false,
                         ),
-                      ),
-                    ))
-                .toList(),
-          ],
+                      ))
+                  .toList(),
+            ],
+          ),
         ),
       );
     }
@@ -167,30 +174,41 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              onTapMore();
-            },
-            behavior: HitTestBehavior.opaque,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: SvgPicture.asset(
-                'assets/icons/ic_more_horiz_line_24.svg',
-                width: 24,
-                height: 24,
-                colorFilter: const ColorFilter.mode(
-                  kColorContentDefault,
-                  BlendMode.srcIn,
+          (userState != null && userState is UserModel) &&
+                  (userState as UserModel).id != widget.userId
+              ? GestureDetector(
+                  onTap: () {
+                    onTapMore();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_more_horiz_line_24.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        kColorContentDefault,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                )
+              : const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
   void onTapMore() {
+    if (profileUserModel == null) return;
+
     showMoreBottomSheet(
       context: context,
       list: [
@@ -210,11 +228,27 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
             );
           },
         ),
+        // TODO 차단해제 만들기
         MoreButton(
           text: '차단하기',
           color: kColorContentError,
           onTap: () async {
-            // TODO
+            Navigator.pop(context);
+            bool isOk = await ref.read(settingRepositoryProvider).blockUser(
+                  target_id: widget.userId,
+                  reporter_id: profileUserModel!.id,
+                );
+            if (isOk && mounted) {
+              showSnackBar(
+                context: context,
+                text: '${profileUserModel!.profile!.nick_name}님을 차단했어요.',
+                margin: const EdgeInsets.only(
+                  bottom: 40,
+                  left: 12,
+                  right: 12,
+                ),
+              );
+            }
           },
         ),
       ],

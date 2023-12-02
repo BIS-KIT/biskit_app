@@ -9,11 +9,14 @@ class MeetUpRequestModel {
   final int meeting_id;
   final String status;
   final int id;
+  final String created_time;
+
   MeetUpRequestModel({
     required this.user,
     required this.meeting_id,
     required this.status,
     required this.id,
+    required this.created_time,
   });
 
   MeetUpRequestModel copyWith({
@@ -21,12 +24,14 @@ class MeetUpRequestModel {
     int? meeting_id,
     String? status,
     int? id,
+    String? created_time,
   }) {
     return MeetUpRequestModel(
       user: user ?? this.user,
       meeting_id: meeting_id ?? this.meeting_id,
       status: status ?? this.status,
       id: id ?? this.id,
+      created_time: created_time ?? this.created_time,
     );
   }
 
@@ -36,6 +41,7 @@ class MeetUpRequestModel {
       'meeting_id': meeting_id,
       'status': status,
       'id': id,
+      'created_time': created_time,
     };
   }
 
@@ -45,6 +51,7 @@ class MeetUpRequestModel {
       meeting_id: map['meeting_id']?.toInt() ?? 0,
       status: map['status'] ?? '',
       id: map['id']?.toInt() ?? 0,
+      created_time: map['created_time'] ?? '',
     );
   }
 
@@ -55,7 +62,7 @@ class MeetUpRequestModel {
 
   @override
   String toString() {
-    return 'MeetUpRequestModel(user: $user, meeting_id: $meeting_id, status: $status, id: $id)';
+    return 'MeetUpRequestModel(user: $user, meeting_id: $meeting_id, status: $status, id: $id, created_time: $created_time)';
   }
 
   @override
@@ -66,11 +73,16 @@ class MeetUpRequestModel {
         other.user == user &&
         other.meeting_id == meeting_id &&
         other.status == status &&
-        other.id == id;
+        other.id == id &&
+        other.created_time == created_time;
   }
 
   @override
   int get hashCode {
-    return user.hashCode ^ meeting_id.hashCode ^ status.hashCode ^ id.hashCode;
+    return user.hashCode ^
+        meeting_id.hashCode ^
+        status.hashCode ^
+        id.hashCode ^
+        created_time.hashCode;
   }
 }
