@@ -49,6 +49,21 @@ class ProfileRepository {
     return res;
   }
 
+  getRandomProfile() async {
+    final res = await dio.get(
+      '$baseUrl/random-image',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    logger.d(res.toString());
+    return res;
+  }
+
   Future<bool> getCheckNickName(String nickName) async {
     bool isOk = false;
 
