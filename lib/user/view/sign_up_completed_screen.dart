@@ -31,13 +31,15 @@ class SignUpCompletedScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  SvgPicture.asset(
-                    'assets/images/welcome_illust 1.svg',
-                    width: 141,
-                    height: 148,
+                  ClipOval(
+                    child: SvgPicture.asset(
+                      'assets/images/biskit_welcome.svg',
+                      width: 192,
+                      height: 192,
+                    ),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 24,
                   ),
                   Column(
                     children: [
@@ -79,6 +81,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                       child: const FilledButtonWidget(
                         text: '프로필 완성하기',
                         isEnable: true,
+                        fontSize: FontSize.l,
                       ),
                     ),
                   ),
