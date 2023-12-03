@@ -109,6 +109,17 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<UseLanguageModel> sortedSelectedList = List.from(selectedList)
+      ..sort((a, b) {
+        // 먼저 level로 내림차순 정렬
+        int levelComparison = b.level.compareTo(a.level);
+
+        // level이 같은 경우 kr_name으로 오름차순 정렬
+        return levelComparison != 0
+            ? levelComparison
+            : a.languageModel.kr_name.compareTo(b.languageModel.kr_name);
+      });
+
     return DefaultLayout(
       title: '',
       actions: [
@@ -153,7 +164,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: Column(
                         children: [
-                          ...selectedList
+                          ...sortedSelectedList
                               .map((e) => _buildLangTile(e, context))
                               .toList()
                         ],
