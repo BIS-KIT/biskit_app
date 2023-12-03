@@ -5,6 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../const/colors.dart';
 import '../const/fonts.dart';
 
+enum FontSize {
+  l,
+  m,
+}
+
 class FilledButtonWidget extends StatelessWidget {
   final String text;
   final bool isEnable;
@@ -12,6 +17,7 @@ class FilledButtonWidget extends StatelessWidget {
   final double height;
   final Color backgroundColor;
   final Color fontColor;
+  final FontSize? fontSize;
   const FilledButtonWidget({
     Key? key,
     required this.text,
@@ -20,6 +26,7 @@ class FilledButtonWidget extends StatelessWidget {
     this.height = 56,
     this.backgroundColor = kColorBgPrimary,
     this.fontColor = kColorContentOnBgPrimary,
+    this.fontSize,
   }) : super(key: key);
 
   @override
@@ -44,7 +51,10 @@ class FilledButtonWidget extends StatelessWidget {
       child: leftIconPath == null
           ? Text(
               text,
-              style: getTsBody16Sb(context).copyWith(
+              style: (fontSize == FontSize.l
+                      ? getTsHeading18(context)
+                      : getTsBody16Sb(context))
+                  .copyWith(
                 color: isEnable ? fontColor : kColorContentDisabled,
               ),
             )

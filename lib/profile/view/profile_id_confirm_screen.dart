@@ -192,6 +192,7 @@ class _ProfileIdConfirmScreenState
                     },
                     child: FilledButtonWidget(
                       text: '작성 완료',
+                      fontSize: FontSize.l,
                       isEnable: selectedPhotoModel != null,
                     ),
                   ),

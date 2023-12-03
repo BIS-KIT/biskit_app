@@ -194,6 +194,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
               onTap: onTapNext,
               child: FilledButtonWidget(
                 text: '다음',
+                fontSize: FontSize.l,
                 height: 56,
                 isEnable: selectedList.isNotEmpty,
               ),

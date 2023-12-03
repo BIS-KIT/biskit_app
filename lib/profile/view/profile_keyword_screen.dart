@@ -210,6 +210,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
               onTap: onTapNext,
               child: FilledButtonWidget(
                 text: widget.isEditorMode ? '저장' : '다음',
+                fontSize: FontSize.l,
                 isEnable: keywordList.isNotEmpty,
               ),
             ),
