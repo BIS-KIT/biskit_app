@@ -69,9 +69,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     return list;
   }
 
-  Future<List<TagModel>> getTags() async {
+  Future<List<TagModel>> getTags({bool? isCustom}) async {
     List<TagModel> list = [];
-    list = await utilRepository.getTags();
+    list = await utilRepository.getTags(isCustom: isCustom);
     return list;
   }
 
@@ -84,7 +84,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
               state!.topic_ids.where((element) => element != id).toList(),
         );
       } else {
-        if (state!.topic_ids.length >= 3) return;
+        if ((state!.custom_topics.length + state!.topic_ids.length) >= 3) {
+          return;
+        }
         state = state!.copyWith(
           topic_ids: [
             ...state!.topic_ids,
@@ -97,6 +99,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
 
   // 커스텀 토픽 생성
   onTapAddCustomTopic(String topic) {
+    if ((state!.custom_topics.length + state!.topic_ids.length) >= 3) {
+      return;
+    }
     if (state != null) {
       state = state!.copyWith(
         custom_topics: [

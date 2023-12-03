@@ -102,24 +102,25 @@ class ChipWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: SizedBox(
-                          width: 57,
-                          // height: 20,
+                          width: 50,
                           child: TextFormField(
                             textInputAction: TextInputAction.go,
                             onFieldSubmitted: onTapEnter,
                             onChanged: onTapAdd,
                             focusNode: focusNode,
                             controller: controller,
+                            maxLength: 10,
                             style: getTsBody14Rg(context)
                                 .copyWith(color: kColorContentOnBgPrimary),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.zero,
                               border: InputBorder.none,
-                              hintText: '직접 입력',
+                              hintText: '직접입력',
                               hintStyle: getTsBody14Rg(context).copyWith(
                                 color: kColorContentOnBgPrimary,
                               ),
                               isDense: true,
+                              counterText: '',
                             ),
                           ),
                         ),

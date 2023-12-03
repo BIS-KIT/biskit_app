@@ -121,7 +121,7 @@ class UtilRepository {
     return list;
   }
 
-  getTags() async {
+  getTags({bool? isCustom}) async {
     List<TagModel> list = [];
     final res = await dio.get(
       '$baseUrl/tags',
@@ -131,6 +131,11 @@ class UtilRepository {
           'Accept': 'application/json',
         },
       ),
+      queryParameters: isCustom == null
+          ? null
+          : {
+              'is_custom': isCustom,
+            },
     );
 
     logger.d(res.toString());

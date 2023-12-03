@@ -214,8 +214,8 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                       createMeetUpState != null ? createMeetUpState.name : '',
                   errorText: (createMeetUpState != null &&
                           createMeetUpState.name != null &&
-                          createMeetUpState.name!.length < 5)
-                      ? '5자 이상으로 입력해주세요'
+                          createMeetUpState.name!.length < 2)
+                      ? '2자 이상으로 입력해주세요'
                       : null,
                   maxLength: 30,
                 ),
@@ -251,6 +251,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                       onTap: () {
                         meetupDescriptionFocusNode.requestFocus();
                       },
+                      maxLength: 1000,
                       // initialValue: createMeetUpState?.description,
                       controller: meetupDescriptionController,
                       focusNode: meetupDescriptionFocusNode,
@@ -264,6 +265,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                         hintStyle: getTsBody16Rg(context).copyWith(
                           color: kColorContentPlaceholder,
                         ),
+                        counterText: '',
                       ),
                       style: kTsEnBody16Rg.copyWith(
                         color: kColorContentWeak,
@@ -274,7 +276,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                     height: 4,
                   ),
                   Text(
-                    '${meetupDescriptionController.text.length}/500',
+                    '${meetupDescriptionController.text.length}/1000',
                     style: getTsCaption12Rg(context).copyWith(
                       color: kColorContentWeakest,
                     ),

@@ -89,6 +89,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
             SearchBarWidget(
               controller: searchController,
               hintText: '장소 검색',
+              maxLength: 20,
               onChanged: (value) {},
               onFieldSubmitted: (value) {
                 // searchPlace();
@@ -155,7 +156,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                             leftIconPath: 'assets/icons/ic_plus_line_24.svg',
                             text: '\'${searchController.text.trim()}\' 장소 입력',
                             isEnable: true,
-                            alignment: null,
+                            textAlign: TextAlign.center,
+                            alignment: AlignmentDirectional.center,
                             height: 44,
                           ),
                         ),

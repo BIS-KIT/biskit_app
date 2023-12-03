@@ -19,12 +19,14 @@ class SearchBarWidget extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
   final Function(String)? onFieldSubmitted;
+  final int? maxLength;
   const SearchBarWidget({
     Key? key,
     this.hintText,
     required this.controller,
     required this.onChanged,
     this.onFieldSubmitted,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -112,6 +114,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 style: getTsBody16Rg(context).copyWith(
                   color: kColorContentWeak,
                 ),
+                maxLength: widget.maxLength ?? widget.maxLength,
                 cursorColor: kColorContentWeak,
                 scrollPadding: EdgeInsets.zero,
                 decoration: InputDecoration(
@@ -119,6 +122,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   border: InputBorder.none,
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
+                  counterText: '',
                   hintStyle: getTsBody16Rg(context).copyWith(
                     color: kColorContentPlaceholder,
                   ),

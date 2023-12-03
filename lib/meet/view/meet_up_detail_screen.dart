@@ -250,11 +250,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                   .setCreateMeeupModel(CreateMeetUpModel(
                     custom_tags: meetUpDetailModel!.tags
                         .where((element) => element.is_custom)
-                        .map((e) => e.kr_name)
+                        .map(
+                            (e) => e.kr_name.isNotEmpty ? e.kr_name : e.en_name)
                         .toList(),
                     custom_topics: meetUpDetailModel!.topics
                         .where((element) => element.is_custom)
-                        .map((e) => e.kr_name)
+                        .map(
+                            (e) => e.kr_name.isNotEmpty ? e.kr_name : e.en_name)
                         .toList(),
                     creator_id: meetUpDetailModel!.creator.id,
                     tag_ids: meetUpDetailModel!.tags
@@ -945,7 +947,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               children: [
                 ...meetUpDetailModel!.tags.map(
                   (tag) => BadgeEmojiWidget(
-                    label: tag.kr_name,
+                    label: tag.kr_name.isNotEmpty ? tag.kr_name : tag.en_name,
                   ),
                 ),
               ],
