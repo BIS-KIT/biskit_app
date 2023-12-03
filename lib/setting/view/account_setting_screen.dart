@@ -168,7 +168,7 @@ class AccountSettingScreen extends ConsumerWidget {
                       ),
                       child: Text(
                         '계정 삭제',
-                        style: getTsBody14Rg(context).copyWith(
+                        style: getTsBody16Rg(context).copyWith(
                           color: kColorContentWeakest,
                           decoration: TextDecoration.underline,
                           decorationColor: kColorContentWeakest,
