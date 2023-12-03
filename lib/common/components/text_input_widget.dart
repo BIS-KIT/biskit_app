@@ -22,6 +22,7 @@ class TextInputWidget extends StatelessWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onFieldSubmitted;
   const TextInputWidget({
     Key? key,
     required this.title,
@@ -39,6 +40,7 @@ class TextInputWidget extends StatelessWidget {
     this.controller,
     this.focusNode,
     this.inputFormatters,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -58,6 +60,7 @@ class TextInputWidget extends StatelessWidget {
         ),
         CustomTextFormField(
           initialValue: initialValue,
+          onFieldSubmitted: onFieldSubmitted,
           hintText: hintText,
           keyboardType: keyboardType,
           textInputAction: textInputAction,
