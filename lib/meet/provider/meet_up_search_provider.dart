@@ -67,7 +67,7 @@ class MeetUpSearchStateNotifier
   }
 
   fetchItems({
-    int limit = 10,
+    int limit = 20,
     bool forceRefetch = false,
     required String searchWord,
   }) async {

@@ -221,17 +221,26 @@ class SettingRepository {
     return isOk;
   }
 
-  Future<void> unblockUser({required List<int> ban_ids}) async {
-    final res = await dio.delete('$baseUrl/ban',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
-          },
-        ),
-        data: ban_ids);
-    logger.d(res);
+  Future<bool> unblockBanIds({required List<int> ban_ids}) async {
+    bool isOk = false;
+    try {
+      final res = await dio.delete('$baseUrl/ban',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          data: ban_ids);
+      logger.d(res);
+      if (res.statusCode == 200) {
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+    return isOk;
   }
 
   Future<List<ReportResModel>> getReportHistory({required int user_id}) async {
@@ -408,5 +417,60 @@ class SettingRepository {
       logger.e(e.toString());
     }
     return reportResModel;
+  }
+
+  getCheckUserBan({
+    required int user_id,
+    required int target_id,
+  }) async {
+    bool? isBan;
+    try {
+      final res = await dio.get(
+        '$baseUrl/ban/$user_id/$target_id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+      logger.d(res);
+      if (res.statusCode == 200) {
+        isBan = true;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+      if (e.response != null && e.response!.statusCode == 404) {
+        isBan = false;
+      }
+    }
+    return isBan;
+  }
+
+  unblockUser({
+    required int target_id,
+    required int reporter_id,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.get(
+        '$baseUrl/ban/$target_id/$target_id',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+      logger.d(res);
+      if (res.statusCode == 200) {
+        isOk = true;
+      }
+    } on DioException catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
   }
 }

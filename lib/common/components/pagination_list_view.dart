@@ -5,6 +5,7 @@ import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:biskit_app/common/provider/pagination_provider.dart';
 import 'package:biskit_app/common/utils/pagination_utils.dart';
+import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -111,6 +112,7 @@ class _PaginationListViewState<T extends IModelWithId>
             onPressed: () {
               ref.read(widget.provider.notifier).paginate(
                     forceRefetch: true,
+                    orderBy: ref.read(meetUpFilterProvider).meetUpOrderState,
                   );
             },
             child: const Text(
@@ -131,6 +133,7 @@ class _PaginationListViewState<T extends IModelWithId>
       onRefresh: () async {
         ref.read(widget.provider.notifier).paginate(
               forceRefetch: true,
+              orderBy: ref.read(meetUpFilterProvider).meetUpOrderState,
             );
       },
       child: Stack(

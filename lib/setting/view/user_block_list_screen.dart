@@ -44,7 +44,7 @@ class _UserBlockListScreenState extends ConsumerState<UserBlockListScreen> {
   Future<void> unblockUser() async {
     await ref
         .read(settingRepositoryProvider)
-        .unblockUser(ban_ids: unblockedIdList);
+        .unblockBanIds(ban_ids: unblockedIdList);
   }
 
   @override

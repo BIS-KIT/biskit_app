@@ -291,8 +291,10 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        dateFormat1.format(DateTime.parse(
-                                            meetUpModel!.meeting_time)),
+                                        meetUpModel!.meeting_time.isEmpty
+                                            ? ''
+                                            : dateFormat1.format(DateTime.parse(
+                                                meetUpModel!.meeting_time)),
                                         style: getTsBody14Rg(context).copyWith(
                                           color: kColorContentWeaker,
                                         ),
@@ -310,8 +312,10 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                                         width: 4,
                                       ),
                                       Text(
-                                        dateFormat2.format(DateTime.parse(
-                                            meetUpModel!.meeting_time)),
+                                        meetUpModel!.meeting_time.isEmpty
+                                            ? ''
+                                            : dateFormat2.format(DateTime.parse(
+                                                meetUpModel!.meeting_time)),
                                         style: getTsBody14Rg(context).copyWith(
                                           color: kColorContentWeaker,
                                         ),
