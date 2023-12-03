@@ -166,6 +166,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
         }
       }
     }
+    logger.d('orderBy>>>$orderBy');
     logger.d('tagFilter>>>$tagFilter');
 
     try {
