@@ -454,8 +454,8 @@ class SettingRepository {
   }) async {
     bool isOk = false;
     try {
-      final res = await dio.get(
-        '$baseUrl/ban/$target_id/$target_id',
+      final res = await dio.delete(
+        '$baseUrl/unban',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -463,6 +463,10 @@ class SettingRepository {
             'accessToken': 'true',
           },
         ),
+        queryParameters: {
+          'reporter_id': reporter_id,
+          'target_id': target_id,
+        },
       );
       logger.d(res);
       if (res.statusCode == 200) {

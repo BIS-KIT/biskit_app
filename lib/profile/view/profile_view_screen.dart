@@ -239,7 +239,6 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
             color: kColorContentDefault,
             onTap: () async {
               Navigator.pop(context);
-              // TODO 차단 해제 수정해야함
               bool isOk = await ref.read(settingRepositoryProvider).unblockUser(
                     target_id: widget.userId,
                     reporter_id: (userState as UserModel).id,
