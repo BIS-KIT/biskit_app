@@ -108,8 +108,9 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '',
-      leadingIconPath:
-          widget.isEditorMode ? 'assets/icons/ic_cancel_line_24.svg' : null,
+      leadingIconPath: widget.isEditorMode
+          ? 'assets/icons/ic_cancel_line_24.svg'
+          : 'assets/icons/ic_arrow_back_ios_line_24.svg',
       actions: [
         if (!widget.isEditorMode)
           Padding(
@@ -149,7 +150,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '비슷한 취향을 가진 친구를 만날 수 있어요',
+                  '비슷한 취향을 가진 친구들을 만날 수 있어요',
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeaker,
                   ),

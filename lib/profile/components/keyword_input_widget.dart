@@ -94,6 +94,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     hintText: '좋아하는 것을 알려주세요',
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
+                    maxLength: 20,
                     maxLines: null,
                     autofocus: true,
                     suffixIcon: keywordController.text.isNotEmpty
@@ -169,6 +170,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                         FocusScope.of(context).unfocus();
                                       }
                                     },
+                                    maxLength: 300,
                                     autofocus: true,
                                     focusNode: reasonFocusNode,
                                     expands: true,
@@ -178,6 +180,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                       hintText: '좋아하는 이유를 알려주세요',
                                       border: InputBorder.none,
                                       isDense: true,
+                                      counterText: '',
                                       contentPadding: EdgeInsets.zero,
                                       hintStyle:
                                           getTsBody16Rg(context).copyWith(
