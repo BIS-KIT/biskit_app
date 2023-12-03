@@ -20,6 +20,7 @@ class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final Function(String)? onFieldSubmitted;
   final int? maxLength;
+  final bool autofocus;
   const SearchBarWidget({
     Key? key,
     this.hintText,
@@ -27,6 +28,7 @@ class SearchBarWidget extends StatefulWidget {
     required this.onChanged,
     this.onFieldSubmitted,
     this.maxLength,
+    this.autofocus = false,
   }) : super(key: key);
 
   @override
@@ -110,6 +112,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   }
                   widget.onChanged.call(value);
                 },
+                autofocus: widget.autofocus,
                 onFieldSubmitted: widget.onFieldSubmitted,
                 style: getTsBody16Rg(context).copyWith(
                   color: kColorContentWeak,

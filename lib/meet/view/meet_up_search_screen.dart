@@ -25,6 +25,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     controller = TextEditingController();
+
     scrollController.addListener(() {
       if (scrollController.offset >
           scrollController.position.maxScrollExtent - 300) {
@@ -52,117 +53,106 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(meetUpSearchProvider);
-    return DefaultLayout(
-      backgroundColor: kColorBgDefault,
-      child: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            // Top
-            Container(
-              // height: 76,
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 12,
-                bottom: 16,
-                right: 20,
-              ),
-              decoration: const BoxDecoration(
-                color: kColorBgDefault,
-                border: Border(
-                  bottom: BorderSide(
-                    width: 1,
-                    color: kColorBorderDefalut,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: DefaultLayout(
+        backgroundColor: kColorBgDefault,
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              // Top
+              Container(
+                // height: 76,
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  left: 12,
+                  bottom: 16,
+                  right: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: kColorBgDefault,
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1,
+                      color: state.data.isEmpty
+                          ? kColorBgDefault
+                          : kColorBorderDefalut,
+                    ),
                   ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        'assets/icons/ic_arrow_back_ios_line_24.svg',
-                        width: 24,
-                        height: 24,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/icons/ic_arrow_back_ios_line_24.svg',
+                          width: 24,
+                          height: 24,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Expanded(
-                    child: SearchBarWidget(
-                      controller: controller,
-                      hintText: '모임의 기쿼드로 찾아보세요',
-                      onChanged: (value) {},
-                      onFieldSubmitted: (p0) {
-                        _search();
-                      },
+                    const SizedBox(
+                      width: 4,
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: kColorBgElevation2,
-                child: ListView.separated(
-                  controller: scrollController,
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                    left: 20,
-                    right: 20,
-                    bottom: 20,
-                  ),
-                  itemBuilder: (context, index) {
-                    return MeetUpCardWidget(
-                      model: state.data[index],
-                      onTapMeetUp: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MeetUpDetailScreen(
-                              meetUpModel: state.data[index],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 12,
-                  ),
-                  itemCount: state.data.length,
+                    Expanded(
+                      child: SearchBarWidget(
+                        controller: controller,
+                        autofocus: true,
+                        hintText: '모임의 기쿼드로 찾아보세요',
+                        onChanged: (value) {},
+                        onFieldSubmitted: (p0) {
+                          _search();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              // SingleChildScrollView(
-              //   controller: scrollController,
-              //   child: Column(
-              //     children: [
-              //       ...state.data.map((e) {
-              //         return MeetUpCardWidget(
-              //           model: e,
-              //           onTapMeetUp: () {
-              //             Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                 builder: (context) => MeetUpDetailScreen(
-              //                   meetUpModel: e,
-              //                 ),
-              //               ),
-              //             );
-              //           },
-              //         );
-              //       }).toList()
-              //     ],
-              //   ),
-              // ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  color:
+                      state.data.isEmpty ? kColorBgDefault : kColorBgElevation2,
+                  child: ListView.separated(
+                    controller: scrollController,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                      left: 20,
+                      right: 20,
+                      bottom: 20,
+                    ),
+                    itemBuilder: (context, index) {
+                      return MeetUpCardWidget(
+                        model: state.data[index],
+                        onTapMeetUp: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MeetUpDetailScreen(
+                                meetUpModel: state.data[index],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 12,
+                    ),
+                    itemCount: state.data.length,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

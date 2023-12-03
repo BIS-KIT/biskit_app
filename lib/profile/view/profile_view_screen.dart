@@ -29,6 +29,7 @@ class ProfileViewScreen extends ConsumerStatefulWidget {
 class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
   UserModel? profileUserModel;
   UserModelBase? userState;
+  bool? isBan;
 
   @override
   void initState() {
@@ -39,6 +40,10 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
   init() async {
     profileUserModel =
         await ref.read(usersRepositoryProvider).getReadUser(widget.userId);
+    isBan = await ref.read(settingRepositoryProvider).getCheckUserBan(
+          user_id: (ref.read(userMeProvider) as UserModel).id,
+          target_id: widget.userId,
+        );
     setState(() {});
   }
 
@@ -228,29 +233,59 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
             );
           },
         ),
-        // TODO 차단해제 만들기
-        MoreButton(
-          text: '차단하기',
-          color: kColorContentError,
-          onTap: () async {
-            Navigator.pop(context);
-            bool isOk = await ref.read(settingRepositoryProvider).blockUser(
-                  target_id: widget.userId,
-                  reporter_id: profileUserModel!.id,
+        if (isBan != null && isBan!)
+          MoreButton(
+            text: '차단 해제',
+            color: kColorContentDefault,
+            onTap: () async {
+              Navigator.pop(context);
+              // TODO 차단 해제 수정해야함
+              bool isOk = await ref.read(settingRepositoryProvider).unblockUser(
+                    target_id: widget.userId,
+                    reporter_id: (userState as UserModel).id,
+                  );
+              if (isOk && mounted) {
+                setState(() {
+                  isBan = false;
+                });
+                showSnackBar(
+                  context: context,
+                  text: '${profileUserModel!.profile!.nick_name}님을 차단 해제했어요.',
+                  margin: const EdgeInsets.only(
+                    bottom: 40,
+                    left: 12,
+                    right: 12,
+                  ),
                 );
-            if (isOk && mounted) {
-              showSnackBar(
-                context: context,
-                text: '${profileUserModel!.profile!.nick_name}님을 차단했어요.',
-                margin: const EdgeInsets.only(
-                  bottom: 40,
-                  left: 12,
-                  right: 12,
-                ),
-              );
-            }
-          },
-        ),
+              }
+            },
+          ),
+        if (isBan != null && !isBan!)
+          MoreButton(
+            text: '차단하기',
+            color: kColorContentError,
+            onTap: () async {
+              Navigator.pop(context);
+              bool isOk = await ref.read(settingRepositoryProvider).blockUser(
+                    target_id: widget.userId,
+                    reporter_id: (userState as UserModel).id,
+                  );
+              if (isOk && mounted) {
+                setState(() {
+                  isBan = true;
+                });
+                showSnackBar(
+                  context: context,
+                  text: '${profileUserModel!.profile!.nick_name}님을 차단했어요.',
+                  margin: const EdgeInsets.only(
+                    bottom: 40,
+                    left: 12,
+                    right: 12,
+                  ),
+                );
+              }
+            },
+          ),
       ],
     );
   }
