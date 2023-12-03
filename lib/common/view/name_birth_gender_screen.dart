@@ -39,6 +39,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   Color yearBorderColor = kColorBorderDefalut;
   Color monthBorderColor = kColorBorderDefalut;
   Color dayBorderColor = kColorBorderDefalut;
+  late FocusNode birthYearFocusNode;
   late FocusNode birthMonthFocusNode;
   late FocusNode birthDayFocusNode;
   late FocusNode nameFocusNode;
@@ -48,6 +49,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   void initState() {
     super.initState();
     nameFocusNode = FocusNode();
+    birthYearFocusNode = FocusNode();
     birthMonthFocusNode = FocusNode();
     birthDayFocusNode = FocusNode();
     nameFocusNode.requestFocus();
@@ -57,12 +59,14 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   void dispose() {
     super.dispose();
     nameFocusNode.dispose();
+    birthYearFocusNode.dispose();
     birthMonthFocusNode.dispose();
     birthDayFocusNode.dispose();
   }
 
   bool isValidNameType(String name) {
-    RegExp koreanEnglishRegExp = RegExp(r'^[a-zA-Zㄱ-ㅎ가-힣]+$');
+    RegExp koreanEnglishRegExp =
+        RegExp(r'^[a-zA-Zㄱ-ㅎ가-힣]+(\s[a-zA-Zㄱ-ㅎ가-힣]+)*$');
     return koreanEnglishRegExp.hasMatch(name);
   }
 
@@ -211,8 +215,11 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
               hintText: '실명을 입력해주세요',
               keyboardType: TextInputType.name,
               errorText: nameError,
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.go,
               focusNode: nameFocusNode,
+              onFieldSubmitted: (value) {
+                FocusScope.of(context).requestFocus(birthYearFocusNode);
+              },
               onChanged: (value) {
                 name = value;
                 checkName();
@@ -239,31 +246,33 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   children: [
                     Flexible(
                       child: Focus(
-                          onFocusChange: (value) {
-                            if (!value && birthYear.length != 4) {
-                              setState(() {
-                                birthYearError = '';
-                                yearBorderColor = kColorBorderError;
-                              });
-                            }
+                        onFocusChange: (value) {
+                          if (!value && birthYear.length != 4) {
+                            setState(() {
+                              birthYearError = '';
+                              yearBorderColor = kColorBorderError;
+                            });
+                          }
+                        },
+                        child: CustomTextFormField(
+                          textAlign: TextAlign.center,
+                          maxLength: 4,
+                          borderColor: yearBorderColor,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          hintText: 'YYYY',
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          focusNode: birthYearFocusNode,
+                          onChanged: (value) {
+                            setState(() {
+                              birthYear = value;
+                            });
+                            checkYear();
                           },
-                          child: CustomTextFormField(
-                            textAlign: TextAlign.center,
-                            maxLength: 4,
-                            borderColor: yearBorderColor,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                            hintText: 'YYYY',
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                birthYear = value;
-                              });
-                              checkYear();
-                            },
-                          )),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       width: 8,

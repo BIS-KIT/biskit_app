@@ -16,6 +16,6 @@ extension InputValidate on String {
 
   /// 닉네임 검증
   bool isNickName() {
-    return RegExp(r'^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,12}$').hasMatch(this);
+    return RegExp(r'^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9가-힣]{2,12}$').hasMatch(this);
   }
 }

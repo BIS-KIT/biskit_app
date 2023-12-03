@@ -178,7 +178,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        if (password.isEmpty)
+                        if (password.isEmpty && passwordError == null)
                           Text(
                             '8자 이상으로 입력해주세요',
                             style: getTsCaption12Rg(context).copyWith(
@@ -200,7 +200,9 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                               });
                             } else if (value == password) {
                               setState(() {
-                                isActiveConfirmButton = true;
+                                if (passwordError == null) {
+                                  isActiveConfirmButton = true;
+                                }
                                 confirmPasswordError = null;
                               });
                             }
