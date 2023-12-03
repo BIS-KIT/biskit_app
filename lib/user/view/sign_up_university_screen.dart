@@ -80,7 +80,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   getStudentStatus() async {
     return await showBiskitBottomSheet(
       context: context,
-      title: '소속상태 선택',
+      title: '소속 선택',
       leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
       isDismissible: false,
       onLeftTap: () async {
