@@ -28,11 +28,12 @@ class _MeetUpFilterSheetWidgetState
   }
 
   // 초기값 셋팅
-  init() {
+  init() async {
     setState(() {
       filterGroupList = ref.read(meetUpFilterProvider).filterGroupList;
       totalCount = ref.read(meetUpFilterProvider).totalCount;
     });
+    await setTotalCount();
   }
 
   // 초기화

@@ -141,7 +141,10 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     if (location is String) {
       // 검색된 장소가 없는 경우
       state = state!.copyWith(
-        location: location.toString(),
+        location: location,
+        x_coord: null,
+        y_coord: null,
+        place_url: null,
       );
     } else if (location is KakaoDocumentModel) {
       // 검색된 장소가 있는 경우
@@ -264,7 +267,7 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   }
 
   createMeetUp() async {
-    bool result = false;
+    int? result;
     if (state != null) {
       String? imageUrl;
       for (var topic in fixTopics) {
@@ -292,7 +295,7 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
         ),
       );
       if (createMeetupId != null) {
-        result = true;
+        result = createMeetupId;
         await chatRepository.updateChatRoom(
           chatRoomUid: chatRoomUid,
           data: {

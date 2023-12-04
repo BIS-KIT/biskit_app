@@ -1,15 +1,22 @@
-import 'package:biskit_app/common/components/btn_icon_widget.dart';
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:biskit_app/common/components/btn_icon_widget.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
+
+import '../../common/components/custom_text_form_field.dart';
 import '../../common/const/colors.dart';
 import '../../common/const/fonts.dart';
-import '../../common/components/custom_text_form_field.dart';
 
 class KeywordInputWidget extends StatefulWidget {
-  const KeywordInputWidget({super.key});
+  final String? keyword;
+  final String? context;
+  const KeywordInputWidget({
+    Key? key,
+    this.keyword,
+    this.context,
+  }) : super(key: key);
 
   @override
   State<KeywordInputWidget> createState() => _KeywordInputWidgetState();
@@ -30,7 +37,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
     keywordFocusNode = FocusNode();
     reasonFocusNode = FocusNode();
 
-    keywordController = TextEditingController()
+    keywordController = TextEditingController(text: widget.keyword ?? '')
       ..addListener(() {
         logger.d(
             'keywordController:${keywordController.text}, ${keywordController.text.contains('\n')}');
@@ -49,7 +56,9 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
 
         setState(() {});
       });
-    contextController = TextEditingController();
+    contextController = TextEditingController(
+      text: widget.context ?? '',
+    );
   }
 
   @override
