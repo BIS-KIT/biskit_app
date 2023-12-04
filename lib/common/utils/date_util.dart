@@ -43,3 +43,23 @@ DateTime getDateTimeIntervalMin5() {
   }
   return now.add(Duration(minutes: minute));
 }
+
+getMeetUpDateStr({
+  required String? meetUpDateStr,
+  required DateFormat dateFormat,
+}) {
+  if (meetUpDateStr == null || meetUpDateStr.isEmpty) {
+    return '';
+  }
+
+  final DateTime now = DateTime.now();
+  final DateTime meetupDate = DateTime.parse(meetUpDateStr);
+
+  if (now.day - meetupDate.day == 0) {
+    return '오늘';
+  } else if (now.day - meetupDate.day == -1) {
+    return '내일';
+  } else {
+    return dateFormat.format(meetupDate);
+  }
+}

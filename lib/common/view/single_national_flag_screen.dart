@@ -126,10 +126,23 @@ class _SingleNationalFlagScreenState
     if (value.isEmpty) {
       setFirstData();
     } else {
+      // TODO 영문의 경우도 처리해야함
       List<NationalFlagModel> searchList = nationalList
-          .where((n) => '${n.en_name.toLowerCase()} ${n.kr_name.toLowerCase()}'
-              .contains(value.toLowerCase()))
+          .where((n) => n.kr_name.toLowerCase().contains(value.toLowerCase()))
           .toList();
+      searchList.sort((a, b) {
+        int indexOfA = a.kr_name.toLowerCase().indexOf(value.toLowerCase());
+        int indexOfB = b.kr_name.toLowerCase().indexOf(value.toLowerCase());
+        if (indexOfA >= 0 && indexOfB >= 0) {
+          return indexOfA - indexOfB;
+        } else if (indexOfA >= 0) {
+          return -1;
+        } else if (indexOfB >= 0) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
       setState(() {
         tempList = searchList;
       });

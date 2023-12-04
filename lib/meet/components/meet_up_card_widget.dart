@@ -2,6 +2,7 @@ import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/flag_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
@@ -210,10 +211,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                         width: 4,
                       ),
                       Text(
-                        widget.model.meeting_time.isEmpty
-                            ? ''
-                            : dateFormat1.format(
-                                DateTime.parse(widget.model.meeting_time)),
+                        getMeetUpDateStr(
+                          meetUpDateStr: widget.model.meeting_time,
+                          dateFormat: dateFormat1,
+                        ),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
                         ),
@@ -275,10 +276,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             width: 4,
                           ),
                           Text(
-                            widget.model.meeting_time.isEmpty
-                                ? ''
-                                : dateFormat1.format(
-                                    DateTime.parse(widget.model.meeting_time)),
+                            getMeetUpDateStr(
+                              meetUpDateStr: widget.model.meeting_time,
+                              dateFormat: dateFormat1,
+                            ),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),

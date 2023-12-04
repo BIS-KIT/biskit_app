@@ -220,70 +220,98 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
     );
   }
 
-  Container _buildKeywordCard(int index, BuildContext context) {
-    return Container(
-      width: 270,
-      height: 360,
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: kColorBgInverse,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Text(
-                  keywordList[index - 1].keyword,
-                  style: getTsBody16Sb(context).copyWith(
-                    color: kColorBgDefault,
+  Widget _buildKeywordCard(int index, BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final result = await showBiskitBottomSheet(
+          context: context,
+          title: '키워드 작성',
+          rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+          onRightTap: () => Navigator.pop(context),
+          isDismissible: false,
+          height: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.top -
+              44,
+          contentWidget: KeywordInputWidget(
+            keyword: keywordList[index - 1].keyword,
+            context: keywordList[index - 1].context,
+          ),
+        );
+        logger.d(result);
+        if (result != null) {
+          KeywordModel keywordModel = KeywordModel(
+            keyword: result['keyword'],
+            context: result['context'],
+          );
+          setState(() {
+            keywordList[index - 1] = keywordModel;
+          });
+        }
+      },
+      child: Container(
+        width: 270,
+        height: 360,
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: kColorBgInverse,
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Text(
+                    keywordList[index - 1].keyword,
+                    style: getTsBody16Sb(context).copyWith(
+                      color: kColorBgDefault,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-              GestureDetector(
-                onTap: () {
-                  onTapKeywordDelete(index);
-                },
-                child: SvgPicture.asset(
-                  'assets/icons/ic_cancel_line_24.svg',
+                const SizedBox(
                   width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    kColorContentWeakest,
-                    BlendMode.srcIn,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    onTapKeywordDelete(index);
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_cancel_line_24.svg',
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentWeakest,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const Divider(
-            thickness: 1,
-            height: 1,
-            color: kColorBorderOnBgInverse,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Text(
-                keywordList[index - 1].context,
-                style: getTsBody14Rg(context).copyWith(
-                  color: kColorBgElevation1,
+              ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const Divider(
+              thickness: 1,
+              height: 1,
+              color: kColorBorderOnBgInverse,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  keywordList[index - 1].context,
+                  style: getTsBody14Rg(context).copyWith(
+                    color: kColorBgElevation1,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

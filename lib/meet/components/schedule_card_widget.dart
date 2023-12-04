@@ -1,6 +1,7 @@
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -86,10 +87,14 @@ class ScheduleCardWidget extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        meetUpModel.meeting_time.isEmpty
-                            ? ''
-                            : dateFormat1.format(
-                                DateTime.parse(meetUpModel.meeting_time)),
+                        getMeetUpDateStr(
+                          meetUpDateStr: meetUpModel.meeting_time,
+                          dateFormat: dateFormat1,
+                        ),
+                        // meetUpModel.meeting_time.isEmpty
+                        //     ? ''
+                        //     : dateFormat1.format(
+                        //         DateTime.parse(meetUpModel.meeting_time)),
                         style: getTsHeading18(context).copyWith(
                           color: kColorContentWeak,
                         ),

@@ -1,3 +1,6 @@
+import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -273,20 +276,34 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   return GestureDetector(
                     onTap: () async {
                       if (isButtonEnable()) {
-                        bool result = false;
                         if (widget.isEditMode) {
+                          bool result = false;
                           result = await ref
                               .read(createMeetUpProvider.notifier)
                               .putUpdateMeetUp(widget.editMeetingId!);
+                          if (result && mounted) {
+                            Navigator.pop(
+                                context, widget.isEditMode ? true : [true]);
+                          }
                         } else {
-                          result = await ref
+                          int? result = await ref
                               .read(createMeetUpProvider.notifier)
                               .createMeetUp();
-                        }
-                        if (result) {
-                          if (!mounted) return;
-                          Navigator.pop(
-                              context, widget.isEditMode ? true : [true]);
+                          if (result != null) {
+                            MeetUpModel model = await ref
+                                .read(meetUpRepositoryProvider)
+                                .getMeeting(result);
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MeetUpDetailScreen(
+                                  meetUpModel: model,
+                                ),
+                              ),
+                            );
+                          }
                         }
                       }
                     },
