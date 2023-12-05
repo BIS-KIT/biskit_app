@@ -83,7 +83,14 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
             Column(
               children: [
                 // Top
-                if (isTopVisible) _buildTop(context, filterState),
+                // if (isTopVisible) _buildTop(context, filterState),
+                AnimatedContainer(
+                  height: isTopVisible ? null : 0,
+                  duration: const Duration(
+                    seconds: 1,
+                  ),
+                  child: _buildTop(context, filterState),
+                ),
 
                 // 필터
                 _buildFilter(),

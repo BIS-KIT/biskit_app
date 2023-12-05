@@ -40,11 +40,20 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
   init() async {
     profileUserModel =
         await ref.read(usersRepositoryProvider).getReadUser(widget.userId);
-    isBan = await ref.read(settingRepositoryProvider).getCheckUserBan(
-          user_id: (ref.read(userMeProvider) as UserModel).id,
-          target_id: widget.userId,
-        );
+    await checkBan();
     setState(() {});
+  }
+
+  checkBan() async {
+    List<int> bans = await ref.read(settingRepositoryProvider).getCheckUserBans(
+      user_id: (ref.read(userMeProvider) as UserModel).id,
+      target_ids: [widget.userId],
+    );
+    if (bans.contains(widget.userId)) {
+      isBan = true;
+    } else {
+      isBan = false;
+    }
   }
 
   @override

@@ -85,10 +85,6 @@ String getLevelSubTitle(int level) {
   }
 }
 
-DateTime getDateTimeByTimestamp(dynamic timestamp) {
-  return timestamp.toDate().toLocal();
-}
-
 String getSnsTypeString(String? snsType) {
   if (snsType == null) {
     return '이메일';

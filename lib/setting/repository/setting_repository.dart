@@ -419,14 +419,14 @@ class SettingRepository {
     return reportResModel;
   }
 
-  getCheckUserBan({
+  getCheckUserBans({
     required int user_id,
-    required int target_id,
+    required List<int> target_ids,
   }) async {
-    bool? isBan;
+    List<int> banIdList = [];
     try {
       final res = await dio.get(
-        '$baseUrl/ban/$user_id/$target_id',
+        '$baseUrl/bans/$user_id',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -434,18 +434,19 @@ class SettingRepository {
             'accessToken': 'true',
           },
         ),
+        queryParameters: {
+          'target_ids': target_ids,
+        },
       );
       logger.d(res);
       if (res.statusCode == 200) {
-        isBan = true;
+        banIdList =
+            List<int>.from(res.data.map((e) => e['target']['id']).toList());
       }
     } on DioException catch (e) {
       logger.e(e.toString());
-      if (e.response != null && e.response!.statusCode == 404) {
-        isBan = false;
-      }
     }
-    return isBan;
+    return banIdList;
   }
 
   unblockUser({

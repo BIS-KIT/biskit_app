@@ -74,7 +74,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   UserModel? userState;
   MeetUpDetailModel? meetUpDetailModel;
   List<AvailableLanguageModel> availableLangList = [];
-  Set<LanguageModel> langSet = <LanguageModel>{};
+  // Set<LanguageModel> langSet = <LanguageModel>{};
   final ScrollController scrollController = ScrollController();
   bool isTitleView = false;
 
@@ -116,9 +116,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     for (var u in meetUpDetailModel!.participants) {
       availableLangList.addAll(u.profile!.available_languages);
     }
-    for (var lang in availableLangList) {
-      langSet.add(lang.language);
-    }
+    // for (var lang in availableLangList) {
+    //   langSet.add(lang.language);
+    // }
     getParticipationStatus();
     setChartDatas();
     setState(() {});
@@ -139,7 +139,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   }
 
   setChartDatas() {
-    for (var l in langSet) {
+    for (var l in meetUpDetailModel!.languages) {
       List<ChartDataModel> list = [];
 
       Set<String> levelSet = availableLangList

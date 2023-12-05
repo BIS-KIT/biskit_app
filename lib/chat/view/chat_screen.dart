@@ -13,6 +13,7 @@ import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   final DateFormat dayFormat = DateFormat('yyyy년 MM월 dd일 EEE', 'ko');
   final DateFormat infoDateFormat1 = DateFormat('MM/dd (EEE)', 'ko');
 
+  // 블럭 유저들
+  List<int>? blockUserIds;
+
   @override
   void initState() {
     super.initState();
@@ -68,7 +72,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   initFetchData() async {
     await fetchChatRoom();
     await fetchMeetUp();
+    await fetchBlockUsers();
     setState(() {});
+  }
+
+  fetchBlockUsers() async {
+    UserModelBase? user = ref.read(userMeProvider);
+    if (user != null && user is UserModel && chatRoomModel != null) {
+      blockUserIds = await ref.read(settingRepositoryProvider).getCheckUserBans(
+            user_id: user.id,
+            target_ids: chatRoomModel!.joinUsers,
+          );
+      setState(() {});
+    }
   }
 
   fetchMeetUp() async {
@@ -282,7 +298,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                         ),
                                       ),
                                     );
-                                    // TODO 차단처리한 사용자 채팅 안나오게 하기
+                                    await fetchBlockUsers();
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -487,154 +503,161 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                     color: kColorBgElevation2,
                     child: Column(
                       children: [
-                        Expanded(
-                          child: StreamBuilder(
-                            stream: ref
-                                .read(chatRepositoryProvider)
-                                .getChatMsgStream(
-                                  chatRoomUid: widget.chatRoomUid,
-                                  fromTimestamp: chatRoomModel!
-                                      .firstUserInfoList
-                                      .singleWhere((element) =>
-                                          element.userId ==
-                                          (userState as UserModel).id)
-                                      .firstJoinDate,
-                                  limit: _limit,
-                                ),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.data != null &&
-                                  snapshot.data!.isNotEmpty) {
-                                list = snapshot.data!;
-                                return ListView.builder(
-                                  controller: scrollController,
-                                  keyboardDismissBehavior:
-                                      ScrollViewKeyboardDismissBehavior.onDrag,
-                                  padding: const EdgeInsets.only(
-                                    left: 20,
-                                    right: 20,
-                                    top: 60,
+                        if (blockUserIds != null)
+                          Expanded(
+                            child: StreamBuilder(
+                              stream: ref
+                                  .read(chatRepositoryProvider)
+                                  .getChatMsgStream(
+                                    chatRoomUid: widget.chatRoomUid,
+                                    fromTimestamp: chatRoomModel!
+                                        .firstUserInfoList
+                                        .singleWhere((element) =>
+                                            element.userId ==
+                                            (userState as UserModel).id)
+                                        .firstJoinDate,
+                                    limit: _limit,
+                                    blockUserIds: blockUserIds!,
                                   ),
-                                  reverse: true,
-                                  itemCount: list.length,
-                                  itemBuilder: (context, index) {
-                                    ChatMsgModel chatMsgModel = list[index];
-                                    Widget widgetMsg = const Row();
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data != null &&
+                                    snapshot.data!.isNotEmpty) {
+                                  list = snapshot.data!;
+                                  return ListView.builder(
+                                    controller: scrollController,
+                                    keyboardDismissBehavior:
+                                        ScrollViewKeyboardDismissBehavior
+                                            .onDrag,
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 60,
+                                    ),
+                                    reverse: true,
+                                    itemCount: list.length,
+                                    itemBuilder: (context, index) {
+                                      ChatMsgModel chatMsgModel = list[index];
+                                      Widget widgetMsg = const Row();
 
-                                    double topPaddingSize = 16;
-                                    bool isProfileView = true;
-                                    bool isMsgTimeView = true;
-                                    bool isDayNoticeView = false;
+                                      double topPaddingSize = 16;
+                                      bool isProfileView = true;
+                                      bool isMsgTimeView = true;
+                                      bool isDayNoticeView = false;
 
-                                    if (index + 1 < list.length) {
-                                      // 이 후 메시지 값을 가져온다
+                                      if (index + 1 < list.length) {
+                                        // 이 후 메시지 값을 가져온다
 
-                                      // 1일 차이가 나는지 확인
-                                      if (getDayDifference(
-                                            list[index + 1].createDate.toDate(),
-                                            list[index].createDate.toDate(),
-                                          ).abs() >
-                                          0) {
-                                        isDayNoticeView = true;
-                                      } else {
-                                        isDayNoticeView = false;
-                                      }
+                                        // 1일 차이가 나는지 확인
+                                        if (getDayDifference(
+                                              list[index + 1]
+                                                  .createDate
+                                                  .toDate(),
+                                              list[index].createDate.toDate(),
+                                            ).abs() >
+                                            0) {
+                                          isDayNoticeView = true;
+                                        } else {
+                                          isDayNoticeView = false;
+                                        }
 
-                                      if (list[index + 1].chatRowType ==
-                                              ChatRowType.message.name &&
-                                          list[index + 1].createUserId ==
-                                              list[index].createUserId) {
-                                        // 이전 메시지가 내가 쓴 메시지라면
+                                        if (list[index + 1].chatRowType ==
+                                                ChatRowType.message.name &&
+                                            list[index + 1].createUserId ==
+                                                list[index].createUserId) {
+                                          // 이전 메시지가 내가 쓴 메시지라면
 
-                                        if (getTimestampDifferenceMin(
-                                                    list[index + 1].createDate,
-                                                    list[index].createDate)
-                                                .abs() <
-                                            1) {
-                                          topPaddingSize = isDayNoticeView
-                                              ? 16
-                                              : 8; // 간격 줄이기
-                                          isProfileView = false; // 프로파일 가리기
+                                          if (getTimestampDifferenceMin(
+                                                      list[index + 1]
+                                                          .createDate,
+                                                      list[index].createDate)
+                                                  .abs() <
+                                              1) {
+                                            topPaddingSize = isDayNoticeView
+                                                ? 16
+                                                : 8; // 간격 줄이기
+                                            isProfileView = false; // 프로파일 가리기
+                                          }
                                         }
                                       }
-                                    }
-                                    if (index - 1 >= 0) {
-                                      // 이 전 메시지 값을 가져온다
-                                      if (list[index - 1].chatRowType ==
-                                              ChatRowType.message.name &&
-                                          list[index - 1].createUserId ==
-                                              list[index].createUserId) {
-                                        // 이전 메시지가 내가 쓴 메시지라면
+                                      if (index - 1 >= 0) {
+                                        // 이 전 메시지 값을 가져온다
+                                        if (list[index - 1].chatRowType ==
+                                                ChatRowType.message.name &&
+                                            list[index - 1].createUserId ==
+                                                list[index].createUserId) {
+                                          // 이전 메시지가 내가 쓴 메시지라면
 
-                                        if (getTimestampDifferenceMin(
-                                                    list[index - 1].createDate,
-                                                    list[index].createDate)
-                                                .abs() <
-                                            1) {
-                                          isMsgTimeView = false; // 채팅 시간 가리기
+                                          if (getTimestampDifferenceMin(
+                                                      list[index - 1]
+                                                          .createDate,
+                                                      list[index].createDate)
+                                                  .abs() <
+                                              1) {
+                                            isMsgTimeView = false; // 채팅 시간 가리기
+                                          }
                                         }
                                       }
-                                    }
 
-                                    if (chatMsgModel.chatRowType ==
-                                        ChatRowType.message.name) {
-                                      if (chatMsgModel.createUserId ==
-                                          (userState as UserModel).id) {
-                                        // 나의 메시지
-                                        widgetMsg = _buildMyMsg(
-                                          context,
-                                          list[index],
-                                          topPaddingSize,
-                                          isMsgTimeView,
-                                        );
+                                      if (chatMsgModel.chatRowType ==
+                                          ChatRowType.message.name) {
+                                        if (chatMsgModel.createUserId ==
+                                            (userState as UserModel).id) {
+                                          // 나의 메시지
+                                          widgetMsg = _buildMyMsg(
+                                            context,
+                                            list[index],
+                                            topPaddingSize,
+                                            isMsgTimeView,
+                                          );
+                                        } else {
+                                          // 상대방 메시지
+                                          widgetMsg = _buildOtherMsg(
+                                            context,
+                                            list[index],
+                                            topPaddingSize,
+                                            isMsgTimeView,
+                                            isProfileView,
+                                          );
+                                        }
                                       } else {
-                                        // 상대방 메시지
-                                        widgetMsg = _buildOtherMsg(
-                                          context,
-                                          list[index],
-                                          topPaddingSize,
-                                          isMsgTimeView,
-                                          isProfileView,
-                                        );
+                                        widgetMsg = _buildNotice(list[index],
+                                            (userState as UserModel).id);
                                       }
-                                    } else {
-                                      widgetMsg = _buildNotice(list[index],
-                                          (userState as UserModel).id);
-                                    }
 
-                                    // 제일 처음에 상단 여백을 제공
+                                      // 제일 처음에 상단 여백을 제공
 
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        if (isDayNoticeView)
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 16,
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          if (isDayNoticeView)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                top: 16,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  _buildNoticeBubble(
+                                                    '${dayFormat.format(getDateTimeByTimestamp(list[index].createDate))}요일',
+                                                    null,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                _buildNoticeBubble(
-                                                  '${dayFormat.format(list[index].createDate.toDate())}요일',
-                                                  null,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        widgetMsg,
-                                      ],
-                                    );
-                                  },
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
+                                          widgetMsg,
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
                           ),
-                        ),
                         _buildInput(context, (userState as UserModel)),
                       ],
                     ),
