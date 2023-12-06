@@ -213,8 +213,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       // Sign up
       apiResModel = await ref.read(authRepositoryProvider).signUpEmail(
             widget.signUpModel.copyWith(
-              // TODO Univer set 수정
-              university_id: 1,
+              university_id: universitySet!.universityModel.id,
               department: universitySet!.universityStudentStatusModel.kname,
               education_status:
                   universitySet!.universityGraduateStatusModel.kname,
@@ -292,7 +291,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        universitySet!.universityModel.kname,
+                                        universitySet!.universityModel.kr_name,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),

@@ -454,6 +454,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: homeState.meetings.length == 1
                 ? MeetUpCardWidget(
                     model: homeState.meetings[0],
+                    userModel: ref.watch(userMeProvider),
                     sizeType: MeetUpCardSizeType.M,
                     width: size.width - 40,
                     onTapMeetUp: () {
@@ -474,6 +475,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => MeetUpCardWidget(
                       model: homeState.meetings[index],
+                      userModel: ref.watch(userMeProvider),
                       sizeType: MeetUpCardSizeType.M,
                       width: size.width - 80,
                       onTapMeetUp: () {

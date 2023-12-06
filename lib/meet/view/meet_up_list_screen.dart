@@ -11,6 +11,7 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -284,6 +285,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           MeetUpModel meetUpModel = model as MeetUpModel;
           return MeetUpCardWidget(
             model: meetUpModel,
+            userModel: ref.watch(userMeProvider),
             onTapMeetUp: () {
               Navigator.push(
                 context,

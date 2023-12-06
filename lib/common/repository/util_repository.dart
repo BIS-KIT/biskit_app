@@ -5,6 +5,7 @@ import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
+import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
@@ -74,7 +75,7 @@ class UtilRepository {
     required String languageCode,
     required String search,
   }) async {
-    List<NationalFlagModel> list = [];
+    List<UniversityModel> list = [];
     final res = await dio.get(
       '$baseUrl/universty',
       options: Options(
@@ -86,12 +87,14 @@ class UtilRepository {
       queryParameters: {
         'os_language': languageCode == kEn ? 'english' : 'korean',
         'search': search,
+        'skip': 0,
+        'limit': 999,
       },
     );
     logger.d(res.toString());
     if (res.data != null) {
-      // list = List<NationalFlagModel>.from(
-      //     res.data.map((e) => NationalFlagModel.fromMap(e)).toList());
+      list = List<UniversityModel>.from(
+          res.data.map((e) => UniversityModel.fromMap(e)).toList());
     }
     return list;
   }
