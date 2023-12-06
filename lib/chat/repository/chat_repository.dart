@@ -162,6 +162,7 @@ class ChatRepository {
   Stream<List<ChatMsgModel>> getChatMsgStream({
     required String chatRoomUid,
     required Timestamp? fromTimestamp,
+    required List<int> blockUserIds,
     int limit = 20,
   }) {
     // logger.d(fromTimestamp!.toDate());
@@ -177,8 +178,10 @@ class ChatRepository {
         .snapshots()
         .asyncMap((snapshot) async {
       // logger.d(snapshot.docs[0].data());
-      final result =
-          snapshot.docs.map((e) => ChatMsgModel.fromMap(e.data())).toList();
+      final result = snapshot.docs
+          .map((e) => ChatMsgModel.fromMap(e.data()))
+          .where((element) => !blockUserIds.contains(element.createUserId))
+          .toList();
       return result;
       // for (var e in snapshot.docs) {
       //   logger.d(e.data());
@@ -228,7 +231,7 @@ class ChatRepository {
       chatRowType: ChatRowType.noticeOnlyMe,
     );
     // 최초 입장시 안내문구 : 참여문구
-    sendMsg(
+    await sendMsg(
       chatMsgType: ChatMsgType.text,
       msg: '${user.profile!.nick_name}님이 참여했습니다.',
       userId: user.id,

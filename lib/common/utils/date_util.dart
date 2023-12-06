@@ -7,6 +7,10 @@ int getDayDifference(DateTime d1, DateTime d2) {
       .inDays;
 }
 
+DateTime getDateTimeByTimestamp(dynamic timestamp) {
+  return timestamp.toDate().toLocal();
+}
+
 int getTimestampDifferenceMin(Timestamp t1, Timestamp t2) {
   return t1.toDate().minute - t2.toDate().minute;
 }

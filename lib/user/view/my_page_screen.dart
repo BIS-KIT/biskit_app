@@ -334,6 +334,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                   children: [
                                     MeetUpCardWidget(
                                       model: e,
+                                      userModel: userState,
                                       isHostTag: userState.id == e.creator.id,
                                       isParticipantsStatusTag: false,
                                       onTapMeetUp: () {

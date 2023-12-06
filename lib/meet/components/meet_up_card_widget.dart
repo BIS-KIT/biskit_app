@@ -1,16 +1,17 @@
-import 'package:biskit_app/common/components/badge_widget.dart';
-import 'package:biskit_app/common/components/flag_widget.dart';
-import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
-import 'package:biskit_app/common/const/data.dart';
-import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:biskit_app/common/components/badge_widget.dart';
+import 'package:biskit_app/common/components/flag_widget.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/user/model/user_model.dart';
 
 enum MeetUpCardSizeType { L, M }
 
@@ -21,6 +22,7 @@ class MeetUpCardWidget extends StatefulWidget {
   final double width;
   final bool isHostTag;
   final bool isParticipantsStatusTag;
+  final UserModelBase? userModel;
   const MeetUpCardWidget({
     Key? key,
     required this.model,
@@ -29,6 +31,7 @@ class MeetUpCardWidget extends StatefulWidget {
     this.width = 277,
     this.isHostTag = false,
     this.isParticipantsStatusTag = true,
+    required this.userModel,
   }) : super(key: key);
 
   @override
@@ -36,6 +39,27 @@ class MeetUpCardWidget extends StatefulWidget {
 }
 
 class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
+  String getRecruitmentBadgeStr() {
+    String str = '';
+
+    if (widget.userModel != null && widget.userModel is UserModel) {
+      bool isKorean = false;
+      if ((widget.userModel as UserModel)
+          .user_nationality
+          .where((element) => element.nationality.code == 'kr')
+          .isNotEmpty) {
+        isKorean = true;
+      }
+      if (isKorean) {
+        str = '외국인 모집';
+      } else {
+        str = '한국인 모집';
+      }
+    }
+
+    return str;
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
@@ -164,10 +188,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             ),
                           )
                         : Container(),
-                    widget.model.participants_status.isNotEmpty &&
-                            widget.isParticipantsStatusTag
+                    widget.model.korean_count == 0 ||
+                            widget.model.foreign_count == 0
                         ? BadgeWidget(
-                            text: widget.model.participants_status,
+                            text: getRecruitmentBadgeStr(),
                             sizeType: BadgeSizeType.M,
                             backgroundColor: kColorBgSecondaryWeak,
                             textColor: kColorContentSecondary,

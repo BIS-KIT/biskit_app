@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:dio/dio.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/check_circle.dart';
@@ -12,8 +11,6 @@ import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
-import 'package:biskit_app/common/utils/json_util.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 
 import '../const/colors.dart';
 
@@ -51,18 +48,6 @@ class _UnivListWidgetState extends State<UnivListWidget> {
       isLoading = true;
     });
 
-    // TODO 학교 데이터 가져오는 부분
-    final UtilRepository utilRepository = UtilRepository(
-      dio: Dio(),
-      baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
-    );
-    await Future.microtask(() => null);
-    List univList = await utilRepository.getUniversty(
-      languageCode: context.locale.languageCode,
-      search: '',
-    );
-    logger.d(univList);
-
     await getUnivList();
     setState(() {
       selectedModel = widget.selectedUnivModel;
@@ -74,31 +59,15 @@ class _UnivListWidgetState extends State<UnivListWidget> {
   }
 
   getUnivList() async {
-    final List data = await readJson(
-      jsonPath: 'assets/jsons/university.json',
+    final UtilRepository utilRepository = UtilRepository(
+      dio: Dio(),
+      baseUrl: 'http://$kServerIp:$kServerPort/$kServerVersion',
     );
-
-    if (!mounted) return;
-    if (context.locale.languageCode == kEn) {
-      // 영문
-      setState(() {
-        univerisyList = data
-            .map((d) => UniversityModel(
-                code: d['code'], ename: d['ename'], kname: d['kname']))
-            .toList();
-        univerisyList.sort((a, b) {
-          return a.ename.toLowerCase().compareTo(b.ename.toLowerCase());
-        });
-      });
-    } else {
-      // 국문
-      setState(() {
-        univerisyList = data
-            .map((d) => UniversityModel(
-                code: d['code'], ename: d['ename'], kname: d['kname']))
-            .toList();
-      });
-    }
+    await Future.microtask(() => null);
+    univerisyList = await utilRepository.getUniversty(
+      languageCode: 'ko',
+      search: '',
+    );
     setState(() {
       tempList = univerisyList;
     });
@@ -125,7 +94,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
       });
     } else {
       List<UniversityModel> searchList = univerisyList
-          .where((n) => '${n.ename.toLowerCase()} ${n.kname.toLowerCase()}'
+          .where((n) => '${n.en_name.toLowerCase()} ${n.kr_name.toLowerCase()}'
               .contains(value.toLowerCase()))
           .toList();
       setState(() {
@@ -171,7 +140,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                                       onTapTile(e);
                                     },
                                     centerWidget: Text(
-                                      e.kname,
+                                      e.kr_name,
                                       style: getTsBody16Rg(context).copyWith(
                                         color: kColorContentWeak,
                                       ),

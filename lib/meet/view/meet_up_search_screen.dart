@@ -4,6 +4,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/provider/meet_up_search_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -132,6 +133,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                     itemBuilder: (context, index) {
                       return MeetUpCardWidget(
                         model: state.data[index],
+                        userModel: ref.watch(userMeProvider),
                         onTapMeetUp: () {
                           Navigator.push(
                             context,
