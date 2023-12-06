@@ -41,9 +41,7 @@ class _MeetUpFilterSheetWidgetState
     filterGroupList = await ref
         .read(meetUpFilterProvider.notifier)
         .getInitFixFilterGroupList();
-    setState(() {
-      totalCount = 0;
-    });
+    await setTotalCount();
   }
 
   // 검색필터 선택

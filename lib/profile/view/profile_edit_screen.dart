@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
 import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
 import 'package:biskit_app/common/const/enums.dart';
@@ -16,6 +17,7 @@ import 'package:biskit_app/profile/components/lang_list_widget.dart';
 import 'package:biskit_app/profile/model/available_language_create_model.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
 import 'package:biskit_app/profile/provider/use_language_provider.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:collection/collection.dart';
@@ -262,6 +264,17 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     }
   }
 
+  onTapCertifyUniv() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfileIdConfirmScreen(
+          isEditor: true,
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -356,36 +369,84 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: 44,
-                child: Row(
-                  children: [
-                    Text(
-                      '학교',
-                      style: getTsBody16Sb(context).copyWith(
-                        color: kColorContentDisabled,
-                      ),
+              widget.profile.student_verification!.verification_status ==
+                      VerificationStatus.UNVERIFIED.name
+                  ? Column(
+                      children: [
+                        SizedBox(
+                          height: 44,
+                          child: Row(
+                            children: [
+                              Text(
+                                '학교',
+                                style: getTsBody16Sb(context).copyWith(
+                                  color: kColorContentWeak,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                widget.user_university.university.kr_name,
+                                style: getTsBody16Rg(context).copyWith(
+                                  color: kColorContentWeak,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            onTapCertifyUniv();
+                          },
+                          child: const FilledButtonWidget(
+                            text: '학교 인증하기',
+                            height: 40,
+                            isEnable: true,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 44,
+                          child: Row(
+                            children: [
+                              Text(
+                                '학교',
+                                style: getTsBody16Sb(context).copyWith(
+                                  color: kColorContentDisabled,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                widget.user_university.university.kr_name,
+                                style: getTsBody16Rg(context).copyWith(
+                                  color: kColorContentDisabled,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 4),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: kColorBorderDefalut,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      widget.user_university.university.kr_name,
-                      style: getTsBody16Rg(context).copyWith(
-                        color: kColorContentDisabled,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                child: Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: kColorBorderDefalut,
-                ),
-              ),
               SizedBox(
                 height: 44,
                 child: Row(

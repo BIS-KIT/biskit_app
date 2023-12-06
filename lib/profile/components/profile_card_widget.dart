@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -243,10 +244,23 @@ class ProfileCardWidget extends StatelessWidget {
                                   const SizedBox(
                                     height: 16,
                                   ),
-                                  const FilledButtonWidget(
-                                    text: '학교 인증하기',
-                                    height: 40,
-                                    isEnable: true,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProfileIdConfirmScreen(
+                                            isEditor: true,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const FilledButtonWidget(
+                                      text: '학교 인증하기',
+                                      height: 40,
+                                      isEnable: true,
+                                    ),
                                   ),
                                 ],
                               );
