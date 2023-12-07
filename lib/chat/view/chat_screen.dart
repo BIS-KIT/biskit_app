@@ -1040,6 +1040,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                     iconColor: kColorBgSecondary,
                     iconSize: 24,
                     radius: 8,
+                    padding: 4,
                     iconPath: 'assets/icons/ic_megaphone_fill_24.svg',
                   ),
                   const SizedBox(

@@ -375,9 +375,11 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                               onTap: () {
                                 setState(() {
                                   startBottomSheetIndex = 0;
-                                  selectedUnivModel = null;
-                                  selectedStudentStatusModel = null;
-                                  selectedGraduateStatusModel = null;
+
+                                  // 다시 선택하기 눌렀을때 값 유지
+                                  // selectedUnivModel = null;
+                                  // selectedStudentStatusModel = null;
+                                  // selectedGraduateStatusModel = null;
                                 });
                                 onTapStartSelectedUniv();
                               },

@@ -69,7 +69,7 @@ class DefaultLayout extends StatelessWidget {
         shape: borderShape ? shape : null,
         title: Text(
           title!,
-          style: getTsHeading18(context).copyWith(
+          style: getTsBody16Sb(context).copyWith(
             color: kColorContentDefault,
           ),
         ),

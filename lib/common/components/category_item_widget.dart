@@ -30,6 +30,7 @@ class CategoryItemWidget extends StatelessWidget {
             ),
             child: ThumbnailIconWidget(
               size: 64,
+              padding: 4,
               iconPath: iconPath,
               thumbnailIconType: ThumbnailIconType.network,
               isSelected: false,

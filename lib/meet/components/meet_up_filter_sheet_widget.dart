@@ -41,9 +41,7 @@ class _MeetUpFilterSheetWidgetState
     filterGroupList = await ref
         .read(meetUpFilterProvider.notifier)
         .getInitFixFilterGroupList();
-    setState(() {
-      totalCount = 0;
-    });
+    await setTotalCount();
   }
 
   // 검색필터 선택
@@ -133,7 +131,7 @@ class _MeetUpFilterSheetWidgetState
                           ),
                           Wrap(
                             spacing: 6,
-                            runSpacing: 6,
+                            runSpacing: 8,
                             children: filterGroupList[index]
                                 .filterList
                                 .map((e) => ChipWidget(

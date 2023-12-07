@@ -119,13 +119,13 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
               Expanded(
                 child: Container(
                   color:
-                      state.data.isEmpty ? kColorBgDefault : kColorBgElevation2,
+                      state.data.isEmpty ? kColorBgDefault : kColorBgElevation1,
                   child: ListView.separated(
                     controller: scrollController,
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
                     padding: const EdgeInsets.only(
-                      top: 8,
+                      top: 20,
                       left: 20,
                       right: 20,
                       bottom: 20,

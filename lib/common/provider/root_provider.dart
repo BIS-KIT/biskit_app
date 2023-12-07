@@ -2,6 +2,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/local_notification_util.dart';
 import 'package:biskit_app/common/utils/permission_util.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,6 +66,7 @@ class RootStateNotifier extends StateNotifier<RootState> {
     required final int index,
     final Color color = kColorBgDefault,
   }) {
+    ref.read(userMeProvider.notifier).getMe();
     Color? scafoldColor = color;
     if (index == 3) {
       scafoldColor = kColorBgDefault;

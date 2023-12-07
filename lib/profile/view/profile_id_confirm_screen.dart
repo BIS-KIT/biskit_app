@@ -1,12 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:biskit_app/common/components/tooltip_widget.dart';
-import 'package:biskit_app/common/const/enums.dart';
-import 'package:biskit_app/common/repository/util_repository.dart';
-import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/profile/model/student_card_model.dart';
-import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:biskit_app/profile/model/student_verification_model.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,19 +11,27 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/tooltip_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
+import 'package:biskit_app/profile/model/student_card_model.dart';
+import 'package:biskit_app/profile/repository/profile_repository.dart';
 
 class ProfileIdConfirmScreen extends ConsumerStatefulWidget {
   static String get routeName => 'profileIdConfirm';
   final ProfileCreateModel? profileCreateModel;
+  final bool isEditor;
   const ProfileIdConfirmScreen({
     Key? key,
     this.profileCreateModel,
+    this.isEditor = false,
   }) : super(key: key);
 
   @override
@@ -48,18 +53,48 @@ class _ProfileIdConfirmScreenState
     super.dispose();
   }
 
+  // 파일 업로드
+  Future<String?> studentCardPhotoUpload() async {
+    String? studentCardPhoto;
+    if (selectedPhotoModel != null) {
+      try {
+        studentCardPhoto = await ref.read(utilRepositoryProvider).uploadImage(
+              photo: selectedPhotoModel!,
+              uploadImageType: UploadImageType.STUDENT_CARD,
+            );
+      } finally {}
+      logger.d('uploadFilePath : $studentCardPhoto');
+    }
+    return studentCardPhoto;
+  }
+
+  // 인증하기
+  onTapAuthenticate() async {
+    final UserModelBase? userModelBase = ref.watch(userMeProvider);
+    String? studentCardPhoto = await studentCardPhotoUpload();
+
+    if (studentCardPhoto != null &&
+        userModelBase != null &&
+        userModelBase is UserModel) {
+      StudentVerificationModel? studentVerificationModel =
+          await ref.read(profileRepositoryProvider).postStudentVarification(
+                student_card: studentCardPhoto,
+                user_id: userModelBase.id,
+              );
+      if (studentVerificationModel != null) {
+        if (!mounted) return;
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  // 등록하기
   submit(bool isPhoto) async {
     context.loaderOverlay.show();
     String? studentCardPhoto;
     if (isPhoto) {
       if (selectedPhotoModel != null) {
-        try {
-          studentCardPhoto = await ref.read(utilRepositoryProvider).uploadImage(
-                photo: selectedPhotoModel!,
-                uploadImageType: UploadImageType.STUDENT_CARD,
-              );
-        } finally {}
-        logger.d('uploadFilePath : $studentCardPhoto');
+        studentCardPhoto = await studentCardPhotoUpload();
       } else {
         return;
       }
@@ -85,6 +120,8 @@ class _ProfileIdConfirmScreenState
     final size = MediaQuery.of(context).size;
     return DefaultLayout(
       title: '',
+      leadingIconPath:
+          widget.isEditor ? 'assets/icons/ic_cancel_line_24.svg' : null,
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 10),
@@ -93,7 +130,7 @@ class _ProfileIdConfirmScreenState
               right: 10,
             ),
             child: Text(
-              '4 / 4',
+              widget.isEditor ? '' : '4 / 4',
               style: getTsBody14Rg(context).copyWith(
                 color: kColorContentWeakest,
               ),
@@ -165,37 +202,49 @@ class _ProfileIdConfirmScreenState
               ),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          submit(false);
-                        },
-                        child: Text(
-                          '다음에 할게요',
-                          style: getTsBody14Rg(context).copyWith(
-                            color: kColorBorderStrong,
+                  if (!widget.isEditor)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            submit(false);
+                          },
+                          child: Text(
+                            '다음에 할게요',
+                            style: getTsBody14Rg(context).copyWith(
+                              color: kColorBorderStrong,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   const SizedBox(
                     height: 16,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (selectedPhotoModel != null) {
-                        submit(true);
-                      }
-                    },
-                    child: FilledButtonWidget(
-                      text: '작성 완료',
-                      fontSize: FontSize.l,
-                      isEnable: selectedPhotoModel != null,
-                    ),
-                  ),
+                  widget.isEditor
+                      ? GestureDetector(
+                          onTap: () {
+                            onTapAuthenticate();
+                          },
+                          child: FilledButtonWidget(
+                            text: '인증하기',
+                            fontSize: FontSize.l,
+                            isEnable: selectedPhotoModel != null,
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            if (selectedPhotoModel != null) {
+                              submit(true);
+                            }
+                          },
+                          child: FilledButtonWidget(
+                            text: '작성 완료',
+                            fontSize: FontSize.l,
+                            isEnable: selectedPhotoModel != null,
+                          ),
+                        ),
                 ],
               ),
             ),

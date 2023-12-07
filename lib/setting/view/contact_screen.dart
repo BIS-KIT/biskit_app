@@ -148,8 +148,10 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
                     rightTextColor: kColorContentOnBgPrimary);
               },
               child: FilledButtonWidget(
-                  text: '비스킷팀에게 보내기',
-                  isEnable: content.isNotEmpty ? true : false),
+                text: '비스킷팀에게 보내기',
+                isEnable: content.isNotEmpty ? true : false,
+                height: 52,
+              ),
             )
           ],
         ),

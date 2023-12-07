@@ -51,9 +51,9 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
         isKorean = true;
       }
       if (isKorean) {
-        str = '외국인 모집';
-      } else {
         str = '한국인 모집';
+      } else {
+        str = '외국인 모집';
       }
     }
 

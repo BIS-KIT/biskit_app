@@ -101,9 +101,12 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // ProfileCard
-                        ProfileCardWidget(
-                          userState: userState as UserModel,
-                          isMe: true,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ProfileCardWidget(
+                            userState: userState as UserModel,
+                            isMe: true,
+                          ),
                         ),
 
                         const SizedBox(

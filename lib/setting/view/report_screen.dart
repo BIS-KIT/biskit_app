@@ -166,6 +166,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
               child: FilledButtonWidget(
                 text: '비스킷팀에게 보내기',
                 isEnable: content.isNotEmpty,
+                height: 52,
               ),
             )
           ],

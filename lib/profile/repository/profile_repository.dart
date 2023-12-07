@@ -3,6 +3,7 @@
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
+import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
@@ -324,5 +325,36 @@ class ProfileRepository {
       logger.e(e.toString());
     }
     return isOk;
+  }
+
+  postStudentVarification({
+    required String student_card,
+    required int user_id,
+  }) async {
+    StudentVerificationModel? studentVerificationModel;
+    try {
+      final res = await dio.post(
+        'http://$kServerIp:$kServerPort/$kServerVersion/student-card',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        queryParameters: {
+          'student_card': student_card,
+          'user_id': user_id,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        studentVerificationModel = StudentVerificationModel.fromMap(res.data);
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return studentVerificationModel;
   }
 }

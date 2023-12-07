@@ -2,6 +2,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarWidget extends StatefulWidget {
@@ -46,19 +47,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           locale: context.locale.toString(),
           rowHeight: 53,
           daysOfWeekHeight: 40,
+          sixWeekMonthsEnforced: true,
           daysOfWeekStyle: DaysOfWeekStyle(
             weekdayStyle: kTsKrBody16Rg.copyWith(color: kColorContentWeaker),
             weekendStyle: kTsKrBody16Rg.copyWith(color: kColorContentWeaker),
           ),
           headerStyle: HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              headerPadding: const EdgeInsets.symmetric(vertical: 8),
-              titleTextStyle:
-                  kTsKrHeading18Bd.copyWith(color: kColorContentDefault)),
+            formatButtonVisible: false,
+            titleCentered: true,
+            headerPadding: const EdgeInsets.symmetric(vertical: 8),
+            titleTextStyle: kTsKrHeading18Bd.copyWith(
+              color: kColorContentDefault,
+            ),
+          ),
           focusedDay: selectedDay,
           firstDay: DateTime(now.year, now.month, now.day),
-          lastDay: DateTime(2040, 10, 24),
+          lastDay: DateTime(now.year + 10, now.month, now.day),
           selectedDayPredicate: (day) => isSameDay(day, selectedDay),
           onDaySelected: (selectedDay, focusedDay) =>
               onDaySelected(selectedDay, focusedDay),
@@ -81,9 +85,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             weekendTextStyle:
                 kTsKrBody16Rg.copyWith(color: kColorContentDefault),
             todayDecoration: BoxDecoration(
-                color: kColorContentInverse,
-                shape: BoxShape.circle,
-                border: Border.all(color: kColorContentSecondary, width: 1)),
+              color: kColorContentInverse,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: kColorContentSecondary,
+                width: 1,
+              ),
+            ),
           ),
         )
       ],

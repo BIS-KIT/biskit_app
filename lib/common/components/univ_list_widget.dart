@@ -134,7 +134,10 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                                         ? kColorBgDefault
                                         : kColorBorderDefalut,
                                     touchWidget: CheckCircleWidget(
-                                      value: e == selectedModel ? true : false,
+                                      value: (selectedModel != null &&
+                                              e.id == selectedModel!.id)
+                                          ? true
+                                          : false,
                                     ),
                                     onTap: () {
                                       onTapTile(e);

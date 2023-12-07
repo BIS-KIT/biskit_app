@@ -1,6 +1,6 @@
 // ignore_for_file: camel_case_types, constant_identifier_names
 
-/// 미팅 참여자 인증상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
+/// 학생증 인증 상태 PENDING, APPROVE, REJECTED, UNVERIFIED(default)
 enum VerificationStatus {
   PENDING,
   APPROVE,

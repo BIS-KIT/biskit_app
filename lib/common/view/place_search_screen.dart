@@ -145,21 +145,28 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(
-                              context,
-                              searchController.text.trim(),
-                            );
-                          },
-                          child: OutlinedButtonWidget(
-                            leftIconPath: 'assets/icons/ic_plus_line_24.svg',
-                            text: '\'${searchController.text.trim()}\' 장소 입력',
-                            isEnable: true,
-                            textAlign: TextAlign.center,
-                            alignment: AlignmentDirectional.center,
-                            height: 44,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(
+                                  context,
+                                  searchController.text.trim(),
+                                );
+                              },
+                              child: OutlinedButtonWidget(
+                                leftIconPath:
+                                    'assets/icons/ic_plus_line_24.svg',
+                                text:
+                                    '\'${searchController.text.trim()}\' 장소 입력',
+                                isEnable: true,
+                                textAlign: TextAlign.center,
+                                alignment: AlignmentDirectional.center,
+                                height: 44,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: viewInsets.bottom,

@@ -14,6 +14,7 @@ import 'package:biskit_app/common/view/error_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/place_search_screen.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen.dart';
+import 'package:biskit_app/common/view/splash_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
@@ -150,6 +151,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   onTap: () async {
                     context.loaderOverlay.show();
                     await Future.delayed(const Duration(seconds: 2));
+                    if (!mounted) return;
                     context.loaderOverlay.hide();
                   },
                   child: const FilledButtonWidget(
@@ -333,12 +335,27 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SetPasswordScreen(
-                          pageType: PageType.register,
-                        ),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SplashScreen(),
+                    ),
+                  );
+                },
+                child: const Text('스플레쉬 화면'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SetPasswordScreen(
+                        pageType: PageType.register,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('비밀번호 화면'),
               ),

@@ -56,10 +56,10 @@ class BadgeWidget extends StatelessWidget {
             child: Text(
               text,
               style: sizeType == BadgeSizeType.L
-                  ? kTsEnBody14Sb.copyWith(
+                  ? kTsKrBody14Rg.copyWith(
                       color: textColor ?? kColorContentWeaker,
                     )
-                  : kTsKrCaption12Sb.copyWith(
+                  : kTsKrCaption12Rg.copyWith(
                       color: textColor ?? kColorContentWeaker,
                     ),
             ),
