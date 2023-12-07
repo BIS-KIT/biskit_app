@@ -131,7 +131,7 @@ class _MeetUpFilterSheetWidgetState
                           ),
                           Wrap(
                             spacing: 6,
-                            runSpacing: 6,
+                            runSpacing: 8,
                             children: filterGroupList[index]
                                 .filterList
                                 .map((e) => ChipWidget(

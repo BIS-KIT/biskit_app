@@ -116,15 +116,22 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                       separatorBuilder: (context, index) => const SizedBox(),
                       itemCount: docs.length,
                     );
-                  } else {
+                  } else if (snapshot.hasData &&
+                      snapshot.data!.docs.isNotEmpty) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            'assets/icons/ic_chat_fill_24.svg',
-                            width: 56,
-                            height: 56,
+                          Container(
+                            padding: const EdgeInsets.only(
+                              top: 16.12,
+                              left: 8.51,
+                              right: 8.44,
+                              bottom: 16.05,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/images/img_chat_empty_states.svg',
+                            ),
                           ),
                           const SizedBox(
                             height: 8,
@@ -138,6 +145,8 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                         ],
                       ),
                     );
+                  } else {
+                    return Container();
                   }
                   // }
                 },

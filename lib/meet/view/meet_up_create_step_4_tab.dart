@@ -87,74 +87,90 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
             GestureDetector(
               onTap: () {
                 showBiskitBottomSheet(
-                  title: '',
-                  customTitleWidget: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, left: 20, right: 20, bottom: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 44,
-                          height: 44,
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              '아이콘 선택',
-                              style: getTsHeading18(context).copyWith(
-                                color: kColorContentDefault,
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SvgPicture.asset(
-                              'assets/icons/ic_cancel_line_24.svg',
-                              width: 24,
-                              height: 24,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  title: '아이콘 선택',
+                  rightIcon: 'assets/icons/ic_cancel_line_24.svg',
+                  onRightTap: () {
+                    Navigator.pop(context);
+                  },
+                  // customTitleWidget: Padding(
+                  //   padding: const EdgeInsets.only(
+                  //     top: 20,
+                  //     left: 20,
+                  //     right: 20,
+                  //     bottom: 0,
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       const SizedBox(
+                  //         width: 44,
+                  //         height: 44,
+                  //       ),
+                  //       Expanded(
+                  //         child: Center(
+                  //           child: Text(
+                  //             '아이콘 선택',
+                  //             style: getTsHeading18(context).copyWith(
+                  //               color: kColorContentDefault,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       GestureDetector(
+                  //         onTap: () {
+                  //           Navigator.pop(context);
+                  //         },
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(10),
+                  //           child: SvgPicture.asset(
+                  //             'assets/icons/ic_cancel_line_24.svg',
+                  //             width: 24,
+                  //             height: 24,
+                  //           ),
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                   context: context,
-                  contentWidget: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Wrap(
-                      spacing: 20,
-                      runSpacing: 20,
-                      children: [
-                        if (fixTopics != null)
-                          ...fixTopics!.map(
-                            (e) => GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedTopic = e;
-                                });
-                                context.pop();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: ThumbnailIconWidget(
-                                  thumbnailIconType: ThumbnailIconType.network,
-                                  iconPath: e.icon_url,
-                                  backgroundColor: kColorBgElevation1,
-                                  radius: 100,
-                                  size: 88,
-                                  isSelected: selectedTopic == e,
+                  contentWidget: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          children: [
+                            if (fixTopics != null)
+                              ...fixTopics!.map(
+                                (e) => GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedTopic = e;
+                                    });
+                                    context.pop();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: ThumbnailIconWidget(
+                                      thumbnailIconType:
+                                          ThumbnailIconType.network,
+                                      iconPath: e.icon_url,
+                                      backgroundColor: kColorBgElevation1,
+                                      radius: 100,
+                                      size: 88,
+                                      isSelected: selectedTopic == e,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                      ],
-                    ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 34,
+                      ),
+                    ],
                   ),
                 );
               },
@@ -210,6 +226,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                         .read(createMeetUpProvider.notifier)
                         .onChangedName(value);
                   },
+                  hintText: '학교 앞에서 같이 밥먹고 공부해요',
                   initialValue:
                       createMeetUpState != null ? createMeetUpState.name : '',
                   errorText: (createMeetUpState != null &&
@@ -286,44 +303,47 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (!showMeetupDescription) {
-                        showMeetupDescription = true;
-                        buttonText = '모임설명 삭제';
-                      } else {
-                        showConfirmModal(
-                          context: context,
-                          leftCall: () {
-                            Navigator.pop(context);
-                          },
-                          leftButton: '취소',
-                          rightCall: () {
-                            ref
-                                .read(createMeetUpProvider.notifier)
-                                .onChangedDescription('');
-                            setState(() {
-                              showMeetupDescription = false;
-                              buttonText = '모임설명 추가';
-                            });
-                            Navigator.pop(context);
-                          },
-                          rightButton: '삭제',
-                          rightBackgroundColor: kColorBgError,
-                          rightTextColor: kColorContentError,
-                          title: '모임 설명을 삭제하시겠어요?',
-                        );
-                      }
-                    });
-                  },
-                  child: OutlinedButtonWidget(
-                    text: buttonText,
-                    leftIconPath: !showMeetupDescription
-                        ? 'assets/icons/ic_plus_line_24.svg'
-                        : 'assets/icons/ic_cancel_line_24.svg',
-                    isEnable: true,
-                    height: 44,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (!showMeetupDescription) {
+                          showMeetupDescription = true;
+                          buttonText = '모임설명 삭제';
+                        } else {
+                          showConfirmModal(
+                            context: context,
+                            leftCall: () {
+                              Navigator.pop(context);
+                            },
+                            leftButton: '취소',
+                            rightCall: () {
+                              ref
+                                  .read(createMeetUpProvider.notifier)
+                                  .onChangedDescription('');
+                              setState(() {
+                                showMeetupDescription = false;
+                                buttonText = '모임설명 추가';
+                              });
+                              Navigator.pop(context);
+                            },
+                            rightButton: '삭제',
+                            rightBackgroundColor: kColorBgError,
+                            rightTextColor: kColorContentError,
+                            title: '모임 설명을 삭제하시겠어요?',
+                          );
+                        }
+                      });
+                    },
+                    child: OutlinedButtonWidget(
+                      text: buttonText,
+                      leftIconPath: !showMeetupDescription
+                          ? 'assets/icons/ic_plus_line_24.svg'
+                          : 'assets/icons/ic_cancel_line_24.svg',
+                      isEnable: true,
+                      height: 44,
+                    ),
                   ),
                 ),
               ],

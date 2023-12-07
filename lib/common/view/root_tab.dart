@@ -108,20 +108,24 @@ class _RootTabState extends ConsumerState<RootTab>
             showUnselectedLabels: false,
             items: [
               _buildBottomItem(
-                iconPath: 'assets/icons/ic_home_fill_24.svg',
+                iconPath: 'assets/icons/ic_home_line_24.svg',
+                activeIconPath: 'assets/icons/ic_home_fill_24.svg',
                 label: '홈',
               ),
               _buildBottomItem(
                 iconPath: 'assets/icons/ic_search_line_24.svg',
+                activeIconPath: 'assets/icons/ic_search_line_24.svg',
                 label: '검색',
               ),
               _buildBottomCenterItem(),
               _buildBottomItem(
                 iconPath: 'assets/icons/ic_chat_line_24.svg',
+                activeIconPath: 'assets/icons/ic_chat_fill_24.svg',
                 label: '채팅',
               ),
               _buildBottomItem(
                 iconPath: 'assets/icons/ic_face_line_24.svg',
+                activeIconPath: 'assets/icons/ic_face_fill_24.svg',
                 label: '프로필',
               ),
             ],
@@ -166,6 +170,7 @@ class _RootTabState extends ConsumerState<RootTab>
 
   BottomNavigationBarItem _buildBottomItem({
     required String iconPath,
+    required String activeIconPath,
     required String label,
   }) {
     return BottomNavigationBarItem(
@@ -190,7 +195,7 @@ class _RootTabState extends ConsumerState<RootTab>
           horizontal: 17,
         ),
         child: SvgPicture.asset(
-          iconPath,
+          activeIconPath,
           width: 32,
           height: 32,
           colorFilter: const ColorFilter.mode(

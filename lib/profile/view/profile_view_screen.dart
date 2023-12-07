@@ -75,9 +75,12 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.only(
                     top: 8,
+                    left: 20,
+                    right: 20,
                     bottom: 20,
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ProfileCardWidget(
                         userState: profileUserModel!,
@@ -85,6 +88,12 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                       ),
                       const SizedBox(
                         height: 20,
+                      ),
+                      Text(
+                        '후기',
+                        style: getTsHeading18(context).copyWith(
+                          color: kColorContentDefault,
+                        ),
                       ),
                       _buildReview(size),
                     ],
@@ -99,7 +108,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
 
   Widget _buildReview(Size size) {
     final reviewState = ref.watch(reviewProvider(profileUserModel!.id));
-
+    double width = (size.width - 40 - 8) / 2;
     if (reviewState.data.isEmpty) {
       return Container(
         padding: const EdgeInsets.symmetric(
@@ -108,10 +117,10 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: 164,
+              height: width,
               child: Center(
                 child: Text(
-                  '작성된 후기가 없어요',
+                  '아직 후기가 없어요',
                   style: getTsBody14Sb(context).copyWith(
                     color: kColorContentWeakest,
                   ),
@@ -122,7 +131,6 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
         ),
       );
     } else {
-      double width = (size.width - 40 - 8) / 2;
       return Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -180,6 +188,24 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
       ),
       child: Row(
         children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: SvgPicture.asset(
+                'assets/icons/ic_arrow_back_ios_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentDefault,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Text(
               '프로필',

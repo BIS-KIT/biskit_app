@@ -169,39 +169,43 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     logger.d('orderBy>>>$orderBy');
     logger.d('tagFilter>>>$tagFilter');
 
-    try {
-      Response res = await dio.get(
-        '${baseUrl}s',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
+    final userState = ref.watch(userMeProvider);
+    if (userState is UserModel) {
+      try {
+        Response res = await dio.get(
+          '${baseUrl}s',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'user_id': userState.id,
+            'order_by': ((orderBy as MeetUpOrderState?) ??
+                    MeetUpOrderState.created_time)
+                .name,
+            'skip': skip,
+            'limit': limit,
+            'tags_ids': tagFilter,
+            'topics_ids': topicsFilter,
+            'creator_nationality': nationalFilter,
+            'time_filters': timeFilter,
           },
-        ),
-        queryParameters: {
-          'order_by':
-              ((orderBy as MeetUpOrderState?) ?? MeetUpOrderState.created_time)
-                  .name,
-          'skip': skip,
-          'limit': limit,
-          'tags_ids': tagFilter,
-          'topics_ids': topicsFilter,
-          'creator_nationality': nationalFilter,
-          'time_filters': timeFilter,
-        },
-      );
-      // logger.d(res.data);
-      if (res.statusCode == 200) {
-        if ((res.data as Map).containsKey('total_count')) {
-          totalCount = res.data['total_count'];
-          count = (res.data['meetings'] as List).length;
-          data = List.from((res.data['meetings'] as List)
-              .map((e) => MeetUpModel.fromMap(e)));
+        );
+        // logger.d(res.data);
+        if (res.statusCode == 200) {
+          if ((res.data as Map).containsKey('total_count')) {
+            totalCount = res.data['total_count'];
+            count = (res.data['meetings'] as List).length;
+            data = List.from((res.data['meetings'] as List)
+                .map((e) => MeetUpModel.fromMap(e)));
+          }
         }
+      } catch (e) {
+        logger.e(e.toString());
       }
-    } catch (e) {
-      logger.e(e.toString());
     }
 
     return CursorPagination<MeetUpModel>(
@@ -220,25 +224,29 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   }) async {
     List<MeetUpModel>? meetings;
     try {
-      Response res = await dio.get(
-        '${baseUrl}s',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
+      final userState = ref.watch(userMeProvider);
+      if (userState is UserModel) {
+        Response res = await dio.get(
+          '${baseUrl}s',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'skip': skip,
+            'limit': limit,
+            'user_id': userState.id,
           },
-        ),
-        queryParameters: {
-          'skip': skip,
-          'limit': limit,
-        },
-      );
-      // logger.d(res.data);
-      if (res.statusCode == 200) {
-        if ((res.data as Map).containsKey('total_count')) {
-          meetings = List.from((res.data['meetings'] as List)
-              .map((e) => MeetUpModel.fromMap(e)));
+        );
+        // logger.d(res.data);
+        if (res.statusCode == 200) {
+          if ((res.data as Map).containsKey('total_count')) {
+            meetings = List.from((res.data['meetings'] as List)
+                .map((e) => MeetUpModel.fromMap(e)));
+          }
         }
       }
     } catch (e) {

@@ -238,27 +238,28 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   ),
                   child: GestureDetector(
                     onTap: () async {
-                      if (isButtonEnable()) {
-                        if (pageIndex >= 0 && pageIndex < 3) {
-                          controller.animateTo(pageIndex + 1);
-                        } else {
-                          bool result = false;
-                          if (widget.isEditMode) {
-                            result = await ref
-                                .read(createMeetUpProvider.notifier)
-                                .putUpdateMeetUp(widget.editMeetingId!);
-                          } else {
-                            result = await ref
-                                .read(createMeetUpProvider.notifier)
-                                .createMeetUp();
-                          }
-                          if (result) {
-                            if (!mounted) return;
-                            Navigator.pop(
-                                context, widget.isEditMode ? true : [true]);
-                          }
-                        }
-                      }
+                      onTapSubmitButton();
+                      // if (isButtonEnable()) {
+                      //   if (pageIndex >= 0 && pageIndex < 3) {
+                      //     controller.animateTo(pageIndex + 1);
+                      //   } else {
+                      //     bool result = false;
+                      //     if (widget.isEditMode) {
+                      //       result = await ref
+                      //           .read(createMeetUpProvider.notifier)
+                      //           .putUpdateMeetUp(widget.editMeetingId!);
+                      //     } else {
+                      //       result = await ref
+                      //           .read(createMeetUpProvider.notifier)
+                      //           .createMeetUp();
+                      //     }
+                      //     if (result) {
+                      //       if (!mounted) return;
+                      //       Navigator.pop(
+                      //           context, widget.isEditMode ? true : [true]);
+                      //     }
+                      //   }
+                      // }
                     },
                     child: FilledButtonWidget(
                       height: 56,
@@ -274,41 +275,11 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
               } else {
                 if (pageIndex == 3) {
                   return GestureDetector(
-                    onTap: () async {
-                      if (isButtonEnable()) {
-                        if (widget.isEditMode) {
-                          bool result = false;
-                          result = await ref
-                              .read(createMeetUpProvider.notifier)
-                              .putUpdateMeetUp(widget.editMeetingId!);
-                          if (result && mounted) {
-                            Navigator.pop(
-                                context, widget.isEditMode ? true : [true]);
-                          }
-                        } else {
-                          int? result = await ref
-                              .read(createMeetUpProvider.notifier)
-                              .createMeetUp();
-                          if (result != null) {
-                            MeetUpModel model = await ref
-                                .read(meetUpRepositoryProvider)
-                                .getMeeting(result);
-                            if (!mounted) return;
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MeetUpDetailScreen(
-                                  meetUpModel: model,
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      }
+                    onTap: () {
+                      onTapSubmitButton();
                     },
                     child: FilledButtonWidget(
-                      height: 56,
+                      height: 52,
                       text: pageIndex == 3
                           ? widget.isEditMode
                               ? '수정하기'
@@ -326,5 +297,36 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
         ),
       ),
     );
+  }
+
+  void onTapSubmitButton() async {
+    if (isButtonEnable()) {
+      if (widget.isEditMode) {
+        bool result = false;
+        result = await ref
+            .read(createMeetUpProvider.notifier)
+            .putUpdateMeetUp(widget.editMeetingId!);
+        if (result && mounted) {
+          Navigator.pop(context, widget.isEditMode ? true : [true]);
+        }
+      } else {
+        int? result =
+            await ref.read(createMeetUpProvider.notifier).createMeetUp();
+        if (result != null) {
+          MeetUpModel model =
+              await ref.read(meetUpRepositoryProvider).getMeeting(result);
+          if (!mounted) return;
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MeetUpDetailScreen(
+                meetUpModel: model,
+              ),
+            ),
+          );
+        }
+      }
+    }
   }
 }

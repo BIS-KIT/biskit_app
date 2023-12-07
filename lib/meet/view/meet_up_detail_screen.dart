@@ -1012,15 +1012,17 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               ),
             ),
             const SizedBox(width: 8),
-            SvgPicture.asset(
-              'assets/icons/ic_chevron_right_line_24.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentWeakest,
-                BlendMode.srcIn,
+            if (meetUpDetailModel != null &&
+                meetUpDetailModel!.place_url.isNotEmpty)
+              SvgPicture.asset(
+                'assets/icons/ic_chevron_right_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentWeakest,
+                  BlendMode.srcIn,
+                ),
               ),
-            ),
           ],
         ),
       ),

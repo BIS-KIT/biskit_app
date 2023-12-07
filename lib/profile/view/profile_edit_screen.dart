@@ -509,7 +509,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   final result1 = await showBiskitBottomSheet(
                     context: context,
                     title: '소속 선택',
-                    leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
+                    // leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
                     isDismissible: false,
                     onLeftTap: () async {
                       Navigator.pop(context);

@@ -6,6 +6,7 @@ import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:biskit_app/common/provider/pagination_provider.dart';
 import 'package:biskit_app/common/utils/pagination_utils.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -129,13 +130,18 @@ class _PaginationListViewState<T extends IModelWithId>
 
     final cp = state as CursorPagination<T>;
 
-    return RefreshIndicator(
+    return CustomMaterialIndicator(
       onRefresh: () async {
         ref.read(widget.provider.notifier).paginate(
               forceRefetch: true,
               orderBy: ref.read(meetUpFilterProvider).meetUpOrderState,
             );
       },
+      indicatorBuilder: (context, controller) {
+        return const CustomLoading();
+      },
+      elevation: 0,
+      trailingScrollIndicatorVisible: false,
       child: Stack(
         alignment: Alignment.center,
         children: [
