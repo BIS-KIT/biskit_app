@@ -57,6 +57,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
           children: [
             ListWidget(
               text: '계정',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
@@ -69,6 +70,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             _buildDivider(),
             ListWidget(
               text: '언어',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               selectText: (state is UserSystenModelError ||
                       state is UserSystemModelLoading)
                   ? ''
@@ -86,6 +88,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '알림',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
@@ -98,6 +101,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             _buildDivider(),
             ListWidget(
               text: '차단 사용자 관리',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
@@ -109,6 +113,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '경고 내역',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
@@ -121,6 +126,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             _buildDivider(),
             ListWidget(
               text: '공지사항',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
@@ -132,10 +138,12 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             ListWidget(
               text: '이용 가이드',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {},
             ),
             ListWidget(
               text: '문의하기',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
@@ -147,6 +155,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             // ListWidget(
             //   text: '신고하기',
+            // selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
             //   onTapCallback: () {
             //     Navigator.push(
             //       context,
@@ -158,6 +167,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             // ),
             ListWidget(
               text: '약관 및 정책',
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,

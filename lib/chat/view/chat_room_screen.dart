@@ -68,7 +68,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     .read(chatRepositoryProvider)
                     .getMyChatRoomListStream(userId: userState.id),
                 builder: (context, snapshot) {
-                  logger.d(snapshot.connectionState);
+                  logger.d(snapshot.hasData);
                   // 깜빡임 현상으로 인하여 삭제
                   // if (snapshot.connectionState == ConnectionState.waiting) {
                   //   return const Center(
@@ -116,8 +116,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                       separatorBuilder: (context, index) => const SizedBox(),
                       itemCount: docs.length,
                     );
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.docs.isNotEmpty) {
+                  } else if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

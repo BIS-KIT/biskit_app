@@ -220,55 +220,54 @@ class ProfileCardWidget extends StatelessWidget {
                                   ),
                               ],
                             );
-                          } else if (studentVerification.verification_status ==
-                              VerificationStatus.UNVERIFIED.name) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 4,
+                          }
+                        } else {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              Text(
+                                '학교를 인증해주세요',
+                                style: getTsBody14Rg(context).copyWith(
+                                  color: kColorContentWeaker,
                                 ),
-                                Text(
-                                  '학교를 인증해주세요',
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeaker,
-                                  ),
-                                ),
-                                if (userState.profile!.context != null &&
-                                    userState.profile!.context!.isNotEmpty)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 16),
-                                    child: Text(
-                                      userState.profile!.context!,
-                                      style: getTsBody14Rg(context).copyWith(
-                                        color: kColorContentWeaker,
-                                      ),
+                              ),
+                              if (userState.profile!.context != null &&
+                                  userState.profile!.context!.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: Text(
+                                    userState.profile!.context!,
+                                    style: getTsBody14Rg(context).copyWith(
+                                      color: kColorContentWeaker,
                                     ),
                                   ),
-                                const SizedBox(
-                                  height: 16,
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ProfileIdConfirmScreen(
-                                          isEditor: true,
-                                        ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProfileIdConfirmScreen(
+                                        isEditor: true,
                                       ),
-                                    );
-                                  },
-                                  child: const FilledButtonWidget(
-                                    text: '학교 인증하기',
-                                    height: 40,
-                                    isEnable: true,
-                                  ),
+                                    ),
+                                  );
+                                },
+                                child: const FilledButtonWidget(
+                                  text: '학교 인증하기',
+                                  height: 40,
+                                  isEnable: true,
                                 ),
-                              ],
-                            );
-                          }
+                              ),
+                            ],
+                          );
                         }
                       } else {
                         return Column(

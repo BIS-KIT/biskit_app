@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
-import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -129,11 +128,33 @@ class _ProfileListWithSubtextWidgetState
                           runSpacing: 4,
                           children: [
                             ...widget.introductions.map(
-                              (introduction) => BadgeWidget(
-                                text: introduction.keyword,
-                                backgroundColor: kColorBgElevation2,
-                                textColor: kColorContentWeaker,
-                                sizeType: BadgeSizeType.M,
+                              (introduction) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 4,
+                                ),
+                                decoration: const BoxDecoration(
+                                  color: kColorBgElevation2,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(6),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 2,
+                                      ),
+                                      child: Text(
+                                        introduction.keyword,
+                                        style: kTsKrCaption12Rg.copyWith(
+                                          color: kColorContentWeaker,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

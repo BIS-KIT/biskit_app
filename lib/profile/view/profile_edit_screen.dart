@@ -369,8 +369,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           ),
           Column(
             children: [
-              widget.profile.student_verification!.verification_status ==
-                      VerificationStatus.UNVERIFIED.name
+              widget.profile.student_verification == null
                   ? Column(
                       children: [
                         SizedBox(

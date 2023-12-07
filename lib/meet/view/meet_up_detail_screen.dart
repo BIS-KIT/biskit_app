@@ -6,6 +6,7 @@ import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:collection/collection.dart';
@@ -492,6 +493,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                     ),
                                     Text(
                                       meetUpDetailModel?.name ?? '',
+                                      textAlign: TextAlign.center,
                                       style: getTsHeading20(context).copyWith(
                                           color: kColorContentDefault),
                                     ),
@@ -541,14 +543,14 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
                           // 모임 참가자들의 언어 레벨
                           if (chartDatas.isNotEmpty) _buildChart(context),
+                          const SizedBox(
+                            height: 26,
+                          ),
                         ],
                       )
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 26,
               ),
               Container(
                 padding: EdgeInsets.only(
@@ -671,52 +673,81 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   Widget _buildBottomButton() {
     if (meetUpDetailModel == null) return Container();
 
-    if (meetUpDetailModel!.is_active) {
-      if (userState!.id == meetUpDetailModel!.creator.id) {
+    if (meetUpDetailModel!.is_active && userState != null) {
+      if (userState!.profile!.student_verification == null) {
+        // 학생증 인증 안한 상태
         return GestureDetector(
-          onTap: () {
-            onTapMembersManagement();
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfileIdConfirmScreen(
+                  isEditor: true,
+                ),
+              ),
+            );
+            await ref.read(userMeProvider.notifier).getMe();
           },
           child: const FilledButtonWidget(
-            text: '모임원 관리',
+            text: '학교 인증하고 참여하기',
             isEnable: true,
           ),
         );
-      } else if (meetUpDetailModel!.participants
-          .any((element) => element.id == userState!.id)) {
-        return GestureDetector(
-          onTap: () {
-            onTapChatting();
-          },
-          child: const FilledButtonWidget(
-            text: '채팅하기',
-            isEnable: true,
-          ),
+      } else if (userState!
+              .profile!.student_verification!.verification_status ==
+          VerificationStatus.PENDING.name) {
+        // 학생증 인증 대기 상태
+        return const FilledButtonWidget(
+          text: '학교 인증 승인 후 참여 가능',
+          isEnable: false,
         );
       } else {
-        if (participationStatus != null) {
-          if (participationStatus == VerificationStatus.PENDING.name) {
-            return const FilledButtonWidget(
-              text: '참여 수락 대기중',
-              isEnable: false,
-            );
-          } else if (participationStatus == VerificationStatus.PENDING.name) {
-            return const FilledButtonWidget(
-              text: '참여 수락 대기중',
-              isEnable: false,
-            );
+        if (userState!.id == meetUpDetailModel!.creator.id) {
+          return GestureDetector(
+            onTap: () {
+              onTapMembersManagement();
+            },
+            child: const FilledButtonWidget(
+              text: '모임원 관리',
+              isEnable: true,
+            ),
+          );
+        } else if (meetUpDetailModel!.participants
+            .any((element) => element.id == userState!.id)) {
+          return GestureDetector(
+            onTap: () {
+              onTapChatting();
+            },
+            child: const FilledButtonWidget(
+              text: '채팅하기',
+              isEnable: true,
+            ),
+          );
+        } else {
+          if (participationStatus != null) {
+            if (participationStatus == VerificationStatus.PENDING.name) {
+              return const FilledButtonWidget(
+                text: '참여 수락 대기중',
+                isEnable: false,
+              );
+            } else if (participationStatus == VerificationStatus.PENDING.name) {
+              return const FilledButtonWidget(
+                text: '참여 수락 대기중',
+                isEnable: false,
+              );
+            }
           }
+          return GestureDetector(
+            onTap: () {
+              onTapJoin();
+            },
+            child: const FilledButtonWidget(
+              text: '참여신청',
+              isEnable: true,
+              height: 52,
+            ),
+          );
         }
-        return GestureDetector(
-          onTap: () {
-            onTapJoin();
-          },
-          child: const FilledButtonWidget(
-            text: '참여신청',
-            isEnable: true,
-            height: 52,
-          ),
-        );
       }
     } else {
       return const FilledButtonWidget(

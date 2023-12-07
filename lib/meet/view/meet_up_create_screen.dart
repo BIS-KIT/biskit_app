@@ -301,30 +301,34 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
 
   void onTapSubmitButton() async {
     if (isButtonEnable()) {
-      if (widget.isEditMode) {
-        bool result = false;
-        result = await ref
-            .read(createMeetUpProvider.notifier)
-            .putUpdateMeetUp(widget.editMeetingId!);
-        if (result && mounted) {
-          Navigator.pop(context, widget.isEditMode ? true : [true]);
-        }
+      if (pageIndex >= 0 && pageIndex < 3) {
+        controller.animateTo(pageIndex + 1);
       } else {
-        int? result =
-            await ref.read(createMeetUpProvider.notifier).createMeetUp();
-        if (result != null) {
-          MeetUpModel model =
-              await ref.read(meetUpRepositoryProvider).getMeeting(result);
-          if (!mounted) return;
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MeetUpDetailScreen(
-                meetUpModel: model,
+        if (widget.isEditMode) {
+          bool result = false;
+          result = await ref
+              .read(createMeetUpProvider.notifier)
+              .putUpdateMeetUp(widget.editMeetingId!);
+          if (result && mounted) {
+            Navigator.pop(context, widget.isEditMode ? true : [true]);
+          }
+        } else {
+          int? result =
+              await ref.read(createMeetUpProvider.notifier).createMeetUp();
+          if (result != null) {
+            MeetUpModel model =
+                await ref.read(meetUpRepositoryProvider).getMeeting(result);
+            if (!mounted) return;
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MeetUpDetailScreen(
+                  meetUpModel: model,
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       }
     }

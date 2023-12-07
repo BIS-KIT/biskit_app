@@ -53,14 +53,16 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             weekendStyle: kTsKrBody16Rg.copyWith(color: kColorContentWeaker),
           ),
           headerStyle: HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              headerPadding: const EdgeInsets.symmetric(vertical: 8),
-              titleTextStyle:
-                  kTsKrHeading18Bd.copyWith(color: kColorContentDefault)),
+            formatButtonVisible: false,
+            titleCentered: true,
+            headerPadding: const EdgeInsets.symmetric(vertical: 8),
+            titleTextStyle: kTsKrHeading18Bd.copyWith(
+              color: kColorContentDefault,
+            ),
+          ),
           focusedDay: selectedDay,
           firstDay: DateTime(now.year, now.month, now.day),
-          lastDay: DateTime(2040, 10, 24),
+          lastDay: DateTime(now.year + 10, now.month, now.day),
           selectedDayPredicate: (day) => isSameDay(day, selectedDay),
           onDaySelected: (selectedDay, focusedDay) =>
               onDaySelected(selectedDay, focusedDay),
@@ -83,9 +85,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             weekendTextStyle:
                 kTsKrBody16Rg.copyWith(color: kColorContentDefault),
             todayDecoration: BoxDecoration(
-                color: kColorContentInverse,
-                shape: BoxShape.circle,
-                border: Border.all(color: kColorContentSecondary, width: 1)),
+              color: kColorContentInverse,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: kColorContentSecondary,
+                width: 1,
+              ),
+            ),
           ),
         )
       ],

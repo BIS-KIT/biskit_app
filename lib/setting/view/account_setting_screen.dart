@@ -114,6 +114,7 @@ class AccountSettingScreen extends ConsumerWidget {
           ),
           ListWidget(
             text: '비밀번호 변경',
+            selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
             onTapCallback: () {
               Navigator.push(
                 context,

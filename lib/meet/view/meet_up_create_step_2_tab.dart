@@ -105,7 +105,6 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
             padding: const EdgeInsets.only(
               left: 20,
               right: 20,
-              bottom: 20,
             ),
             child: CalendarWidget(
               selectedDay: tempDay,
