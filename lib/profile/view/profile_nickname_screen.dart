@@ -35,6 +35,7 @@ class ProfileNicknameScreen extends ConsumerStatefulWidget {
 
 class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
   PhotoModel? selectedPhotoModel;
+  String randomProfile = '';
 
   late final TextEditingController controller;
   // String nickName = '';
@@ -61,6 +62,13 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
       String temp = res.data['kr_nick_name'] ?? '';
 
       controller.text = temp.replaceAll(' ', '');
+    }
+    final profileRes =
+        await ref.read(profileRepositoryProvider).getRandomProfile();
+    if (profileRes != null) {
+      setState(() {
+        randomProfile = profileRes.data['image_url'] ?? '';
+      });
     }
   }
 
@@ -148,7 +156,9 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
         ProfileLanguageScreen.routeName,
         extra: ProfileCreateModel(
           nick_name: controller.text,
-          profile_photo: profilePhoto,
+          profile_photo:
+              selectedPhotoModel != null ? profilePhoto : randomProfile,
+          is_default_photo: selectedPhotoModel == null && false,
           available_languages: [],
           introductions: [],
         ),
@@ -199,65 +209,93 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: () async {
-                        final List result = await Navigator.push(
-                              context,
-                              createUpDownRoute(
-                                const PhotoManagerScreen(
-                                  isCamera: true,
-                                  maxCnt: 1,
+                    child: selectedPhotoModel == null
+                        ? GestureDetector(
+                            onTap: () async {
+                              final List result = await Navigator.push(
+                                    context,
+                                    createUpDownRoute(
+                                      const PhotoManagerScreen(
+                                        isCamera: true,
+                                        maxCnt: 1,
+                                      ),
+                                    ),
+                                  ) ??
+                                  [];
+                              logger.d(result);
+                              if (result.length == 1) {
+                                setState(() {
+                                  selectedPhotoModel = result[0];
+                                });
+                              }
+                            },
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 44,
+                                  foregroundImage: NetworkImage(
+                                    randomProfile,
+                                  ),
                                 ),
-                              ),
-                            ) ??
-                            [];
-                        logger.d(result);
-                        if (result.length == 1) {
-                          setState(() {
-                            selectedPhotoModel = result[0];
-                          });
-                        }
-                      },
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 44,
-                            backgroundImage: const AssetImage(
-                              'assets/images/88.png',
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(
+                                      color: kColorBgInverseWeak,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/icons/ic_pencil_fill_16.svg',
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            foregroundImage: selectedPhotoModel == null
-                                ? null
-                                : selectedPhotoModel!.photoType ==
-                                        PhotoType.asset
-                                    ? AssetEntityImageProvider(
-                                        selectedPhotoModel!.assetEntity!,
-                                        isOriginal: true,
-                                      )
-                                    : Image.file(
-                                        File(
-                                          selectedPhotoModel!.cameraXfile!.path,
-                                        ),
-                                      ).image,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: kColorBgInverseWeak,
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_pencil_fill_16.svg',
-                                width: 16,
-                                height: 16,
-                              ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedPhotoModel = null;
+                              });
+                            },
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 44,
+                                  foregroundImage:
+                                      selectedPhotoModel!.photoType ==
+                                              PhotoType.asset
+                                          ? AssetEntityImageProvider(
+                                              selectedPhotoModel!.assetEntity!,
+                                              isOriginal: true,
+                                            )
+                                          : Image.file(
+                                              File(
+                                                selectedPhotoModel!
+                                                    .cameraXfile!.path,
+                                              ),
+                                            ).image,
+                                ),
+                                Positioned(
+                                  top: 32,
+                                  left: 32,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/ic_cancel_line_24.svg',
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: const ColorFilter.mode(
+                                      kColorContentInverse,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
                   ),
                   const SizedBox(
                     height: 16,
@@ -322,6 +360,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                     onTap: onTapNext,
                     child: FilledButtonWidget(
                       text: '다음',
+                      fontSize: FontSize.l,
                       isEnable: isNickNameOk,
                     ),
                   ),
