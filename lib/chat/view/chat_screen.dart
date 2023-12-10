@@ -335,6 +335,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                                 'assets/icons/ic_crown_circle_fill_24.svg',
                                                 width: 24,
                                                 height: 24,
+                                                colorFilter:
+                                                    const ColorFilter.mode(
+                                                  kColorContentPrimary,
+                                                  BlendMode.srcIn,
+                                                ),
                                               ),
                                             ],
                                           ),

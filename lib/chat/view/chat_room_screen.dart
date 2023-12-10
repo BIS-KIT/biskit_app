@@ -84,11 +84,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     return ListView.separated(
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
-                      // padding: const EdgeInsets.only(
-                      //   top: 20,
-                      //   left: 20,
-                      //   right: 20,
-                      // ),
                       itemBuilder: (context, index) {
                         ChatRoomFirstUserInfo? chatRoomFirstUserInfo;
                         if (docs[index]
@@ -101,16 +96,26 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                               .singleWhere(
                                   (element) => element.userId == userState.id);
                         }
-                        return ChatRoomCardWidget(
-                          chatRoomModel: docs[index],
-                          user: userState,
-                          chatRoomFirstUserInfo: chatRoomFirstUserInfo,
-                          onTapChatRoom: () {
-                            onTapChatRoom(
-                              chatRoom: docs[index],
-                              user: userState,
-                            );
-                          },
+                        return Container(
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 1,
+                                color: kColorBorderWeak,
+                              ),
+                            ),
+                          ),
+                          child: ChatRoomCardWidget(
+                            chatRoomModel: docs[index],
+                            user: userState,
+                            chatRoomFirstUserInfo: chatRoomFirstUserInfo,
+                            onTapChatRoom: () {
+                              onTapChatRoom(
+                                chatRoom: docs[index],
+                                user: userState,
+                              );
+                            },
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) => const SizedBox(),
