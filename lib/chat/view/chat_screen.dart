@@ -1144,6 +1144,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                             );
                         textEditingController.text = '';
                         scrollController.jumpTo(0);
+                        ref.read(chatRepositoryProvider).postChatAlarm(
+                              content: msg,
+                              chat_id: widget.chatRoomUid,
+                            );
                       }
                     },
                     child: textEditingController.text.isEmpty

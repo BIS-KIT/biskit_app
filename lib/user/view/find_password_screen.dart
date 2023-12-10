@@ -170,6 +170,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
         if (!mounted) return;
       }
     } finally {
+      // ignore: use_build_context_synchronously
       context.loaderOverlay.hide();
     }
 

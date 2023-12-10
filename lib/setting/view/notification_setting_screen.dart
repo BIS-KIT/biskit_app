@@ -6,6 +6,7 @@ import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationSettingScreen extends ConsumerStatefulWidget {
   const NotificationSettingScreen({super.key});
@@ -80,36 +81,40 @@ class _NotificationSettingScreenState
                   CupertinoSwitch(
                     value: criticalNotification!,
                     activeColor: kColorBgPrimaryStrong,
-                    onChanged: (bool? value) {
+                    onChanged: (bool? value) async {
                       if (criticalNotification == false) {
-                        showConfirmModal(
-                          context: context,
-                          title: '기기의 알림 설정이 꺼져있어요',
-                          content: '휴대폰 설정 > 알림 > BISKIT에서\n알림을 허용해주세요',
-                          leftButton: '취소',
-                          leftCall: () {
-                            Navigator.pop(context);
-                          },
-                          rightButton: '알림 켜기',
-                          rightCall: () async {
-                            // TODO: 알림 설정으로 이동
-                            setState(() {
-                              criticalNotification = true;
-                            });
-                            await ref
-                                .read(systemProvider.notifier)
-                                .updateUserAlarm(
-                                  systemId: (ref.watch(systemProvider)
-                                          as UserSystemModel)
+                        final PermissionStatus status =
+                            await Permission.notification.request();
+                        if (status.isDenied && mounted) {
+                          showConfirmModal(
+                            context: context,
+                            title: '기기의 알림 설정이 꺼져있어요',
+                            content: '휴대폰 설정 > 알림 > BISKIT에서\n알림을 허용해주세요',
+                            leftButton: '취소',
+                            leftCall: () {
+                              Navigator.pop(context);
+                            },
+                            rightButton: '알림 켜기',
+                            rightCall: () async {
+                              // 알림 설정으로 이동
+                              openAppSettings();
+
+                              Navigator.pop(context);
+                            },
+                            rightBackgroundColor: kColorBgPrimary,
+                            rightTextColor: kColorContentOnBgPrimary,
+                          );
+                        }
+                        setState(() {
+                          criticalNotification = true;
+                        });
+                        await ref.read(systemProvider.notifier).updateUserAlarm(
+                              systemId:
+                                  (ref.watch(systemProvider) as UserSystemModel)
                                       .id,
-                                  mainAlarm: criticalNotification,
-                                  etcAlarm: generalNotification,
-                                );
-                            Navigator.pop(context);
-                          },
-                          rightBackgroundColor: kColorBgPrimary,
-                          rightTextColor: kColorContentOnBgPrimary,
-                        );
+                              mainAlarm: criticalNotification,
+                              etcAlarm: generalNotification,
+                            );
                       } else {
                         setState(() {
                           criticalNotification = false;
@@ -150,36 +155,39 @@ class _NotificationSettingScreenState
                   CupertinoSwitch(
                     value: generalNotification!,
                     activeColor: kColorBgPrimaryStrong,
-                    onChanged: (bool? value) {
+                    onChanged: (bool? value) async {
                       if (generalNotification == false) {
-                        showConfirmModal(
-                          context: context,
-                          title: '기기의 알림 설정이 꺼져있어요',
-                          content: '휴대폰 설정 > 알림 > BISKIT에서\n알림을 허용해주세요',
-                          leftButton: '취소',
-                          leftCall: () {
-                            Navigator.pop(context);
-                          },
-                          rightButton: '알림 켜기',
-                          rightCall: () async {
-                            // TODO: 알림 설정으로 이동
-                            setState(() {
-                              generalNotification = true;
-                            });
-                            await ref
-                                .read(systemProvider.notifier)
-                                .updateUserAlarm(
-                                  systemId: (ref.watch(systemProvider)
-                                          as UserSystemModel)
+                        final PermissionStatus status =
+                            await Permission.notification.request();
+                        if (status.isDenied && mounted) {
+                          await showConfirmModal(
+                            context: context,
+                            title: '기기의 알림 설정이 꺼져있어요',
+                            content: '휴대폰 설정 > 알림 > BISKIT에서\n알림을 허용해주세요',
+                            leftButton: '취소',
+                            leftCall: () {
+                              Navigator.pop(context);
+                            },
+                            rightButton: '알림 켜기',
+                            rightCall: () async {
+                              // 알림 설정으로 이동
+                              openAppSettings();
+                              Navigator.pop(context);
+                            },
+                            rightBackgroundColor: kColorBgPrimary,
+                            rightTextColor: kColorContentOnBgPrimary,
+                          );
+                        }
+                        setState(() {
+                          generalNotification = true;
+                        });
+                        await ref.read(systemProvider.notifier).updateUserAlarm(
+                              systemId:
+                                  (ref.watch(systemProvider) as UserSystemModel)
                                       .id,
-                                  mainAlarm: criticalNotification,
-                                  etcAlarm: generalNotification,
-                                );
-                            Navigator.pop(context);
-                          },
-                          rightBackgroundColor: kColorBgPrimary,
-                          rightTextColor: kColorContentOnBgPrimary,
-                        );
+                              mainAlarm: criticalNotification,
+                              etcAlarm: generalNotification,
+                            );
                       } else {
                         setState(() {
                           generalNotification = false;

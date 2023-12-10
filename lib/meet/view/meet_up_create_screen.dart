@@ -80,7 +80,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
   //       },
   //       leftButton: '취소',
   //       rightCall: () {
-  //         // TODO 임시 저장된 데이터로 셋팅
+  //         // 임시 저장된 데이터로 셋팅
   //         controller.animateTo(ref.read(createMeetUpProvider).pageIndex);
   //         Navigator.pop(context);
   //       },

@@ -83,8 +83,6 @@ class CustomInterceptor extends Interceptor {
       '[BODY] ${err.requestOptions.data}',
     ]);
 
-    // TODO 리프레시 토큰 처리
-
     final refreshToken = await storage.read(key: kREFRESH_TOKEN_KEY);
 
     // refreshToken 아예 없으면

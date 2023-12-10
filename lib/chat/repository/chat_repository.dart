@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:biskit_app/common/const/data.dart';
@@ -352,5 +354,35 @@ class ChatRepository {
         ),
       },
     );
+  }
+
+  postChatAlarm({
+    required String content,
+    required String chat_id,
+  }) async {
+    bool isOk = false;
+    try {
+      final res = await dio.post(
+        '$baseUrl/alarm',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: {
+          'content': content,
+          'chat_id': chat_id,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
   }
 }
