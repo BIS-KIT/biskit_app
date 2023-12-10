@@ -124,7 +124,7 @@ class UtilRepository {
     return list;
   }
 
-  getTags({bool? isCustom}) async {
+  getTags({bool? isCustom, bool? isHome = false}) async {
     List<TagModel> list = [];
     final res = await dio.get(
       '$baseUrl/tags',
@@ -138,6 +138,7 @@ class UtilRepository {
           ? null
           : {
               'is_custom': isCustom,
+              'is_home': isHome,
             },
     );
 

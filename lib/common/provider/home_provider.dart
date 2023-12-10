@@ -43,7 +43,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
       fixTopics: await utilRepository.getTopics(
         isCustom: false,
       ),
-      tags: await utilRepository.getTags(),
+      tags: await utilRepository.getTags(isCustom: false, isHome: true),
       meetings: await meetUpRepository.getMeetings(
         skip: 0,
         limit: 5,
