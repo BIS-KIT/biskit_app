@@ -1,3 +1,4 @@
+import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,10 +15,12 @@ import 'package:biskit_app/user/provider/user_me_provider.dart';
 class IntroductionViewScreen extends ConsumerStatefulWidget {
   final bool isEditorEnable;
   final String? nickName;
+  final int userId;
   const IntroductionViewScreen({
     Key? key,
     this.isEditorEnable = true,
     this.nickName,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -27,9 +30,22 @@ class IntroductionViewScreen extends ConsumerStatefulWidget {
 
 class _IntroductionViewScreenState
     extends ConsumerState<IntroductionViewScreen> {
+  UserModel? userState;
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  init() async {
+    userState =
+        await ref.read(usersRepositoryProvider).getReadUser(widget.userId);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userMeProvider);
+    // final userState = ref.watch(userMeProvider);
     return Scaffold(
       backgroundColor: kColorBgElevation2,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -41,79 +57,80 @@ class _IntroductionViewScreenState
           bottom: false,
           child: Column(
             children: [
-              // Appbar
-              _buildAppBar(
-                context,
-                (userState as UserModel),
-              ),
+              if (userState != null)
+                // Appbar
+                _buildAppBar(
+                  context,
+                  (userState as UserModel),
+                ),
 
               // content
-              // if (userState is UserModel)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 20,
-                  ),
-                  child: ListView.separated(
-                    itemBuilder: (context, index) => Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: const BoxDecoration(
-                        color: kColorBgDefault,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
+              if (userState != null)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 20,
+                    ),
+                    child: ListView.separated(
+                      itemBuilder: (context, index) => Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: const BoxDecoration(
+                          color: kColorBgDefault,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x11495B7D),
+                              blurRadius: 20,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x07495B7D),
+                              blurRadius: 1,
+                              offset: Offset(0, 0),
+                              spreadRadius: 0,
+                            )
+                          ],
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x11495B7D),
-                            blurRadius: 20,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x07495B7D),
-                            blurRadius: 1,
-                            offset: Offset(0, 0),
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            userState.profile!.introductions[index].keyword,
-                            style: getTsBody16Sb(context).copyWith(
-                              color: kColorContentDefault,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              userState!.profile!.introductions[index].keyword,
+                              style: getTsBody16Sb(context).copyWith(
+                                color: kColorContentDefault,
+                              ),
                             ),
-                          ),
-                          if (userState
-                              .profile!.introductions[index].context.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  userState
-                                      .profile!.introductions[index].context,
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeak,
+                            if (userState!.profile!.introductions[index].context
+                                .isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const SizedBox(
+                                    height: 8,
                                   ),
-                                ),
-                              ],
-                            ),
-                        ],
+                                  Text(
+                                    userState!
+                                        .profile!.introductions[index].context,
+                                    style: getTsBody14Rg(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 12,
+                      ),
+                      itemCount: userState!.profile!.introductions.length,
                     ),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 12,
-                    ),
-                    itemCount: userState.profile!.introductions.length,
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -189,6 +206,7 @@ class _IntroductionViewScreenState
                                   );
                                   if (isOk) {
                                     ref.read(userMeProvider.notifier).getMe();
+                                    await init();
                                     if (!mounted) return;
                                     Navigator.pop(context);
                                   }

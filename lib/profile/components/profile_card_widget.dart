@@ -329,6 +329,7 @@ class ProfileCardWidget extends StatelessWidget {
                     builder: (context) => IntroductionViewScreen(
                       isEditorEnable: isMe,
                       nickName: userState.profile!.nick_name,
+                      userId: userState.id,
                     ),
                   ));
             },
