@@ -41,7 +41,10 @@ class BtnTagWidget extends StatelessWidget {
                 Radius.circular(50),
               ),
             ),
-            child: Text(emoji),
+            child: Text(
+              emoji,
+              style: const TextStyle(fontSize: 18),
+            ),
           ),
           const SizedBox(
             width: 8,
