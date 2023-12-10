@@ -13,12 +13,14 @@ class ProfileCreateModel {
   final List<AvailableLanguageCreateModel> available_languages;
   final List<IntroductionCreateModel> introductions;
   final StudentCard? student_card;
+  final bool? is_default_photo;
   ProfileCreateModel({
     required this.nick_name,
     required this.profile_photo,
     required this.available_languages,
     required this.introductions,
     this.student_card,
+    this.is_default_photo,
   });
 
   ProfileCreateModel copyWith({
@@ -27,6 +29,7 @@ class ProfileCreateModel {
     List<AvailableLanguageCreateModel>? available_languages,
     List<IntroductionCreateModel>? introductions,
     StudentCard? student_card,
+    bool? is_default_photo,
   }) {
     return ProfileCreateModel(
       nick_name: nick_name ?? this.nick_name,
@@ -34,6 +37,7 @@ class ProfileCreateModel {
       available_languages: available_languages ?? this.available_languages,
       introductions: introductions ?? this.introductions,
       student_card: student_card ?? this.student_card,
+      is_default_photo: is_default_photo ?? this.is_default_photo,
     );
   }
 
@@ -44,6 +48,7 @@ class ProfileCreateModel {
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
       'introductions': introductions.map((x) => x.toMap()).toList(),
       'student_card': student_card?.toMap(),
+      'is_default_photo': is_default_photo,
     };
   }
 
@@ -67,6 +72,9 @@ class ProfileCreateModel {
       student_card: map['student_card'] != null
           ? StudentCard.fromMap(map['student_card'] as Map<String, dynamic>)
           : null,
+      is_default_photo: map['is_default_photo'] != null
+          ? map['is_default_photo'] as bool
+          : null,
     );
   }
 
@@ -88,7 +96,8 @@ class ProfileCreateModel {
         other.profile_photo == profile_photo &&
         listEquals(other.available_languages, available_languages) &&
         listEquals(other.introductions, introductions) &&
-        other.student_card == student_card;
+        other.student_card == student_card &&
+        other.is_default_photo == is_default_photo;
   }
 
   @override
@@ -97,6 +106,7 @@ class ProfileCreateModel {
         profile_photo.hashCode ^
         available_languages.hashCode ^
         introductions.hashCode ^
-        student_card.hashCode;
+        student_card.hashCode ^
+        is_default_photo.hashCode;
   }
 }

@@ -14,6 +14,7 @@ class ProfileModel {
   final String nick_name;
   final String? context;
   final String? profile_photo;
+  final bool is_default_photo;
   final List<AvailableLanguageModel> available_languages;
   final List<IntroductionModel> introductions;
   final UserUniversityModel user_university;
@@ -23,34 +24,38 @@ class ProfileModel {
     required this.user_id,
     required this.nick_name,
     this.context,
-    required this.profile_photo,
+    this.profile_photo,
+    required this.is_default_photo,
     required this.available_languages,
     required this.introductions,
     required this.user_university,
-    required this.student_verification,
+    this.student_verification,
   });
 
   ProfileModel copyWith({
     int? id,
     int? user_id,
     String? nick_name,
-    String? context,
-    String? profile_photo,
+    ValueGetter<String?>? context,
+    ValueGetter<String?>? profile_photo,
+    bool? is_default_photo,
     List<AvailableLanguageModel>? available_languages,
     List<IntroductionModel>? introductions,
     UserUniversityModel? user_university,
-    StudentVerificationModel? student_verification,
+    ValueGetter<StudentVerificationModel?>? student_verification,
   }) {
     return ProfileModel(
       id: id ?? this.id,
       user_id: user_id ?? this.user_id,
       nick_name: nick_name ?? this.nick_name,
-      context: context ?? this.context,
-      profile_photo: profile_photo ?? this.profile_photo,
+      context: context?.call() ?? this.context,
+      profile_photo: profile_photo?.call() ?? this.profile_photo,
+      is_default_photo: is_default_photo ?? this.is_default_photo,
       available_languages: available_languages ?? this.available_languages,
       introductions: introductions ?? this.introductions,
       user_university: user_university ?? this.user_university,
-      student_verification: student_verification ?? this.student_verification,
+      student_verification:
+          student_verification?.call() ?? this.student_verification,
     );
   }
 
@@ -61,6 +66,7 @@ class ProfileModel {
       'nick_name': nick_name,
       'context': context,
       'profile_photo': profile_photo,
+      'is_default_photo': is_default_photo,
       'available_languages': available_languages.map((x) => x.toMap()).toList(),
       'introductions': introductions.map((x) => x.toMap()).toList(),
       'user_university': user_university.toMap(),
@@ -75,6 +81,7 @@ class ProfileModel {
       nick_name: map['nick_name'] ?? '',
       context: map['context'],
       profile_photo: map['profile_photo'],
+      is_default_photo: map['is_default_photo'] ?? false,
       available_languages: List<AvailableLanguageModel>.from(
           map['available_languages']
               ?.map((x) => AvailableLanguageModel.fromMap(x))),
@@ -94,7 +101,7 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, context: $context, profile_photo: $profile_photo, available_languages: $available_languages, introductions: $introductions, user_university: $user_university, student_verification: $student_verification)';
+    return 'ProfileModel(id: $id, user_id: $user_id, nick_name: $nick_name, context: $context, profile_photo: $profile_photo, is_default_photo: $is_default_photo, available_languages: $available_languages, introductions: $introductions, user_university: $user_university, student_verification: $student_verification)';
   }
 
   @override
@@ -107,6 +114,7 @@ class ProfileModel {
         other.nick_name == nick_name &&
         other.context == context &&
         other.profile_photo == profile_photo &&
+        other.is_default_photo == is_default_photo &&
         listEquals(other.available_languages, available_languages) &&
         listEquals(other.introductions, introductions) &&
         other.user_university == user_university &&
@@ -120,6 +128,7 @@ class ProfileModel {
         nick_name.hashCode ^
         context.hashCode ^
         profile_photo.hashCode ^
+        is_default_photo.hashCode ^
         available_languages.hashCode ^
         introductions.hashCode ^
         user_university.hashCode ^

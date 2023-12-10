@@ -65,6 +65,9 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   bool isSaveEnable = false;
 
   PhotoModel? selectedPhotoModel;
+  String randomProfile = '';
+  bool? isUserInitialPhotoDeleted;
+
   List<KeywordModel> introductions = [];
   List<UseLanguageModel> useLanguageModelList = [];
   // List<UseLanguageModel>? useLangState = [];
@@ -79,7 +82,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     super.initState();
   }
 
-  init() {
+  init() async {
     nickNameController = TextEditingController(text: widget.profile.nick_name)
       ..addListener(() {
         onSearchChanged(nickNameController.text);
@@ -93,6 +96,25 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             isChecked: true,
           ))
     ];
+    if (widget.profile.is_default_photo) {
+      setState(() {
+        randomProfile = widget.profile.profile_photo!;
+      });
+    } else {
+      final profileRes =
+          await ref.read(profileRepositoryProvider).getRandomProfile();
+      if (profileRes != null) {
+        setState(() {
+          randomProfile = profileRes.data['image_url'] ?? '';
+        });
+      }
+    }
+    if (widget.profile.is_default_photo == false &&
+        selectedPhotoModel == null) {
+      setState(() {
+        isUserInitialPhotoDeleted = false;
+      });
+    }
     introductions = widget.profile.introductions
         .map((e) => KeywordModel(keyword: e.keyword, context: e.context))
         .toList();
@@ -174,7 +196,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         contextController.text.trim() != (widget.profile.context ?? '') ||
         !checkEqualLang() ||
         !checkEqualIntroduction() ||
-        !checkEqualUniv()) {
+        !checkEqualUniv() ||
+        isUserInitialPhotoDeleted!) {
       // 수정여부 확인
       setState(() {
         isSaveEnable = true;
@@ -204,6 +227,12 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           );
       data.addEntries(<String, dynamic>{
         'profile_photo': profilePhoto,
+        'is_default_photo': false,
+      }.entries);
+    } else {
+      data.addEntries(<String, dynamic>{
+        'profile_photo': randomProfile,
+        'is_default_photo': true,
       }.entries);
     }
 
@@ -253,7 +282,6 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       }.entries);
     }
 
-    logger.d(data);
     final bool isOk = await ref.read(profileRepositoryProvider).updateProfile(
           profile_id: widget.profile.id,
           data: data,
@@ -790,67 +818,98 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       ),
       child: Column(
         children: [
-          // Avatar
-          GestureDetector(
-            onTap: () async {
-              final List result = await Navigator.push(
-                    context,
-                    createUpDownRoute(
-                      const PhotoManagerScreen(
-                        isCamera: true,
-                        maxCnt: 1,
-                      ),
+          Align(
+            alignment: Alignment.center,
+            child: (selectedPhotoModel != null ||
+                    isUserInitialPhotoDeleted == false)
+                ? GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedPhotoModel = null;
+                      });
+                      if (widget.profile.is_default_photo == false &&
+                          selectedPhotoModel == null) {
+                        isUserInitialPhotoDeleted = true;
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 44,
+                          foregroundImage: selectedPhotoModel == null
+                              ? NetworkImage(widget.profile.profile_photo!)
+                              : selectedPhotoModel!.photoType == PhotoType.asset
+                                  ? AssetEntityImageProvider(
+                                      selectedPhotoModel!.assetEntity!,
+                                      isOriginal: true,
+                                    )
+                                  : Image.file(
+                                      File(
+                                        selectedPhotoModel!.cameraXfile!.path,
+                                      ),
+                                    ).image,
+                        ),
+                        Positioned(
+                          top: 32,
+                          left: 32,
+                          child: SvgPicture.asset(
+                            'assets/icons/ic_cancel_line_24.svg',
+                            width: 24,
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(
+                              kColorContentInverse,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ) ??
-                  [];
-              logger.d(result);
-              if (result.length == 1) {
-                setState(() {
-                  selectedPhotoModel = result[0];
-                });
-                checkValue();
-              }
-            },
-            child: Stack(
-              children: [
-                CircleAvatar(
-                  radius: 44,
-                  backgroundImage: const AssetImage(
-                    'assets/images/88.png',
-                  ),
-                  foregroundImage: selectedPhotoModel == null
-                      ? (widget.profile.profile_photo == null
-                          ? null
-                          : NetworkImage(widget.profile.profile_photo!))
-                      : selectedPhotoModel!.photoType == PhotoType.asset
-                          ? AssetEntityImageProvider(
-                              selectedPhotoModel!.assetEntity!,
-                              isOriginal: true,
-                            )
-                          : Image.file(
-                              File(
-                                selectedPhotoModel!.cameraXfile!.path,
+                  )
+                : GestureDetector(
+                    onTap: () async {
+                      final List result = await Navigator.push(
+                            context,
+                            createUpDownRoute(
+                              const PhotoManagerScreen(
+                                isCamera: true,
+                                maxCnt: 1,
                               ),
-                            ).image,
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: kColorBgInverseWeak,
-                      shape: BoxShape.circle,
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_pencil_fill_16.svg',
-                      width: 16,
-                      height: 16,
+                            ),
+                          ) ??
+                          [];
+                      logger.d(result);
+                      if (result.length == 1) {
+                        setState(() {
+                          selectedPhotoModel = result[0];
+                        });
+                        checkValue();
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 44,
+                          foregroundImage: NetworkImage(randomProfile),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: kColorBgInverseWeak,
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_pencil_fill_16.svg',
+                              width: 16,
+                              height: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
           ),
 
           const SizedBox(
