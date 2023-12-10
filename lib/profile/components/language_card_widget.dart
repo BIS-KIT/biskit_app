@@ -43,7 +43,7 @@ class LanguageCardWidget extends StatelessWidget {
                     children: [
                       Text(
                         // TODO 언어 코드 가져오는거 필요함
-                        'KR',
+                        l.language.en_name.substring(0, 2).toUpperCase(),
                         style: getTsBody14Sb(context).copyWith(
                           color: kColorContentWeaker,
                         ),

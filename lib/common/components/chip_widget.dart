@@ -43,104 +43,107 @@ class ChipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onClickSelect,
-      child: FittedBox(
-        fit: BoxFit.fitWidth,
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: isSelected ? selectedColor : Colors.transparent,
-            border: Border.all(
-              width: 1,
-              color: isSelected ? selectedBorderColor! : kColorBorderStrong,
+      child: SizedBox(
+        height: 36,
+        child: FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: isSelected ? selectedColor : Colors.transparent,
+              border: Border.all(
+                width: 1,
+                color: isSelected ? selectedBorderColor! : kColorBorderStrong,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(50)),
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(50)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (order != null)
-                  CircleAvatar(
-                    backgroundColor: kColorBgInverse,
-                    minRadius: 8,
-                    child: Text(
-                      order.toString(),
-                      textAlign: TextAlign.center,
-                      style: kTsKrCaption11Rg.copyWith(
-                        color: kColorContentInverse,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (order != null)
+                    CircleAvatar(
+                      backgroundColor: kColorBgInverse,
+                      minRadius: 8,
+                      child: Text(
+                        order.toString(),
+                        textAlign: TextAlign.center,
+                        style: kTsKrCaption11Rg.copyWith(
+                          color: kColorContentInverse,
+                        ),
                       ),
                     ),
-                  ),
-                if (onTapAdd != null)
-                  GestureDetector(
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_plus_line_24.svg',
-                      width: 16,
-                      height: 16,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentDefault,
-                        BlendMode.srcIn,
+                  if (onTapAdd != null)
+                    GestureDetector(
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_plus_line_24.svg',
+                        width: 16,
+                        height: 16,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentDefault,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
-                  ),
-                if (onTapAdd == null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.center,
-                      style: getTsBody14Rg(context).copyWith(
-                        color: isSelected ? selectedTextColor : textColor,
+                  if (onTapAdd == null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: getTsBody14Rg(context).copyWith(
+                          color: isSelected ? selectedTextColor : textColor,
+                        ),
                       ),
-                    ),
-                  )
-                else
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: SizedBox(
-                          width: 50,
-                          child: TextFormField(
-                            textInputAction: TextInputAction.go,
-                            onFieldSubmitted: onTapEnter,
-                            onChanged: onTapAdd,
-                            focusNode: focusNode,
-                            controller: controller,
-                            maxLength: 10,
-                            style: getTsBody14Rg(context)
-                                .copyWith(color: kColorContentOnBgPrimary),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                              border: InputBorder.none,
-                              hintText: '직접입력',
-                              hintStyle: getTsBody14Rg(context).copyWith(
-                                color: kColorContentOnBgPrimary,
+                    )
+                  else
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: SizedBox(
+                            width: 50,
+                            child: TextFormField(
+                              textInputAction: TextInputAction.go,
+                              onFieldSubmitted: onTapEnter,
+                              onChanged: onTapAdd,
+                              focusNode: focusNode,
+                              controller: controller,
+                              maxLength: 10,
+                              style: getTsBody14Rg(context)
+                                  .copyWith(color: kColorContentOnBgPrimary),
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.zero,
+                                border: InputBorder.none,
+                                hintText: '직접입력',
+                                hintStyle: getTsBody14Rg(context).copyWith(
+                                  color: kColorContentOnBgPrimary,
+                                ),
+                                isDense: true,
+                                counterText: '',
                               ),
-                              isDense: true,
-                              counterText: '',
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                if (onTapDelete != null)
-                  GestureDetector(
-                    onTap: onTapDelete,
-                    child: SvgPicture.asset(
-                      rightIcon,
-                      width: 16,
-                      height: 16,
-                      colorFilter: ColorFilter.mode(
-                        rightIconColor,
-                        BlendMode.srcIn,
+                      ],
+                    ),
+                  if (onTapDelete != null)
+                    GestureDetector(
+                      onTap: onTapDelete,
+                      child: SvgPicture.asset(
+                        rightIcon,
+                        width: 16,
+                        height: 16,
+                        colorFilter: ColorFilter.mode(
+                          rightIconColor,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

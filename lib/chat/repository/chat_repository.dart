@@ -226,8 +226,7 @@ class ChatRepository {
     // 최초 입장시 안내문구 : 입장문구
     await sendMsg(
       chatMsgType: ChatMsgType.text,
-      msg:
-          '비스킷은 서로가 신뢰할 수 있는 커뮤니티를 만들어가고 있어요. 여기다가 맨처음 들어오면 알려줄 안내사항 적으면 될듯? 뭐라고 적지',
+      msg: '비스킷은 서로 배려하며 소통하는 커뮤니티를 만들어가고 있어요. 모든 구성원들의 언어와 문화차이를 존중해주세요.',
       userId: user.id,
       chatRoomUid: chatRoom.uid,
       chatRowType: ChatRowType.noticeOnlyMe,

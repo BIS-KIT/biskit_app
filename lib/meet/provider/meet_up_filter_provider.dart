@@ -42,7 +42,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
               isCustom: false,
             );
     List<TagModel> tagList =
-        await ref.read(createMeetUpProvider.notifier).getTags();
+        await ref.read(createMeetUpProvider.notifier).getTags(isCustom: false);
     return [
       MeetUpFilterGroup(
         groupText: '날짜',

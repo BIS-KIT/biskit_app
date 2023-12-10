@@ -106,7 +106,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                       child: SearchBarWidget(
                         controller: controller,
                         autofocus: true,
-                        hintText: '모임의 기쿼드로 찾아보세요',
+                        hintText: '모임의 키워드로 찾아보세요',
                         onChanged: (value) {},
                         onFieldSubmitted: (p0) {
                           _search();

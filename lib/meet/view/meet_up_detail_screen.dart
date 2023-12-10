@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
@@ -20,7 +21,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/components/badge_emoji_widget.dart';
-import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/number_badge_widget.dart';
@@ -478,13 +478,10 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                         maxLines: 1,
                                         children: [
                                           ...meetUpDetailModel!.topics.map(
-                                            (topic) => BadgeWidget(
-                                              text: topic.kr_name,
-                                              backgroundColor:
-                                                  kColorBgInverseWeak,
-                                              textColor: kColorContentInverse,
-                                              sizeType: BadgeSizeType.L,
-                                            ),
+                                            (topic) => NewBadgeWidget(
+                                                text: topic.kr_name,
+                                                type: BadgeType.primary,
+                                                size: BadgeSize.M),
                                           ),
                                         ],
                                       ),
@@ -1183,13 +1180,11 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 const SizedBox(width: 8),
                                 if (meetUpDetailModel!
                                     .participants_status.isNotEmpty)
-                                  BadgeWidget(
-                                    text:
-                                        meetUpDetailModel!.participants_status,
-                                    textColor: kColorContentSecondary,
-                                    backgroundColor: kColorBgSecondaryWeak,
-                                    sizeType: BadgeSizeType.M,
-                                  ),
+                                  NewBadgeWidget(
+                                      text: meetUpDetailModel!
+                                          .participants_status,
+                                      type: BadgeType.secondary,
+                                      size: BadgeSize.M)
                               ],
                             ),
                           ),
