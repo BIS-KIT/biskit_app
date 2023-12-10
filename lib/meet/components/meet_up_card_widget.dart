@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
@@ -171,32 +172,32 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     const SizedBox(
                       width: 8,
                     ),
-                    widget.isHostTag
-                        ? Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: kColorBgSecondaryWeak,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                            ),
-                            child: Text(
-                              '모임장',
-                              style: getTsCaption12Sb(context).copyWith(
-                                color: kColorContentSecondary,
-                              ),
-                            ),
-                          )
-                        : Container(),
-                    widget.model.korean_count == 0 ||
-                            widget.model.foreign_count == 0
-                        ? BadgeWidget(
-                            text: getRecruitmentBadgeStr(),
-                            sizeType: BadgeSizeType.M,
-                            backgroundColor: kColorBgSecondaryWeak,
-                            textColor: kColorContentSecondary,
-                          )
-                        : Container(),
+                    if (widget.isHostTag)
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: kColorBgSecondaryWeak,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                        ),
+                        child: Text(
+                          '모임장',
+                          style: getTsCaption12Sb(context).copyWith(
+                            color: kColorContentSecondary,
+                          ),
+                        ),
+                      ),
+                    if (widget.isHostTag)
+                      const SizedBox(
+                        width: 6,
+                      ),
+                    if (widget.model.korean_count == 0 ||
+                        widget.model.foreign_count == 0)
+                      NewBadgeWidget(
+                          text: getRecruitmentBadgeStr(),
+                          type: BadgeType.secondary,
+                          size: BadgeSize.M)
                   ],
                 ),
               ],
