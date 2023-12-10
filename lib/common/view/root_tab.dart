@@ -261,7 +261,7 @@ class _RootTabState extends ConsumerState<RootTab>
           width: 32,
           height: 32,
           colorFilter: const ColorFilter.mode(
-            kColorContentPlaceholder,
+            kColorContentWeaker,
             BlendMode.srcIn,
           ),
         ),

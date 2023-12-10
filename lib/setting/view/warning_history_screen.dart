@@ -1,5 +1,4 @@
 import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/common/components/thumbnail_icon_notify_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -9,6 +8,7 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WarningHistoryScreen extends ConsumerStatefulWidget {
   const WarningHistoryScreen({super.key});
@@ -105,12 +105,27 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                                     vertical: 16, horizontal: 20),
                                 child: Row(
                                   children: [
-                                    const ThumbnailIconNotifyWidget(
-                                      backgroundColor: kColorBgError,
-                                      iconColor: kColorContentError,
-                                      // TODO: siren icon 으로 변경해야함
-                                      iconUrl:
-                                          'assets/icons/ic_megaphone_fill_24.svg',
+                                    // const ThumbnailIconNotifyWidget(
+                                    //   backgroundColor: kColorBgError,
+                                    //   iconColor: kColorContentError,
+                                    // TODO: siren icon 으로 변경해야함
+                                    //   iconUrl:
+                                    //       'assets/icons/ic_siren_fill_24.svg',
+                                    // ),
+                                    Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: const BoxDecoration(
+                                        color: kColorBgError,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(
+                                            'assets/images/ic_siren_fill_24.png',
+                                          ),
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(12)),
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 12,
