@@ -50,7 +50,8 @@ class ProfileRepository {
     return res;
   }
 
-  getRandomProfile() async {
+  Future<String?> getRandomProfile() async {
+    String? imageUrl;
     final res = await dio.get(
       '$baseUrl/random-image',
       options: Options(
@@ -62,7 +63,10 @@ class ProfileRepository {
     );
 
     logger.d(res.toString());
-    return res;
+    if (res.statusCode == 200) {
+      imageUrl = res.data['image_url'];
+    }
+    return imageUrl;
   }
 
   Future<bool> getCheckNickName(String nickName) async {

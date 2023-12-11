@@ -65,8 +65,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   bool isSaveEnable = false;
 
   PhotoModel? selectedPhotoModel;
-  String randomProfile = '';
-  bool? isUserInitialPhotoDeleted;
+  String? profileImageUrl;
+  bool isDefaultImage = true;
 
   List<KeywordModel> introductions = [];
   List<UseLanguageModel> useLanguageModelList = [];
@@ -90,31 +90,31 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     contextController =
         TextEditingController(text: widget.profile.context ?? '');
     useLanguageModelList = [
-      ...widget.profile.available_languages.map((e) => UseLanguageModel(
-            languageModel: e.language,
-            level: getLevelServerValueToInt(e.level),
-            isChecked: true,
-          ))
+      ...widget.profile.available_languages.map(
+        (e) => UseLanguageModel(
+          languageModel: e.language,
+          level: getLevelServerValueToInt(e.level),
+          isChecked: true,
+        ),
+      ),
     ];
-    if (widget.profile.is_default_photo) {
-      setState(() {
-        randomProfile = widget.profile.profile_photo!;
-      });
-    } else {
-      final profileRes =
-          await ref.read(profileRepositoryProvider).getRandomProfile();
-      if (profileRes != null) {
-        setState(() {
-          randomProfile = profileRes.data['image_url'] ?? '';
-        });
-      }
-    }
-    if (widget.profile.is_default_photo == false &&
-        selectedPhotoModel == null) {
-      setState(() {
-        isUserInitialPhotoDeleted = false;
-      });
-    }
+    isDefaultImage = widget.profile.is_default_photo;
+    profileImageUrl = widget.profile.profile_photo;
+    // if (widget.profile.is_default_photo) {
+    //   setState(() {
+    //     randomProfile = widget.profile.profile_photo!;
+    //   });
+    // } else {
+    //   randomProfile =
+    //       await ref.read(profileRepositoryProvider).getRandomProfile();
+    //   setState(() {});
+    // }
+    // if (widget.profile.is_default_photo == false &&
+    //     selectedPhotoModel == null) {
+    //   setState(() {
+    //     isUserInitialPhotoDeleted = false;
+    //   });
+    // }
     introductions = widget.profile.introductions
         .map((e) => KeywordModel(keyword: e.keyword, context: e.context))
         .toList();
@@ -192,12 +192,12 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       return;
     }
     if (selectedPhotoModel != null ||
+        widget.profile.profile_photo != profileImageUrl ||
         nickNameController.text.trim() != widget.profile.nick_name ||
         contextController.text.trim() != (widget.profile.context ?? '') ||
         !checkEqualLang() ||
         !checkEqualIntroduction() ||
-        !checkEqualUniv() ||
-        isUserInitialPhotoDeleted!) {
+        !checkEqualUniv()) {
       // 수정여부 확인
       setState(() {
         isSaveEnable = true;
@@ -231,7 +231,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       }.entries);
     } else {
       data.addEntries(<String, dynamic>{
-        'profile_photo': randomProfile,
+        'profile_photo': profileImageUrl,
         'is_default_photo': true,
       }.entries);
     }
@@ -820,34 +820,43 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         children: [
           Align(
             alignment: Alignment.center,
-            child: (selectedPhotoModel != null ||
-                    isUserInitialPhotoDeleted == false)
+            child: selectedPhotoModel != null
                 ? GestureDetector(
                     onTap: () {
                       setState(() {
                         selectedPhotoModel = null;
                       });
-                      if (widget.profile.is_default_photo == false &&
-                          selectedPhotoModel == null) {
-                        isUserInitialPhotoDeleted = true;
-                      }
+                      checkValue();
                     },
                     child: Stack(
                       children: [
-                        CircleAvatar(
-                          radius: 44,
-                          foregroundImage: selectedPhotoModel == null
-                              ? NetworkImage(widget.profile.profile_photo!)
-                              : selectedPhotoModel!.photoType == PhotoType.asset
-                                  ? AssetEntityImageProvider(
-                                      selectedPhotoModel!.assetEntity!,
-                                      isOriginal: true,
-                                    )
-                                  : Image.file(
-                                      File(
-                                        selectedPhotoModel!.cameraXfile!.path,
-                                      ),
-                                    ).image,
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(44),
+                          ),
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.3),
+                              BlendMode.srcOver,
+                            ),
+                            child: CircleAvatar(
+                              radius: 44,
+                              foregroundImage: selectedPhotoModel == null
+                                  ? NetworkImage(widget.profile.profile_photo!)
+                                  : selectedPhotoModel!.photoType ==
+                                          PhotoType.asset
+                                      ? AssetEntityImageProvider(
+                                          selectedPhotoModel!.assetEntity!,
+                                          isOriginal: true,
+                                        )
+                                      : Image.file(
+                                          File(
+                                            selectedPhotoModel!
+                                                .cameraXfile!.path,
+                                          ),
+                                        ).image,
+                            ),
+                          ),
                         ),
                         Positioned(
                           top: 32,
@@ -867,46 +876,83 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   )
                 : GestureDetector(
                     onTap: () async {
-                      final List result = await Navigator.push(
-                            context,
-                            createUpDownRoute(
-                              const PhotoManagerScreen(
-                                isCamera: true,
-                                maxCnt: 1,
+                      if (!isDefaultImage) {
+                        profileImageUrl = await ref
+                            .read(profileRepositoryProvider)
+                            .getRandomProfile();
+                        isDefaultImage = true;
+                        setState(() {});
+                      } else {
+                        final List result = await Navigator.push(
+                              context,
+                              createUpDownRoute(
+                                const PhotoManagerScreen(
+                                  isCamera: true,
+                                  maxCnt: 1,
+                                ),
                               ),
-                            ),
-                          ) ??
-                          [];
-                      logger.d(result);
-                      if (result.length == 1) {
-                        setState(() {
-                          selectedPhotoModel = result[0];
-                        });
-                        checkValue();
+                            ) ??
+                            [];
+                        logger.d(result);
+                        if (result.length == 1) {
+                          setState(() {
+                            selectedPhotoModel = result[0];
+                          });
+                        }
                       }
+                      checkValue();
                     },
                     child: Stack(
                       children: [
-                        CircleAvatar(
-                          radius: 44,
-                          foregroundImage: NetworkImage(randomProfile),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: kColorBgInverseWeak,
-                              shape: BoxShape.circle,
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(44),
+                          ),
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              isDefaultImage
+                                  ? Colors.black.withOpacity(0)
+                                  : Colors.black.withOpacity(0.3),
+                              BlendMode.srcOver,
                             ),
-                            child: SvgPicture.asset(
-                              'assets/icons/ic_pencil_fill_16.svg',
-                              width: 16,
-                              height: 16,
+                            child: CircleAvatar(
+                              radius: 44,
+                              foregroundImage: profileImageUrl == null
+                                  ? null
+                                  : NetworkImage(profileImageUrl!),
                             ),
                           ),
                         ),
+                        isDefaultImage
+                            ? Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: kColorBgInverseWeak,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/ic_pencil_fill_16.svg',
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                ),
+                              )
+                            : Positioned(
+                                top: 32,
+                                left: 32,
+                                child: SvgPicture.asset(
+                                  'assets/icons/ic_cancel_line_24.svg',
+                                  width: 24,
+                                  height: 24,
+                                  colorFilter: const ColorFilter.mode(
+                                    kColorContentInverse,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
