@@ -374,6 +374,7 @@ class ChatRepository {
         data: {
           'content': content,
           'chat_id': chat_id,
+          'user_id': user_id,
         },
       );
 
