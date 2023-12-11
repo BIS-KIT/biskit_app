@@ -77,7 +77,7 @@ class ProfileCardWidget extends StatelessWidget {
                       profilePath: userState.profile!.profile_photo,
                       flagPath: userState.user_nationality.isEmpty
                           ? null
-                          : '$kS3Url$kS3Flag43Path/${userState.user_nationality[0].nationality.code}.svg',
+                          : '$kS3HttpUrl$kS3Flag43Path/${userState.user_nationality[0].nationality.code}.svg',
                     ),
 
                     // Language card

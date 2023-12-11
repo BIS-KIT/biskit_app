@@ -98,7 +98,7 @@ class _UserBlockListScreenState extends ConsumerState<UserBlockListScreen> {
                                       profilePath: blockedIdList!
                                           .ban_list[index].target.profile_photo,
                                       flagPath:
-                                          '$kS3Url$kS3Flag43Path/${blockedIdList!.ban_list[index].target.user_nationality[0].nationality.code}.svg',
+                                          '$kS3HttpUrl$kS3Flag43Path/${blockedIdList!.ban_list[index].target.user_nationality[0].nationality.code}.svg',
                                     ),
                                     const SizedBox(
                                       width: 12,
