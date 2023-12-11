@@ -818,7 +818,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   profilePath: profilePhotoModel.profile_photo,
                   flagPath: profilePhotoModel.nationalities.isEmpty
                       ? null
-                      : '$kS3Url$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
+                      : '$kS3HttpUrl$kS3Flag43Path/${profilePhotoModel.nationalities[0].code}.svg',
                 );
               } else {
                 return const SizedBox(
@@ -1152,6 +1152,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         ref.read(chatRepositoryProvider).postChatAlarm(
                               content: msg,
                               chat_id: widget.chatRoomUid,
+                              user_id: userState.id,
                             );
                       }
                     },

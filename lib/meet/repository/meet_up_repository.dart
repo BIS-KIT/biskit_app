@@ -647,7 +647,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
 
       logger.d(res);
       if (res.statusCode == 201 || res.statusCode == 200) {
-        status = res.data['status'];
+        status = res.data?['status'];
       }
     } on DioException catch (e) {
       if (e.response != null && e.response!.statusCode == 404) {

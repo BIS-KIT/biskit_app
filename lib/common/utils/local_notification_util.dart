@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -21,6 +22,9 @@ localNotificationInit() async {
 
   await notifications.initialize(
     initializationSettings,
+    onDidReceiveNotificationResponse: (details) {
+      logger.d(details);
+    },
   );
 }
 

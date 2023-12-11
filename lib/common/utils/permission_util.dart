@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/const/data.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'local_notification_util.dart';
@@ -24,9 +25,21 @@ foregroundFcm() async {
     logger.d('Message data: ${message.data}');
 
     if (message.notification != null) {
-      showNotification(message.notification!);
-      logger
-          .d('Message also contained a notification: ${message.notification}');
+      Map payLoad = message.data;
+      bool isMainAlarm = (payLoad['is_main_alarm'] ?? '') == 'True';
+      bool isSubAlarm = (payLoad['is_sub_alarm'] ?? '') == 'True';
+
+      if (isMainAlarm && criticalNotification) {
+        showNotification(message.notification!);
+        return;
+      }
+      if (isSubAlarm && generalNotification) {
+        showNotification(message.notification!);
+        return;
+      }
+      // showNotification(message.notification!);
+      // logger
+      //     .d('Message also contained a notification: ${message.notification}');
     }
   });
 }

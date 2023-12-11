@@ -269,6 +269,10 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   createMeetUp() async {
     int? result;
     if (state != null) {
+      if (state!.location == null ||
+          state!.name == null ||
+          state!.language_ids.isEmpty ||
+          state!.meeting_time == null) return;
       String? imageUrl;
       for (var topic in fixTopics) {
         if (state!.topic_ids.contains(topic.id)) {

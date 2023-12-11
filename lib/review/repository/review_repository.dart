@@ -69,4 +69,36 @@ class ReviewRepository {
     }
     return model;
   }
+
+  updateReview({
+    required int reviewId,
+    required String imageUrl,
+    required String context,
+  }) async {
+    bool isOk = false;
+    try {
+      Response? res = await dio.put(
+        '$baseUrl/$reviewId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+        data: {
+          'context': context,
+          'image_url': imageUrl,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        logger.d(res);
+        isOk = true;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return isOk;
+  }
 }

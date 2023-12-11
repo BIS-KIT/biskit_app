@@ -2,7 +2,10 @@ import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -19,6 +22,7 @@ import 'package:go_router/go_router.dart';
 class ReviewWriteScreen extends ConsumerStatefulWidget {
   final PhotoModel? photoModel;
   final MeetUpModel meetUpModel;
+
   const ReviewWriteScreen({
     Key? key,
     required this.meetUpModel,
@@ -36,6 +40,7 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
       );
   String reviewStr = '';
   TextEditingController textEditingController = TextEditingController();
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -170,12 +175,18 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
                 right: 20,
               ),
               child: GestureDetector(
-                onTap: () {
-                  onTapCreateReview();
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await onTapCreateReview();
+                  setState(() {
+                    isLoading = false;
+                  });
                 },
-                child: const FilledButtonWidget(
+                child: FilledButtonWidget(
                   text: '후기 남기기',
-                  isEnable: true,
+                  isEnable: !isLoading,
                 ),
               ),
             )
@@ -200,6 +211,12 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
               );
       logger.d(createId);
       if (createId != null) {
+        final userState = ref.watch(userMeProvider);
+        if (userState != null && userState is UserModel) {
+          ref.read(reviewProvider(userState.id).notifier).fetchItems(
+                forceRefetch: true,
+              );
+        }
         if (!mounted) return;
         context.goNamed(
           ReviewViewScreen.routeName,
