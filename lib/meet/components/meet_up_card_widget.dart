@@ -4,7 +4,6 @@ import 'package:extended_wrap/extended_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/flag_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -192,8 +191,9 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       const SizedBox(
                         width: 6,
                       ),
-                    if (widget.model.korean_count == 0 ||
-                        widget.model.foreign_count == 0)
+                    if (widget.isParticipantsStatusTag &&
+                        (widget.model.korean_count == 0 ||
+                            widget.model.foreign_count == 0))
                       NewBadgeWidget(
                           text: getRecruitmentBadgeStr(),
                           type: BadgeType.secondary,

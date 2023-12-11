@@ -83,32 +83,36 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
             .map((e) => e.value));
       }
     }
-    try {
-      Response res = await dio.get(
-        '${baseUrl}s',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
+    final userState = ref.watch(userMeProvider);
+    if (userState is UserModel) {
+      try {
+        Response res = await dio.get(
+          '${baseUrl}s',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'is_count_only': true,
+            'tags_ids': tagFilter,
+            'topics_ids': topicsFilter,
+            'creator_nationality': nationalFilter,
+            'time_filters': timeFilter,
+            'user_id': userState.id,
           },
-        ),
-        queryParameters: {
-          'is_count_only': true,
-          'tags_ids': tagFilter,
-          'topics_ids': topicsFilter,
-          'creator_nationality': nationalFilter,
-          'time_filters': timeFilter,
-        },
-      );
-      // logger.d(res.data);
-      if (res.statusCode == 200) {
-        if ((res.data as Map).containsKey('total_count')) {
-          totalCount = res.data['total_count'];
+        );
+        // logger.d(res.data);
+        if (res.statusCode == 200) {
+          if ((res.data as Map).containsKey('total_count')) {
+            totalCount = res.data['total_count'];
+          }
         }
+      } catch (e) {
+        logger.e(e.toString());
       }
-    } catch (e) {
-      logger.e(e.toString());
     }
     return totalCount;
   }
@@ -661,41 +665,45 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     required String searchWord,
   }) async {
     CursorPagination<MeetUpModel>? cursorPagination;
-    try {
-      final res = await dio.get(
-        '${baseUrl}s',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
+    final userState = ref.watch(userMeProvider);
+    if (userState is UserModel) {
+      try {
+        final res = await dio.get(
+          '${baseUrl}s',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'skip': skip,
+            'limit': limit,
+            'search_word': searchWord,
+            'user_id': userState.id,
           },
-        ),
-        queryParameters: {
-          'skip': skip,
-          'limit': limit,
-          'search_word': searchWord,
-        },
-      );
+        );
 
-      if (res.statusCode == 200) {
-        logger.d(res);
-        if ((res.data as Map).containsKey('total_count')) {
-          int totalCount = res.data['total_count'];
-          int count = (res.data['meetings'] as List).length;
-          cursorPagination = CursorPagination<MeetUpModel>(
-            meta: CursorPaginationMeta(
-              count: count,
-              totalCount: totalCount,
-              hasMore: (skip + count < totalCount),
-            ),
-            data: List.from(
-                res.data['meetings'].map((e) => MeetUpModel.fromMap(e))),
-          );
+        if (res.statusCode == 200) {
+          logger.d(res);
+          if ((res.data as Map).containsKey('total_count')) {
+            int totalCount = res.data['total_count'];
+            int count = (res.data['meetings'] as List).length;
+            cursorPagination = CursorPagination<MeetUpModel>(
+              meta: CursorPaginationMeta(
+                count: count,
+                totalCount: totalCount,
+                hasMore: (skip + count < totalCount),
+              ),
+              data: List.from(
+                  res.data['meetings'].map((e) => MeetUpModel.fromMap(e))),
+            );
+          }
         }
+      } catch (e) {
+        logger.e(e.toString());
       }
-    } catch (e) {
-      logger.e(e.toString());
     }
     // }
     return cursorPagination;
