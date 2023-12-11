@@ -1,3 +1,5 @@
+import 'package:biskit_app/profile/model/available_language_model.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -82,15 +84,30 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                       spacing: 6,
                       runSpacing: 8,
                       children: [
-                        ...userState.profile!.available_languages.map((e) {
-                          int index = createMeetUpState!.language_ids
-                              .indexWhere(
-                                  (element) => element == e.language.id);
+                        ...createMeetUpState!.language_ids
+                            .mapIndexed((index, id) {
+                          AvailableLanguageModel languageModel =
+                              userState.profile!.available_languages.firstWhere(
+                                  (element) => element.language.id == id);
+                          return ChipWidget(
+                            text: languageModel.language.kr_name,
+                            order: index + 1,
+                            isSelected: true,
+                            onClickSelect: () {
+                              ref
+                                  .read(createMeetUpProvider.notifier)
+                                  .onTapLang(languageModel);
+                            },
+                          );
+                        }).toList(),
+                        ...userState.profile!.available_languages
+                            .where((e1) => !createMeetUpState.language_ids
+                                .contains(e1.language.id))
+                            .map((e) {
                           return ChipWidget(
                             text: e.language.kr_name,
-                            order: index > -1 ? index + 1 : null,
-                            isSelected: createMeetUpState.language_ids
-                                .contains(e.language.id),
+                            order: null,
+                            isSelected: false,
                             onClickSelect: () {
                               ref
                                   .read(createMeetUpProvider.notifier)

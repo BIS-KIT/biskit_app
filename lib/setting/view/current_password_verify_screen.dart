@@ -73,6 +73,7 @@ class _CurrentPasswordVerifyScreenState
                         TextInputWidget(
                           title: "현재 비밀번호",
                           hintText: "현재 비밀번호를 입력해주세요",
+                          autofocus: true,
                           errorText: currentPasswordError,
                           onChanged: (value) {
                             if (currentPasswordError!.isNotEmpty) {

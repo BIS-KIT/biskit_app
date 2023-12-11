@@ -253,7 +253,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
         height: 360,
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
-          color: kColorBgInverse,
+          color: kColorBgInverseWeak,
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: Column(
@@ -266,7 +266,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   child: Text(
                     keywordList[index - 1].keyword,
                     style: getTsBody16Sb(context).copyWith(
-                      color: kColorBgDefault,
+                      color: kColorContentInverse,
                     ),
                   ),
                 ),
@@ -305,7 +305,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                 child: Text(
                   keywordList[index - 1].context,
                   style: getTsBody14Rg(context).copyWith(
-                    color: kColorBgElevation1,
+                    color: kColorContentInverseWeak,
                   ),
                 ),
               ),

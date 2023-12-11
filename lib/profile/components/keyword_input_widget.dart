@@ -106,7 +106,8 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     maxLength: 20,
                     maxLines: null,
                     autofocus: true,
-                    suffixIcon: keywordController.text.isNotEmpty
+                    suffixIcon: keywordController.text.isNotEmpty &&
+                            keywordFocusNode.hasFocus
                         ? GestureDetector(
                             onTap: () {
                               keywordController.clear();
@@ -124,19 +125,24 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                         : null,
                   ),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                BtnIconWidget(
-                  iconPath: 'assets/icons/ic_plus_line_24.svg',
-                  isDisable: keywordController.text.isEmpty,
-                  onTap: () {
-                    setState(() {
-                      isReasonView = true;
-                      reasonFocusNode.requestFocus();
-                    });
-                  },
-                ),
+                if (!reasonFocusNode.hasFocus)
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      BtnIconWidget(
+                        iconPath: 'assets/icons/ic_plus_line_24.svg',
+                        isDisable: keywordController.text.isEmpty,
+                        onTap: () {
+                          setState(() {
+                            isReasonView = true;
+                            reasonFocusNode.requestFocus();
+                          });
+                        },
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),

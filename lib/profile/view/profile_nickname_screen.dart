@@ -233,9 +233,11 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 44,
-                                  foregroundImage: NetworkImage(
-                                    randomProfile,
-                                  ),
+                                  foregroundImage: randomProfile.isEmpty
+                                      ? null
+                                      : NetworkImage(
+                                          randomProfile,
+                                        ),
                                 ),
                                 Positioned(
                                   bottom: 0,

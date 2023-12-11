@@ -158,6 +158,8 @@ class _AccountDeleteStep2ScreenState
                   context: context,
                   leftCall: () {
                     Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   rightCall: () {
                     Navigator.pop(context);
