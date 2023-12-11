@@ -35,7 +35,7 @@ class ProfileNicknameScreen extends ConsumerStatefulWidget {
 
 class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
   PhotoModel? selectedPhotoModel;
-  String randomProfile = '';
+  String? randomProfile;
 
   late final TextEditingController controller;
   // String nickName = '';
@@ -63,13 +63,9 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
 
       controller.text = temp.replaceAll(' ', '');
     }
-    final profileRes =
+    randomProfile =
         await ref.read(profileRepositoryProvider).getRandomProfile();
-    if (profileRes != null) {
-      setState(() {
-        randomProfile = profileRes.data['image_url'] ?? '';
-      });
-    }
+    setState(() {});
   }
 
   @override
@@ -147,6 +143,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                 uploadImageType: UploadImageType.PROFILE,
               );
         } finally {
+          // ignore: use_build_context_synchronously
           context.loaderOverlay.hide();
         }
         logger.d('uploadFilePath : $profilePhoto');
@@ -158,7 +155,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
           nick_name: controller.text,
           profile_photo:
               selectedPhotoModel != null ? profilePhoto : randomProfile,
-          is_default_photo: selectedPhotoModel == null && false,
+          is_default_photo: selectedPhotoModel == null,
           available_languages: [],
           introductions: [],
         ),
@@ -233,10 +230,10 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 44,
-                                  foregroundImage: randomProfile.isEmpty
+                                  foregroundImage: randomProfile == null
                                       ? null
                                       : NetworkImage(
-                                          randomProfile,
+                                          randomProfile!,
                                         ),
                                 ),
                                 Positioned(
@@ -266,10 +263,19 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                             },
                             child: Stack(
                               children: [
-                                CircleAvatar(
-                                  radius: 44,
-                                  foregroundImage:
-                                      selectedPhotoModel!.photoType ==
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(44),
+                                  ),
+                                  child: ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.3),
+                                      BlendMode.srcOver,
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 44,
+                                      foregroundImage: selectedPhotoModel!
+                                                  .photoType ==
                                               PhotoType.asset
                                           ? AssetEntityImageProvider(
                                               selectedPhotoModel!.assetEntity!,
@@ -281,6 +287,8 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                                                     .cameraXfile!.path,
                                               ),
                                             ).image,
+                                    ),
+                                  ),
                                 ),
                                 Positioned(
                                   top: 32,

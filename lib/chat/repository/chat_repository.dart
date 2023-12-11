@@ -358,6 +358,7 @@ class ChatRepository {
   postChatAlarm({
     required String content,
     required String chat_id,
+    required int user_id,
   }) async {
     bool isOk = false;
     try {
@@ -373,6 +374,7 @@ class ChatRepository {
         data: {
           'content': content,
           'chat_id': chat_id,
+          'user_id': user_id,
         },
       );
 

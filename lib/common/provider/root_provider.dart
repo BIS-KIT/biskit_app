@@ -1,7 +1,9 @@
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/local_notification_util.dart';
 import 'package:biskit_app/common/utils/permission_util.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +35,13 @@ class RootStateNotifier extends StateNotifier<RootState> {
   }
 
   initFcm() async {
+    // 알림
+    criticalNotification =
+        await ref.read(systemProvider.notifier).getCriticalNotification();
+
+    generalNotification =
+        await ref.read(systemProvider.notifier).getGeneralNotification();
+
     // 로컬노티피케이션 init
     localNotificationInit();
     // 파이어베이스 메시징 처리

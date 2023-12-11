@@ -58,4 +58,30 @@ class SystemStateNotifier extends StateNotifier<UserSystemModelBase?> {
       state = res;
     } finally {}
   }
+
+  Future<bool> getCriticalNotification() async {
+    bool isValue = false;
+    UserModelBase? userState = ref.watch(userMeProvider);
+    UserSystemModel? res =
+        await ref.read(settingRepositoryProvider).getUserSystem(
+              userId: (userState as UserModel).id,
+            );
+    if (res is UserSystemModel) {
+      isValue = res.main_alarm;
+    }
+    return isValue;
+  }
+
+  Future<bool> getGeneralNotification() async {
+    bool isValue = false;
+    UserModelBase? userState = ref.watch(userMeProvider);
+    UserSystemModel? res =
+        await ref.read(settingRepositoryProvider).getUserSystem(
+              userId: (userState as UserModel).id,
+            );
+    if (res is UserSystemModel) {
+      isValue = res.etc_alarm;
+    }
+    return isValue;
+  }
 }

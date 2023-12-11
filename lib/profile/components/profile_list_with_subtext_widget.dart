@@ -70,7 +70,7 @@ class _ProfileListWithSubtextWidgetState
               flagRadius: 16,
               profilePath: widget.profilePath,
               flagPath:
-                  '$kS3Url$kS3Flag43Path/${widget.userNationalityModel.nationality.code}.svg',
+                  '$kS3HttpUrl$kS3Flag43Path/${widget.userNationalityModel.nationality.code}.svg',
             ),
             const SizedBox(
               width: 16,
