@@ -1152,6 +1152,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         ref.read(chatRepositoryProvider).postChatAlarm(
                               content: msg,
                               chat_id: widget.chatRoomUid,
+                              user_id: userState.id,
                             );
                       }
                     },

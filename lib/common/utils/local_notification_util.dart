@@ -1,3 +1,5 @@
+import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -42,6 +44,12 @@ showNotification(
     presentBadge: true,
     presentSound: true,
   );
+
+  logger.d(notifications.toString());
+
+  // if (!criticalNotification && !generalNotification) {
+  //   return;
+  // }
 
   // 알림 id, 제목, 내용 맘대로 채우기
   notifications.show(

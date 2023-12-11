@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -18,19 +19,16 @@ class NotificationSettingScreen extends ConsumerStatefulWidget {
 
 class _NotificationSettingScreenState
     extends ConsumerState<NotificationSettingScreen> {
-  bool? criticalNotification;
-  bool? generalNotification;
-
   @override
   Widget build(BuildContext context) {
-    if (criticalNotification == null || generalNotification == null) {
-      setState(() {
-        criticalNotification =
-            (ref.watch(systemProvider) as UserSystemModel).main_alarm;
-        generalNotification =
-            (ref.watch(systemProvider) as UserSystemModel).etc_alarm;
-      });
-    }
+    // if (criticalNotification == null || generalNotification == null) {
+    //   setState(() {
+    //     criticalNotification =
+    //         (ref.watch(systemProvider) as UserSystemModel).main_alarm;
+    //     generalNotification =
+    //         (ref.watch(systemProvider) as UserSystemModel).etc_alarm;
+    //   });
+    // }
     return DefaultLayout(
         title: '알림',
         shape: const Border(
@@ -79,7 +77,7 @@ class _NotificationSettingScreenState
                     width: 4,
                   ),
                   CupertinoSwitch(
-                    value: criticalNotification!,
+                    value: criticalNotification,
                     activeColor: kColorBgPrimaryStrong,
                     onChanged: (bool? value) async {
                       if (criticalNotification == false) {
@@ -153,7 +151,7 @@ class _NotificationSettingScreenState
                     width: 4,
                   ),
                   CupertinoSwitch(
-                    value: generalNotification!,
+                    value: generalNotification,
                     activeColor: kColorBgPrimaryStrong,
                     onChanged: (bool? value) async {
                       if (generalNotification == false) {

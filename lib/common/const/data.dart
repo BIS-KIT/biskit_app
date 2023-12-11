@@ -17,3 +17,6 @@ const String kReviewTagName = 'review';
 
 const String kCategoryDefaultPath =
     'https://biskit-bucket.s3.ap-northeast-2.amazonaws.com/default_icon/ic_talk_fill_48.svg';
+
+bool criticalNotification = false;
+bool generalNotification = false;

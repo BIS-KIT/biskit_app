@@ -21,8 +21,9 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
   updateUserOSLanguage() async {
     try {
       await ref.read(systemProvider.notifier).updateUserOSLanguage(
-          systemId: (ref.watch(systemProvider) as UserSystemModel).id,
-          selectedLang: selectedLang);
+            systemId: (ref.watch(systemProvider) as UserSystemModel).id,
+            selectedLang: selectedLang,
+          );
     } finally {
       if (mounted) {
         Navigator.pop(context);
