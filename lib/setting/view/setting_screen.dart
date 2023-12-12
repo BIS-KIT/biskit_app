@@ -1,7 +1,9 @@
 import 'package:biskit_app/common/components/list_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/view/web_view_screen.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/setting/view/account_setting_screen.dart';
@@ -139,7 +141,17 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ListWidget(
               text: '이용 가이드',
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
-              onTapCallback: () {},
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WebViewScreen(
+                      url: kUseGuideUrl,
+                      title: '이용 가이드',
+                    ),
+                  ),
+                );
+              },
             ),
             ListWidget(
               text: '문의하기',
