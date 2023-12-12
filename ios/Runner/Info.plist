@@ -50,6 +50,8 @@
 	<string>카메라 접근을 허용해주세요</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>사진앨범 접근을 허용해주세요</string>
+	<key>PermissionGroupNotification</key>
+	<string>알림 접근을 허용해주세요</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

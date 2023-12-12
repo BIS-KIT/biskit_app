@@ -83,7 +83,8 @@ class _NotificationSettingScreenState
                       if (criticalNotification == false) {
                         final PermissionStatus status =
                             await Permission.notification.request();
-                        if (status.isDenied && mounted) {
+                        if (!mounted) return;
+                        if (!status.isGranted) {
                           showConfirmModal(
                             context: context,
                             title: '기기의 알림 설정이 꺼져있어요',
@@ -106,18 +107,18 @@ class _NotificationSettingScreenState
                         setState(() {
                           criticalNotification = true;
                         });
-                        await ref.read(systemProvider.notifier).updateUserAlarm(
-                              systemId:
-                                  (ref.watch(systemProvider) as UserSystemModel)
-                                      .id,
-                              mainAlarm: criticalNotification,
-                              etcAlarm: generalNotification,
-                            );
                       } else {
                         setState(() {
                           criticalNotification = false;
                         });
                       }
+                      await ref.read(systemProvider.notifier).updateUserAlarm(
+                            systemId:
+                                (ref.watch(systemProvider) as UserSystemModel)
+                                    .id,
+                            mainAlarm: criticalNotification,
+                            etcAlarm: generalNotification,
+                          );
                     },
                   ),
                 ],
@@ -157,7 +158,8 @@ class _NotificationSettingScreenState
                       if (generalNotification == false) {
                         final PermissionStatus status =
                             await Permission.notification.request();
-                        if (status.isDenied && mounted) {
+                        if (!mounted) return;
+                        if (!status.isGranted) {
                           await showConfirmModal(
                             context: context,
                             title: '기기의 알림 설정이 꺼져있어요',
@@ -179,18 +181,18 @@ class _NotificationSettingScreenState
                         setState(() {
                           generalNotification = true;
                         });
-                        await ref.read(systemProvider.notifier).updateUserAlarm(
-                              systemId:
-                                  (ref.watch(systemProvider) as UserSystemModel)
-                                      .id,
-                              mainAlarm: criticalNotification,
-                              etcAlarm: generalNotification,
-                            );
                       } else {
                         setState(() {
                           generalNotification = false;
                         });
                       }
+                      await ref.read(systemProvider.notifier).updateUserAlarm(
+                            systemId:
+                                (ref.watch(systemProvider) as UserSystemModel)
+                                    .id,
+                            mainAlarm: criticalNotification,
+                            etcAlarm: generalNotification,
+                          );
                     },
                   ),
                 ],
