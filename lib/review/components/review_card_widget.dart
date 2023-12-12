@@ -60,6 +60,10 @@ class ReviewCardWidget extends StatelessWidget {
                         imagePath!,
                       ),
                       fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        const Color(0xff000000).withOpacity(0.15),
+                        BlendMode.srcOver,
+                      ),
                     ),
             ),
           ),
@@ -77,6 +81,10 @@ class ReviewCardWidget extends StatelessWidget {
                   : DecorationImage(
                       image: AssetEntityImageProvider(photoModel!.assetEntity!),
                       fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        const Color(0xff000000).withOpacity(0.15),
+                        BlendMode.srcOver,
+                      ),
                     ),
             ),
           ),

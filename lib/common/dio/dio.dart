@@ -69,8 +69,11 @@ class CustomInterceptor extends Interceptor {
   // 응답을 받을때
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    logger.d(
-        '[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
+    logger.d([
+      '[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}',
+      '[QUERY] ${response.requestOptions.queryParameters}',
+      '[BODY] ${response.requestOptions.data}',
+    ]);
 
     return super.onResponse(response, handler);
   }

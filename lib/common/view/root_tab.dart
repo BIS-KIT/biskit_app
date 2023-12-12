@@ -37,6 +37,8 @@ class _RootTabState extends ConsumerState<RootTab>
     const MyPageScreen(),
   ];
 
+  bool isFirstToolTip = true;
+
   @override
   void initState() {
     super.initState();
@@ -91,6 +93,11 @@ class _RootTabState extends ConsumerState<RootTab>
             type: BottomNavigationBarType.fixed,
             onTap: (index) async {
               if (index == 2) {
+                if (isFirstToolTip) {
+                  setState(() {
+                    isFirstToolTip = false;
+                  });
+                }
                 if (userState != null &&
                     userState is UserModel &&
                     userState.profile != null &&
@@ -189,7 +196,8 @@ class _RootTabState extends ConsumerState<RootTab>
           if (userState != null &&
               userState is UserModel &&
               userState.profile != null &&
-              userState.profile!.student_verification == null)
+              userState.profile!.student_verification == null &&
+              isFirstToolTip)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [

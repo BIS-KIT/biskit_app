@@ -511,15 +511,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             color: kColorBgDefault,
             padding: const EdgeInsets.symmetric(
               vertical: 24,
-              horizontal: 20,
+              // horizontal: 20,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  '${userState.profile!.nick_name}님\n새로운 모임을 찾아볼까요?',
-                  style: getTsHeading20(context).copyWith(
-                    color: kColorContentOnBgPrimary,
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    '${userState.profile!.nick_name}님\n새로운 모임을 찾아볼까요?',
+                    style: getTsHeading20(context).copyWith(
+                      color: kColorContentOnBgPrimary,
+                    ),
                   ),
                 ),
                 const SizedBox(

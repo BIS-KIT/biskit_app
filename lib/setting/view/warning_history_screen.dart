@@ -8,7 +8,6 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class WarningHistoryScreen extends ConsumerStatefulWidget {
   const WarningHistoryScreen({super.key});

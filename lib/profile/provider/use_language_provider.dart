@@ -30,24 +30,36 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguageModel>?> {
         .toList();
   }
 
+  void setSort() {
+    List<UseLanguageModel> selectedList = state != null
+        ? state!.where((element) => element.isChecked).toList()
+        : [];
+    selectedList.sort(
+        (a, b) => a.languageModel.kr_name.compareTo(b.languageModel.kr_name));
+    selectedList.sort((a, b) => b.level.compareTo(a.level));
+    state = [
+      ...selectedList,
+      ...state!
+          .where((e) => !(selectedList
+              .map((l) => l.languageModel.id)
+              .contains(e.languageModel.id)))
+          .toList()
+    ];
+  }
+
   setSelectedList(List<UseLanguageModel> list) {
-    logger.d(list);
     list.sort(
         (a, b) => a.languageModel.kr_name.compareTo(b.languageModel.kr_name));
     list.sort((a, b) => b.level.compareTo(a.level));
-    logger.d(list);
-    state = state!.map((e) {
-      if (list.map((l) => l.languageModel.id).contains(e.languageModel.id)) {
-        return list
-            .where((element) => element.languageModel.id == e.languageModel.id)
-            .first;
-      } else {
-        return e.copyWith(
-          level: 0,
-          isChecked: false,
-        );
-      }
-    }).toList();
+    state = [
+      ...list,
+      ...state!
+          .where((e) => !(list
+              .map((l) => l.languageModel.id)
+              .contains(e.languageModel.id)))
+          .toList()
+    ];
+    logger.d(state);
   }
 
   getList() async {
@@ -72,6 +84,7 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguageModel>?> {
               : e)
           .toList();
     }
+    setSort();
   }
 
   setLevel({
@@ -87,6 +100,7 @@ class UseLanguageStateNotifier extends StateNotifier<List<UseLanguageModel>?> {
               : e)
           .toList();
     }
+    setSort();
   }
 
   List<UseLanguageModel> getSelectedList() {
