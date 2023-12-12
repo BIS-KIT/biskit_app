@@ -180,6 +180,8 @@ class _MyMeetUpListScreenState extends ConsumerState<MyMeetUpListScreen> {
                           onTapMeetUp: () {
                             onTapMeetUpCard(list[index]);
                           },
+                          isParticipantsStatusTag: false,
+                          isHostTag: true,
                         ),
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 12,

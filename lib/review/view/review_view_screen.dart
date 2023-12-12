@@ -336,15 +336,32 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                                       const SizedBox(
                                         width: 4,
                                       ),
-                                      Text(
-                                        meetUpModel!.location,
-                                        style: getTsBody14Rg(context).copyWith(
-                                          color: kColorContentWeaker,
+                                      Expanded(
+                                        child: Text(
+                                          meetUpModel!.location,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style:
+                                              getTsBody14Rg(context).copyWith(
+                                            color: kColorContentWeaker,
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            SvgPicture.asset(
+                              'assets/icons/ic_chevron_right_line_24.svg',
+                              width: 24,
+                              height: 24,
+                              colorFilter: const ColorFilter.mode(
+                                kColorContentWeakest,
+                                BlendMode.srcIn,
                               ),
                             ),
                           ],

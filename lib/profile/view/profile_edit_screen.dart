@@ -230,10 +230,12 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         'is_default_photo': false,
       }.entries);
     } else {
-      data.addEntries(<String, dynamic>{
-        'profile_photo': profileImageUrl,
-        'is_default_photo': true,
-      }.entries);
+      if (widget.profile.is_default_photo != isDefaultImage) {
+        data.addEntries(<String, dynamic>{
+          'profile_photo': profileImageUrl,
+          'is_default_photo': true,
+        }.entries);
+      }
     }
 
     // 닉네임
@@ -598,6 +600,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   }
 
   Container _buildLang(BuildContext context) {
+    ref.watch(useLanguageProvider);
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 24,

@@ -9,7 +9,6 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -70,7 +69,7 @@ class _AnnouncementDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    bool isAdmin = (ref.watch(userMeProvider) as UserModel).is_admin;
+    final userState = ref.watch(userMeProvider);
     return DefaultLayout(
       title: '공지사항',
       shape: const Border(
@@ -80,7 +79,7 @@ class _AnnouncementDetailScreenState
         ),
       ),
       actions: [
-        if (isAdmin)
+        if (userState != null && userState is UserModel && userState.is_admin)
           GestureDetector(
             onTap: () {
               onTapMore();
@@ -96,59 +95,55 @@ class _AnnouncementDetailScreenState
                 height: 24,
               ),
             ),
-          )
-        else
-          Container(),
+          ),
       ],
       backgroundColor: kColorBgElevation1,
-      child: Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 1,
-                      color: kColorBorderDefalut,
-                    ),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.notice.title,
-                        style: getTsHeading18(context)
-                            .copyWith(color: kColorContentWeak),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        dateFormat
-                            .format(DateTime.parse(widget.notice.created_time)),
-                        style: getTsBody14Rg(context)
-                            .copyWith(color: kColorContentWeakest),
-                      ),
-                    ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 1,
+                    color: kColorBorderDefalut,
                   ),
                 ),
               ),
-              Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text(
-                  widget.notice.content,
-                  style:
-                      getTsBody16Rg(context).copyWith(color: kColorContentWeak),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.notice.title,
+                      style: getTsHeading18(context)
+                          .copyWith(color: kColorContentWeak),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      dateFormat
+                          .format(DateTime.parse(widget.notice.created_time)),
+                      style: getTsBody14Rg(context)
+                          .copyWith(color: kColorContentWeakest),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                widget.notice.content,
+                style:
+                    getTsBody16Rg(context).copyWith(color: kColorContentWeak),
+              ),
+            ),
+          ],
         ),
       ),
     );

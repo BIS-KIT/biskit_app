@@ -263,8 +263,10 @@ class SettingRepository {
     return reportList;
   }
 
-  Future<NoticeListModel> getNoticeList(
-      {int? skip = 0, int? limit = 10}) async {
+  Future<NoticeListModel> getNoticeList({
+    int? skip = 0,
+    int? limit = 10,
+  }) async {
     final res = await dio.get('$baseUrl/notices',
         options: Options(
           headers: {
