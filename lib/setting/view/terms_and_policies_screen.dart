@@ -1,6 +1,8 @@
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/view/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,7 +14,16 @@ class TermsAndPoliciesScreen extends StatefulWidget {
 }
 
 class _TermsAndPoliciesScreenState extends State<TermsAndPoliciesScreen> {
-  List<String> termsAndPolicies = ['서비스 이용약관', '개인정보 처리방침', '오픈소스 라이선스'];
+  List<Map<String, String>> termsAndPolicies = [
+    {
+      'title': '서비스 이용약관',
+      'url': kTermsConditionsServiceUseUrl,
+    },
+    {
+      'title': '개인정보 처리방침',
+      'url': kPrivacyPolicyUrl,
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -27,7 +38,16 @@ class _TermsAndPoliciesScreenState extends State<TermsAndPoliciesScreen> {
           itemCount: termsAndPolicies.length,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WebViewScreen(
+                        url: termsAndPolicies[index]['url'] ?? '',
+                        title: termsAndPolicies[index]['title'] ?? ''),
+                  ),
+                );
+              },
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 17, horizontal: 20),
@@ -35,7 +55,7 @@ class _TermsAndPoliciesScreenState extends State<TermsAndPoliciesScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        termsAndPolicies[index],
+                        termsAndPolicies[index]['title'] ?? '',
                         style: getTsBody16Rg(context)
                             .copyWith(color: kColorContentWeak),
                       ),

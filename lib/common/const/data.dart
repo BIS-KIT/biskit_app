@@ -21,3 +21,19 @@ const String kCategoryDefaultPath =
 
 bool criticalNotification = false;
 bool generalNotification = false;
+
+// 이용가이드
+const String kUseGuideUrl =
+    'https://wisyeons.notion.site/BISKIT-9f623ff795874ab69445aafaff1d735c';
+
+// 서비스 이용약관
+const String kTermsConditionsServiceUseUrl =
+    'https://wisyeons.notion.site/BISKIT-c664d0d64e1a43bc96e33e6294aa7273';
+
+// 개인정보 처리방침
+const String kPrivacyPolicyUrl =
+    'https://wisyeons.notion.site/BISKIT-2563785000624e2e8e65a4f87d0adf75';
+
+// 위치기반 서비스 이용약관
+const String kLocationServiceTermsConditionsUrl =
+    'https://wisyeons.notion.site/346b7773b89d44289ec74fc5ac780479?pvs=4';

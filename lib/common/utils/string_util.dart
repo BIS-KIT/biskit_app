@@ -71,17 +71,17 @@ String getLevelServerValueToKrString(String value) {
 String getLevelSubTitle(int level) {
   switch (level) {
     case 5:
-      return '대부분의 것들을 편히 이해할 수 있어요';
+      return '모국어 수준으로 언어를 자유롭게 구사할 수 있어요';
     case 4:
-      return '대부분의 것들을 편히 이해할 수 있어요';
+      return '복잡한 주제에 대해 막힘없이 대화를 나눌 수 있어요';
     case 3:
-      return '대부분의 것들을 편히 이해할 수 있어요';
+      return '다양한 주제를 이해하고 의견을 표현할 수 있어요';
     case 2:
-      return '대부분의 것들을 편히 이해할 수 있어요';
+      return '일상적인 주제를 이해하고 대화할 수 있어요';
     case 1:
-      return '대부분의 것들을 편히 이해할 수 있어요';
+      return '자기소개를 하고 간단한 질문에 대답할 수 있어요';
     default:
-      return '대부분의 것들을 편히 이해할 수 있어요';
+      return '';
   }
 }
 

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/view/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -124,7 +126,17 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   text: '',
                   usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WebViewScreen(
+                          url: kTermsConditionsServiceUseUrl,
+                          title: '서비스 이용약관',
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               ListWidgetTemp(
@@ -149,7 +161,17 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   text: '',
                   usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WebViewScreen(
+                          url: kPrivacyPolicyUrl,
+                          title: '개인정보 처리방침',
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -175,7 +197,17 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   text: '',
                   usageType: 'body',
                   iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WebViewScreen(
+                          url: kLocationServiceTermsConditionsUrl,
+                          title: '위치기반 서비스 이용약관',
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               ListWidgetTemp(
@@ -196,12 +228,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                     color: kColorContentWeak,
                   ),
                 ),
-                rightWidget: SelectWidget(
-                  text: '',
-                  usageType: 'body',
-                  iconPath: 'assets/icons/ic_chevron_right_line_24.svg',
-                  onTap: () {},
-                ),
+                rightWidget: null,
               ),
               const Spacer(),
               GestureDetector(
