@@ -11,7 +11,7 @@ import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/review/components/review_write_card_widget.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
-import 'package:biskit_app/setting/view/notification_list_screen.dart';
+import 'package:biskit_app/setting/view/alarm_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/setting/view/setting_screen.dart';
@@ -430,7 +430,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const NotificationListScreen(),
+                      builder: (context) => const AlarmListScreen(),
                     ),
                   );
                 },
