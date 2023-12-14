@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -20,12 +21,12 @@ Map<String, Map<BadgeType, Color>> badgeColorVariants = {
   },
 };
 Map<String, Map<String, TextStyle>> badgeTextStyleMap = {
-  'BadgeType.primaryL': {'font': kTsKrBody14Sb},
+  'primaryL': {'font': kTsKrBody14Sb},
   'secondaryL': {'font': kTsKrBody14Sb},
-  'tertiaryL': {'font': kTsKrBody14Rg},
+  'teritaryL': {'font': kTsKrBody14Rg},
   'primaryM': {'font': kTsKrCaption12Sb},
   'secondaryM': {'font': kTsKrCaption12Sb},
-  'tertiaryM': {'font': kTsKrCaption12Rg},
+  'teritaryM': {'font': kTsKrCaption12Rg},
 };
 
 class NewBadgeWidget extends StatelessWidget {
@@ -54,6 +55,7 @@ class NewBadgeWidget extends StatelessWidget {
     }
 
     String key = getKey(type, size);
+    logger.d(type);
 
     return Container(
       padding: EdgeInsets.symmetric(
