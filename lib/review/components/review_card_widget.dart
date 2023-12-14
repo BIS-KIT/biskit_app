@@ -51,7 +51,7 @@ class ReviewCardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xff000000).withOpacity(0.15),
               borderRadius: const BorderRadius.all(
-                Radius.circular(12),
+                Radius.circular(8),
               ),
               image: imagePath == null || imagePath!.isEmpty
                   ? null
@@ -74,7 +74,7 @@ class ReviewCardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xff000000).withOpacity(0.15),
               borderRadius: const BorderRadius.all(
-                Radius.circular(12),
+                Radius.circular(8),
               ),
               image: photoModel == null
                   ? null
