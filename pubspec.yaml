@@ -70,6 +70,7 @@ dependencies:
   flutter_local_notifications: ^16.1.0
   custom_refresh_indicator: ^3.0.0
   permission_handler: ^11.0.1
+  heic_to_jpg: ^0.2.0
 
 dev_dependencies:
   flutter_test:
