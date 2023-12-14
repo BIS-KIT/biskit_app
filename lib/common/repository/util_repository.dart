@@ -13,6 +13,7 @@ import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:heic_to_jpg/heic_to_jpg.dart';
 
 final utilRepositoryProvider = Provider<UtilRepository>(
   (ref) => UtilRepository(
@@ -154,11 +155,25 @@ class UtilRepository {
   }) async {
     String? path;
     File? file;
+    String? filePath;
 
     if (photo.photoType == PhotoType.asset) {
       file = await photo.assetEntity!.originFile;
     } else {
       file = File(photo.cameraXfile!.path);
+    }
+
+    // 파일 확장자 heic 체크
+    if (file != null) {
+      List<String> parts = file.path.split('.');
+      String extension = parts.last;
+      if (extension == 'heic' || extension == 'heif') {
+        String? jpegPath = await HeicToJpg.convert(file.path);
+        filePath = jpegPath;
+      } else {
+        filePath = file.path;
+      }
+      logger.d('filePath: $filePath');
     }
 
     Response? res;
@@ -178,13 +193,13 @@ class UtilRepository {
         queryParameters: {
           'image_source': uploadImageType.name,
         },
-        data: file == null
+        data: filePath == null
             ? null
             : FormData.fromMap({
                 'photo': [
                   await MultipartFile.fromFile(
-                    file.path,
-                    filename: file.path.split('/').last,
+                    filePath,
+                    filename: filePath.split('/').last,
                   ),
                 ],
               }),
