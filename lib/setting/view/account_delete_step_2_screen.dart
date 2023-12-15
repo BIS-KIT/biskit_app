@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 List<String> reasons = [
-  "7일간 재가입이 불가합니다.",
-  "모든 계정의 모든 정보는 삭제되며 재가입시에도 복구되지 않습니다.",
+  '7일간 재가입이 불가합니다',
+  '모든 계정의 모든 정보는 삭제되며 재가입시에도 복구되지 않습니다',
+  '작성한 글? 댓글?',
 ];
 
 class AccountDeleteStep2Screen extends ConsumerStatefulWidget {
@@ -87,7 +88,7 @@ class _AccountDeleteStep2ScreenState
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Text(
-              "계정 삭제 전 유의사항을\n확인해주세요",
+              '계정 삭제 전 유의사항을\n확인해주세요',
               style: getTsHeading20(context).copyWith(
                 color: kColorContentDefault,
               ),

@@ -21,11 +21,11 @@ class _MeetUpCreateStep1TabState
   @override
   Widget build(BuildContext context) {
     final List<String> reasons = [
-      "탈퇴사유 1",
-      "탈퇴사유 2",
-      "탈퇴사유 3",
-      "탈퇴사유 4",
-      "탈퇴사유 5"
+      "자주 사용하지 않아요",
+      "사용하기가 불편해요",
+      "개인정보가 걱정되어요",
+      "새로운 계정으로 가입할거에요",
+      "기타"
     ];
     return DefaultLayout(
       title: '계정 삭제',
@@ -62,7 +62,14 @@ class _MeetUpCreateStep1TabState
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         children: [
-                          Expanded(child: Text(reasons[index])),
+                          Expanded(
+                            child: Text(
+                              reasons[index],
+                              style: getTsBody16Rg(context).copyWith(
+                                color: kColorContentWeak,
+                              ),
+                            ),
+                          ),
                           const SizedBox(
                             width: 8,
                           ),
