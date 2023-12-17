@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
-import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -345,9 +345,10 @@ class ProfileCardWidget extends StatelessWidget {
                         // Badge
                         ...userState.profile!.introductions
                             .map(
-                              (e) => BadgeWidget(
+                              (e) => NewBadgeWidget(
+                                size: BadgeSize.L,
+                                type: BadgeType.teritary,
                                 text: e.keyword,
-                                sizeType: BadgeSizeType.M,
                               ),
                             )
                             .toList(),
