@@ -296,15 +296,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   child: Column(
                     children: [
+                      GestureDetector(
+                        onTap: signInWithKakao,
+                        child: _buildKakao(context),
+                      ),
                       if (Platform.isIOS)
                         GestureDetector(
                           onTap: signInWithApple,
                           child: _buildApple(context),
                         ),
-                      GestureDetector(
-                        onTap: signInWithKakao,
-                        child: _buildKakao(context),
-                      ),
                       GestureDetector(
                         onTap: signInWithGoogle,
                         child: _buildGoogle(context),
@@ -339,7 +339,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             horizontal: 16,
           ),
           decoration: const BoxDecoration(
-            color: Colors.black,
+            color: Colors.white,
             borderRadius: BorderRadius.all(
               Radius.circular(6),
             ),
@@ -365,7 +365,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   'Apple로 로그인',
                   textAlign: TextAlign.center,
                   style: getTsBody16Sb(context).copyWith(
-                    color: kColorBgDefault,
+                    color: kColorContentWeak,
                   ),
                 ),
               ),
@@ -513,7 +513,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       'Google',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(0xff465063),
+                        color: kColorContentWeak,
                         fontFamily: 'Roboto',
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
