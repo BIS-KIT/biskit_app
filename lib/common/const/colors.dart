@@ -33,7 +33,7 @@ const Color kColorBorderError = Color(0xffdf2c22);
 // Content Color
 const Color kColorContentDefault = Color(0xff141b2e);
 const Color kColorContentOnBgPrimary = Color(0xff141b2e);
-const Color kColorContentWeak = Color(0xff465063);
+const Color kColorContentWeak = Color(0xff374154);
 const Color kColorContentWeaker = Color(0xff677389);
 const Color kColorContentWeakest = Color(0xff9ca6b8);
 const Color kColorContentDisabled = Color(0xffbcc4cf);
