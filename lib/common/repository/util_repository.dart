@@ -12,8 +12,9 @@ import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:heic_to_jpg/heic_to_jpg.dart';
+import 'package:path_provider/path_provider.dart';
 
 final utilRepositoryProvider = Provider<UtilRepository>(
   (ref) => UtilRepository(
@@ -166,10 +167,20 @@ class UtilRepository {
     // 파일 확장자 heic 체크
     if (file != null) {
       List<String> parts = file.path.split('.');
-      String extension = parts.last;
-      if (extension == 'heic' || extension == 'heif') {
-        String? jpegPath = await HeicToJpg.convert(file.path);
-        filePath = jpegPath;
+      String extension = parts.last.toLowerCase();
+      if (extension.contains('heic') || extension.contains('heif')) {
+        // String? jpegPath = await HeicToJpg.convert(file.path);
+        final tmpDir = (await getTemporaryDirectory()).path;
+        final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
+        XFile? jpegXfile = await FlutterImageCompress.compressAndGetFile(
+          file.path,
+          target,
+          format: CompressFormat.jpeg,
+          quality: 90,
+        );
+        if (jpegXfile != null) {
+          filePath = jpegXfile.path;
+        }
       } else {
         filePath = file.path;
       }
