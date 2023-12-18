@@ -6,6 +6,7 @@ import 'package:biskit_app/setting/model/report_res_model.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,6 +20,7 @@ class WarningHistoryScreen extends ConsumerStatefulWidget {
 
 class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
   List<ReportResModel>? warningHistories;
+  final DateFormat dayFormat = DateFormat('MM/dd hh:mm', 'ko');
 
   @override
   void initState() {
@@ -152,7 +154,9 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                                           height: 8,
                                         ),
                                         Text(
-                                          '11/2 17:00',
+                                          dayFormat.format(DateTime.parse(
+                                              warningHistories![index]
+                                                  .created_time)),
                                           style: getTsCaption12Rg(context)
                                               .copyWith(
                                                   color: kColorContentWeakest),

@@ -119,15 +119,6 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      '${contentController.text.length}/0',
-                      style: getTsCaption12Rg(context).copyWith(
-                        color: kColorContentWeakest,
-                      ),
-                    ),
                   ],
                 )
               ],

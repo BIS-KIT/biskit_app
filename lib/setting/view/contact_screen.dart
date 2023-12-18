@@ -116,15 +116,6 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      '${contentController.text.length}/0',
-                      style: getTsCaption12Rg(context).copyWith(
-                        color: kColorContentWeakest,
-                      ),
-                    ),
                   ],
                 )
               ],

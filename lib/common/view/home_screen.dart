@@ -14,7 +14,7 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
-import 'package:biskit_app/setting/view/notification_list_screen.dart';
+import 'package:biskit_app/setting/view/alarm_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -602,29 +602,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           Row(
             children: [
-              if (!isApproveMeetupEmpty)
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationListScreen(),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      'assets/icons/ic_notifications_line_24.svg',
-                      width: 24,
-                      height: 24,
-                      colorFilter: const ColorFilter.mode(
-                        kColorContentDefault,
-                        BlendMode.srcIn,
-                      ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AlarmListScreen(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_notifications_line_24.svg',
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      kColorContentDefault,
+                      BlendMode.srcIn,
                     ),
                   ),
                 ),
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
