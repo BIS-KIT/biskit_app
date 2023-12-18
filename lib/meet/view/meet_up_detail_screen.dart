@@ -863,7 +863,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                   width: 4,
                 ),
                 Text(
-                  (meetUpDetailModel?.current_participants ?? '').toString(),
+                  (meetUpDetailModel?.participants.length ?? '').toString(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentSecondary,
                   ),
