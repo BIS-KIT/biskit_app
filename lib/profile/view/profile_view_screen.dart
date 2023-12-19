@@ -95,6 +95,9 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                           color: kColorContentDefault,
                         ),
                       ),
+                      const SizedBox(
+                        height: 16,
+                      ),
                       _buildReview(size),
                     ],
                   ),
@@ -131,48 +134,43 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
         ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            runSpacing: 8,
-            spacing: 8,
-            children: [
-              ...reviewState.data
-                  .map((e) => GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReviewViewScreen(
-                                model: e,
-                              ),
+      return SizedBox(
+        width: double.infinity,
+        child: Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          runSpacing: 8,
+          spacing: 8,
+          children: [
+            ...reviewState.data
+                .map((e) => GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReviewViewScreen(
+                              model: e,
                             ),
-                          );
-                        },
-                        child: Hero(
-                          tag: '$kReviewTagName/${e.id}',
-                          child: ReviewCardWidget(
-                            width: width,
-                            imagePath: e.image_url,
-                            reviewImgType: ReviewImgType.networkImage,
-                            flagCodeList: e.creator.user_nationality
-                                .map((e) => e.nationality.code)
-                                .toList(),
-                            isShowDelete: false,
-                            isShowFlag: true,
-                            isShowLock: false,
-                            isShowLogo: false,
                           ),
+                        );
+                      },
+                      child: Hero(
+                        tag: '$kReviewTagName/${e.id}',
+                        child: ReviewCardWidget(
+                          width: width,
+                          imagePath: e.image_url,
+                          reviewImgType: ReviewImgType.networkImage,
+                          flagCodeList: e.creator.user_nationality
+                              .map((e) => e.nationality.code)
+                              .toList(),
+                          isShowDelete: false,
+                          isShowFlag: true,
+                          isShowLock: false,
+                          isShowLogo: false,
                         ),
-                      ))
-                  .toList(),
-            ],
-          ),
+                      ),
+                    ))
+                .toList(),
+          ],
         ),
       );
     }

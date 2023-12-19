@@ -42,8 +42,8 @@ class UsersRepository {
       ),
     );
 
-    logger.d(res.toString());
     userModel = UserModel.fromMap(res.data);
+    logger.d(userModel.toJson());
 
     return userModel;
   }

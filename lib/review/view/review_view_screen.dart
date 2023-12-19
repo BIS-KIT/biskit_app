@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -55,6 +56,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
       resReviewModel =
           await ref.read(reviewRepositoryProvider).getReview(widget.id!);
     } else {
+      logger.d(widget.model);
       resReviewModel = widget.model;
     }
     meetUpModel = await ref

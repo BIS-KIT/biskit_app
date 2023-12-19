@@ -85,6 +85,23 @@ String getLevelSubTitle(int level) {
   }
 }
 
+String getLanMaxDescription(String levelStr) {
+  switch (levelStr) {
+    case '능숙':
+      return '능숙한 사람이 가장 많아요';
+    case '고급':
+      return '고급인 사람이 가장 많아요';
+    case '중급':
+      return '중급인 사람이 가장 많아요';
+    case '기초':
+      return '기초인 사람이 가장 많아요';
+    case '초보':
+      return '초보인 사람이 가장 많아요';
+    default:
+      return '';
+  }
+}
+
 String getSnsTypeString(String? snsType) {
   if (snsType == null) {
     return '이메일';

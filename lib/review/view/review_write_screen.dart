@@ -59,6 +59,7 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final userState = ref.watch(userMeProvider);
     return DefaultLayout(
       title: '후기 작성',
       leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
@@ -80,119 +81,122 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
           content: '작성한 내용이 모두 사라져요',
         );
       },
-      child: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                controller: controller,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 20,
-                  ),
-                  child: Column(
-                    children: [
-                      ReviewCardWidget(
-                        width: size.width - 40,
-                        reviewImgType: ReviewImgType.photoModel,
-                        photoModel: widget.photoModel,
-                        isShowLogo: true,
-                        isShowFlag: true,
-                        flagCodeList: const [
-                          'kr',
-                          'us',
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: kColorBorderDefalut,
-                              ),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(6),
-                              ),
-                              color: kColorBgElevation1,
+      child: userState != null && userState is UserModel
+          ? SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: controller,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 20,
+                        ),
+                        child: Column(
+                          children: [
+                            ReviewCardWidget(
+                              width: size.width - 40,
+                              reviewImgType: ReviewImgType.photoModel,
+                              photoModel: widget.photoModel,
+                              isShowLogo: true,
+                              isShowFlag: true,
+                              flagCodeList: (userState)
+                                  .user_nationality
+                                  .map((e) => e.nationality.code)
+                                  .toList(),
                             ),
-                            child: TextFormField(
-                              controller: textEditingController,
-                              minLines: 5,
-                              maxLines: 10,
-                              maxLength: 500,
-                              style: getTsBody16Rg(context).copyWith(
-                                color: kColorContentWeak,
-                              ),
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                counterText: '',
-                                hintText: '즐거웠던 모임 경험을 들려주세요 (선택사항)',
-                                hintStyle: getTsBody16Rg(context).copyWith(
-                                  color: kColorContentPlaceholder,
-                                ),
-                                contentPadding: EdgeInsets.zero,
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
+                            const SizedBox(
+                              height: 16,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${textEditingController.text.length}/500',
-                                style: getTsCaption11Rg(context).copyWith(
-                                  color: kColorContentWeakest,
+                            Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1,
+                                      color: kColorBorderDefalut,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(6),
+                                    ),
+                                    color: kColorBgElevation1,
+                                  ),
+                                  child: TextFormField(
+                                    controller: textEditingController,
+                                    minLines: 5,
+                                    maxLines: 10,
+                                    maxLength: 500,
+                                    style: getTsBody16Rg(context).copyWith(
+                                      color: kColorContentWeak,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {});
+                                    },
+                                    decoration: InputDecoration(
+                                      counterText: '',
+                                      hintText: '즐거웠던 모임 경험을 들려주세요 (선택사항)',
+                                      hintStyle:
+                                          getTsBody16Rg(context).copyWith(
+                                        color: kColorContentPlaceholder,
+                                      ),
+                                      contentPadding: EdgeInsets.zero,
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${textEditingController.text.length}/500',
+                                      style: getTsCaption11Rg(context).copyWith(
+                                        color: kColorContentWeakest,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-            // const Spacer(),
-            Container(
-              padding: const EdgeInsets.only(
-                top: 12,
-                left: 20,
-                bottom: 20,
-                right: 20,
-              ),
-              child: GestureDetector(
-                onTap: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await onTapCreateReview();
-                  setState(() {
-                    isLoading = false;
-                  });
-                },
-                child: FilledButtonWidget(
-                  text: '후기 남기기',
-                  isEnable: !isLoading,
-                ),
+                  // const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: 12,
+                      left: 20,
+                      bottom: 20,
+                      right: 20,
+                    ),
+                    child: GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await onTapCreateReview();
+                        setState(() {
+                          isLoading = false;
+                        });
+                      },
+                      child: FilledButtonWidget(
+                        text: '후기 남기기',
+                        isEnable: !isLoading,
+                      ),
+                    ),
+                  )
+                ],
               ),
             )
-          ],
-        ),
-      ),
+          : Container(),
     );
   }
 
