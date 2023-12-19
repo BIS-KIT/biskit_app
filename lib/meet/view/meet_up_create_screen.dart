@@ -176,7 +176,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
         }
       } else if (pageIndex == 3) {
         if (createMeetUpState.name != null &&
-            createMeetUpState.name!.length >= 5) {
+            createMeetUpState.name!.length >= 2) {
           return true;
         }
       }
