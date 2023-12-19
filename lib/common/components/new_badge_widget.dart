@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -55,7 +54,6 @@ class NewBadgeWidget extends StatelessWidget {
     }
 
     String key = getKey(type, size);
-    logger.d(type);
 
     return Container(
       padding: EdgeInsets.symmetric(

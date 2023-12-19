@@ -1,15 +1,5 @@
 import 'dart:io';
 
-import 'package:biskit_app/common/components/new_badge_widget.dart';
-import 'package:biskit_app/common/const/enums.dart';
-import 'package:biskit_app/common/provider/home_provider.dart';
-import 'package:biskit_app/common/utils/string_util.dart';
-import 'package:biskit_app/meet/model/create_meet_up_model.dart';
-import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
-import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
-import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
-import 'package:biskit_app/profile/view/profile_view_screen.dart';
-import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_wrap/extended_wrap.dart';
@@ -17,26 +7,36 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/components/badge_emoji_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:biskit_app/common/components/number_badge_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/provider/home_provider.dart';
+import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/meet/model/create_meet_up_model.dart';
 import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_member_management_screen.dart';
 import 'package:biskit_app/profile/components/profile_list_with_subtext_widget.dart';
 import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+import 'package:biskit_app/profile/view/profile_view_screen.dart';
+import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MeetUpDetailScreen extends ConsumerStatefulWidget {
   final MeetUpModel meetUpModel;
@@ -52,9 +52,11 @@ class MeetUpDetailScreen extends ConsumerStatefulWidget {
 class ChartDataListModel {
   LanguageModel lang;
   List<ChartDataModel> dataList;
+  String description;
   ChartDataListModel({
     required this.lang,
     required this.dataList,
+    required this.description,
   });
 }
 
@@ -142,6 +144,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   setChartDatas() {
     for (var l in meetUpDetailModel!.languages) {
       List<ChartDataModel> list = [];
+      String description = '';
 
       Set<String> levelSet = availableLangList
           .where((element) => element.language.id == l.id)
@@ -156,9 +159,36 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               .length,
         ));
       }
+
+      // 챠트 설명 셋팅
+      if (list.length == 1) {
+        // 레벨이 1개인 경우
+        description = getLanMaxDescription(list[0].title);
+      } else {
+        // 레벨이 1개 이상인 경우
+
+        bool isAllLevelEqual =
+            list.map((e) => e.value).toList().toSet().length > 1;
+        if (isAllLevelEqual) {
+          // 모든 레벨이 같은 경우
+          description = '다양한 레벨이 섞여있어요';
+        } else {
+          ChartDataModel chartDataModel = list.reduce((a, b) {
+            if (a.value > b.value) {
+              return a;
+            } else {
+              return b;
+            }
+          });
+
+          description = getLanMaxDescription(chartDataModel.title);
+        }
+      }
+
       chartDatas.add(ChartDataListModel(
         lang: l,
         dataList: list,
+        description: description,
       ));
     }
   }
@@ -347,6 +377,10 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                         meeting_id: meetUpDetailModel!.id,
                       );
               if (isOk) {
+                await ref.read(chatRepositoryProvider).chatExist(
+                      chatRoomUid: meetUpDetailModel!.chat_id,
+                      userId: userState!.id,
+                    );
                 await init();
                 if (!mounted) return;
                 Navigator.pop(context);
@@ -655,7 +689,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  "한국어가 능숙한 사람이 가장 많아요",
+                  chartDatas[chartLangSelectedIndex].description,
                   style:
                       getTsBody16Sb(context).copyWith(color: kColorContentWeak),
                 ),

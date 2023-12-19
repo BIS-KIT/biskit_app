@@ -142,9 +142,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
       // 검색된 장소가 없는 경우
       state = state!.copyWith(
         location: location,
-        x_coord: null,
-        y_coord: null,
-        place_url: null,
+        x_coord: '',
+        y_coord: '',
+        place_url: '',
       );
     } else if (location is KakaoDocumentModel) {
       // 검색된 장소가 있는 경우

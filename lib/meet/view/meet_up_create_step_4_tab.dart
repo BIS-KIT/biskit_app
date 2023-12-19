@@ -60,6 +60,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
     if (meetupDescriptionController.text.isNotEmpty) {
       setState(() {
         showMeetupDescription = true;
+        buttonText = '모임설명 삭제';
       });
     }
   }
