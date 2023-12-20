@@ -5,11 +5,13 @@ import 'dart:convert';
 class AlarmModel {
   final String title;
   final String content;
+  final bool is_read;
   final int id;
   final String created_time;
   AlarmModel({
     required this.title,
     required this.content,
+    required this.is_read,
     required this.id,
     required this.created_time,
   });
@@ -17,12 +19,14 @@ class AlarmModel {
   AlarmModel copyWith({
     String? title,
     String? content,
+    bool? is_read,
     int? id,
     String? created_time,
   }) {
     return AlarmModel(
       title: title ?? this.title,
       content: content ?? this.content,
+      is_read: is_read ?? this.is_read,
       id: id ?? this.id,
       created_time: created_time ?? this.created_time,
     );
@@ -32,6 +36,7 @@ class AlarmModel {
     return {
       'title': title,
       'content': content,
+      'is_read': is_read,
       'id': id,
       'created_time': created_time,
     };
@@ -41,6 +46,7 @@ class AlarmModel {
     return AlarmModel(
       title: map['title'] ?? '',
       content: map['content'] ?? '',
+      is_read: map['is_read'] ?? false,
       id: map['id']?.toInt() ?? 0,
       created_time: map['created_time'] ?? '',
     );
@@ -53,7 +59,7 @@ class AlarmModel {
 
   @override
   String toString() {
-    return 'AlarmModel(title: $title, content: $content, id: $id, created_time: $created_time)';
+    return 'AlarmModel(title: $title, content: $content, is_read: $is_read, id: $id, created_time: $created_time)';
   }
 
   @override
@@ -63,6 +69,7 @@ class AlarmModel {
     return other is AlarmModel &&
         other.title == title &&
         other.content == content &&
+        other.is_read == is_read &&
         other.id == id &&
         other.created_time == created_time;
   }
@@ -71,6 +78,7 @@ class AlarmModel {
   int get hashCode {
     return title.hashCode ^
         content.hashCode ^
+        is_read.hashCode ^
         id.hashCode ^
         created_time.hashCode;
   }

@@ -2,6 +2,7 @@ import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/setting/model/alarm_list_model.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -60,8 +61,14 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                           itemCount: alarmData!.total_count,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
+                              decoration: BoxDecoration(
+                                color: alarmData!
+                                        .alarms[
+                                            alarmData!.total_count - 1 - index]
+                                        .is_read
+                                    ? kColorBgElevation1
+                                    : kColorBgDefault,
+                                border: const Border(
                                   bottom: BorderSide(
                                     width: 1,
                                     color: kColorBorderWeak,
