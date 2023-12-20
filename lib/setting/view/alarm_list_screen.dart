@@ -101,7 +101,11 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          alarmData!.alarms[index].title,
+                                          alarmData!
+                                              .alarms[alarmData!.total_count -
+                                                  1 -
+                                                  index]
+                                              .title,
                                           style: getTsBody14Sb(context)
                                               .copyWith(
                                                   color: kColorContentWeak),
@@ -110,7 +114,11 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                                           height: 4,
                                         ),
                                         Text(
-                                          alarmData!.alarms[index].content,
+                                          alarmData!
+                                              .alarms[alarmData!.total_count -
+                                                  1 -
+                                                  index]
+                                              .content,
                                           style: getTsBody14Rg(context)
                                               .copyWith(
                                                   color: kColorContentWeak),
@@ -121,7 +129,11 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                                         Text(
                                           dayFormat.format(DateTime.parse(
                                               alarmData!
-                                                  .alarms[index].created_time)),
+                                                  .alarms[
+                                                      alarmData!.total_count -
+                                                          1 -
+                                                          index]
+                                                  .created_time)),
                                           style: getTsCaption12Rg(context)
                                               .copyWith(
                                                   color: kColorContentWeakest),
