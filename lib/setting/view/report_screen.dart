@@ -119,6 +119,18 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      '누적 신고 횟수가 3회 이상인 유저는 모임 생성 및 참여가 제한됩니다.',
+                      style: getTsBody14Rg(context).copyWith(
+                        color: kColorContentWeakest,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 )
               ],
@@ -147,7 +159,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      title: '신고가 접수되었습니다',
+                      title: '신고가 접수되었습니다. 검토까지 최대 24시간이 소요됩니다.',
                       rightBackgroundColor: kColorBgPrimary,
                       rightTextColor: kColorContentOnBgPrimary,
                     );
