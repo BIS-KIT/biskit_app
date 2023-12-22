@@ -1,3 +1,6 @@
+import 'package:biskit_app/alarm/model/alarm_list_model.dart';
+import 'package:biskit_app/alarm/model/alarm_model.dart';
+import 'package:biskit_app/alarm/provider/alarm_provider.dart';
 import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
@@ -5,6 +8,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/schedule_card_widget.dart';
@@ -14,7 +18,7 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
-import 'package:biskit_app/setting/view/alarm_list_screen.dart';
+import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -576,6 +580,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Color? color,
   }) {
     final padding = MediaQuery.of(context).padding;
+
+    bool hasUnreadAlarm() {
+      if (ref.watch(alarmProvider) is AlarmListModel) {
+        List<AlarmModel> alarms =
+            (ref.watch(alarmProvider) as AlarmListModel).alarms;
+        for (var alarm in alarms) {
+          if (alarm.is_read == false) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       padding: EdgeInsets.only(top: padding.top),
@@ -611,17 +629,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic_notifications_line_24.svg',
-                    width: 24,
-                    height: 24,
-                    colorFilter: const ColorFilter.mode(
-                      kColorContentDefault,
-                      BlendMode.srcIn,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_notifications_line_24.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentDefault,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (hasUnreadAlarm() == true)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          width: 5,
+                          height: 5,
+                          decoration: const BoxDecoration(
+                            color: kColorBgNotification,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               GestureDetector(

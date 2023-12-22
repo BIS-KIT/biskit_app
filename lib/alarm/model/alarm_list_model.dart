@@ -2,11 +2,21 @@
 
 import 'dart:convert';
 
+import 'package:biskit_app/alarm/model/alarm_model.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:biskit_app/setting/model/alarm_model.dart';
+abstract class AlarmListModelBase {}
 
-class AlarmListModel {
+class AlarmListModelError extends AlarmListModelBase {
+  final String message;
+  AlarmListModelError({
+    required this.message,
+  });
+}
+
+class AlarmListModelLoading extends AlarmListModelBase {}
+
+class AlarmListModel extends AlarmListModelBase {
   final int total_count;
   final List<AlarmModel> alarms;
   AlarmListModel({

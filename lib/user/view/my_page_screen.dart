@@ -1,3 +1,6 @@
+import 'package:biskit_app/alarm/model/alarm_list_model.dart';
+import 'package:biskit_app/alarm/model/alarm_model.dart';
+import 'package:biskit_app/alarm/provider/alarm_provider.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/review/components/review_card_widget.dart';
@@ -11,7 +14,7 @@ import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
 import 'package:biskit_app/review/components/review_write_card_widget.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
-import 'package:biskit_app/setting/view/alarm_list_screen.dart';
+import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/setting/view/setting_screen.dart';
@@ -407,6 +410,19 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   }
 
   Padding _buildTop(BuildContext context) {
+    bool hasUnreadAlarm() {
+      if (ref.watch(alarmProvider) is AlarmListModel) {
+        List<AlarmModel> alarms =
+            (ref.watch(alarmProvider) as AlarmListModel).alarms;
+        for (var alarm in alarms) {
+          if (alarm.is_read == false) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,
@@ -434,17 +450,34 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                     ),
                   );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic_notifications_line_24.svg',
-                    width: 24,
-                    height: 24,
-                    colorFilter: const ColorFilter.mode(
-                      kColorContentDefault,
-                      BlendMode.srcIn,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_notifications_line_24.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                          kColorContentDefault,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (hasUnreadAlarm() == true)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          width: 5,
+                          height: 5,
+                          decoration: const BoxDecoration(
+                            color: kColorBgNotification,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               GestureDetector(

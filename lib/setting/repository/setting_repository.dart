@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
-import 'package:biskit_app/setting/model/alarm_list_model.dart';
 import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
 import 'package:biskit_app/setting/model/report_res_model.dart';
@@ -480,36 +479,5 @@ class SettingRepository {
       logger.e(e.toString());
     }
     return isOk;
-  }
-
-  Future<AlarmListModel?> getAlarmList({
-    required int user_id,
-    int? skip = 0,
-    int? limit = 10,
-  }) async {
-    AlarmListModel? alarms;
-    try {
-      final res = await dio.get(
-        '$baseUrl/alarms/$user_id',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
-          },
-        ),
-        queryParameters: {
-          'skip': skip,
-          'limit': limit,
-        },
-      );
-      logger.d(res);
-      if (res.statusCode == 200) {
-        alarms = AlarmListModel.fromMap(res.data);
-      }
-    } on DioException catch (e) {
-      logger.d(e.toString());
-    }
-    return alarms;
   }
 }
