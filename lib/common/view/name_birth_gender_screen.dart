@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +53,21 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
     birthYearFocusNode = FocusNode();
     birthMonthFocusNode = FocusNode();
     birthDayFocusNode = FocusNode();
-    nameFocusNode.requestFocus();
+    if (widget.signUpModel.name != null &&
+        widget.signUpModel.sns_type == SnsType.apple.name &&
+        widget.signUpModel.name!.isNotEmpty) {
+      birthYearFocusNode.requestFocus();
+      isValidName = true;
+    } else {
+      nameFocusNode.requestFocus();
+    }
+
+    init();
+  }
+
+  init() {
+    name = widget.signUpModel.name ?? '';
+    setState(() {});
   }
 
   @override
@@ -217,6 +232,10 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
               errorText: nameError,
               textInputAction: TextInputAction.go,
               focusNode: nameFocusNode,
+              initialValue: name,
+              readOnly: widget.signUpModel.name != null &&
+                  widget.signUpModel.sns_type == SnsType.apple.name &&
+                  widget.signUpModel.name!.isNotEmpty,
               onFieldSubmitted: (value) {
                 FocusScope.of(context).requestFocus(birthYearFocusNode);
               },
