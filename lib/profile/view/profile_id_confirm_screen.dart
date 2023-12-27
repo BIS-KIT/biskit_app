@@ -331,7 +331,7 @@ class _ProfileIdConfirmScreenState
           height: 8,
         ),
         Text(
-          '학생 인증을 하면\n모임에 참여할 수 있어요',
+          '학교 인증을 하면\n모임에 참여할 수 있어요',
           style: getTsHeading24(context).copyWith(
             color: kColorContentDefault,
           ),
@@ -342,7 +342,7 @@ class _ProfileIdConfirmScreenState
         TooltipWidget(
           preferredDirection: AxisDirection.down,
           tooltipText:
-              '비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 학생인증 용도 외 다른 어떠한 용도로도 사용되지 않으며, 인증이 끝난 즉시 파기됩니다. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다.',
+              '비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다.',
           child: Row(
             children: [
               SvgPicture.asset(

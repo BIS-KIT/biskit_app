@@ -60,7 +60,7 @@ class ReviewRepository {
           },
         ),
       );
-
+      logger.d(res);
       if (res.statusCode == 200) {
         model = ResReviewModel.fromMap(res.data);
       }

@@ -277,9 +277,9 @@ class ProfileCardWidget extends StatelessWidget {
                               spacing: 4,
                               children: [
                                 Text(
-                                  userState.profile!.user_university.university
-                                      .kr_name,
-                                  style: getTsBody14Rg(context).copyWith(
+                                  userState
+                                      .user_nationality[0].nationality.kr_name,
+                                  style: getTsBody14Sb(context).copyWith(
                                     color: kColorContentWeaker,
                                   ),
                                 ),
@@ -287,6 +287,13 @@ class ProfileCardWidget extends StatelessWidget {
                                   '·',
                                   style: getTsBody14Rg(context).copyWith(
                                     color: kColorContentWeakest,
+                                  ),
+                                ),
+                                Text(
+                                  userState.profile!.user_university.university
+                                      .kr_name,
+                                  style: getTsBody14Rg(context).copyWith(
+                                    color: kColorContentWeaker,
                                   ),
                                 ),
                                 Text(

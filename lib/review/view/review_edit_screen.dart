@@ -144,7 +144,8 @@ class _ReviewEditScreenState extends ConsumerState<ReviewEditScreen> {
                               },
                               decoration: InputDecoration(
                                 counterText: '',
-                                hintText: '즐거웠던 모임 경험을 들려주세요 (선택사항)',
+                                hintText:
+                                    '즐거웠던 모임 경험을 들려주세요.(선택)\n\n부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.',
                                 hintStyle: getTsBody16Rg(context).copyWith(
                                   color: kColorContentPlaceholder,
                                 ),

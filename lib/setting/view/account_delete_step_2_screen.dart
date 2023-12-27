@@ -48,10 +48,10 @@ class _AccountDeleteStep2ScreenState
   Future<bool> deleteUserAccount() async {
     bool isDeleted = false;
     try {
-      bool? res = await ref.read(settingRepositoryProvider).deleteUserAccount(
+      bool isOk = await ref.read(settingRepositoryProvider).deleteUserAccount(
             userId: (ref.watch(userMeProvider) as UserModel).id,
           );
-      if (res) {
+      if (isOk) {
         isDeleted = true;
       }
     } finally {}
@@ -62,8 +62,8 @@ class _AccountDeleteStep2ScreenState
     bool reasonRes = await requestDeleteUserAccountReason();
     bool isDeleted = false;
     if (reasonRes) {
-      bool? res = await deleteUserAccount();
-      if (res) {
+      bool isOk = await deleteUserAccount();
+      if (isOk) {
         isDeleted = true;
       }
     }

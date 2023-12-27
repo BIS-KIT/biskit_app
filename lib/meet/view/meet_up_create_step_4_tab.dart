@@ -60,6 +60,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
     if (meetupDescriptionController.text.isNotEmpty) {
       setState(() {
         showMeetupDescription = true;
+        buttonText = '모임설명 삭제';
       });
     }
   }
@@ -275,7 +276,8 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                       maxLines: null,
                       minLines: null,
                       decoration: InputDecoration(
-                        hintText: '모임설명을 입력해주세요',
+                        hintText:
+                            '모임설명을 입력해주세요. 부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.',
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,

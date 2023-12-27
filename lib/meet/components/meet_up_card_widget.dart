@@ -39,26 +39,26 @@ class MeetUpCardWidget extends StatefulWidget {
 }
 
 class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
-  String getRecruitmentBadgeStr() {
-    String str = '';
+  // String getRecruitmentBadgeStr() {
+  //   String str = '';
 
-    if (widget.userModel != null && widget.userModel is UserModel) {
-      bool isKorean = false;
-      if ((widget.userModel as UserModel)
-          .user_nationality
-          .where((element) => element.nationality.code == 'kr')
-          .isNotEmpty) {
-        isKorean = true;
-      }
-      if (isKorean) {
-        str = '한국인 모집';
-      } else {
-        str = '외국인 모집';
-      }
-    }
+  //   if (widget.userModel != null && widget.userModel is UserModel) {
+  //     bool isKorean = false;
+  //     if ((widget.userModel as UserModel)
+  //         .user_nationality
+  //         .where((element) => element.nationality.code.toLowerCase() == 'kr')
+  //         .isNotEmpty) {
+  //       isKorean = true;
+  //     }
+  //     if (isKorean) {
+  //       str = '한국인 모집';
+  //     } else {
+  //       str = '외국인 모집';
+  //     }
+  //   }
 
-    return str;
-  }
+  //   return str;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -191,13 +191,33 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       const SizedBox(
                         width: 6,
                       ),
-                    if (widget.isParticipantsStatusTag &&
-                        (widget.model.korean_count == 0 ||
-                            widget.model.foreign_count == 0))
-                      NewBadgeWidget(
-                          text: getRecruitmentBadgeStr(),
-                          type: BadgeType.secondary,
-                          size: BadgeSize.M)
+                    if (widget.isParticipantsStatusTag)
+                      Builder(builder: (context) {
+                        bool isKorean = false;
+                        if ((widget.userModel as UserModel)
+                            .user_nationality
+                            .where((element) =>
+                                element.nationality.code.toLowerCase() == 'kr')
+                            .isNotEmpty) {
+                          isKorean = true;
+                        }
+                        if (isKorean && widget.model.korean_count == 0) {
+                          return const NewBadgeWidget(
+                            text: '한국인 모집',
+                            type: BadgeType.secondary,
+                            size: BadgeSize.M,
+                          );
+                        } else if (!isKorean &&
+                            widget.model.foreign_count == 0) {
+                          return const NewBadgeWidget(
+                            text: '외국인 모집',
+                            type: BadgeType.secondary,
+                            size: BadgeSize.M,
+                          );
+                        } else {
+                          return Container();
+                        }
+                      })
                   ],
                 ),
               ],
