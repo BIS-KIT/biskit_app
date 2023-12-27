@@ -98,6 +98,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           // email: authResult.user!.email,
           snsId: authResult.user!.uid,
           snsType: SnsType.apple,
+          iOsEmail: appleCredential.email,
+          iOsFirstName: appleCredential.givenName,
+          iOsLastName: appleCredential.familyName,
         );
       }
     } catch (error) {
@@ -153,6 +156,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   login({
     required String snsId,
     required SnsType snsType,
+    String? iOsEmail,
+    String? iOsLastName,
+    String? iOsFirstName,
   }) async {
     UserModelBase? userModelBase =
         await ref.read(userMeProvider.notifier).login(
@@ -166,10 +172,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (!mounted) return;
       context.pushNamed(
         SignUpAgreeScreen.routeName,
-        extra: SignUpModel(
-          sns_type: snsType.name,
-          sns_id: snsId,
-        ),
+        extra: snsType == SnsType.apple
+            ? SignUpModel(
+                sns_type: snsType.name,
+                sns_id: snsId,
+                email: iOsEmail,
+                name: '$iOsFirstName $iOsLastName',
+              )
+            : SignUpModel(
+                sns_type: snsType.name,
+                sns_id: snsId,
+              ),
       );
     } else if (userModelBase is UserModelError) {
       showSnackBar(
