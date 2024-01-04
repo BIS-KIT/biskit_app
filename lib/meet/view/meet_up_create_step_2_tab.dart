@@ -148,6 +148,9 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
       final time = await showTimeBottomSheet(
         context: context,
         time: tempTime,
+        onTapBack: () {
+          onTapDate();
+        },
       );
       if (time != null) {
         setState(() {

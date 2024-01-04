@@ -394,7 +394,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     children: widget.model.tags
                         .map(
                           (e) => Container(
-                            padding: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 4,
+                            ),
                             decoration: const BoxDecoration(
                               color: kColorBgElevation2,
                               borderRadius: BorderRadius.all(

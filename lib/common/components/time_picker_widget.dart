@@ -1,18 +1,21 @@
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 
 import 'filled_button_widget.dart';
 
 class TimePickerWidget extends StatefulWidget {
   final DateTime time;
+  final Function() onTapBack;
   const TimePickerWidget({
-    super.key,
+    Key? key,
     required this.time,
-  });
+    required this.onTapBack,
+  }) : super(key: key);
 
   @override
   State<TimePickerWidget> createState() => _TimePickerWidgetState();
@@ -58,6 +61,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
+                      widget.onTapBack();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10),

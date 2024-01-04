@@ -228,11 +228,15 @@ showTimeBottomSheet({
   required BuildContext context,
   required DateTime time,
   // required Function(DateTime newTime) onDateTimeChanged,
-}) {
-  return showCupertinoModalPopup(
+  required Function() onTapBack,
+}) async {
+  return await showCupertinoModalPopup(
     context: context,
     builder: (context) {
-      return TimePickerWidget(time: time);
+      return TimePickerWidget(
+        time: time,
+        onTapBack: onTapBack,
+      );
     },
   );
 }
