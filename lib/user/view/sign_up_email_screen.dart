@@ -287,6 +287,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                             title: 'emailScreen.email'.tr(),
                             hintText: 'example@email.com',
                             initialValue: email,
+                            autofocus: true,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             errorText: emailError,

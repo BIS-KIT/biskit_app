@@ -107,7 +107,9 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
               leftButton: '취소',
               rightCall: () async {
                 if (resReviewModel == null) return;
-                await ref.read(reviewProvider(null).notifier).deleteReview(
+                await ref
+                    .read(reviewProvider((userState as UserModel).id).notifier)
+                    .deleteReview(
                       id: resReviewModel!.id,
                     );
                 if (!context.mounted) return;

@@ -137,7 +137,7 @@ class _ChatRoomCardWidgetState extends State<ChatRoomCardWidget> {
                           padding: EdgeInsets.only(top: 8.0),
                           child: CircleAvatar(
                             radius: 4,
-                            backgroundColor: kColorContentError,
+                            backgroundColor: kColorBgNotification,
                           ),
                         ),
                 ],

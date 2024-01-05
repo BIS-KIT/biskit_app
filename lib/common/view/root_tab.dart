@@ -171,7 +171,7 @@ class _RootTabState extends ConsumerState<RootTab>
               ),
               _buildBottomItem(
                 iconPath: 'assets/icons/ic_search_line_24.svg',
-                activeIconPath: 'assets/icons/ic_search_line_24.svg',
+                activeIconPath: 'assets/icons/ic_search_fill_24.svg',
                 label: '검색',
               ),
               _buildBottomCenterItem(),
