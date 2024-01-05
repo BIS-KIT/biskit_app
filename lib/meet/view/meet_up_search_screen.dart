@@ -1,8 +1,11 @@
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/provider/meet_up_search_provider.dart';
+import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
@@ -120,42 +123,127 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                 child: Container(
                   color:
                       state.data.isEmpty ? kColorBgDefault : kColorBgElevation1,
-                  child: ListView.separated(
-                    controller: scrollController,
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      left: 20,
-                      right: 20,
-                      bottom: 20,
-                    ),
-                    itemBuilder: (context, index) {
-                      return MeetUpCardWidget(
-                        model: state.data[index],
-                        userModel: ref.watch(userMeProvider),
-                        onTapMeetUp: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MeetUpDetailScreen(
-                                meetUpModel: state.data[index],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 12,
-                    ),
-                    itemCount: state.data.length,
-                  ),
+                  child: (state.data.isEmpty && state.meta.totalCount == 0)
+                      ? _buildEmpty(context)
+                      : ListView.separated(
+                          controller: scrollController,
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: const EdgeInsets.only(
+                            top: 20,
+                            left: 20,
+                            right: 20,
+                            bottom: 20,
+                          ),
+                          itemBuilder: (context, index) {
+                            return MeetUpCardWidget(
+                              model: state.data[index],
+                              userModel: ref.watch(userMeProvider),
+                              onTapMeetUp: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MeetUpDetailScreen(
+                                      meetUpModel: state.data[index],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) => const SizedBox(
+                            height: 12,
+                          ),
+                          itemCount: state.data.length,
+                        ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Container _buildEmpty(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: kColorBgElevation1,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              Image.asset(
+                'assets/images/img_empty_states.png',
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                '검색겨롸가 없어요',
+                style: getTsBody16Sb(context).copyWith(
+                  color: kColorContentPlaceholder,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              top: 24,
+              left: 20,
+              right: 20,
+              bottom: 20,
+            ),
+            decoration: const BoxDecoration(
+              color: kColorBgDefault,
+              borderRadius: BorderRadius.all(
+                Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '원하는 모임이 없다면 직접 만들어볼까요?',
+                  style: getTsBody14Rg(context).copyWith(
+                    color: kColorContentWeaker,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MeetUpCreateScreen(),
+                          ),
+                        );
+                      },
+                      child: const OutlinedButtonWidget(
+                        text: '모임 만들기',
+                        height: 44,
+                        isEnable: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

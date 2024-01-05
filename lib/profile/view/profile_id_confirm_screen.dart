@@ -120,8 +120,9 @@ class _ProfileIdConfirmScreenState
     final size = MediaQuery.of(context).size;
     return DefaultLayout(
       title: '',
-      leadingIconPath:
-          widget.isEditor ? 'assets/icons/ic_cancel_line_24.svg' : null,
+      leadingIconPath: widget.isEditor
+          ? 'assets/icons/ic_cancel_line_24.svg'
+          : 'assets/icons/ic_arrow_back_ios_line_24.svg',
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 10),

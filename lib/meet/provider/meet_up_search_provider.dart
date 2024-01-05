@@ -32,7 +32,7 @@ class MeetUpSearchStateNotifier
           data: [],
           meta: CursorPaginationMeta(
             count: 0,
-            totalCount: 0,
+            totalCount: -1,
             hasMore: true,
           ),
         )) {
@@ -44,7 +44,7 @@ class MeetUpSearchStateNotifier
       data: [],
       meta: CursorPaginationMeta(
         count: 0,
-        totalCount: 0,
+        totalCount: -1,
         hasMore: true,
       ),
     );

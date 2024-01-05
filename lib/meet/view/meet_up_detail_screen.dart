@@ -669,10 +669,15 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                               // chartTouchedIndex = -1;
                               return;
                             }
+                            if (pieTouchResponse
+                                    .touchedSection!.touchedSectionIndex ==
+                                -1) {
+                              return;
+                            }
                             if (chartTouchedIndex ==
                                 pieTouchResponse
                                     .touchedSection!.touchedSectionIndex) {
-                              chartTouchedIndex = -1;
+                              chartTouchedIndex = chartTouchedIndex;
                             } else {
                               chartTouchedIndex = pieTouchResponse
                                   .touchedSection!.touchedSectionIndex;

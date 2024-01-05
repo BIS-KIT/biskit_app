@@ -59,6 +59,11 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
     contextController = TextEditingController(
       text: widget.context ?? '',
     );
+
+    if (contextController.text.isNotEmpty) {
+      isReasonView = true;
+    }
+    setState(() {});
   }
 
   @override
@@ -125,7 +130,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                         : null,
                   ),
                 ),
-                if (!reasonFocusNode.hasFocus)
+                if (!reasonFocusNode.hasFocus && contextController.text.isEmpty)
                   Row(
                     children: [
                       const SizedBox(

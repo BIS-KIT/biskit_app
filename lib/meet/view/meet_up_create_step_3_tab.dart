@@ -138,33 +138,25 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                     spacing: 6,
                     runSpacing: 8,
                     children: [
-                      ChipWidget(
-                        text: "직접입력",
-                        isSelected: false,
-                        onTapEnter: (e) {
-                          ref
-                              .read(createMeetUpProvider.notifier)
-                              .onTapAddCustomTag(customTagController.text);
-                          setState(() {
-                            customTagController.text = '';
-                          });
-                        },
-                        onTapAdd: (e) {
-                          customTagFocusNode.requestFocus();
-                        },
-                        focusNode: customTagFocusNode,
-                        controller: customTagController,
-                      ),
-                      ...widget.tags.map(
-                        (e) => ChipWidget(
-                          text: e.kr_name,
-                          isSelected: createMeetUpState!.tag_ids.contains(e.id),
-                          onClickSelect: () {
-                            ref.read(createMeetUpProvider.notifier).onTapTag(e);
+                      if (createMeetUpState!.custom_tags.length < 10)
+                        ChipWidget(
+                          text: "직접입력",
+                          isSelected: false,
+                          onTapEnter: (e) {
+                            ref
+                                .read(createMeetUpProvider.notifier)
+                                .onTapAddCustomTag(customTagController.text);
+                            setState(() {
+                              customTagController.text = '';
+                            });
                           },
+                          onTapAdd: (e) {
+                            customTagFocusNode.requestFocus();
+                          },
+                          focusNode: customTagFocusNode,
+                          controller: customTagController,
                         ),
-                      ),
-                      ...createMeetUpState!.custom_tags.map(
+                      ...createMeetUpState.custom_tags.map(
                         (e) => ChipWidget(
                           text: e,
                           isSelected: createMeetUpState.custom_tags.contains(e),
@@ -177,6 +169,15 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                             ref
                                 .read(createMeetUpProvider.notifier)
                                 .onTapDeleteCustomTag(e);
+                          },
+                        ),
+                      ),
+                      ...widget.tags.map(
+                        (e) => ChipWidget(
+                          text: e.kr_name,
+                          isSelected: createMeetUpState.tag_ids.contains(e.id),
+                          onClickSelect: () {
+                            ref.read(createMeetUpProvider.notifier).onTapTag(e);
                           },
                         ),
                       ),

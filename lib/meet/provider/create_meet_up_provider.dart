@@ -230,6 +230,9 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
   // 커스텀 태그 생성
   onTapAddCustomTag(String tag) {
     if (state != null) {
+      if (state!.custom_tags.length >= 10) {
+        return;
+      }
       state = state!.copyWith(
         custom_tags: [
           ...state!.custom_tags,
