@@ -1,11 +1,238 @@
 {
-  "hello": "안녕",
-  "emailScreen": {
-    "title": "이메일 로그인",
-    "email": "이메일",
-    "password": "비밀번호"
+  "emailLoginScreen":{
+      "title": "이메일 로그인",
+      "email": "이메일",
+          "email.placeholder":"이메일을 입력해주세요",
+          "email.error":"이메일 형식을 확인해주세요",
+      "password" : "비밀번호",
+          "password.placeholder":"비밀번호를 입력해주세요",
+      "login" : "로그인",
+      "signUp":"회원가입",
+      "errorToast":"이메일 또는 비밀번호가 일치하지 않아요",
+      "findEmail":"아이디 찾기",
+      "resetPassword":"비밀번호 재설정"
   },
-  "findPasswordScreen": {
-    "title": "비밀번호 재설정"
+
+
+  "resetPasswordScreen1":{
+      "title":"비밀번호 재설정",
+      "email":"이메일",
+          "email.placeholder":"가입한 이메일을 입력해주세요",
+          "email.inputError":"이메일을 입력해주세요",
+          "email.formatError":"이메일 양식이 올바르지 않아요",
+          "email.loginError":"등록된 이메일 주소가 아니에요",
+      "getCode":"인증번호 받기"
+  },
+
+  "resetPasswordScreen2":{
+      "title":"비밀번호 재설정",
+      "email":"이메일",
+      "resendVCode":"인증번호 다시 받기",
+      "vCode":"인증번호",
+        "vCode.placeholder":"인증번호를 입력해주세요",
+        "vCode.timeoutError":"인증번호를 다시 보내주세요",
+        "vCode.wrongError":"인증번호가 일치하지 않아요",
+      "noVCode.title":"태그를 받지 못하셨나요?",
+      "noVCode.content":"스팸 메일함을 확인해주세요. 메일이 없다면 teambiskit@gmail.com으로 문의해주세요."
+  },
+
+  "resetPasswordScreen3":{
+      "title":"비밀번호 재설정",
+      "newPassword":"새 비밀번호",
+          "newPassword.placeholder":"새 비밀번호를 입력해주세요",
+          "newPassword.description":"8자 이상으로 입력해주세요",
+          "newPassword.numError":"8자 이상으로 입력해주세요",
+      "confirmPassword":"비밀번호 확인",
+          "confirmPassword.placeholder":"다시 한번 입력해주세요", 
+          "confirmPassword.description":"비밀번호가 일치해요",
+          "confirmPassword.wrongError":"비밀번호가 일치하지 않아요",
+      "complete":"완료"
+  },
+
+  "resetPasswordCompleteScreen":{
+      "pwChangedTitle":"비밀번호가 변경되었어요",
+      "pwChangedText":"새로운 비밀번호로 로그인해주세요",
+      "login":"로그인"
+  },
+
+  "signUpTermsScreen":{
+      "title":"회원가입 전 이용약관 동의가 필요해요",
+      "agreeToAll":"전체 동의하기",
+      "required1":"[필수] 서비스 이용약관",
+      "required2":"[필수] 개인정보 처리방침",
+      "required3":"[필수] 위치기반 서비스 이용약관",
+      "optional":"[필수] 마케팅 정보 활용",
+      "next":"다음"
+  },
+
+  "signUpEmailScreen":{
+      "email":"이메일",
+          "email.placeholder":"example@email.com",
+          "email.error1":"이메일을 입력해주세요",
+          "email.error2":"이메일 양식이 올바르지 않아요",
+      "getVCode":"인증번호 받기"
+  },
+
+  "accountExistModal":{
+      "title":"이미 가입된 계정이 있어요",
+      "text":"계정으로 로그인 해주세요",
+      "btn":"Sign in"
+     },
+
+  "signUpEmailVerifyScreen":{
+      "email":"이메일",
+      "resendVCode":"인증번호 다시 받기",
+      "vCode":"인증번호",
+        "vCode.placeholder":"인증번호를 입력해주세요",
+        "vCode.timeoutError":"인증번호를 다시 보내주세요",
+        "vCode.wrongError":"인증번호가 일치하지 않아요",
+      "noVCode.title":"태그를 받지 못하셨나요?",
+      "noVCode.content":"스팸 메일함을 확인해주세요. 메일이 없다면 teambiskit@gmail.com으로 문의해주세요."
+
+  },
+
+  "signUpPasswordScreen":{
+      "password":"비밀번호",
+          "password.placeholder":"비밀번호를 입력해주세요",
+          "password.description":"8자 이상으로 입력해주세요",
+          "password.numError":"8자 이상으로 입력해주세요",
+      "confirmPassword":"비밀번호 확인",
+          "confirmPassword.placeholder":"다시 한번 입력해주세요", 
+          "confirmPassword.description":"비밀번호가 일치해요",
+          "confirmPassword.wrongError":"비밀번호가 일치하지 않아요",
+      "next":"다음"
+  },
+
+  "signUpNameScreen":{
+      "name":"이름",
+          "name.placeholder":"이름을 입력해주세요",
+          "name.error":"한글 또는 영문으로 입력해주세요",
+      "birth":"생년월일",
+      "gender":"성별",
+      "female":"여성",
+      "male":"남성",
+      "next":"다음"
+  },
+
+  "signUpNationalityScreen":{
+      "title":"국적을 선택해주세요",
+      "subtitle":"변경할 수 없으니 정확히 선택해주세요",
+      "searchBar":"국적 검색",
+      "multinational":"이중국적인가요?",
+      "next":"다음"
+  },
+
+  "signUpSelectUnivScreen":{
+      "title":"학교를 선택해주세요",
+      "subtitle":"같은 학교의 친구들을 만날 수 있어요",
+      "selectUniv":"학교 선택",
+      "next":"다음"
+  },
+
+  "selectUnivBottomSheet":{
+      "title":"학교 선택",
+      "search":"학교 검색",
+      "next":"다음"
+  },
+
+  "selectDegreeBottomSheet":{
+      "title":"소속 선택",
+      "undergraduate":"학부",
+      "graduate":"대학원",
+      "exchange":"교환학생",
+      "language":"어학당",
+      "next":"다음"
+  },
+
+  "selectStateBottomSheet":{
+      "title":"학적상태 선택",
+      "attending":"재학",
+      "completed":"수료",
+      "graduated":"졸업",
+      "next":"다음"
+  },
+
+  "selectStateBottomSheet2":{
+      "title":"학적상태 선택",
+      "attending":"재학",
+      "completed":"수료",
+      "next":"다음"
+  },
+
+  "signUpSelectUnivCompleteScreen":{
+      "title":"학교를 선택해주세요",
+      "subtitle":"같은 학교의 친구들을 만날 수 있어요",
+      "univ":"학교",
+      "degree":"소속",
+      "state":"학적상태",
+      "edit":"다시 선택하기",
+      "create":"가입하기"
+  },
+
+  "signUpCompleteScreen":{
+      "title":"가입을 축하드려요!",
+      "subtitle":"보다 즐거운 모임을 위해 프로필을 작성해주세요",
+      "create":"프로필 완성하기"
+  },
+
+  "uploadPhotoScreen":{
+      "title":"사진과 닉네임을 등록해주세요",
+      "nickname":"닉네임",
+          "nickname.available":"사용 가능한 닉네임이에요",
+          "nickname.numError":"2자 이상 입력해주세요",
+          "nickname.duplicateError":"이미 사용중인 닉네임이에요",
+      "next":"다음"
+  },
+
+  "userAlbumScreen":{
+      "title":"최근 항목",
+      "done":"완료"
+  },
+
+  "availableLangScreen":{
+      "title":"사용가능한 언어를 알려주세요",
+      "selectLang":"언어선택",
+      "next":"다음"
+  },
+
+  "selectLangBottomSheet":{
+      "title":"언어 선택",
+      "searchLang":"언어 검색",
+      "level":"레벨",
+      "done":"완료"
+  },
+
+  "langLevelBottomSheet":{
+      "title":"레벨 선택",
+      "mastery":"능숙",
+          "mastery.description":"모국어 수준으로 언어를 자유롭게 구사할 수 있어요",
+      "advanced":"고급",
+          "advanced.description":"복잡한 주제에 대해 막힘없이 대화를 나눌 수 있어요",
+      "intermediate":"중급",
+          "intermediate.description":"다양한 주제를 이해하고 의견을 표현할 수 있어요",
+      "elementary":"기초",
+          "elementary.description":"일상적인 주제를 이해하고 대화할 수 있어요",
+      "beginner":"초보",
+          "beginner.description":"자기소개를 하고 간단한 질문에 대답할 수 있어요"
+  },
+
+  "langSelectConstraintModal":{
+      "title":"5개까지 선택할 수 있어요",
+      "ok":"확인"
+  },
+
+  "addKeywordScreen":{
+      "title":"님, 좋아하는 것을 알려주세요",
+      "subtitle":"비슷한 취향을 가진 친구들을 만날 수 있어요",
+      "next":"다음"
+  },
+   
+  "addKeywordBottomSheet":{
+      "title":"Add keyword",
+      "keyword.placeholder":"좋아하는 것을 알려주세요",
+      "explain.placeholder": ""
   }
-}
+
+
+
+  }
