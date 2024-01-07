@@ -187,14 +187,14 @@
     "attending": "Attending",
     "completed": "Completed",
     "graduated": "Graduated",
-    "next": "Done"
+    "next": "Next"
   },
 
   "selectStateBottomSheet2": {
     "title": "Select state",
     "attending": "Attending",
     "completed": "Completed",
-    "next": "Done"
+    "done": "Done"
   },
 
   "signUpSelectUnivCompleteScreen": {
@@ -209,16 +209,23 @@
 
   "signUpCompleteScreen": {
     "title": "Congratulations!",
-    "subtitle": "Sign up has been completed successfully. Create your profile to enjoy meetups",
+    "subtitle": "Sign up has been completed successfully.\nCreate your profile to enjoy meetups",
     "create": "Create a profile"
   },
 
   "uploadPhotoScreen": {
     "title": "Upload a photo and\nNickname",
-    "nickname": "Nickname",
-    "nickname.available": "This nickname is available",
-    "nickname.numError": "At least 2 characters",
-    "nickname.duplicateError": "This nickname is already in use",
+    "placeholder": "Please enter your nickname",
+    "nickname": {
+      "title": "Nickname",
+      "subtitle": {
+        "available": "This nickname is available",
+        "error": "At least 2 Korean/English/numeric characters"
+      },
+      "numError": "At least 2 characters",
+      "duplicateError": "This nickname is already in use",
+      "formatError": "Only available in Korean/English/numbers"
+    },
     "next": "Next"
   },
 
@@ -270,15 +277,17 @@
   },
 
   "addKeywordScreen": {
-    "title": "Hi ,\nWhat's your favorites?",
+    "title": ",\nWhat's your favorite?",
     "subtitle": "You can meet friends with similar tastes",
-    "next": "Next"
+    "next": "Next",
+    "save": "save"
   },
 
   "addKeywordBottomSheet": {
+    "placeholder": "What's your favorite?",
     "title": "Add keyword",
     "keyword_placeholder": "Enter your favorite thing",
-    "explain_placeholder": "Enter a reason you like",
+    "explain_placeholder": "Enter a reason why you like",
     "done": "Done"
   },
 

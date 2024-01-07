@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -98,7 +99,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
         _albums.add(
           Album(
             id: path.id,
-            name: path.isAll ? '최근 항목' : path.name,
+            name: path.isAll ? 'userAlbumScreen.title'.tr() : path.name,
             count: count,
             thumbnail: (await path.getAssetListRange(start: 0, end: 1))[0],
           ),
@@ -576,7 +577,7 @@ class _PhotoManagerScreenState extends State<PhotoManagerScreen> {
                       GestureDetector(
                         onTap: onTapComplete,
                         child: Text(
-                          '완료',
+                          'userAlbumScreen.done'.tr(),
                           style: getTsBody16Sb(context).copyWith(
                             color: _selectedPhoto.isEmpty
                                 ? kColorContentDisabled

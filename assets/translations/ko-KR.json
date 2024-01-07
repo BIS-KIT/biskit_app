@@ -194,7 +194,7 @@
     "title": "학적상태 선택",
     "attending": "재학",
     "completed": "수료",
-    "next": "다음"
+    "done": "완료"
   },
 
   "signUpSelectUnivCompleteScreen": {
@@ -209,16 +209,23 @@
 
   "signUpCompleteScreen": {
     "title": "가입을 축하드려요!",
-    "subtitle": "보다 즐거운 모임을 위해 프로필을 작성해주세요",
+    "subtitle": "보다 즐거운 모임을 위해\n프로필을 작성해주세요",
     "create": "프로필 완성하기"
   },
 
   "uploadPhotoScreen": {
-    "title": "사진과 닉네임을 등록해주세요",
-    "nickname": "닉네임",
-    "nickname.available": "사용 가능한 닉네임이에요",
-    "nickname.numError": "2자 이상 입력해주세요",
-    "nickname.duplicateError": "이미 사용중인 닉네임이에요",
+    "title": "사진과 닉네임을\n등록해주세요",
+    "placeholder": "닉네임을 입력해주세요",
+    "nickname": {
+      "title": "닉네임",
+      "subtitle": {
+        "available": "사용 가능한 닉네임이에요",
+        "error": "한글/영문/숫자 2자 이상"
+      },
+      "numError": "2자 이상 입력해주세요",
+      "duplicateError": "이미 사용중인 닉네임이에요",
+      "formatError": "한글/영문/숫자만 사용가능해요"
+    },
     "next": "다음"
   },
 
@@ -228,7 +235,7 @@
   },
 
   "availableLangScreen": {
-    "title": "사용가능한 언어를 알려주세요",
+    "title": "사용가능한 언어를\n알려주세요",
     "selectLang": "언어선택",
     "next": "다음"
   },
@@ -270,13 +277,15 @@
   },
 
   "addKeywordScreen": {
-    "title": "님, 좋아하는 것을 알려주세요",
+    "title": "님,\n좋아하는 것을 알려주세요",
     "subtitle": "비슷한 취향을 가진 친구들을 만날 수 있어요",
-    "next": "다음"
+    "next": "다음",
+    "save": "저장"
   },
 
   "addKeywordBottomSheet": {
-    "title": "Add keyword",
+    "placeholder": "좋아하는 것을 알려주세요",
+    "title": "키워드 작성",
     "keyword_placeholder": "좋아하는 것을 알려주세요",
     "explain_placeholder": "좋아하는 이유를 알려주세요",
     "done": "완료"
