@@ -16,6 +16,7 @@ import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_language_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,7 +95,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
             .getCheckNickName(value)) {
           // 이미 사용중일 때
           setState(() {
-            nickNameError = '이미 사용중인 닉네임이에요';
+            nickNameError = 'uploadPhotoScreen.nickname.duplicateError'.tr();
             isNickNameOk = false;
           });
         } else {
@@ -108,13 +109,13 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
       } else {
         if (value.length < 2) {
           setState(() {
-            nickNameError = '2자 이상 입력해주세요';
+            nickNameError = 'uploadPhotoScreen.nickname.numError'.tr();
             isNickNameOk = false;
           });
           return;
         } else {
           setState(() {
-            nickNameError = '한글/영문/숫자만 사용가능해요';
+            nickNameError = 'uploadPhotoScreen.nickname.formatError'.tr();
             isNickNameOk = false;
           });
           return;
@@ -196,7 +197,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                     height: 8,
                   ),
                   Text(
-                    '사진과 닉네임을\n등록해주세요',
+                    'uploadPhotoScreen.title'.tr(),
                     style: getTsHeading24(context).copyWith(
                       color: kColorContentDefault,
                     ),
@@ -315,8 +316,8 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                     children: [
                       TextInputWidget(
                         controller: controller,
-                        title: '닉네임',
-                        hintText: '닉네임을 입력해주세요',
+                        title: 'uploadPhotoScreen.nickname'.tr(),
+                        hintText: 'uploadPhotoScreen.placeholder'.tr(),
                         maxLength: 12,
                         // onChanged: onSearchChanged,
                         errorText: nickNameError,
@@ -345,7 +346,11 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
-                            isNickNameOk ? '사용 가능한 닉네임이에요' : '한글/영문/숫자 2자 이상',
+                            isNickNameOk
+                                ? 'uploadPhotoScreen.nickname.subtitle.available'
+                                    .tr()
+                                : 'uploadPhotoScreen.nickname.subtitle.error'
+                                    .tr(),
                             style: getTsCaption12Rg(context).copyWith(
                               color: isNickNameOk
                                   ? kColorContentSeccess
@@ -369,7 +374,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                   child: GestureDetector(
                     onTap: onTapNext,
                     child: FilledButtonWidget(
-                      text: '다음',
+                      text: 'uploadPhotoScreen.next'.tr(),
                       fontSize: FontSize.l,
                       isEnable: isNickNameOk,
                     ),
@@ -378,7 +383,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
               : GestureDetector(
                   onTap: onTapNext,
                   child: FullBleedButtonWidget(
-                    text: '다음',
+                    text: 'uploadPhotoScreen.next'.tr(),
                     isEnable: isNickNameOk,
                   ),
                 ),

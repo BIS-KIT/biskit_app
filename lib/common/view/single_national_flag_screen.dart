@@ -165,7 +165,7 @@ class _SingleNationalFlagScreenState
               height: 8,
             ),
             Text(
-              '국적을 선택해주세요',
+              'signUpNationalityScreen.title'.tr(),
               style: getTsHeading24(context).copyWith(
                 color: kColorContentDefault,
               ),
@@ -174,7 +174,7 @@ class _SingleNationalFlagScreenState
               height: 8,
             ),
             Text(
-              '변경할 수 없으니 정확히 선택해주세요',
+              'signUpNationalityScreen.subtitle'.tr(),
               style: getTsBody16Rg(context).copyWith(
                 color: kColorContentWeaker,
               ),
@@ -185,7 +185,7 @@ class _SingleNationalFlagScreenState
             SearchBarWidget(
               controller: textEditingController,
               onChanged: (value) {},
-              hintText: '국적 검색',
+              hintText: 'signUpNationalityScreen.searchBar'.tr(),
             ),
             Expanded(
               child: isLoading
@@ -241,7 +241,7 @@ class _SingleNationalFlagScreenState
                             ));
                       },
                       child: Text(
-                        '복수국적인가요?',
+                        'signUpNationalityScreen.multinational'.tr(),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeakest,
                         ),
@@ -262,7 +262,7 @@ class _SingleNationalFlagScreenState
                         }
                       },
                       child: FilledButtonWidget(
-                        text: '다음',
+                        text: 'signUpNationalityScreen.next'.tr(),
                         isEnable: selectedModel != null,
                         height: 56,
                       ),
