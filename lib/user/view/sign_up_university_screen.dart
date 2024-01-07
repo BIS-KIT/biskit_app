@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -54,7 +55,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   getUniv() async {
     return await showBiskitBottomSheet(
       context: context,
-      title: '학교 선택',
+      title: 'selectUnivBottomSheet.title'.tr(),
       rightIcon: 'assets/icons/ic_cancel_line_24.svg',
       isDismissible: false,
       onRightTap: () {
@@ -80,7 +81,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   getStudentStatus() async {
     return await showBiskitBottomSheet(
       context: context,
-      title: '소속 선택',
+      title: 'selectDegreeBottomSheet.title'.tr(),
       leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
       isDismissible: false,
       onLeftTap: () async {
@@ -107,7 +108,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
   getGraduateStatus() async {
     return await showBiskitBottomSheet(
       context: context,
-      title: '학적상태 선택',
+      title: 'selectStateBottomSheet.title'.tr(),
       leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
       isDismissible: false,
       onLeftTap: () async {
@@ -282,7 +283,8 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '학교',
+                                        'signUpSelectUnivCompleteScreen.univ'
+                                            .tr(),
                                         style: getTsBody16Sb(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -314,7 +316,8 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '소속',
+                                        'signUpSelectUnivCompleteScreen.degree'
+                                            .tr(),
                                         style: getTsBody16Sb(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -347,7 +350,8 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '학적상태',
+                                        'signUpSelectUnivCompleteScreen.state'
+                                            .tr(),
                                         style: getTsBody16Sb(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -383,9 +387,10 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                 });
                                 onTapStartSelectedUniv();
                               },
-                              child: const OutlinedButtonWidget(
+                              child: OutlinedButtonWidget(
                                 isEnable: true,
-                                text: '다시 선택하기',
+                                text:
+                                    'signUpSelectUnivCompleteScreen.edit'.tr(),
                                 height: 52,
                               ),
                             ),
@@ -393,9 +398,9 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                         )
                       : GestureDetector(
                           onTap: onTapStartSelectedUniv,
-                          child: const OutlinedButtonWidget(
+                          child: OutlinedButtonWidget(
                             isEnable: true,
-                            text: '학교 선택',
+                            text: 'selectUnivBottomSheet.title'.tr(),
                             height: 52,
                           ),
                         ),
@@ -412,7 +417,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
               child: GestureDetector(
                 onTap: onTapSignUp,
                 child: FilledButtonWidget(
-                  text: '가입하기',
+                  text: 'signUpSelectUnivCompleteScreen.create'.tr(),
                   isEnable: universitySet != null,
                 ),
               ),
@@ -428,7 +433,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          '학교를 선택해주세요',
+          'signUpSelectUnivScreen.title'.tr(),
           style: getTsHeading24(context).copyWith(
             color: kColorContentDefault,
           ),
@@ -437,7 +442,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
           height: 8,
         ),
         Text(
-          '같은 학교의 친구들을 만날 수 있어요',
+          'signUpSelectUnivScreen.subtitle'.tr(),
           style: getTsBody16Rg(context).copyWith(
             color: kColorContentWeaker,
           ),
