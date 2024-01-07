@@ -88,7 +88,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
 
             // 시간 오버인 경우
             setState(() {
-              pinCodeError = '인증번호를 다시 보내주세요';
+              pinCodeError = 'signUpEmailVerifyScreen.vCode.timeoutError'.tr();
               recivePinCode = '';
             });
           } else {
@@ -117,12 +117,12 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
   checkValueEmail() {
     if (email.isEmpty) {
       setState(() {
-        emailError = '이메일을 입력해주세요';
+        emailError = 'signUpEmailScreen.email.error1'.tr();
       });
       return false;
     } else if (!email.isValidEmailFormat()) {
       setState(() {
-        emailError = '이메일 양식이 올바르지 않아요';
+        emailError = 'signUpEmailScreen.email.error2'.tr();
       });
       return false;
     } else {
@@ -157,8 +157,8 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
           if (!mounted) return;
           showDefaultModal(
             context: context,
-            title: '이미 가입된 계정이 있어요',
-            content: '$email\n계정으로 로그인해주세요',
+            title: 'accountExistModal.title'.tr(),
+            content: '$email\n${'accountExistModal.text'.tr()}',
             function: () {
               context.goNamed(
                 EmailLoginScreen.routeName,
@@ -223,7 +223,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     if (pinCode.length == 6) {
       if (pinCode != recivePinCode) {
         setState(() {
-          pinCodeError = '인증번호가 일치하지 않아요';
+          pinCodeError = 'signUpEmailVerifyScreen.vCode.wrongError'.tr();
         });
       } else {
         timer.cancel();
@@ -284,7 +284,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                             }
                           },
                           child: TextInputWidget(
-                            title: 'emailScreen.email'.tr(),
+                            title: 'signUpEmailScreen.email.title'.tr(),
                             hintText: 'example@email.com',
                             initialValue: email,
                             autofocus: true,
@@ -311,7 +311,7 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                                       },
                                 child: FilledButtonWidget(
                                   height: 52,
-                                  text: '인증번호 받기',
+                                  text: 'signUpEmailScreen.getVCode'.tr(),
                                   isEnable: isButtonEnable,
                                 ),
                               )
@@ -320,9 +320,10 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                                   onTapRePinCodeRecive();
                                   pinFocusNode.requestFocus();
                                 },
-                                child: const OutlinedButtonWidget(
+                                child: OutlinedButtonWidget(
                                   height: 52,
-                                  text: '인증번호 다시 받기',
+                                  text: 'signUpEmailVerifyScreen.resendVCode'
+                                      .tr(),
                                   isEnable: true,
                                 ),
                               ),
@@ -333,8 +334,11 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                                 height: 24,
                               ),
                               TextInputWidget(
-                                title: '인증번호',
-                                hintText: '인증번호를 입력해주세요',
+                                title:
+                                    'signUpEmailVerifyScreen.vCode.title'.tr(),
+                                hintText:
+                                    'signUpEmailVerifyScreen.vCode.placeholder'
+                                        .tr(),
                                 keyboardType: TextInputType.number,
                                 maxLength: 6,
                                 controller: pinController,
@@ -374,10 +378,9 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
                 if (isPinCodeMode)
                   TooltipWidget(
                     preferredDirection: AxisDirection.up,
-                    tooltipText:
-                        '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
+                    tooltipText: 'signUpEmailVerifyScreen.noVCode.content'.tr(),
                     child: Text(
-                      '메일을 받지 못하셨나요?',
+                      'signUpEmailVerifyScreen.noVCode.title'.tr(),
                       style: getTsBody14Rg(context).copyWith(
                         color: kColorContentWeakest,
                       ),

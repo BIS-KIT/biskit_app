@@ -69,12 +69,19 @@
   },
 
   "signUpTermsScreen": {
-    "title": "회원가입 전 이용약관 동의가 필요해요",
+    "title": "회원가입 전\n이용약관 동의가 필요해요",
     "agreeToAll": "전체 동의하기",
-    "required1": "[필수] 서비스 이용약관",
-    "required2": "[필수] 개인정보 처리방침",
-    "required3": "[필수] 위치기반 서비스 이용약관",
-    "optional": "[필수] 마케팅 정보 활용",
+    "agreeList": {
+      "required1": "[필수] 서비스 이용약관",
+      "required2": "[필수] 개인정보 처리방침",
+      "required3": "[필수] 위치기반 서비스 이용약관",
+      "optional": "[선택] 마케팅 정보 활용"
+    },
+    "agreeTitle": {
+      "required1": "서비스 이용약관",
+      "required2": "개인정보 처리방침",
+      "required3": "위치기반 서비스 이용약관"
+    },
     "next": "다음"
   },
 

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/view/web_view_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -68,7 +69,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                 height: 24,
               ),
               Text(
-                '회원가입 전\n이용약관 동의가 필요해요',
+                'signUpTermsScreen.title'.tr(),
                 style: getTsHeading24(context).copyWith(
                   color: kColorContentDefault,
                 ),
@@ -86,7 +87,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   value: isAll,
                 ),
                 centerWidget: Text(
-                  '전체 동의하기',
+                  'signUpTermsScreen.agreeToAll'.tr(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -117,7 +118,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   checkAll();
                 },
                 centerWidget: Text(
-                  '[필수] 서비스 이용약관',
+                  'signUpTermsScreen.agreeList.required1'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -130,9 +131,9 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const WebViewScreen(
+                        builder: (context) => WebViewScreen(
                           url: kTermsConditionsServiceUseUrl,
-                          title: '서비스 이용약관',
+                          title: 'signUpTermsScreen.agreeTitle.required1'.tr(),
                         ),
                       ),
                     );
@@ -152,7 +153,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   checkAll();
                 },
                 centerWidget: Text(
-                  '[필수] 개인정보 처리방침',
+                  'signUpTermsScreen.agreeList.required2'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -165,9 +166,9 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const WebViewScreen(
+                        builder: (context) => WebViewScreen(
                           url: kPrivacyPolicyUrl,
-                          title: '개인정보 처리방침',
+                          title: 'signUpTermsScreen.agreeTitle.required2'.tr(),
                         ),
                       ),
                     );
@@ -188,7 +189,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   checkAll();
                 },
                 centerWidget: Text(
-                  '[필수] 위치기반 서비스 이용약관',
+                  'signUpTermsScreen.agreeList.required3'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -201,9 +202,9 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const WebViewScreen(
+                        builder: (context) => WebViewScreen(
                           url: kLocationServiceTermsConditionsUrl,
-                          title: '위치기반 서비스 이용약관',
+                          title: 'signUpTermsScreen.agreeTitle.required3'.tr(),
                         ),
                       ),
                     );
@@ -223,7 +224,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   checkAll();
                 },
                 centerWidget: Text(
-                  '[선택] 마케팅 정보 활용',
+                  'signUpTermsScreen.agreeList.optional'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -256,7 +257,7 @@ class _SignUpAgreeScreenState extends ConsumerState<SignUpAgreeScreen> {
                   }
                 },
                 child: FilledButtonWidget(
-                  text: '다음',
+                  text: 'signUpTermsScreen.next'.tr(),
                   height: 56,
                   isEnable: isAgree1 && isAgree2 && isAgree3,
                 ),

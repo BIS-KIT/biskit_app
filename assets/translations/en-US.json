@@ -71,10 +71,17 @@
   "signUpTermsScreen": {
     "title": "Terms and Conditions\nAgreement are required",
     "agreeToAll": "Agree to All",
-    "required1": "[Required] Terms of Service",
-    "required2": "[Required] Privacy Policy",
-    "required3": "[Required] Terms of Location-based Services",
-    "optional": "[Optional] Consent to the Marketing information",
+    "agreeList": {
+      "required1": "[Required] Terms of Service",
+      "required2": "[Required] Privacy Policy",
+      "required3": "[Required] Terms of Location-based Services",
+      "optional": "[Optional] Consent to the Marketing information"
+    },
+    "agreeTitle": {
+      "required1": "Terms of Service",
+      "required2": "Privacy Policy",
+      "required3": "Terms of Location-based Services"
+    },
     "next": "Next"
   },
 
