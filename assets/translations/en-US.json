@@ -1,11 +1,15 @@
 {
   "emailLoginScreen":{
       "title": "Continue with Email",
-      "email": "Email",
-          "email.placeholder":"Enter a Email",
-          "email.error":"Enter a valid email address",
-      "password" : "Password",
-          "password.placeholder":"Enter a Password",
+      "email": {
+        "title": "Email",
+        "placeholder":"Enter a Email",
+        "error":"Enter a valid email address"
+      },   
+      "password" : {
+        "title": "Password",
+        "placeholder":"Enter a Password"
+      },
       "login" : "Sign in",
       "signUp":"Sign up",
       "errorToast":"Wrong email or Password",
@@ -637,7 +641,7 @@
   },
 
   "detailReviewScreen":{
-      "title:":"Meetup review",
+      "title":"Meetup review",
       "toast":{
           "deleted":"This meetup has been deleted",
           "saved":"The image has been saved to an album"

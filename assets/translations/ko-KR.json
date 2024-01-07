@@ -1,18 +1,21 @@
 {
   "emailLoginScreen":{
       "title": "이메일 로그인",
-      "email": "이메일",
-          "email.placeholder":"이메일을 입력해주세요",
-          "email.error":"이메일 형식을 확인해주세요",
-      "password" : "비밀번호",
-          "password.placeholder":"비밀번호를 입력해주세요",
+      "email": {
+        "title": "이메일",
+        "placeholder":"이메일을 입력해주세요",
+        "error":"이메일 형식을 확인해주세요"
+      },   
+      "password" : {
+        "title": "비밀번호",
+        "placeholder":"비밀번호를 입력해주세요"
+      },
       "login" : "로그인",
       "signUp":"회원가입",
       "errorToast":"이메일 또는 비밀번호가 일치하지 않아요",
       "findEmail":"아이디 찾기",
       "resetPassword":"비밀번호 재설정"
   },
-
 
   "resetPasswordScreen1":{
       "title":"비밀번호 재설정",
@@ -232,7 +235,4 @@
       "keyword.placeholder":"좋아하는 것을 알려주세요",
       "explain.placeholder": ""
   }
-
-
-
   }
