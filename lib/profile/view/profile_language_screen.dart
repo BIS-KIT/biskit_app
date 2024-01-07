@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:biskit_app/profile/model/available_language_create_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,7 +53,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
     FocusScope.of(context).unfocus();
     showDefaultModalBottomSheet(
       context: context,
-      title: '레벨 선택',
+      title: 'langLevelBottomSheet.title'.tr(),
       titleRightButton: true,
       enableDrag: false,
       isDismissible: false,
@@ -74,7 +75,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
   onTapSelectedLang() {
     showDefaultModalBottomSheet(
       context: context,
-      title: '언어 선택',
+      title: 'selectLangBottomSheet.title'.tr(),
       titleRightButton: true,
       enableDrag: false,
       isDismissible: false,
@@ -151,7 +152,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
                     height: 8,
                   ),
                   Text(
-                    '사용가능한 언어를\n알려주세요',
+                    'availableLangScreen.title'.tr(),
                     style: getTsHeading24(context).copyWith(
                       color: kColorContentDefault,
                     ),
@@ -173,8 +174,8 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
                   if (selectedList.length < 5)
                     GestureDetector(
                       onTap: onTapSelectedLang,
-                      child: const OutlinedButtonWidget(
-                        text: '언어선택',
+                      child: OutlinedButtonWidget(
+                        text: 'availableLangScreen.selectLang'.tr(),
                         height: 52,
                         isEnable: true,
                         leftIconPath: 'assets/icons/ic_plus_line_24.svg',
@@ -193,7 +194,7 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
             child: GestureDetector(
               onTap: onTapNext,
               child: FilledButtonWidget(
-                text: '다음',
+                text: 'availableLangScreen.next'.tr(),
                 fontSize: FontSize.l,
                 height: 56,
                 isEnable: selectedList.isNotEmpty,

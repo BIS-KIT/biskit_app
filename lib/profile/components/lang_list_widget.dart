@@ -54,7 +54,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
     FocusScope.of(context).unfocus();
     showBiskitBottomSheet(
       context: context,
-      title: '레벨 선택',
+      title: 'langLevelBottomSheet.title'.tr(),
       rightIcon: 'assets/icons/ic_cancel_line_24.svg',
       onRightTap: () {
         Navigator.pop(context);
@@ -82,8 +82,8 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
         e.isChecked == false) {
       showDefaultModal(
         context: context,
-        title: '$maxLang개까지 선택할 수 있어요',
-        buttonText: '확인',
+        title: 'langSelectConstraintModal.title'.tr(),
+        buttonText: 'langSelectConstraintModal.ok'.tr(),
         function: () {
           Navigator.pop(context);
         },
@@ -105,7 +105,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
         children: [
           SearchBarWidget(
             controller: searchBarController,
-            hintText: '언어 검색',
+            hintText: 'selectLangBottomSheet.searchLang'.tr(),
             onChanged: (value) {},
           ),
           const SizedBox(
@@ -164,7 +164,7 @@ class _LangListWidgetState extends ConsumerState<LangListWidget> {
                 }
               },
               child: FilledButtonWidget(
-                text: '완료',
+                text: 'selectLangBottomSheet.done'.tr(),
                 isEnable: state != null &&
                     (state.where((element) => element.isChecked).isNotEmpty &&
                         state.where((element) => element.isChecked).length ==
