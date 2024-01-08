@@ -1,19 +1,20 @@
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 String getLevelTitle(int level) {
   switch (level) {
     case 5:
-      return '능숙';
+      return 'langLevelBottomSheet.mastery.title'.tr();
     case 4:
-      return '고급';
+      return 'langLevelBottomSheet.advanced.title'.tr();
     case 3:
-      return '중급';
+      return 'langLevelBottomSheet.intermediate.title'.tr();
     case 2:
-      return '기초';
+      return 'langLevelBottomSheet.elementary.title'.tr();
     case 1:
-      return '초보';
+      return 'langLevelBottomSheet.beginner.title'.tr();
     default:
-      return '레벨';
+      return 'selectLangBottomSheet.level.title'.tr();
   }
 }
 
@@ -71,15 +72,15 @@ String getLevelServerValueToKrString(String value) {
 String getLevelSubTitle(int level) {
   switch (level) {
     case 5:
-      return '모국어 수준으로 언어를 자유롭게 구사할 수 있어요';
+      return 'langLevelBottomSheet.mastery.description'.tr();
     case 4:
-      return '복잡한 주제에 대해 막힘없이 대화를 나눌 수 있어요';
+      return 'langLevelBottomSheet.advanced.description'.tr();
     case 3:
-      return '다양한 주제를 이해하고 의견을 표현할 수 있어요';
+      return 'langLevelBottomSheet.intermediate.description'.tr();
     case 2:
-      return '일상적인 주제를 이해하고 대화할 수 있어요';
+      return 'langLevelBottomSheet.elementary.description'.tr();
     case 1:
-      return '자기소개를 하고 간단한 질문에 대답할 수 있어요';
+      return 'langLevelBottomSheet.beginner.description'.tr();
     default:
       return '';
   }

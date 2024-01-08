@@ -111,7 +111,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   Widget build(BuildContext context) {
     state = ref.watch(userMeProvider);
     return DefaultLayout(
-      title: 'emailScreen.title'.tr(),
+      title: 'emailLoginScreen.title'.tr(),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -131,8 +131,8 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   },
                   child: TextInputWidget(
                     initialValue: email,
-                    title: 'emailScreen.email'.tr(),
-                    hintText: '이메일을 입력해주세요',
+                    title: 'emailLoginScreen.email.title'.tr(),
+                    hintText: 'emailLoginScreen.email.placeholder'.tr(),
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     errorText: emailError,
@@ -147,8 +147,8 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                   height: 20,
                 ),
                 TextInputWidget(
-                  title: 'emailScreen.password'.tr(),
-                  hintText: '비밀번호를 입력해주세요',
+                  title: 'emailLoginScreen.password.title'.tr(),
+                  hintText: 'emailLoginScreen.password.placeholder'.tr(),
                   initialValue: password,
                   onChanged: (value) {
                     password = value;
@@ -201,7 +201,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       : null,
                   child: OutlinedButtonWidget(
                     height: 52,
-                    text: '로그인',
+                    text: 'emailLoginScreen.login'.tr(),
                     isEnable: isLoginButtonEnable,
                   ),
                 ),
@@ -217,9 +217,9 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       extra: SignUpModel(),
                     );
                   },
-                  child: const FilledButtonWidget(
+                  child: FilledButtonWidget(
                     height: 52,
-                    text: '회원가입',
+                    text: 'emailLoginScreen.signUp'.tr(),
                     isEnable: true,
                   ),
                 ),
@@ -236,7 +236,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         context.pushNamed(FindIdScreen.routeName);
                       },
                       child: Text(
-                        '아이디 찾기',
+                        'emailLoginScreen.findEmail'.tr(),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
                         ),
@@ -259,7 +259,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         context.pushNamed(FindPasswordScreen.routeName);
                       },
                       child: Text(
-                        '비밀번호 재설정',
+                        'emailLoginScreen.resetPassword'.tr(),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
                         ),

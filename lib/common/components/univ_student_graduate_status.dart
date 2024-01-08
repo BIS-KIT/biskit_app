@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/check_circle.dart';
@@ -47,26 +48,26 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
           widget.selectedStudentStatusModel.kname == "대학원") {
         univerisyGraduateStatusList = [
           UniversityGraduateStatusModel(
-            ename: '재학',
+            ename: 'Attending',
             kname: '재학',
           ),
           UniversityGraduateStatusModel(
-            ename: '수료',
+            ename: 'Completed',
             kname: '수료',
           ),
           UniversityGraduateStatusModel(
-            ename: '졸업',
+            ename: 'Graduated',
             kname: '졸업',
           ),
         ];
       } else {
         univerisyGraduateStatusList = [
           UniversityGraduateStatusModel(
-            ename: '재학',
+            ename: 'Attending',
             kname: '재학',
           ),
           UniversityGraduateStatusModel(
-            ename: '수료',
+            ename: 'Completed',
             kname: '수료',
           ),
         ];
@@ -113,6 +114,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                             });
                             widget.onTap(e);
                           },
+                          // TODO: 언어에 따라 다르게 보여줘야함
                           centerWidget: Text(
                             e.kname,
                             style: getTsBody16Rg(context).copyWith(
@@ -138,7 +140,7 @@ class _UnivListWidgetState extends State<UnivGraduateStatusListWidget> {
                 }
               },
               child: FilledButtonWidget(
-                text: '완료',
+                text: 'selectStateBottomSheet2.done'.tr(),
                 isEnable: selectedModel != null,
               ),
             ),

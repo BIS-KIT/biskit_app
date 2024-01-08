@@ -74,7 +74,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
         });
       } else {
         setState(() {
-          emailError = '등록된 이메일 주소가 아니에요';
+          emailError = 'resetPasswordScreen1.email.loginError'.tr();
           isButtonEnable = false;
         });
       }
@@ -107,7 +107,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                     )));
           } else {
             setState(() {
-              pinCodeError = '인증번호가 일치하지 않아요';
+              pinCodeError = 'resetPasswordScreen2.vCode.wrongError'.tr();
             });
           }
         }
@@ -133,7 +133,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
 
             // 시간 오버인 경우
             setState(() {
-              pinCodeError = '인증번호를 다시 보내주세요';
+              pinCodeError = 'resetPasswordScreen2.vCode.timeoutError'.tr();
               // receivePinCode = '';
             });
           } else {
@@ -183,7 +183,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'findPasswordScreen.title'.tr(),
+      title: 'resetPasswordScreen1.title'.tr(),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -202,12 +202,16 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                           onFocusChange: (value) {
                             if (!value && email.isEmpty) {
                               setState(() {
-                                emailError = "이메일을 입력해주세요";
+                                emailError =
+                                    "resetPasswordScreen1.email.inputError"
+                                        .tr();
                               });
                             } else if (email.isNotEmpty &&
                                 !email.isValidEmailFormat()) {
                               setState(() {
-                                emailError = '이메일 양식이 올바르지 않아요';
+                                emailError =
+                                    'resetPasswordScreen1.email.formatError'
+                                        .tr();
                               });
                             } else {
                               setState(() {
@@ -216,8 +220,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                             }
                           },
                           child: TextInputWidget(
-                            title: 'emailScreen.email'.tr(),
-                            hintText: '가입한 이메일을 입력해주세요',
+                            title: 'resetPasswordScreen1.email.title'.tr(),
+                            hintText:
+                                'resetPasswordScreen1.email.placeholder'.tr(),
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             errorText: emailError,
@@ -237,7 +242,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                               },
                               child: FilledButtonWidget(
                                 height: 52,
-                                text: '인증번호 받기',
+                                text: 'resetPasswordScreen1.getCode'.tr(),
                                 isEnable: isButtonEnable,
                               ),
                             )
@@ -246,9 +251,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                                 onTapPinCodeRecive(resend: true);
                                 pinFocusNode.requestFocus();
                               },
-                              child: const OutlinedButtonWidget(
+                              child: OutlinedButtonWidget(
                                 height: 52,
-                                text: '인증번호 다시 받기',
+                                text: 'resetPasswordScreen2.resendVCode'.tr(),
                                 isEnable: true,
                               ),
                             ),
@@ -257,8 +262,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                       ),
                       if (isPinCodeMode)
                         TextInputWidget(
-                          title: '인증번호',
-                          hintText: '인증번호를 입력해주세요',
+                          title: 'resetPasswordScreen2.vCode.title'.tr(),
+                          hintText:
+                              'resetPasswordScreen2.vCode.placeholder'.tr(),
                           keyboardType: TextInputType.number,
                           maxLength: 6,
                           controller: pinController,
@@ -289,10 +295,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
               if (isPinCodeMode)
                 TooltipWidget(
                   preferredDirection: AxisDirection.up,
-                  tooltipText:
-                      '스팸 메일함을 확인해주세요. 메일이 없다면\nteambiskit@gmail.com으로 문의해주세요.',
+                  tooltipText: 'resetPasswordScreen2.noVCode.content'.tr(),
                   child: Text(
-                    '메일을 받지 못하셨나요?',
+                    'resetPasswordScreen2.noVCode.title'.tr(),
                     style: getTsBody14Rg(context)
                         .copyWith(color: kColorContentWeakest),
                   ),

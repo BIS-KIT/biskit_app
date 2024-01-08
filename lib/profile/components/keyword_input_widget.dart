@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -105,7 +106,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                     onChanged: (value) {
                       // logger.d(value.contains('\n'));
                     },
-                    hintText: '좋아하는 것을 알려주세요',
+                    hintText: 'addKeywordBottomSheet.placeholder'.tr(),
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
                     maxLength: 20,
@@ -197,7 +198,9 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                                     maxLines: null,
                                     minLines: null,
                                     decoration: InputDecoration(
-                                      hintText: '좋아하는 이유를 알려주세요',
+                                      hintText:
+                                          'addKeywordBottomSheet.explain_placeholder'
+                                              .tr(),
                                       border: InputBorder.none,
                                       isDense: true,
                                       counterText: '',
@@ -254,7 +257,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                           onTapSubmit();
                         },
                         child: FilledButtonWidget(
-                          text: '완료',
+                          text: 'addKeywordBottomSheet.done'.tr(),
                           isEnable: getButtonEnable(),
                           height: 52,
                         ),
@@ -283,7 +286,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
                 onTapSubmit();
               },
               child: FilledButtonWidget(
-                text: '완료',
+                text: 'addKeywordBottomSheet.done'.tr(),
                 isEnable: getButtonEnable(),
                 height: 52,
               ),

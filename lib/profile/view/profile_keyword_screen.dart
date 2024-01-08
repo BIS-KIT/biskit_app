@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -141,7 +142,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}님,\n좋아하는 것을 알려주세요',
+                  '${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}${'addKeywordScreen.title'.tr()}',
                   style: getTsHeading24(context).copyWith(
                     color: kColorContentDefault,
                   ),
@@ -150,7 +151,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '비슷한 취향을 가진 친구들을 만날 수 있어요',
+                  'addKeywordScreen.subtitle'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeaker,
                   ),
@@ -209,7 +210,9 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
             child: GestureDetector(
               onTap: onTapNext,
               child: FilledButtonWidget(
-                text: widget.isEditorMode ? '저장' : '다음',
+                text: widget.isEditorMode
+                    ? 'addKeywordScreen.save'.tr()
+                    : 'addKeywordScreen.next'.tr(),
                 fontSize: FontSize.l,
                 isEnable: keywordList.isNotEmpty,
               ),
@@ -225,7 +228,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
       onTap: () async {
         final result = await showBiskitBottomSheet(
           context: context,
-          title: '키워드 작성',
+          title: 'addKeywordBottomSheet.title'.tr(),
           rightIcon: 'assets/icons/ic_cancel_line_24.svg',
           onRightTap: () => Navigator.pop(context),
           isDismissible: false,
@@ -321,7 +324,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
       onTap: () async {
         final result = await showBiskitBottomSheet(
           context: context,
-          title: '키워드 작성',
+          title: 'addKeywordBottomSheet.title'.tr(),
           rightIcon: 'assets/icons/ic_cancel_line_24.svg',
           onRightTap: () => Navigator.pop(context),
           isDismissible: false,

@@ -1,11 +1,917 @@
 {
-  "hello": "hello",
-  "emailScreen": {
-    "title": "Email Login",
-    "email": "Email",
-    "password": "Password"
+  "emailLoginScreen": {
+    "title": "Continue with Email",
+    "email": {
+      "title": "Email",
+      "placeholder": "Enter a Email",
+      "error": "Enter a valid email address"
+    },
+    "password": {
+      "title": "Password",
+      "placeholder": "Enter a Password"
+    },
+    "login": "Sign in",
+    "signUp": "Sign up",
+    "errorToast": "Wrong email or Password",
+    "findEmail": "Forgot email?",
+    "resetPassword": "Forgot password?"
   },
-  "findPasswordScreen": {
-    "title": "Reset Password"
+
+  "resetPasswordScreen1": {
+    "title": "Reset Password",
+    "email": {
+      "title": "Email",
+      "placeholder": "Enter your email",
+      "inputError": "Enter your email",
+      "formatError": "Enter a valid email address",
+      "loginError": "Couldn't find your Account"
+    },
+    "getCode": "Get a verification code"
+  },
+
+  "resetPasswordScreen2": {
+    "title": "Reset Password",
+    "email": "Email",
+    "resendVCode": "Resend a verification code",
+    "vCode": {
+      "title": "Verification code",
+      "placeholder": "Enter a verification code",
+      "timeoutError": "Please resend a verification code",
+      "wrongError": "Wrong number of digits. Try again"
+    },
+    "noVCode": {
+      "title": "Haven’t received a verification code?",
+      "content": "Please check your spam mail box. If it doesn't exist, please contact to teambiskit@gmail.com."
+    }
+  },
+
+  "changePasswordScreen": {
+    "title": "Change password"
+  },
+
+  "resetPasswordScreen3": {
+    "title": "Reset password",
+    "newPassword": {
+      "title": "New Password",
+      "placeholder": "Enter a new password",
+      "description": "At least 8 characters",
+      "numError": "At least 8 characters"
+    },
+    "confirmPassword": {
+      "title": "Confirm Password",
+      "placeholder": "Confirm a new password",
+      "description": "The password is correct",
+      "wrongError": "Those passwords didn’t match. Try again"
+    },
+    "alert": {
+      "error": "failed to reset password"
+    },
+    "complete": "Reset Password"
+  },
+
+  "resetPasswordCompleteScreen": {
+    "pwChangedTitle": "Password has been successfully changed",
+    "pwChangedText": "Please sign in with your new password",
+    "login": "Sign in"
+  },
+
+  "signUpTermsScreen": {
+    "title": "Terms and Conditions\nAgreement are required",
+    "agreeToAll": "Agree to All",
+    "agreeList": {
+      "required1": "[Required] Terms of Service",
+      "required2": "[Required] Privacy Policy",
+      "required3": "[Required] Terms of Location-based Services",
+      "optional": "[Optional] Consent to the Marketing information"
+    },
+    "agreeTitle": {
+      "required1": "Terms of Service",
+      "required2": "Privacy Policy",
+      "required3": "Terms of Location-based Services"
+    },
+    "next": "Next"
+  },
+
+  "signUpEmailScreen": {
+    "email": {
+      "title": "Email",
+      "placeholder": "example@email.com",
+      "error1": "Enter your email",
+      "error2": "Enter a valid email address"
+    },
+    "getVCode": "Get a verification code"
+  },
+
+  "accountExistModal": {
+    "title": "The account already exists",
+    "text": "Please sign in with your account",
+    "btn": "Sign in"
+  },
+
+  "signUpEmailVerifyScreen": {
+    "email": "Email",
+    "resendVCode": "Resend a verification code",
+    "vCode": {
+      "title": "Verification code",
+      "placeholder": "Enter a verification code",
+      "timeoutError": "Please resend a verification code",
+      "wrongError": "Wrong number of digits. Try again"
+    },
+    "noVCode": {
+      "title": "Haven’t received a verification code??",
+      "content": "Please check your spam mail box. If it doesn't exist, please contact to teambiskit@gmail.com."
+    }
+  },
+
+  "signUpPasswordScreen": {
+    "password": {
+      "title": "Password",
+      "placeholder": "Enter a password",
+      "description": "At least 8 characters",
+      "numError": "At least 8 characters"
+    },
+    "confirmPassword": {
+      "title": "Confirm password",
+      "placeholder": "Confirm a password",
+      "description": "The password is correct",
+      "wrongError": "Those passwords didn’t match. Try again."
+    },
+    "next": "Next"
+  },
+
+  "signUpNameScreen": {
+    "name": {
+      "title": "Name",
+      "placeholder": "Enter your real name",
+      "error": "Enter in Korean or English"
+    },
+    "birth": "Date of Birth",
+    "gender": "Gender",
+    "female": "Female",
+    "male": "Male",
+    "next": "Next"
+  },
+
+  "signUpNationalityScreen": {
+    "title": "Select your Nationality",
+    "subtitle": "The nationality cannot be changed. Please select correctly",
+    "searchBar": "Search your nationality",
+    "multinational": "Are you a multinational?",
+    "next": "Next"
+  },
+
+  "signUpSelectUnivScreen": {
+    "title": "Select your University",
+    "subtitle": "You can meet friends from your school",
+    "selectUniv": "Select University",
+    "next": "Next"
+  },
+
+  "selectUnivBottomSheet": {
+    "title": "Select university",
+    "search": "Search your university",
+    "next": "Next"
+  },
+
+  "selectDegreeBottomSheet": {
+    "title": "Select degree",
+    "undergraduate": "Undergraduate",
+    "graduate": "Graduate",
+    "exchange": "Exchange Student",
+    "language": "Language Course",
+    "next": "Next"
+  },
+
+  "selectStateBottomSheet": {
+    "title": "Select state",
+    "attending": "Attending",
+    "completed": "Completed",
+    "graduated": "Graduated",
+    "next": "Next"
+  },
+
+  "selectStateBottomSheet2": {
+    "title": "Select state",
+    "attending": "Attending",
+    "completed": "Completed",
+    "done": "Done"
+  },
+
+  "signUpSelectUnivCompleteScreen": {
+    "title": "Select your University",
+    "subtitle": "You can meet friends from your school",
+    "univ": "University",
+    "degree": "Degree",
+    "state": "State",
+    "edit": "Edit",
+    "create": "Create Account"
+  },
+
+  "signUpCompleteScreen": {
+    "title": "Congratulations!",
+    "subtitle": "Sign up has been completed successfully.\nCreate your profile to enjoy meetups",
+    "create": "Create a profile"
+  },
+
+  "uploadPhotoScreen": {
+    "title": "Upload a photo and\nNickname",
+    "placeholder": "Please enter your nickname",
+    "nickname": {
+      "title": "Nickname",
+      "subtitle": {
+        "available": "This nickname is available",
+        "error": "At least 2 Korean/English/numeric characters"
+      },
+      "numError": "At least 2 characters",
+      "duplicateError": "This nickname is already in use",
+      "formatError": "Only available in Korean/English/numbers"
+    },
+    "next": "Next"
+  },
+
+  "userAlbumScreen": {
+    "title": "Recent",
+    "done": "Done"
+  },
+
+  "availableLangScreen": {
+    "title": "Select your\nAvailable Languages",
+    "selectLang": "Select languages",
+    "next": "Next"
+  },
+
+  "selectLangBottomSheet": {
+    "title": "Select languages",
+    "searchLang": "Search your Language",
+    "level": "level",
+    "done": "Done"
+  },
+
+  "langLevelBottomSheet": {
+    "title": "Select level",
+    "mastery": {
+      "title": "Mastery",
+      "description": "Can understand with ease virtually everything heard or read"
+    },
+    "advanced": {
+      "title": "Advanced",
+      "description": "Can express opinions, analyze information, and understand subtleties"
+    },
+    "intermediate": {
+      "title": "Intermediate",
+      "description": "Can communicate more confidently and handle a wider range of topics"
+    },
+    "elementary": {
+      "title": "Elementary",
+      "description": "Can understand basic sentences and frequently used expressions"
+    },
+    "beginner": {
+      "title": "Beginner",
+      "description": "Can understand basic vocabulary and simple phrases like self introduction"
+    }
+  },
+
+  "langSelectConstraintModal": {
+    "title": "You can choose up to five",
+    "ok": "OK"
+  },
+
+  "addKeywordScreen": {
+    "title": ",\nWhat's your favorite?",
+    "subtitle": "You can meet friends with similar tastes",
+    "next": "Next",
+    "save": "save"
+  },
+
+  "addKeywordBottomSheet": {
+    "placeholder": "What's your favorite?",
+    "title": "Add keyword",
+    "keyword_placeholder": "Enter your favorite thing",
+    "explain_placeholder": "Enter a reason why you like",
+    "done": "Done"
+  },
+
+  "deleteKeywordModal": {
+    "title": "Delete a keyword?",
+    "cancel": "cancel",
+    "delete": "Delete"
+  },
+
+  "verifyUnivScreen": {
+    "title": "Verify your University\nto join the meetup",
+    "reason": "Why do I need to verify it?",
+    "reason.description": "BISKIT allows only student-authenticated users to participate in meetings to ensure safety. If you steal someone else's materials, you will be restricted from using the service and may be subject to criminal penalties.",
+    "addIdCard.title": "Upload Student ID card",
+    "addIdCard.subtitle": "(mobile)ID card or materials",
+    "addIdCard.description": "Make sure to include your Real name, School, Department, and Student number.",
+    "later": "I’ll do it later",
+    "done": "Completed"
+  },
+
+  "createMeetupScreen1": {
+    "title1": "What are you going to do?",
+    "subtitle1": "Select up to 3 topics to promote your meetup",
+    "chip1": "Food",
+    "chip2": "Language Exchange",
+    "chip3": "Activity",
+    "chip4": "Sports",
+    "chip5": "Study",
+    "chip6": "Cultural Art",
+    "chip7": "Hobby",
+    "chip8": "Create",
+    "title2": "Where do you want to meet?",
+    "chooseLocation": "Select location",
+    "next": "Next"
+  },
+
+  "leavePageModal": {
+    "title": "Leave page?",
+    "subtitle": "Meetup that you made may not be saved",
+    "cancel": "Cancel",
+    "leave": "Leave"
+  },
+
+  "selectLocationBottomSheet": {
+    "title": "Select location",
+    "find": "Find a location",
+    "noResult": "No Results found",
+    "create": "Add ''"
+  },
+
+  "createMeetupScreen2": {
+    "title1": "When do you want to meet?",
+    "title2": "How many people can join?",
+    "next": "Next"
+  },
+
+  "selectDateBottomSheet": {
+    "title": "Select Date",
+    "next": "Next"
+  },
+
+  "selectTimeBottomSheet": {
+    "title": "Select Time",
+    "done": "Done"
+  },
+
+  "createMeetupScreen3": {
+    "title1": "Select the languages you’d like to use at the meetup in order",
+    "title2": "Select the tags that describe your meetup",
+    "createChip": "Create",
+    "chip1": "It's okay if your English isn't good",
+    "chip2": "It's okay if your Korean isn't good",
+    "chip3": "Vegetarian",
+    "chip4": "After party",
+    "chip5": "Women only",
+    "chip6": "Men only",
+    "chip7": "It's okay to come alone",
+    "chip8": "Late arrivals accepted",
+    "next": "Next"
+  },
+
+  "createMeetupScreen4": {
+    "title": "Enter a meetup title",
+    "title.placeholder": "Let's have lunch at school :)",
+    "title.numError": "At least 2 characters",
+    "addDescription": "Add a description",
+    "addDescription.placeholder": "Enter a description of meetup",
+    "deleteDescription": "Delete a description",
+    "createMeetup": "Create a meetup"
+  },
+
+  "selectTopicIconBottomSheet": {
+    "title": "Select Icon"
+  },
+
+  "deleteDescriptionModal": {
+    "title": "Delete meetup description?",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+
+  "meetupDetailScreen": {
+    "recruitForeigner": "Recruit Foreigner",
+    "recruitKorean": "Recruit Korean",
+    "introduction": "About meetup",
+    "members": "Members",
+    "firstForeigner": "Be the first international member",
+    "firstKorean": "Be the first Korean member",
+    "langLevel": "Language level of members",
+    "advancedMost": "Advanced are the most",
+    "langLevelMix": "Mix of different levels",
+
+    "btn": {
+      "request": "Request to join the meetup",
+      "chat": "Join Group chat",
+      "adminMember": "Member administration",
+      "pending": "Pending Acceptance",
+      "full": "This meetup is full",
+      "end": "This meetup has ended"
+    },
+
+    "actionSheet": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "leave": "Leave meetup",
+      "report": "Report"
+    },
+
+    "Modal": {
+      "deleteModal": {
+        "title": "Delete the meetup?",
+        "subtitle": "All data including group chatting will be lost and cannot be restored",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      },
+      "leaveModal": {
+        "title": "Leave from this meetup?",
+        "cancel": "Cancel",
+        "delete": "Leave"
+      },
+      "requestModal": {
+        "title": "Request to join this meetup?",
+        "cancel": "Cancel",
+        "join": "Request"
+      },
+      "cancelEditModal": {
+        "title": "Cancel Editing the meetup?",
+        "subtitle": "Unsaved changes will be lost",
+        "continue": "Continue",
+        "cancel": "Cancel"
+      }
+    }
+  },
+
+  "adminMemberScreen": {
+    "title": "Meetup members",
+    "request": {
+      "title": "Join Requests",
+      "decline": "Decline",
+      "accept": "Accept",
+      "none": "No join requests found"
+    },
+    "members": "Members",
+    "modal": {
+      "acceptModal": {
+        "title": "Accept to join the meetup?",
+        "cancel": "Cancel",
+        "accept": "Accept"
+      },
+      "declineModal": {
+        "title": "Decline to join the meetup?",
+        "cancel": "Cancel",
+        "decline": "Decline"
+      },
+      "removeModal": {
+        "title": "Remove from the meetup?",
+        "cancel": "Cancel",
+        "remove": "Remove"
+      }
+    },
+    "actionSheet": {
+      "remove": "Remove",
+      "cancel": "Cancel"
+    }
+  },
+
+  "exploreMeetupScreen": {
+    "title": "Explore",
+    "sort": {
+      "latest": "Latest",
+      "upcoming": "Upcoming",
+      "almostFull": "Almost full"
+    },
+    "chip": {
+      "date": "Date",
+      "day": "Day",
+      "time": "Time",
+      "hostNationality": "Nationality of Host",
+      "subject": "Category",
+      "tag": "Tag"
+    },
+    "recruitForeigner": "Recruit foreigner",
+    "recruitKorean": "Recruit Korean",
+    "noMeetups": "No meetups found"
+  },
+
+  "exploreFilterBottomSheet": {
+    "title": "Filter",
+    "date": {
+      "title": "Date",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "thisWeek": "This week",
+      "nextWeek": "Next week"
+    },
+    "day": {
+      "title": "Day",
+      "mon": "Mon.",
+      "tue": "Tue.",
+      "wed": "Wed.",
+      "thu": "Thu.",
+      "fri": "Fri.",
+      "sat": "Sat.",
+      "sun": "Sun."
+    },
+    "time": {
+      "title": "Time",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "dinner": "Evening"
+    },
+    "hostNationality": {
+      "title": "Nationality of Host",
+      "korean": "Korean",
+      "foreigner": "Foreigner"
+    },
+    "category": {
+      "title": "Category",
+      "food": "Food",
+      "langExchange": "Language Exchange",
+      "activity": "Activity",
+      "sports": "Sports",
+      "study": "Study",
+      "culturalArt": "Cultural Arts",
+      "hobby": "Hobby",
+      "etc": "ETC"
+    },
+    "tag": {
+      "title": "Tag",
+      "tag1": "t's okay if your English isn't good",
+      "tag2": "It's okay if your Korean isn't good",
+      "tag3": "Vegetarian",
+      "tag4": "After party",
+      "tag5": "Women only",
+      "tag6": "Men only",
+      "tag7": "It's okay to come alone",
+      "tag8": "Late arrivals accepted"
+    },
+    "reset": "Reset",
+    "view": "View n meetups"
+  },
+
+  "searchMeetupScreen": {
+    "placeholder": "Search by keywords",
+    "noResult": "No Result Found",
+    "makeMeetup": "Why don't you make your own meetup?",
+    "createMeetup": "Create meetup"
+  },
+
+  "chatListScreen": {
+    "title": "Chats",
+    "noResult": "No chats found"
+  },
+
+  "chatroomScreen": {
+    "description": "BISKIT is a caring and communicative community. Please respect the language and cultural differences of all members. Posting inappropriate or offensive content may result in a ban from the service.",
+    "join": " joined this chatroom",
+    "placeholder": "Type a Message",
+    "chatBottomSheet": {
+      "title": "Members"
+    },
+
+    "unableLeaveModal": {
+      "title": "You can't leave until the end of the meetup",
+      "subtitle": "Leave the meetup in the meetup page before you leave chatroom",
+      "ok": "OK"
+    },
+
+    "leaveChatroomModal": {
+      "title": "Leave from chatroom?",
+      "subtitle": "Your chat history will be permanently deleted",
+      "cancel": "Cancel",
+      "leave": "Leave"
+    }
+  },
+
+  "myPageScreen": {
+    "editProfile": "Edit Profile",
+    "verifyUniv": "Verify University",
+    "availableLan": "Available Languages",
+    "tap": {
+      "myMeetup": {
+        "title": "My meetups",
+        "joining": "Joining",
+        "pending": "Pending",
+        "past": "Past",
+        "noJoiningMeetups": "You don’t have any meetups yet",
+        "noPendingMeetups": "You don’t have any meetups yet",
+        "noPastMeetups": "You don’t have any meetups yet",
+        "host": "Host"
+      },
+      "review": {
+        "title": "Reviews",
+        "leaveReview": "Join a meetup and leave a review",
+        "noReview": "Join a meetup and leave a review"
+      }
+    }
+  },
+
+  "myFavoriteScreen": {
+    "title": "Favorites"
+  },
+
+  "editProfileScreen": {
+    "title": "Edit Profile",
+    "nickname": {
+      "label": "Nickname",
+      "numError": "At least 2 characters",
+      "overlapError": "This nickname is already in use"
+    },
+    "aboutMe": {
+      "label": "About me",
+      "placeholder": "Introduce myself"
+    },
+    "favorites": {
+      "label": "Favorites",
+      "edit": "Edit"
+    },
+    "availableLan": {
+      "label": "Available Languages",
+      "edit": "Edit",
+      "noLan": "사Choose at least one language",
+      "chooseLan": "Select Languages"
+    },
+    "univInfo": {
+      "label": "University Information",
+      "univ": "University",
+      "degree": "Degree",
+      "state": "State",
+      "verifyUniv": "Verify University",
+      "edit": "Edit"
+    },
+    "save": "Save"
+  },
+
+  "editFavoriteScreen": {
+    "saveError": "Failed to save. Please try again",
+    "save": "Done"
+  },
+
+  "othersProfileScreen": {
+    "title": "Profile",
+    "review": "Review",
+    "pending": "Verification pending",
+    "required": "Verification required",
+    "actionSheet": {
+      "report": "Report",
+      "block": "Block",
+      "unblock": "Unblock",
+      "cancel": "Cancel"
+    },
+    "blockToast": "Blocked Successfully"
+  },
+
+  "othersFavoriteScreen": {
+    "title": "'s Favorites"
+  },
+
+  "reportScreen": {
+    "title": "Report",
+    "label": "Why are you reporting?",
+    "Placeholder": "Please enter your report",
+    "description": "Users with 3 or more cumulative reports are restricted from creating and joining meetups",
+    "send": "Send",
+    "completeModal": {
+      "title": "Your report has been received.It will take up to 24 hours to review your report.",
+      "ok": "OK"
+    }
+  },
+
+  "selectReviewScreen": {
+    "title": "Which meetup\ndo you want to record?",
+    "host": "Host"
+  },
+
+  "writeReviewScreen": {
+    "title": "Meetup Review",
+    "placeholder": "Leave a meetup experience (optional)",
+    "done": "Done",
+    "leavePageModal": {
+      "title": "Leave page?",
+      "subtitle": "Contents you made may not be saved",
+      "cancel": "Cancel",
+      "leave": "Leave"
+    }
+  },
+
+  "detailReviewScreen": {
+    "title": "Meetup review",
+    "toast": {
+      "deleted": "This meetup has been deleted",
+      "saved": "The image has been saved to an album"
+    },
+    "actionSheet": {
+      "edit": "Edit",
+      "remove": "Remove",
+      "report": "Report",
+      "cancel": "Cancel"
+    },
+    "deleteReviewModal": {
+      "title": "Delete Review?",
+      "subtitle": "Deleted reviews are not restored",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
+  },
+
+  "editReviewScreen": {
+    "title": "Edit Review",
+    "complete": "Done"
+  },
+
+  "homeScreen": {
+    "title": "Hi, \nExplore and join the meetups",
+    "category": {
+      "food": "Food",
+      "langExchange": "Language",
+      "activity": "Activity",
+      "sports": "Sports",
+      "study": "Study",
+      "culturalArt": "Cultural Art",
+      "hobby": "Hobby",
+      "etc": "ETC"
+    },
+    "schoolMeetups": "Meetups from my Univ.",
+    "findTags": {
+      "title": "태그로 찾기",
+      "chip1": "It's okay if your English isn't good",
+      "chip2": "It's okay if your Korean isn't good",
+      "chip3": "Vegetarian",
+      "chip4": "After party",
+      "chip5": "Women only",
+      "chip6": "Men only",
+      "chip7": "It's okay to come alone",
+      "chip8": "Late arrivals accepted"
+    },
+    "upcoming": "님\n 다가오는 모임이 있어요",
+    "chat": "채팅",
+    "homeTooltip": "Verify University and create a meetup!",
+    "verifyModal": {
+      "title": "Please Verify your University to create your meetup",
+      "subtitle": "Verify and Create your meetup",
+      "cancel": "Cancel",
+      "verify": "Verify"
+    },
+    "pendingModal": {
+      "title": "Verify Pending",
+      "subtitle": "BISKIT allows only student-authenticated users to participate in meetings to ensure safety. We'll authenticate as soon as possible",
+      "ok": "OK"
+    }
+  },
+
+  "settingScreen": {
+    "title": "Settings",
+    "account": "Account",
+    "lang": "Language",
+    "notification": "Notifications",
+    "blockedUser": "Manage Blocked Users",
+    "warning": "Warning History",
+    "notice": "Notice",
+    "guide": "BISKIT User Guide",
+    "inquiry": "Inquiry",
+    "terms": "Terms and Policies",
+    "ver": "Version",
+    "version": "Latest Ver.",
+    "update": "Update Required"
+  },
+
+  "accountScreen": {
+    "title": "Account",
+    "accountInfo": {
+      "title": "Account info",
+      "kakako": "Kakao Account",
+      "apple": "Apple Account",
+      "google": "Google Account",
+      "email": "Email Account"
+    },
+    "changePw": "Change password",
+    "logout": "Logout",
+    "logoutModal": {
+      "title": "Log out from BISKIT?",
+      "cancel": "Cancel",
+      "logout": "Logout"
+    },
+    "deleteAccount": "Delete Account"
+  },
+
+  "changePwScreen": {
+    "title": "Change Password",
+    "label": "Current Password",
+    "placeholder": "Enter a password",
+    "wrongError": "The password is incorrect",
+    "next": "Next"
+  },
+
+  "newPwScreen": {
+    "title": "Change Password",
+    "newPw": {
+      "label": "New Password",
+      "placeholder": "Enter a new password",
+      "description": "At least 8 characters",
+      "numError": "At least 8 characters",
+      "overlapError": "The new password must be different from the current password"
+    },
+    "confirmPw": {
+      "label": "Confirm password",
+      "Placeholder": "Confirm a new password",
+      "correctPw:": "The password is correct",
+      "incorrectError": "Those passwords didn’t match"
+    },
+    "done": "Change password",
+    "changePwTooltip": "Password has been changed successfully"
+  },
+
+  "deleteAccountScreen": {
+    "title": "Delete account",
+    "reason": "Why are you deleting\nyour account?",
+    "reason1": "I don't use it often",
+    "reason2": "I'm not comfortable using it",
+    "reason3": "I'm worried about my privacy",
+    "reason4": "I'm going to sign up with a new account",
+    "reason5": "ETC"
+  },
+
+  "deleteAccountCautionScreen": {
+    "header": "Delete account",
+    "title": "Please check the precautions\nbefore deleting account",
+    "description1": "You can't sign up again for 7 days after deleting your account",
+    "description2": "Upon deletion of your account, all personal information registered in BISKIT will be deleted and destroyed, and will not be restored.",
+    "agree": "Agree to all",
+    "delete": "Delete account",
+
+    "modal": {
+      "deleteAccountModal": {
+        "title": "Are you sure to delete your BISKIT account?",
+        "cancel": "Cancel",
+        "delete": "Delete account"
+      },
+      "deleteCompleteModal": {
+        "title": "Account successfully deleted",
+        "subtitle": "Thank you for using BISKIT ",
+        "ok": "OK"
+      }
+    }
+  },
+
+  "setLangScreen": {
+    "header": "Languages",
+    "korean": "Korean",
+    "english": "English"
+  },
+
+  "setNotificationScreen": {
+    "header": "Notifications",
+    "importantNotification": {
+      "title": "Important Notifications",
+      "description": "Notifications about meetups"
+    },
+    "etcNotification": {
+      "title": "ETC",
+      "description": "Notice, Event Remind, ETC"
+    },
+    "setNotificationModal": {
+      "title": "The device's notification setting is off",
+      "subtitle": "Please allow the device to set notifications by Settings > Notifications > BISKIT",
+      "cancel": "Cancel",
+      "allow": "Allow"
+    }
+  },
+
+  "setBlockScreen": {
+    "header": "Manage blocked user",
+    "unblock": "Unblock",
+    "block": "Block",
+    "noUser": "No blocked users found"
+  },
+
+  "setWarningScreen": {
+    "header": "Warning History",
+    "acWarnings": "Accumulated warnings",
+    "warning": "Warning",
+    "description": "The warnings have been accumulated due to a violation of service usage regulations.",
+    "noWarnings": "No warnings found"
+  },
+
+  "noticeScreen": {
+    "header": "Notices"
+  },
+
+  "inquiryScreen": {
+    "header": "Inquiry",
+    "label": "What’s your Inquires?",
+    "placeholder": "Please enter your inquiry",
+    "send": "Send",
+    "completeModal": {
+      "title": "Your inquiry has been received",
+      "ok": "OK"
+    }
+  },
+
+  "termsScreen": {
+    "header": "Terms and Policies",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy"
   }
 }

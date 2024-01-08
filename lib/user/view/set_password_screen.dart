@@ -2,6 +2,7 @@
 import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/setting/view/setting_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -74,7 +75,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
         context.pushReplacementNamed(SetPasswordCompletedScreen.routeName);
       } else {
         setState(() {
-          confirmPasswordError = '비밀번호 재설정에 실패했습니다.';
+          confirmPasswordError = 'resetPasswordScreen3.alert.error'.tr();
         });
       }
     } finally {
@@ -96,7 +97,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
         );
       } else {
         setState(() {
-          confirmPasswordError = '비밀번호 재설정에 실패했습니다.';
+          confirmPasswordError = 'resetPasswordScreen3.alert.error'.tr();
         });
       }
     } finally {
@@ -110,8 +111,8 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
         title: widget.pageType == PageType.register
             ? ''
             : widget.pageType == PageType.find
-                ? '비밀번호 재설정'
-                : '비밀번호 변경',
+                ? 'resetPasswordScreen3.title'.tr()
+                : 'changePasswordScreen.title'.tr(),
         child: SafeArea(
           child: Column(
             children: [
@@ -130,7 +131,9 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                             if (!value && password.isNotEmpty) {
                               if (!password.isValidPassword()) {
                                 setState(() {
-                                  passwordError = '8자 이상으로 입력해주세요';
+                                  passwordError =
+                                      'resetPasswordScreen3.newPassword.description'
+                                          .tr();
                                 });
                               } else {
                                 setState(() {
@@ -141,11 +144,13 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           },
                           child: TextInputWidget(
                             title: widget.pageType == PageType.register
-                                ? '비밀번호'
-                                : '새 비밀번호',
+                                ? 'signUpPasswordScreen.password.title'.tr()
+                                : 'resetPasswordScreen3.newPassword.title'.tr(),
                             hintText: widget.pageType == PageType.register
-                                ? '비밀번호를 입력해주세요'
-                                : '새 비밀번호를 입력해주세요',
+                                ? 'signUpPasswordScreen.password.placeholder'
+                                    .tr()
+                                : 'resetPasswordScreen3.newPassword.placeholder'
+                                    .tr(),
                             errorText: passwordError,
                             onChanged: (value) {
                               setState(() {
@@ -180,7 +185,7 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                         ),
                         if (password.isEmpty && passwordError == null)
                           Text(
-                            '8자 이상으로 입력해주세요',
+                            'signUpPasswordScreen.password.description'.tr(),
                             style: getTsCaption12Rg(context).copyWith(
                               color: kColorContentWeakest,
                             ),
@@ -189,14 +194,19 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                           height: 24,
                         ),
                         TextInputWidget(
-                          title: '비밀번호 확인',
-                          hintText: '다시 한번 입력해주세요',
+                          title:
+                              'signUpPasswordScreen.confirmPassword.title'.tr(),
+                          hintText:
+                              'signUpPasswordScreen.confirmPassword.placeholder'
+                                  .tr(),
                           focusNode: confirmPasswordFocusNode,
                           onChanged: (value) {
                             if (value != password) {
                               setState(() {
                                 isActiveConfirmButton = false;
-                                confirmPasswordError = '비밀번호가 일치하지 않아요';
+                                confirmPasswordError =
+                                    'signUpPasswordScreen.confirmPassword.wrongError'
+                                        .tr();
                               });
                             } else if (value == password) {
                               setState(() {
@@ -233,7 +243,8 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                         ),
                         if (isActiveConfirmButton)
                           Text(
-                            '비밀번호가 일치해요',
+                            'signUpPasswordScreen.confirmPassword.description'
+                                .tr(),
                             style: getTsCaption12Rg(context).copyWith(
                               color: kColorContentSeccess,
                             ),
@@ -269,8 +280,8 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                   child: MediaQuery.of(context).viewInsets.bottom != 0
                       ? FullBleedButtonWidget(
                           text: widget.pageType == PageType.register
-                              ? '다음'
-                              : '완료',
+                              ? 'signUpPasswordScreen.next'.tr()
+                              : 'resetPasswordScreen3.complete'.tr(),
                           isEnable: isActiveConfirmButton,
                         )
                       : Padding(
@@ -278,8 +289,8 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
                               horizontal: 20, vertical: 34),
                           child: FilledButtonWidget(
                               text: widget.pageType == PageType.register
-                                  ? '다음'
-                                  : '완료',
+                                  ? 'signUpPasswordScreen.next'.tr()
+                                  : 'resetPasswordScreen3.complete'.tr(),
                               isEnable: isActiveConfirmButton),
                         ),
                 ),

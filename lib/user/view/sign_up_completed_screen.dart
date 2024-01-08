@@ -3,6 +3,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/profile/view/profile_nickname_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +45,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        '가입을 축하드려요!',
+                        'signUpCompleteScreen.title'.tr(),
                         style: getTsHeading24(context).copyWith(
                           color: kColorContentDefault,
                         ),
@@ -53,7 +54,7 @@ class SignUpCompletedScreen extends StatelessWidget {
                         height: 12,
                       ),
                       Text(
-                        '보다 즐거운 모임을 위해\n프로필을 작성해주세요',
+                        'signUpCompleteScreen.subtitle'.tr(),
                         textAlign: TextAlign.center,
                         style: getTsBody16Rg(context).copyWith(
                           color: kColorContentWeaker,
@@ -78,8 +79,8 @@ class SignUpCompletedScreen extends StatelessWidget {
                       onTap: () {
                         onTap(context);
                       },
-                      child: const FilledButtonWidget(
-                        text: '프로필 완성하기',
+                      child: FilledButtonWidget(
+                        text: 'signUpCompleteScreen.create'.tr(),
                         isEnable: true,
                         fontSize: FontSize.l,
                       ),

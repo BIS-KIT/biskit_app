@@ -1,5 +1,6 @@
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -226,8 +227,8 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
             ),
             //  이름
             TextInputWidget(
-              title: "이름",
-              hintText: '실명을 입력해주세요',
+              title: "signUpNameScreen.name.title".tr(),
+              hintText: 'signUpNameScreen.name.placeholder'.tr(),
               keyboardType: TextInputType.name,
               errorText: nameError,
               textInputAction: TextInputAction.go,
@@ -252,7 +253,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '생년월일',
+                  'signUpNameScreen.birth'.tr(),
                   style: getTsBody14Sb(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -386,7 +387,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '성별',
+                  'signUpNameScreen.gender'.tr(),
                   style: getTsBody14Sb(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -395,8 +396,8 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                   height: 8,
                 ),
                 RadioWidget(
-                    leftText: '여성',
-                    rightText: '남성',
+                    leftText: 'signUpNameScreen.female'.tr(),
+                    rightText: 'signUpNameScreen.male'.tr(),
                     value: selectGender,
                     radioBtnGap: 8,
                     onTapLeft: () {
@@ -428,7 +429,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
                 );
               },
               child: FilledButtonWidget(
-                text: '다음',
+                text: 'signUpNameScreen.next'.tr(),
                 isEnable: isValidName &&
                     birthYear.isNotEmpty &&
                     birthYearError == null &&

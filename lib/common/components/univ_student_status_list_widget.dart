@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:biskit_app/common/components/check_circle.dart';
@@ -42,19 +43,19 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
       univerisyStudentStatusList = [
         // TODO 영어명
         UniversityStudentStatusModel(
-          ename: '학부',
+          ename: 'Undergraduate',
           kname: '학부',
         ),
         UniversityStudentStatusModel(
-          ename: '대학원',
+          ename: 'Graduate',
           kname: '대학원',
         ),
         UniversityStudentStatusModel(
-          ename: '교환학생',
+          ename: 'Exchange Student',
           kname: '교환학생',
         ),
         UniversityStudentStatusModel(
-          ename: '어학당',
+          ename: 'Language Course',
           kname: '어학당',
         ),
       ];
@@ -122,7 +123,7 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
                 }
               },
               child: FilledButtonWidget(
-                text: '다음',
+                text: 'selectDegreeBottomSheet.next'.tr(),
                 isEnable: selectedModel != null,
               ),
             ),

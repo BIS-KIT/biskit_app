@@ -3,6 +3,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/user/view/email_login_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,8 +36,8 @@ class _SetPasswordCompletedScreenState
                   onTap: () {
                     context.pushReplacementNamed(EmailLoginScreen.routeName);
                   },
-                  child: const FilledButtonWidget(
-                    text: '로그인',
+                  child: FilledButtonWidget(
+                    text: 'resetPasswordCompleteScreen.login'.tr(),
                     isEnable: true,
                     height: 56,
                   ),
@@ -71,7 +72,7 @@ class _SetPasswordCompletedScreenState
                 height: 40,
               ),
               Text(
-                '비밀번호가 변경되었어요',
+                'resetPasswordCompleteScreen.pwChangedTitle'.tr(),
                 style: getTsHeading24(context).copyWith(
                   color: kColorContentDefault,
                 ),
@@ -80,7 +81,7 @@ class _SetPasswordCompletedScreenState
                 height: 12,
               ),
               Text(
-                '새로운 비밀번호로 로그인해주세요',
+                'pwChangedTitle.pwChangedText'.tr(),
                 style: getTsBody16Rg(context).copyWith(
                   color: kColorContentWeaker,
                 ),
