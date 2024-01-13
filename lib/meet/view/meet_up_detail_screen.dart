@@ -40,9 +40,12 @@ import 'package:biskit_app/user/provider/user_me_provider.dart';
 
 class MeetUpDetailScreen extends ConsumerStatefulWidget {
   final MeetUpModel meetUpModel;
+  final UserModelBase? userModel;
+
   const MeetUpDetailScreen({
     Key? key,
     required this.meetUpModel,
+    required this.userModel,
   }) : super(key: key);
 
   @override
@@ -1217,17 +1220,39 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                if (meetUpDetailModel!
-                                    .participants_status.isNotEmpty)
-                                  NewBadgeWidget(
-                                      text: meetUpDetailModel!
-                                          .participants_status,
+                                Builder(builder: (context) {
+                                  bool isKorean = false;
+                                  if ((widget.userModel as UserModel)
+                                      .user_nationality
+                                      .where((element) =>
+                                          element.nationality.code
+                                              .toLowerCase() ==
+                                          'kr')
+                                      .isNotEmpty) {
+                                    isKorean = true;
+                                  }
+                                  if (isKorean &&
+                                      meetUpDetailModel!.korean_count == 0) {
+                                    return const NewBadgeWidget(
+                                      text: '한국인 모집',
                                       type: BadgeType.secondary,
-                                      size: BadgeSize.M)
+                                      size: BadgeSize.M,
+                                    );
+                                  } else if (!isKorean &&
+                                      meetUpDetailModel!.foreign_count == 0) {
+                                    return const NewBadgeWidget(
+                                      text: '외국인 모집',
+                                      type: BadgeType.secondary,
+                                      size: BadgeSize.M,
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                })
                               ],
                             ),
                           ),
-                        ),
+                        )
                     ],
                   ),
                 ),
