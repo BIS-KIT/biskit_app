@@ -69,7 +69,10 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MeetUpDetailScreen(meetUpModel: meetUpModel!),
+        builder: (context) => MeetUpDetailScreen(
+          meetUpModel: meetUpModel!,
+          userModel: ref.watch(userMeProvider),
+        ),
       ),
     );
   }

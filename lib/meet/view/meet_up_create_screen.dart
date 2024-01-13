@@ -1,6 +1,7 @@
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -317,6 +318,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                 MaterialPageRoute(
                   builder: (context) => MeetUpDetailScreen(
                     meetUpModel: model,
+                    userModel: ref.watch(userMeProvider),
                   ),
                 ),
               );

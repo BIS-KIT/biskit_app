@@ -351,6 +351,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                             builder: (context) =>
                                                 MeetUpDetailScreen(
                                               meetUpModel: e,
+                                              userModel: userState,
                                             ),
                                           ),
                                         );
