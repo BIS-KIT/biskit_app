@@ -4,6 +4,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,10 +58,11 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     setState(() {
                       selectedLang = 'kr';
                     });
+                    await context.setLocale(const Locale('ko', 'KR'));
                   },
                   child: Row(
                     children: [
@@ -87,12 +89,13 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     setState(
                       () {
                         selectedLang = 'en';
                       },
                     );
+                    await context.setLocale(const Locale('en', 'US'));
                   },
                   child: Row(
                     children: [
