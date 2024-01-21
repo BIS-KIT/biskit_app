@@ -339,7 +339,7 @@
     "title": "장소 선택",
     "find": "장소 검색",
     "noResult": "검색 결과가 없어요",
-    "create": "장소 입력 ''"
+    "create": "장소 입력"
   },
 
   "createMeetupScreen2": {
@@ -359,7 +359,7 @@
   },
 
   "createMeetupScreen3": {
-    "title1": "S모임에서 사용하고 싶은 언어를\n순서대로 선택해주세요",
+    "title1": "모임에서 사용하고 싶은 언어를\n순서대로 선택해주세요",
     "title2": "태그로 모임을 소개해보세요",
     "createChip": "직접입력",
     "chip1": "영어 못해도 괜찮아요",
@@ -375,10 +375,10 @@
 
   "createMeetupScreen4": {
     "title": "제목을 입력해주세요",
-    "title.placeholder": "학교 앞에서 같이 밥먹고 공부해요",
-    "title.numError": "2자 이상으로 입력해주세요",
+    "title_placeholder": "학교 앞에서 같이 밥먹고 공부해요",
+    "title_numError": "2자 이상으로 입력해주세요",
     "addDescription": "모임설명 추가",
-    "addDescription.placeholder": "모임설명을 입력해주세요",
+    "addDescription_placeholder": "모임설명을 입력해주세요",
     "deleteDescription": "모임설명 삭제",
     "createMeetup": "모임 만들기"
   },
@@ -917,5 +917,10 @@
     "header": "약관 및 정책",
     "terms": "서비스 이용약관",
     "privacy": "개인정보 처리방침"
+  },
+
+  "modal": {
+    "cancel": "취소",
+    "confirm": "확인"
   }
 }

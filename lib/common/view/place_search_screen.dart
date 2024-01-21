@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -88,7 +89,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
           children: [
             SearchBarWidget(
               controller: searchController,
-              hintText: '장소 검색',
+              hintText: 'selectLocationBottomSheet.find'.tr(),
               maxLength: 20,
               onChanged: (value) {},
               onFieldSubmitted: (value) {

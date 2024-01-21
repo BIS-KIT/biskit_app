@@ -1,7 +1,11 @@
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,6 +40,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     with SingleTickerProviderStateMixin {
   late TabController controller;
   int pageIndex = 0;
+  String? selectedLang;
 
   List<TopicModel> topics = [];
   List<TagModel> tags = [];
@@ -137,18 +142,18 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
           leftCall: () {
             Navigator.pop(context);
           },
-          leftButton: '취소',
+          leftButton: 'leavePageModal.cancel'.tr(),
           rightCall: () {
             isPop = true;
             ref.read(createMeetUpProvider.notifier).init();
             Navigator.pop(context);
             Navigator.pop(context, [true]);
           },
-          rightButton: '나가기',
+          rightButton: 'leavePageModal.leave'.tr(),
           rightBackgroundColor: kColorBgError,
           rightTextColor: kColorContentError,
-          title: '나가시겠어요?',
-          content: '작성한 모임 정보가 모두 사라져요',
+          title: 'leavePageModal.title'.tr(),
+          content: 'leavePageModal.subtitle'.tr(),
         );
       }
     }
@@ -190,6 +195,12 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     final viewInsets = MediaQuery.of(context).viewInsets;
     final padding = MediaQuery.of(context).padding;
 
+    if (selectedLang == null) {
+      setState(() {
+        selectedLang =
+            (ref.watch(systemProvider) as UserSystemModel).system_language;
+      });
+    }
     return WillPopScope(
       onWillPop: onWillPop,
       child: DefaultLayout(
@@ -222,8 +233,11 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   MeetUpCreateStep1Tab(
                     topics: topics,
                     topPadding: padding.top,
+                    selectedLang: selectedLang!,
                   ),
-                  const MeetUpCreateStep2Tab(),
+                  MeetUpCreateStep2Tab(
+                    selectedLang: selectedLang!,
+                  ),
                   MeetUpCreateStep3Tab(
                     tags: tags,
                   ),
@@ -253,8 +267,8 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                       text: pageIndex == 3
                           ? widget.isEditMode
                               ? '수정하기'
-                              : '모임 만들기'
-                          : '다음',
+                              : 'createMeetupScreen4.createMeetup'.tr()
+                          : 'createMeetupScreen1.next'.tr(),
                       isEnable: isButtonEnable(),
                     ),
                   ),
@@ -272,8 +286,8 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                       text: pageIndex == 3
                           ? widget.isEditMode
                               ? '수정하기'
-                              : '모임 만들기'
-                          : '다음',
+                              : 'createMeetupScreen4.createMeetup'.tr()
+                          : 'createMeetupScreen3.next'.tr(),
                       isEnable: isButtonEnable(),
                     ),
                   );

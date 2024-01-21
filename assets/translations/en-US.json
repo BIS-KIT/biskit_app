@@ -294,7 +294,7 @@
   "deleteKeywordModal": {
     "title": "Delete a keyword?",
     "cancel": "cancel",
-    "delete": "Delete"
+    "delete": "delete"
   },
 
   "verifyUnivScreen": {
@@ -359,7 +359,7 @@
   },
 
   "createMeetupScreen3": {
-    "title1": "Select the languages you’d like to use at the meetup in order",
+    "title1": "Select the languages\nyou’d like to use at the meetup in order",
     "title2": "Select the tags that describe your meetup",
     "createChip": "Create",
     "chip1": "It's okay if your English isn't good",
@@ -375,11 +375,11 @@
 
   "createMeetupScreen4": {
     "title": "Enter a meetup title",
-    "title.placeholder": "Let's have lunch at school :)",
-    "title.numError": "At least 2 characters",
+    "title_placeholder": "Let's have lunch at school :)",
+    "title_numError": "At least 2 characters",
     "addDescription": "Add a description",
-    "addDescription.placeholder": "Enter a description of meetup",
-    "deleteDescription": "Delete a description",
+    "addDescription_placeholder": "Enter a description of meetup",
+    "deleteDescription": "Delete a description. ",
     "createMeetup": "Create a meetup"
   },
 
@@ -891,7 +891,7 @@
   },
 
   "setWarningScreen": {
-    "header": "Warning History",
+    "header": "deleteKeywordModalWarning History",
     "acWarnings": "Accumulated warnings",
     "warning": "Warning",
     "description": "The warnings have been accumulated due to a violation of service usage regulations.",
@@ -917,5 +917,10 @@
     "header": "Terms and Policies",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy"
+  },
+
+  "modal": {
+    "cancel": "cancel",
+    "confirm": "confirm"
   }
 }

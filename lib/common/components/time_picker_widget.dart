@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -77,7 +78,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                   ),
                   Expanded(
                     child: Text(
-                      '시간 선택',
+                      'selectTimeBottomSheet.title'.tr(),
                       textAlign: TextAlign.center,
                       style: getTsHeading18(context).copyWith(
                         color: kColorContentDefault,
@@ -146,7 +147,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                   }
                 },
                 child: FilledButtonWidget(
-                  text: '완료',
+                  text: 'selectTimeBottomSheet.done'.tr(),
                   isEnable: isButtonEnable,
                   backgroundColor: kColorBgPrimary,
                 ),

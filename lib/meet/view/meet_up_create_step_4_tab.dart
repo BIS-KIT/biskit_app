@@ -7,6 +7,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,12 +22,9 @@ class MeetUpCreateStep4Tab extends ConsumerStatefulWidget {
 }
 
 class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
-  // dynamic selectedSubject = {};
-
   late final FocusNode meetupDescriptionFocusNode;
   late final TextEditingController meetupDescriptionController;
   bool showMeetupDescription = false;
-  String buttonText = '모임설명 추가';
   List<TopicModel>? fixTopics;
   TopicModel? selectedTopic;
 
@@ -60,7 +58,6 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
     if (meetupDescriptionController.text.isNotEmpty) {
       setState(() {
         showMeetupDescription = true;
-        buttonText = '모임설명 삭제';
       });
     }
   }
@@ -88,7 +85,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
             GestureDetector(
               onTap: () {
                 showBiskitBottomSheet(
-                  title: '아이콘 선택',
+                  title: 'selectTopicIconBottomSheet.title'.tr(),
                   rightIcon: 'assets/icons/ic_cancel_line_24.svg',
                   onRightTap: () {
                     Navigator.pop(context);
@@ -213,7 +210,7 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '제목을 입력해주세요',
+                  'createMeetupScreen4.title'.tr(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentDefault,
                   ),
@@ -227,13 +224,13 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                         .read(createMeetUpProvider.notifier)
                         .onChangedName(value);
                   },
-                  hintText: '학교 앞에서 같이 밥먹고 공부해요',
+                  hintText: 'createMeetupScreen4.title_placeholder'.tr(),
                   initialValue:
                       createMeetUpState != null ? createMeetUpState.name : '',
                   errorText: (createMeetUpState != null &&
                           createMeetUpState.name != null &&
                           createMeetUpState.name!.length < 2)
-                      ? '2자 이상으로 입력해주세요'
+                      ? 'createMeetupScreen4.title_numError'.tr()
                       : null,
                   maxLength: 30,
                 ),
@@ -277,7 +274,8 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                       minLines: null,
                       decoration: InputDecoration(
                         hintText:
-                            '모임설명을 입력해주세요. 부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.',
+                            'createMeetupScreen4.addDescription_placeholder'
+                                .tr(),
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
@@ -312,34 +310,34 @@ class _MeetUpCreateStep4TabState extends ConsumerState<MeetUpCreateStep4Tab> {
                       setState(() {
                         if (!showMeetupDescription) {
                           showMeetupDescription = true;
-                          buttonText = '모임설명 삭제';
                         } else {
                           showConfirmModal(
                             context: context,
                             leftCall: () {
                               Navigator.pop(context);
                             },
-                            leftButton: '취소',
+                            leftButton: 'deleteDescriptionModal.cancel'.tr(),
                             rightCall: () {
                               ref
                                   .read(createMeetUpProvider.notifier)
                                   .onChangedDescription('');
                               setState(() {
                                 showMeetupDescription = false;
-                                buttonText = '모임설명 추가';
                               });
                               Navigator.pop(context);
                             },
-                            rightButton: '삭제',
+                            rightButton: 'deleteDescriptionModal.delete'.tr(),
                             rightBackgroundColor: kColorBgError,
                             rightTextColor: kColorContentError,
-                            title: '모임 설명을 삭제하시겠어요?',
+                            title: 'deleteDescriptionModal.title'.tr(),
                           );
                         }
                       });
                     },
                     child: OutlinedButtonWidget(
-                      text: buttonText,
+                      text: !showMeetupDescription
+                          ? 'createMeetupScreen4.addDescription'.tr()
+                          : 'createMeetupScreen4.deleteDescription'.tr(),
                       leftIconPath: !showMeetupDescription
                           ? 'assets/icons/ic_plus_line_24.svg'
                           : 'assets/icons/ic_cancel_line_24.svg',

@@ -1,4 +1,6 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,10 +17,13 @@ import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 class MeetUpCreateStep1Tab extends ConsumerStatefulWidget {
   final List<TopicModel> topics;
   final double topPadding;
+  final String selectedLang;
+
   const MeetUpCreateStep1Tab({
     super.key,
     required this.topics,
     required this.topPadding,
+    required this.selectedLang,
   });
 
   @override
@@ -79,7 +84,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                       height: 32,
                     ),
                     Text(
-                      '무엇을 할건가요?',
+                      'createMeetupScreen1.title1'.tr(),
                       style: getTsHeading18(context).copyWith(
                         color: kColorContentDefault,
                       ),
@@ -88,7 +93,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                       height: 4,
                     ),
                     Text(
-                      '3개까지 선택 가능해요',
+                      'createMeetupScreen1.subtitle1'.tr(),
                       style: getTsBody14Rg(context).copyWith(
                         color: kColorContentWeaker,
                       ),
@@ -104,7 +109,9 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                           ...topicList
                               .map(
                                 (e) => ChipWidget(
-                                  text: e.kr_name,
+                                  text: widget.selectedLang == 'kr'
+                                      ? e.kr_name
+                                      : e.en_name,
                                   isSelected: createMeetUpState.topic_ids
                                       .contains(e.id),
                                   onClickSelect: () {
@@ -136,7 +143,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                                   createMeetUpState.custom_topics.length <
                               3)
                             ChipWidget(
-                              text: "직접입력",
+                              text: 'createMeetupScreen1.chip8'.tr(),
                               isSelected: false,
                               onTapEnter: (e) {
                                 ref
@@ -159,7 +166,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                       height: 48,
                     ),
                     Text(
-                      '어디서 만날까요?',
+                      'createMeetupScreen1.title2'.tr(),
                       style: getTsHeading18(context).copyWith(
                         color: kColorContentDefault,
                       ),
@@ -171,7 +178,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                       onTap: () async {
                         final location = await showBiskitBottomSheet(
                           context: context,
-                          title: '장소 검색',
+                          title: 'selectLocationBottomSheet.find'.tr(),
                           rightIcon: 'assets/icons/ic_cancel_line_24.svg',
                           height: MediaQuery.of(context).size.height -
                               widget.topPadding -
@@ -194,7 +201,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                         height: 52,
                         maxLines: 1,
                         text: createMeetUpState!.location == null
-                            ? '장소 선택'
+                            ? 'selectLocationBottomSheet.title'.tr()
                             : createMeetUpState.location ?? '',
                         isEnable: true,
                       ),
