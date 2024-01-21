@@ -299,11 +299,15 @@
 
   "verifyUnivScreen": {
     "title": "Verify your University\nto join the meetup",
-    "reason": "Why do I need to verify it?",
-    "reason.description": "BISKIT allows only student-authenticated users to participate in meetings to ensure safety. If you steal someone else's materials, you will be restricted from using the service and may be subject to criminal penalties.",
-    "addIdCard.title": "Upload Student ID card",
-    "addIdCard.subtitle": "(mobile)ID card or materials",
-    "addIdCard.description": "Make sure to include your Real name, School, Department, and Student number.",
+    "reason": {
+      "label": "Why do I need to verify it?",
+      "description": "BISKIT allows only student-authenticated users to participate in meetings to ensure safety. If you steal someone else's materials, you will be restricted from using the service and may be subject to criminal penalties."
+    },
+    "addIdCard": {
+      "title": "Upload Student ID card",
+      "subtitle": "(mobile)ID card or materials",
+      "description": "Make sure to include your Real name, School, Department, and Student number."
+    },
     "later": "I’ll do it later",
     "done": "Completed"
   },
