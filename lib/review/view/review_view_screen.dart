@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/review/view/review_share_screen.dart';
 import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -166,15 +167,29 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
             userState != null &&
             userState is UserModel &&
             (userState as UserModel).id == resReviewModel!.creator.id)
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              'assets/icons/ic_ios_share_line_24.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentDefault,
-                BlendMode.srcIn,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReviewShareScreen(
+                    imageUrl: resReviewModel!.image_url,
+                    meetUpModel: meetUpModel!,
+                    resReviewModel: resReviewModel!,
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: SvgPicture.asset(
+                'assets/icons/ic_ios_share_line_24.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  kColorContentDefault,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),
