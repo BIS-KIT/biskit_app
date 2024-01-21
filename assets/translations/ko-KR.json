@@ -289,5 +289,633 @@
     "keyword_placeholder": "좋아하는 것을 알려주세요",
     "explain_placeholder": "좋아하는 이유를 알려주세요",
     "done": "완료"
+  },
+
+  "deleteKeywordModal": {
+    "title": "삭제하시겠어요??",
+    "cancel": "취소",
+    "delete": "삭제"
+  },
+
+  "verifyUnivScreen": {
+    "title": "학교 인증을 하면\n모임에 참여할 수 있어요",
+    "reason": {
+      "label": "학교인증이 왜 필요한가요?",
+      "description": "비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다."
+    },
+    "addIdCard": {
+      "title": "학생증 올리기",
+      "subtitle": "(모바일)학생증 또는 학적증명자료",
+      "description": "실명, 학교, 학과, 학번이 정확히 나오도록 올려주세요."
+    },
+    "later": "다음에 할게요",
+    "done": "작성 완료"
+  },
+
+  "createMeetupScreen1": {
+    "title1": "무엇을 할건가요?",
+    "subtitle1": "3개까지 선택 가능해요",
+    "chip1": "푸드",
+    "chip2": "언어교환",
+    "chip3": "액티비티",
+    "chip4": "스포츠",
+    "chip5": "스터디",
+    "chip6": "문화·예술",
+    "chip7": "취미",
+    "chip8": "직접입력",
+    "title2": "어디서 만날까요?",
+    "chooseLocation": "장소 선택",
+    "next": "다음"
+  },
+
+  "leavePageModal": {
+    "title": "나가시겠어요?",
+    "subtitle": "작성한 모임 정보가 모두 사라져요",
+    "cancel": "취소",
+    "leave": "나가기"
+  },
+
+  "selectLocationBottomSheet": {
+    "title": "장소 선택",
+    "find": "장소 검색",
+    "noResult": "검색 결과가 없어요",
+    "create": "장소 입력 ''"
+  },
+
+  "createMeetupScreen2": {
+    "title1": "언제 만날까요?",
+    "title2": "최대 인원을 알려주세요",
+    "next": "다음"
+  },
+
+  "selectDateBottomSheet": {
+    "title": "날짜 선택",
+    "next": "선택"
+  },
+
+  "selectTimeBottomSheet": {
+    "title": "시간 선택",
+    "done": "완료"
+  },
+
+  "createMeetupScreen3": {
+    "title1": "S모임에서 사용하고 싶은 언어를\n순서대로 선택해주세요",
+    "title2": "태그로 모임을 소개해보세요",
+    "createChip": "직접입력",
+    "chip1": "영어 못해도 괜찮아요",
+    "chip2": "한국어 못해도 괜찮아요",
+    "chip3": "비건",
+    "chip4": "뒷풀이",
+    "chip5": "여자만",
+    "chip6": "남자만",
+    "chip7": "혼자와도 괜찮아요",
+    "chip8": "늦참가능",
+    "next": "다음"
+  },
+
+  "createMeetupScreen4": {
+    "title": "제목을 입력해주세요",
+    "title.placeholder": "학교 앞에서 같이 밥먹고 공부해요",
+    "title.numError": "2자 이상으로 입력해주세요",
+    "addDescription": "모임설명 추가",
+    "addDescription.placeholder": "모임설명을 입력해주세요",
+    "deleteDescription": "모임설명 삭제",
+    "createMeetup": "모임 만들기"
+  },
+
+  "selectTopicIconBottomSheet": {
+    "title": "아이콘 선택"
+  },
+
+  "deleteDescriptionModal": {
+    "title": "모임 설명을 삭제하시겠어요?",
+    "cancel": "취소",
+    "delete": "삭제"
+  },
+
+  "meetupDetailScreen": {
+    "recruitForeigner": "외국인 모집",
+    "recruitKorean": "한국인 모집",
+    "introduction": "모임 소개",
+    "members": "모임 멤버",
+    "firstForeigner": "첫 외국인 참가자가 되어보세요",
+    "firstKorean": "첫 한국인 참가자가 되어보세요",
+    "langLevel": "모임 멤버들의 언어 레벨",
+    "advancedMost": "능숙한 사람이 가장 많아요",
+    "langLevelMix": "다양한 레벨이 섞여있어요",
+
+    "btn": {
+      "request": "참여 신청",
+      "chat": "채팅하기",
+      "adminMember": "모임 멤버 관리",
+      "pending": "수락 대기중",
+      "full": "인원이 마감된 모임이에요",
+      "end": "종료된 모임이에요"
+    },
+
+    "actionSheet": {
+      "edit": "수정하기",
+      "delete": "삭제하기",
+      "cancel": "취소",
+      "leave": "모임 나가기",
+      "report": "신고하기"
+    },
+
+    "Modal": {
+      "deleteModal": {
+        "title": "모임을 삭제하시겠어요?",
+        "subtitle": "모임 삭제시 채팅방이 함께 삭제되며 복구할 수 없어요",
+        "cancel": "취소",
+        "delete": "삭제"
+      },
+      "leaveModal": {
+        "title": "모임에서 나가시겠어요?",
+        "cancel": "취소",
+        "delete": "나가기"
+      },
+      "requestModal": {
+        "title": "참여하시겠어요?",
+        "cancel": "취소",
+        "join": "참여신청"
+      },
+      "cancelEditModal": {
+        "title": "모임 수정을 취소하시겠어요?",
+        "subtitle": "저장하지 않은 수정 사항은 사라져요",
+        "continue": "계속 수정",
+        "cancel": "수정 취소"
+      }
+    }
+  },
+
+  "adminMemberScreen": {
+    "title": "모임 멤버 관리",
+    "request": {
+      "title": "참여 대기",
+      "decline": "거절",
+      "accept": "수락",
+      "none": "참여 대기자가 없어요"
+    },
+    "members": "모임 멤버",
+    "modal": {
+      "acceptModal": {
+        "title": "님의 참여를 수락하시겠어요?",
+        "cancel": "취소",
+        "accept": "수락"
+      },
+      "declineModal": {
+        "title": "님의 참여를 거절하시겠어요?",
+        "cancel": "취소",
+        "decline": "거절"
+      },
+      "removeModal": {
+        "title": "님을 내보내시겠어요?",
+        "cancel": "취소",
+        "remove": "내보내기"
+      }
+    },
+    "actionSheet": {
+      "remove": "내보내기",
+      "cancel": "취소"
+    }
+  },
+
+  "exploreMeetupScreen": {
+    "title": "탐색",
+    "sort": {
+      "latest": "등록순",
+      "upcoming": "일시순",
+      "almostFull": "마감임박순"
+    },
+    "chip": {
+      "date": "날짜",
+      "day": "요일",
+      "time": "시간",
+      "hostNationality": "주최자 국적",
+      "subject": "모임 주제",
+      "tag": "태그"
+    },
+    "recruitForeigner": "외국인 모집",
+    "recruitKorean": "한국인 모집",
+    "noMeetups": "모임이 아직 없어요"
+  },
+
+  "exploreFilterBottomSheet": {
+    "title": "필터",
+    "date": {
+      "title": "날짜",
+      "today": "오늘",
+      "tomorrow": "내일",
+      "thisWeek": "이번주",
+      "nextWeek": "다음주"
+    },
+    "day": {
+      "title": "요일",
+      "mon": "월.",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토",
+      "sun": "일"
+    },
+    "time": {
+      "title": "시간",
+      "morning": "오전",
+      "afternoon": "오후",
+      "dinner": "저녁"
+    },
+    "hostNationality": {
+      "title": "주최자 국적",
+      "korean": "한국인",
+      "foreigner": "외국인"
+    },
+    "category": {
+      "title": "모임 주제",
+      "food": "푸드",
+      "langExchange": "언어교환",
+      "activity": "액티비티",
+      "sports": "스포츠",
+      "study": "스터디",
+      "culturalArt": "문화·예술",
+      "hobby": "취미",
+      "etc": "기타"
+    },
+    "tag": {
+      "title": "태그",
+      "tag1": "영어 못해도 괜찮아요",
+      "tag2": "한국어 못해도 괜찮아요",
+      "tag3": "비건",
+      "tag4": "뒷풀이",
+      "tag5": "여자만",
+      "tag6": "남자만",
+      "tag7": "혼자와도 괜찮아요",
+      "tag8": "늦참가능"
+    },
+    "reset": "초기화",
+    "view": "n개 모임보기"
+  },
+
+  "searchMeetupScreen": {
+    "placeholder": "모임의 키워드로 찾아보세요",
+    "noResult": "검색결과가 없어요",
+    "makeMeetup": "원하는 모임이 없다면 직접 만들어볼까요?",
+    "createMeetup": "모임 만들기"
+  },
+
+  "chatListScreen": {
+    "title": "채팅",
+    "noResult": "채팅방이 없어요"
+  },
+
+  "chatroomScreen": {
+    "description": "비스킷은 서로 배려하며 소통하는 커뮤니티를 만들어가고 있어요. 모든 구성원들의 언어와 문화차이를 존중해주세요. 부적절하거나 불쾌감을 주는 컨텐츠를 게시할 경우 서비스 이용에 제재를 받을 수 있습니다.",
+    "join": " 님이 참여했습니다.",
+    "placeholder": "메시지를 입력하세요",
+    "chatBottomSheet": {
+      "title": "모임 멤버"
+    },
+
+    "unableLeaveModal": {
+      "title": "모임 종료 전에는 나갈 수 없어요",
+      "subtitle": "모임 종료 전 채팅방에서 나가기 위해선모임 상세페이지-모임 나가기를 진행해주세요",
+      "ok": "확인"
+    },
+
+    "leaveChatroomModal": {
+      "title": "채팅방에서 나가시겠어요?",
+      "subtitle": "대화 내용이 모두 사라져요",
+      "cancel": "취소",
+      "leave": "나가기"
+    }
+  },
+
+  "myPageScreen": {
+    "editProfile": "프로필 수정",
+    "verifyUniv": "학교 인증하기",
+    "availableLan": "사용가능언어",
+    "tap": {
+      "myMeetup": {
+        "title": "내 모임",
+        "joining": "참여중",
+        "pending": "승인대기",
+        "past": "지난모임",
+        "noJoiningMeetups": "참여중인 모임이 없어요",
+        "noPendingMeetups": "승인대기중인 모임이 없어요",
+        "noPastMeetups": "지난 모임이 없어요",
+        "host": "모임장"
+      },
+      "review": {
+        "title": "후기",
+        "leaveReview": "모임에 참여하고 후기를 남겨보세요",
+        "noReview": "모임 후기를 남겨보세요"
+      }
+    }
+  },
+
+  "myFavoriteScreen": {
+    "title": "좋아하는 것"
+  },
+
+  "editProfileScreen": {
+    "title": "프로필 수정",
+    "nickname": {
+      "label": "닉네임",
+      "numError": "2자 이상 입력해주세요",
+      "overlapError": "이미 사용중인 닉네임이에요"
+    },
+    "aboutMe": {
+      "label": "자기소개",
+      "placeholder": "나에 대해 소개해볼까요?"
+    },
+    "favorites": {
+      "label": "좋아하는 것",
+      "edit": "수정하기"
+    },
+    "availableLan": {
+      "label": "사용 언어",
+      "edit": "수정하기",
+      "noLan": "사용가능언어를 1개 이상 선택해주세요",
+      "chooseLan": "언어선택"
+    },
+    "univInfo": {
+      "label": "학교 정보",
+      "univ": "학교",
+      "degree": "소속",
+      "state": "학적상태",
+      "verifyUniv": "학교 인증하기",
+      "edit": "수정하기"
+    },
+    "save": "저장"
+  },
+
+  "editFavoriteScreen": {
+    "saveError": "저장에 실패했어요. 다시 시도해주세요.",
+    "save": "저장"
+  },
+
+  "othersProfileScreen": {
+    "title": "프로필",
+    "review": "후기",
+    "pending": "학교인증 대기중",
+    "required": "인증되지 않은 사용자입니다",
+    "actionSheet": {
+      "report": "신고하기",
+      "block": "차단하기",
+      "unblock": "차단해제",
+      "cancel": "취소"
+    },
+    "blockToast": "님을 차단했어요"
+  },
+
+  "othersFavoriteScreen": {
+    "title": "님이\n좋아하는 것들이에요"
+  },
+
+  "reportScreen": {
+    "title": "신고하기",
+    "label": "신고 내용",
+    "Placeholder": "신고내용을 입력해주세요",
+    "description": "누적 신고 횟수가 3회 이상인 유저는 모임 생성 및 참여가 제한됩니다.",
+    "send": "비스킷팀에게 보내기",
+    "completeModal": {
+      "title": "신고가 접수되었습니다. 검토까지 최대 24시간이 소요됩니다.",
+      "ok": "확인"
+    }
+  },
+
+  "selectReviewScreen": {
+    "title": "어떤 모임의\n인증샷을 남길까요?",
+    "host": "모임장"
+  },
+
+  "writeReviewScreen": {
+    "title": "후기 작성",
+    "placeholder": "즐거웠던 모임 경험을 들려주세요 (선택사항)",
+    "done": "후기 남기기",
+    "leavePageModal": {
+      "title": "나가시겠어요?",
+      "subtitle": "작성한 내용이 모두 사라져요",
+      "cancel": "취소",
+      "leave": "나가기"
+    }
+  },
+
+  "detailReviewScreen": {
+    "title": "후기",
+    "toast": {
+      "deleted": "삭제된 모임이에요",
+      "saved": "이미지가 앨범에 저장되었어요"
+    },
+    "actionSheet": {
+      "edit": "수정하기",
+      "remove": "삭제하기",
+      "report": "신고하기",
+      "cancel": "취소"
+    },
+    "deleteReviewModal": {
+      "title": "모임 후기를 삭제하시겠어요?",
+      "subtitle": "삭제한 후기는 복구할 수 없어요",
+      "cancel": "취소",
+      "delete": "삭제"
+    }
+  },
+
+  "editReviewScreen": {
+    "title": "후기 수정",
+    "complete": "수정완료"
+  },
+
+  "homeScreen": {
+    "title": "님\n새로운 모임을 찾아볼까요?",
+    "category": {
+      "food": "푸드",
+      "langExchange": "언어교환",
+      "activity": "액티비티",
+      "sports": "스포츠",
+      "study": "스터디",
+      "culturalArt": "문화·예술",
+      "hobby": "취미",
+      "etc": "기타"
+    },
+    "schoolMeetups": "우리학교에서 개설된 모임",
+    "findTags": {
+      "title": "태그로 찾기",
+      "chip1": "영어 못해도 괜찮아요",
+      "chip2": "한국어 못해도 괜찮아요",
+      "chip3": "비건",
+      "chip4": "뒷풀이",
+      "chip5": "여자만",
+      "chip6": "남자만",
+      "chip7": "혼자와도 괜찮아요",
+      "chip8": "늦참가능"
+    },
+    "upcoming": "님\n 다가오는 모임이 있어요",
+    "chat": "채팅",
+    "homeTooltip": "학교 인증하고 모임을 만들어보세요!",
+    "verifyModal": {
+      "title": "학교 인증을 하면 모임을 만들 수 있어요",
+      "subtitle": "간단히 인증하고 모임을 만들어보세요",
+      "cancel": "취소",
+      "verify": "인증하기"
+    },
+    "pendingModal": {
+      "title": "학교 인증 승인 대기중",
+      "subtitle": "승인 완료된 유저만 모임을 만들 수 있어요. 최대한 빠르게 인증 처리 해드릴게요.",
+      "ok": "확인"
+    }
+  },
+
+  "settingScreen": {
+    "title": "설정",
+    "account": "계정",
+    "lang": "언어",
+    "notification": "알림",
+    "blockedUser": "차단 사용자 관리",
+    "warning": "경고 내역",
+    "notice": "공지사항",
+    "guide": "이용 가이드",
+    "inquiry": "문의하기",
+    "terms": "약관 및 정책",
+    "ver": "앱 버전",
+    "version": "최신 버전",
+    "update": "업데이트가 필요해요"
+  },
+
+  "accountScreen": {
+    "title": "계정",
+    "accountInfo": {
+      "title": "가입정보",
+      "kakako": "카카오 회원가입",
+      "apple": "애플 회원가입",
+      "google": "구글 회원가입",
+      "email": "이메일 회원가입"
+    },
+    "changePw": "비밀번호 변경",
+    "logout": "로그아웃",
+    "logoutModal": {
+      "title": "로그아웃 하시겠어요?",
+      "cancel": "취소",
+      "logout": "로그아웃"
+    },
+    "deleteAccount": "계정 삭제"
+  },
+
+  "changePwScreen": {
+    "title": "비밀번호 변경",
+    "label": "현재 비밀번호",
+    "placeholder": "현재 비밀번호를 입력해주세요",
+    "wrongError": "비밀번호가 올바르지 않습니다",
+    "next": "다음"
+  },
+
+  "newPwScreen": {
+    "title": "비밀번호 변경",
+    "newPw": {
+      "label": "새 비밀번호",
+      "placeholder": "새 비밀번호를 입력해주세요",
+      "description": "8자 이상으로 입력해주세요",
+      "numError": "8자 이상으로 입력해주세요",
+      "overlapError": "현재 비밀번호와 다르게 입력해주세요"
+    },
+    "confirmPw": {
+      "label": "비밀번호 확인",
+      "Placeholder": "다시 한번 입력해주세요",
+      "correctPw:": "The password is correct",
+      "incorrectError": "비밀번호가 일치하지 않아요"
+    },
+    "done": "완료",
+    "changePwTooltip": "비밀번호가 변경되었어요"
+  },
+
+  "deleteAccountScreen": {
+    "title": "계정 삭제",
+    "reason": "계정을 삭제하시려는\n이유가 무엇인가요?",
+    "reason1": "자주 사용하지 않아요",
+    "reason2": "사용하기가 불편해요",
+    "reason3": "개인정보가 걱정되어요",
+    "reason4": "새로운 계정으로 가입할거에요",
+    "reason5": "기타"
+  },
+
+  "deleteAccountCautionScreen": {
+    "header": "계정 삭제",
+    "title": "계정 삭제 전 유의사항을\n확인해주세요",
+    "description1": "7일간 재가입이 불가합니다",
+    "description2": "모든 계정의 모든 정보는 삭제되며 복구되지 않습니다.",
+    "agree": "유의사항을 확인했으며 모두 동의합니다",
+    "delete": "계정 삭제하기",
+
+    "modal": {
+      "deleteAccountModal": {
+        "title": "계정을 삭제하시겠습니까?",
+        "cancel": "삭제하지 않기",
+        "delete": "삭제하기"
+      },
+      "deleteCompleteModal": {
+        "title": "정상적으로 삭제되었습니다",
+        "subtitle": "그동안 BISKIT을 이용해주셔서 감사합니다",
+        "ok": "확인"
+      }
+    }
+  },
+
+  "setLangScreen": {
+    "header": "언어",
+    "korean": "한국어",
+    "english": "영어"
+  },
+
+  "setNotificationScreen": {
+    "header": "알림",
+    "importantNotification": {
+      "title": "중요알림",
+      "description": "모임에 필수적인 알림을 보내드려요"
+    },
+    "etcNotification": {
+      "title": "기타알림",
+      "description": "공지/이벤트 알림 등을 보내드려요"
+    },
+    "setNotificationModal": {
+      "title": "기기의 알림 설정이 꺼져있어요",
+      "subtitle": "휴대폰 설정 > 알림 > BISKIT에서 알림을 허용해주세요",
+      "cancel": "취소",
+      "allow": "알림 켜기"
+    }
+  },
+
+  "setBlockScreen": {
+    "header": "차단 사용자 관리",
+    "unblock": "차단중",
+    "block": "차단하기",
+    "noUser": "차단한 사용자가 없어요"
+  },
+
+  "setWarningScreen": {
+    "header": "경고 내역",
+    "acWarnings": "누적 경고 횟수",
+    "warning": "경고",
+    "description": "서비스 이용규정 위반으로 경고가 3회 누적되었습니다.",
+    "noWarnings": "경고 내역이 없어요"
+  },
+
+  "noticeScreen": {
+    "header": "공지사항"
+  },
+
+  "inquiryScreen": {
+    "header": "문의하기",
+    "label": "문의 내용",
+    "placeholder": "문의내용을 입력해주세요",
+    "send": "비스킷팀에게 보내기",
+    "completeModal": {
+      "title": "문의가 접수되었습니다",
+      "ok": "확인"
+    }
+  },
+
+  "termsScreen": {
+    "header": "약관 및 정책",
+    "terms": "서비스 이용약관",
+    "privacy": "개인정보 처리방침"
   }
 }
