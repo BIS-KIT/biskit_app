@@ -39,7 +39,10 @@ class ScheduleCardWidget extends ConsumerWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MeetUpDetailScreen(meetUpModel: meetUpModel),
+            builder: (context) => MeetUpDetailScreen(
+              meetUpModel: meetUpModel,
+              userModel: ref.watch(userMeProvider),
+            ),
           ),
         );
       },

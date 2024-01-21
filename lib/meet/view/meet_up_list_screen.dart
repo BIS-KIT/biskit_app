@@ -292,6 +292,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                 MaterialPageRoute(
                   builder: (context) => MeetUpDetailScreen(
                     meetUpModel: meetUpModel,
+                    userModel: ref.watch(userMeProvider),
                   ),
                 ),
               );
