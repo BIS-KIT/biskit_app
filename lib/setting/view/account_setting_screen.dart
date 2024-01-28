@@ -5,9 +5,9 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/setting/view/account_delete_step_1_screen.dart';
+import 'package:biskit_app/setting/view/current_password_verify_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:biskit_app/setting/view/current_password_verify_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +24,7 @@ class AccountSettingScreen extends ConsumerWidget {
     final userState = ref.watch(userMeProvider);
     final DateFormat dateFormat = DateFormat('yyyy.MM.dd', 'ko');
     return DefaultLayout(
-      title: '계정',
+      title: 'accountScreen.title'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,
@@ -48,7 +48,7 @@ class AccountSettingScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '가입정보',
+                  'accountScreen.accountInfo.title'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -97,7 +97,7 @@ class AccountSettingScreen extends ConsumerWidget {
                                   width: 4,
                                 ),
                                 Text(
-                                  '${getSnsTypeString(userState.sns_type)} 회원가입',
+                                  '${getSnsTypeString(userState.sns_type)} ${'accountScreen.signUp'.tr()}',
                                   style: getTsCaption12Rg(context).copyWith(
                                     color: kColorContentWeakest,
                                   ),
@@ -113,7 +113,7 @@ class AccountSettingScreen extends ConsumerWidget {
             ),
           ),
           ListWidget(
-            text: '비밀번호 변경',
+            text: 'accountScreen.changePw'.tr(),
             selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
             onTapCallback: () {
               Navigator.push(
@@ -125,16 +125,16 @@ class AccountSettingScreen extends ConsumerWidget {
             },
           ),
           ListWidget(
-            text: '로그아웃',
+            text: 'accountScreen.logout'.tr(),
             onTapCallback: () {
               showConfirmModal(
                 context: context,
-                title: '로그아웃 하시겠어요?',
-                leftButton: '취소',
+                title: 'accountScreen.logoutModal.title'.tr(),
+                leftButton: 'accountScreen.logoutModal.cancel'.tr(),
                 leftCall: () {
                   Navigator.pop(context);
                 },
-                rightButton: '로그아웃',
+                rightButton: 'accountScreen.logoutModal.logout'.tr(),
                 rightBackgroundColor: kColorBgError,
                 rightTextColor: kColorContentError,
                 rightCall: () {
@@ -168,7 +168,7 @@ class AccountSettingScreen extends ConsumerWidget {
                         right: 20,
                       ),
                       child: Text(
-                        '계정 삭제',
+                        'accountScreen.deleteAccount'.tr(),
                         style: getTsBody16Rg(context).copyWith(
                           color: kColorContentWeakest,
                           decoration: TextDecoration.underline,

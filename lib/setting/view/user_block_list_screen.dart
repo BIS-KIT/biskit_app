@@ -10,6 +10,7 @@ import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -53,7 +54,7 @@ class _UserBlockListScreenState extends ConsumerState<UserBlockListScreen> {
       init();
     }
     return DefaultLayout(
-      title: '차단 사용자 관리',
+      title: 'setBlockScreen.header'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,
@@ -138,13 +139,13 @@ class _UserBlockListScreenState extends ConsumerState<UserBlockListScreen> {
                               },
                               child: unblockedIdList.contains(
                                       blockedIdList!.ban_list[index].id)
-                                  ? const OutlinedButtonWidget(
-                                      text: '차단하기',
+                                  ? OutlinedButtonWidget(
+                                      text: 'setBlockScreen.block'.tr(),
                                       isEnable: true,
                                       height: 40,
                                     )
-                                  : const FilledButtonWidget(
-                                      text: '차단중',
+                                  : FilledButtonWidget(
+                                      text: 'setBlockScreen.blocked'.tr(),
                                       isEnable: true,
                                       height: 40,
                                       backgroundColor: kColorBgError,
@@ -159,7 +160,7 @@ class _UserBlockListScreenState extends ConsumerState<UserBlockListScreen> {
                 )
               : Center(
                   child: Text(
-                    '차단한 사용자가 없어요',
+                    'setBlockScreen.noUser'.tr(),
                     style: getTsBody16Rg(context)
                         .copyWith(color: kColorContentWeakest),
                   ),

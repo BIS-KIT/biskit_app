@@ -47,7 +47,7 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
       init();
     }
     return DefaultLayout(
-      title: '공지사항',
+      title: 'noticeScreen.header'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,

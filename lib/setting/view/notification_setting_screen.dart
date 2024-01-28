@@ -5,6 +5,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -30,7 +31,7 @@ class _NotificationSettingScreenState
     //   });
     // }
     return DefaultLayout(
-        title: '알림',
+        title: 'setNotificationScreen.header'.tr(),
         shape: const Border(
           bottom: BorderSide(
             width: 1,
@@ -58,7 +59,8 @@ class _NotificationSettingScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '중요알림',
+                          'setNotificationScreen.importantNotification.title'
+                              .tr(),
                           style: getTsBody16Rg(context)
                               .copyWith(color: kColorContentWeak),
                         ),
@@ -66,7 +68,8 @@ class _NotificationSettingScreenState
                           height: 4,
                         ),
                         Text(
-                          '모임에 필수적인 알림을 보내드려요',
+                          'setNotificationScreen.importantNotification.description'
+                              .tr(),
                           style: getTsBody14Rg(context)
                               .copyWith(color: kColorContentWeakest),
                         ),
@@ -87,13 +90,21 @@ class _NotificationSettingScreenState
                         if (!status.isGranted) {
                           showConfirmModal(
                             context: context,
-                            title: '기기의 알림 설정이 꺼져있어요',
-                            content: '휴대폰 설정 > 알림 > BISKIT에서\n알림을 허용해주세요',
-                            leftButton: '취소',
+                            title:
+                                'setNotificationScreen.setNotificationModal.title'
+                                    .tr(),
+                            content:
+                                'setNotificationScreen.setNotificationModal.subtitle'
+                                    .tr(),
+                            leftButton:
+                                'setNotificationScreen.setNotificationModal.cancel'
+                                    .tr(),
                             leftCall: () {
                               Navigator.pop(context);
                             },
-                            rightButton: '알림 켜기',
+                            rightButton:
+                                'setNotificationScreen.setNotificationModal.allow'
+                                    .tr(),
                             rightCall: () async {
                               // 알림 설정으로 이동
                               openAppSettings();
@@ -133,7 +144,7 @@ class _NotificationSettingScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '기타알림',
+                          'setNotificationScreen.etcNotification.title'.tr(),
                           style: getTsBody16Rg(context)
                               .copyWith(color: kColorContentWeak),
                         ),
@@ -141,7 +152,8 @@ class _NotificationSettingScreenState
                           height: 4,
                         ),
                         Text(
-                          '공지/이벤트 알림 등을 보내드려요',
+                          'setNotificationScreen.etcNotification.description'
+                              .tr(),
                           style: getTsBody14Rg(context)
                               .copyWith(color: kColorContentWeakest),
                         ),
@@ -162,13 +174,21 @@ class _NotificationSettingScreenState
                         if (!status.isGranted) {
                           await showConfirmModal(
                             context: context,
-                            title: '기기의 알림 설정이 꺼져있어요',
-                            content: '휴대폰 설정 > 알림 > BISKIT에서\n알림을 허용해주세요',
-                            leftButton: '취소',
+                            title:
+                                'setNotificationScreen.setNotificationModal.title'
+                                    .tr(),
+                            content:
+                                'setNotificationScreen.setNotificationModal.subtitle'
+                                    .tr(),
+                            leftButton:
+                                'setNotificationScreen.setNotificationModal.cancel'
+                                    .tr(),
                             leftCall: () {
                               Navigator.pop(context);
                             },
-                            rightButton: '알림 켜기',
+                            rightButton:
+                                'setNotificationScreen.setNotificationModal.allow'
+                                    .tr(),
                             rightCall: () async {
                               // 알림 설정으로 이동
                               openAppSettings();

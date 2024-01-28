@@ -785,11 +785,12 @@
     "title": "계정",
     "accountInfo": {
       "title": "가입정보",
-      "kakako": "카카오 회원가입",
-      "apple": "애플 회원가입",
-      "google": "구글 회원가입",
-      "email": "이메일 회원가입"
+      "kakako": "카카오",
+      "apple": "애플",
+      "google": "구글",
+      "email": "이메일"
     },
+    "signUp": "회원가입",
     "changePw": "비밀번호 변경",
     "logout": "로그아웃",
     "logoutModal": {
@@ -877,7 +878,7 @@
     },
     "setNotificationModal": {
       "title": "기기의 알림 설정이 꺼져있어요",
-      "subtitle": "휴대폰 설정 > 알림 > BISKIT에서 알림을 허용해주세요",
+      "subtitle": "휴대폰 설정 > 알림 > BISKIT\n에서 알림을 허용해주세요",
       "cancel": "취소",
       "allow": "알림 켜기"
     }
@@ -885,7 +886,7 @@
 
   "setBlockScreen": {
     "header": "차단 사용자 관리",
-    "unblock": "차단중",
+    "blocked": "차단중",
     "block": "차단하기",
     "noUser": "차단한 사용자가 없어요"
   },
@@ -894,8 +895,10 @@
     "header": "경고 내역",
     "acWarnings": "누적 경고 횟수",
     "warning": "경고",
-    "description": "서비스 이용규정 위반으로 경고가 3회 누적되었습니다.",
-    "noWarnings": "경고 내역이 없어요"
+    "description1": "서비스 이용규정 위반으로 경고가",
+    "description2": "회 누적되었습니다.",
+    "noWarnings": "경고 내역이 없어요",
+    "count": "회"
   },
 
   "noticeScreen": {
@@ -921,6 +924,8 @@
 
   "modal": {
     "cancel": "취소",
-    "confirm": "확인"
+    "confirm": "확인",
+    "edit": "수정하기",
+    "delete": "삭제하기"
   }
 }

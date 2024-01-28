@@ -785,11 +785,12 @@
     "title": "Account",
     "accountInfo": {
       "title": "Account info",
-      "kakako": "Kakao Account",
-      "apple": "Apple Account",
-      "google": "Google Account",
-      "email": "Email Account"
+      "kakako": "Kakao",
+      "apple": "Apple",
+      "google": "Google",
+      "email": "Email"
     },
+    "signUp": "Account",
     "changePw": "Change password",
     "logout": "Logout",
     "logoutModal": {
@@ -877,7 +878,7 @@
     },
     "setNotificationModal": {
       "title": "The device's notification setting is off",
-      "subtitle": "Please allow the device to set notifications by Settings > Notifications > BISKIT",
+      "subtitle": "Please allow the device to set notifications\n by Settings > Notifications > BISKIT",
       "cancel": "Cancel",
       "allow": "Allow"
     }
@@ -885,17 +886,19 @@
 
   "setBlockScreen": {
     "header": "Manage blocked user",
-    "unblock": "Unblock",
+    "blocked": "Blocked",
     "block": "Block",
     "noUser": "No blocked users found"
   },
 
   "setWarningScreen": {
-    "header": "deleteKeywordModalWarning History",
+    "header": "Warning History",
     "acWarnings": "Accumulated warnings",
     "warning": "Warning",
-    "description": "The warnings have been accumulated due to a violation of service usage regulations.",
-    "noWarnings": "No warnings found"
+    "description1": "The warnings have been accumulated",
+    "description2": "due to a violation of service usage regulations.",
+    "noWarnings": "No warnings found",
+    "count": "times"
   },
 
   "noticeScreen": {
@@ -921,6 +924,8 @@
 
   "modal": {
     "cancel": "cancel",
-    "confirm": "confirm"
+    "confirm": "confirm",
+    "edit": "edit",
+    "delete": "delete"
   }
 }

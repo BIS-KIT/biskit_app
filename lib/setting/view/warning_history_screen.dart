@@ -44,7 +44,7 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
       init();
     }
     return DefaultLayout(
-      title: '경고 내역',
+      title: 'setWarningScreen.header'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,
@@ -73,13 +73,13 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            '누적 경고 횟수',
+                            'setWarningScreen.acWarnings'.tr(),
                             style: getTsBody14Sb(context)
                                 .copyWith(color: kColorContentWeaker),
                           ),
                         ),
                         Text(
-                          '${warningHistories!.length}회',
+                          '${warningHistories!.length} ${'setWarningScreen.count'.tr()}',
                           style: getTsBody16Sb(context)
                               .copyWith(color: kColorContentWeak),
                         ),
@@ -136,7 +136,7 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '경고',
+                                          'setWarningScreen.warning'.tr(),
                                           style: getTsBody14Sb(context)
                                               .copyWith(
                                                   color: kColorContentWeak),
@@ -145,7 +145,7 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                                           height: 4,
                                         ),
                                         Text(
-                                          '서비스 이용규정 위반으로 경고가 ${index + 1}회 누적되었습니다.',
+                                          '${'setWarningScreen.description1'.tr()} ${index + 1} ${'setWarningScreen.count'.tr()} ${'setWarningScreen.description2'.tr()}',
                                           style: getTsBody14Rg(context)
                                               .copyWith(
                                                   color: kColorContentWeak),
@@ -173,7 +173,7 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                     : Expanded(
                         child: Center(
                           child: Text(
-                            '경고 내역이 없어요',
+                            'setWarningScreen.noWarnings'.tr(),
                             style: getTsBody16Rg(context)
                                 .copyWith(color: kColorContentWeakest),
                           ),
