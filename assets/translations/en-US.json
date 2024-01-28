@@ -726,7 +726,8 @@
   },
 
   "homeScreen": {
-    "title": "Hi, \nExplore and join the meetups",
+    "title1": "Hi,",
+    "title2": "\nExplore and join the meetups!",
     "category": {
       "food": "Food",
       "langExchange": "Language",
@@ -737,9 +738,9 @@
       "hobby": "Hobby",
       "etc": "ETC"
     },
-    "schoolMeetups": "Meetups from my Univ.",
+    "schoolMeetups": "Meetups in my Univ.",
     "findTags": {
-      "title": "태그로 찾기",
+      "title": "Search by tags",
       "chip1": "It's okay if your English isn't good",
       "chip2": "It's okay if your Korean isn't good",
       "chip3": "Vegetarian",
@@ -749,11 +750,11 @@
       "chip7": "It's okay to come alone",
       "chip8": "Late arrivals accepted"
     },
-    "upcoming": "님\n 다가오는 모임이 있어요",
-    "chat": "채팅",
+    "upcoming": "\nThere is an upcoming meetup!",
+    "chat": "chat",
     "homeTooltip": "Verify University and create a meetup!",
     "verifyModal": {
-      "title": "Please Verify your University to create your meetup",
+      "title": "Please Verify your University\nto create your meetup",
       "subtitle": "Verify and Create your meetup",
       "cancel": "Cancel",
       "verify": "Verify"

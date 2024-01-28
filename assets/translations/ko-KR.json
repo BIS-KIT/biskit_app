@@ -726,7 +726,8 @@
   },
 
   "homeScreen": {
-    "title": "님\n새로운 모임을 찾아볼까요?",
+    "title1": "",
+    "title2": "님\n새로운 모임을 찾아볼까요?",
     "category": {
       "food": "푸드",
       "langExchange": "언어교환",
@@ -753,7 +754,7 @@
     "chat": "채팅",
     "homeTooltip": "학교 인증하고 모임을 만들어보세요!",
     "verifyModal": {
-      "title": "학교 인증을 하면 모임을 만들 수 있어요",
+      "title": "학교 인증을 하면\n모임을 만들 수 있어요",
       "subtitle": "간단히 인증하고 모임을 만들어보세요",
       "cancel": "취소",
       "verify": "인증하기"

@@ -1,6 +1,7 @@
 import 'package:biskit_app/alarm/model/alarm_list_model.dart';
 import 'package:biskit_app/alarm/model/alarm_model.dart';
 import 'package:biskit_app/alarm/provider/alarm_provider.dart';
+import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
@@ -17,9 +18,9 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
-import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -376,7 +377,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               vertical: 8,
             ),
             child: Text(
-              '태그로 찾기',
+              'homeScreen.findTags.title'.tr(),
               style: getTsHeading18(context).copyWith(
                 color: kColorContentDefault,
               ),
@@ -424,7 +425,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    '우리학교에서 개설된 모임',
+                    'homeScreen.schoolMeetups'.tr(),
                     style: getTsHeading18(context).copyWith(
                       color: kColorContentDefault,
                     ),
@@ -524,7 +525,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text(
-                    '${userState.profile!.nick_name}님\n새로운 모임을 찾아볼까요?',
+                    '${'homeScreen.title1'.tr()}${userState.profile!.nick_name}${'homeScreen.title2'.tr()}',
                     style: getTsHeading20(context).copyWith(
                       color: kColorContentOnBgPrimary,
                     ),

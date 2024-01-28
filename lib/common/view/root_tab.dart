@@ -14,6 +14,7 @@ import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/my_page_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -105,13 +106,13 @@ class _RootTabState extends ConsumerState<RootTab>
                   // 인증을 안했을때
                   showConfirmModal(
                     context: context,
-                    title: '학교 인증을 하면\n모임을 만들 수 있어요',
-                    content: '간단히 인증하고 모임을 만들어보세요.',
-                    leftButton: '취소',
+                    title: 'homeScreen.verifyModal.title'.tr(),
+                    content: 'homeScreen.verifyModal.subtitle'.tr(),
+                    leftButton: 'homeScreen.verifyModal.cancel'.tr(),
                     leftCall: () {
                       Navigator.pop(context);
                     },
-                    rightButton: '인증하기',
+                    rightButton: 'homeScreen.verifyModal.verify'.tr(),
                     rightBackgroundColor: kColorBgPrimary,
                     rightTextColor: kColorContentOnBgPrimary,
                     rightCall: () async {
@@ -135,8 +136,8 @@ class _RootTabState extends ConsumerState<RootTab>
                         VerificationStatus.PENDING.name) {
                   showDefaultModal(
                     context: context,
-                    title: '학교 인증 승인 대기중',
-                    content: '승인 완료된 유저만 모임을 만들 수 있어요. 최대한 빠르게 인증 처리 해드릴게요.',
+                    title: 'homeScreen.pendingModal.title'.tr(),
+                    content: 'homeScreen.pendingModal.subtitle'.tr(),
                     function: () {
                       Navigator.pop(context);
                     },
@@ -213,7 +214,7 @@ class _RootTabState extends ConsumerState<RootTab>
                     ),
                   ),
                   child: Text(
-                    '학교 인증하고 모임을 만들어보세요',
+                    'homeScreen.homeTooltip'.tr(),
                     style: getTsCaption12Rg(context).copyWith(
                       color: kColorContentInverse,
                     ),
