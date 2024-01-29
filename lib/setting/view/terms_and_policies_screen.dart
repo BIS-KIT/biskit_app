@@ -3,6 +3,7 @@ import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/view/web_view_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -16,18 +17,18 @@ class TermsAndPoliciesScreen extends StatefulWidget {
 class _TermsAndPoliciesScreenState extends State<TermsAndPoliciesScreen> {
   List<Map<String, String>> termsAndPolicies = [
     {
-      'title': '서비스 이용약관',
+      'title': 'termsScreen.terms'.tr(),
       'url': kTermsConditionsServiceUseUrl,
     },
     {
-      'title': '개인정보 처리방침',
+      'title': 'termsScreen.privacy'.tr(),
       'url': kPrivacyPolicyUrl,
     },
   ];
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-        title: '약관 및 정책',
+        title: 'termsScreen.header'.tr(),
         shape: const Border(
           bottom: BorderSide(
             width: 1,

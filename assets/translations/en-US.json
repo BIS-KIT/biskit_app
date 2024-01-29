@@ -294,7 +294,7 @@
   "deleteKeywordModal": {
     "title": "Delete a keyword?",
     "cancel": "cancel",
-    "delete": "Delete"
+    "delete": "delete"
   },
 
   "verifyUnivScreen": {
@@ -359,7 +359,7 @@
   },
 
   "createMeetupScreen3": {
-    "title1": "Select the languages you’d like to use at the meetup in order",
+    "title1": "Select the languages\nyou’d like to use at the meetup in order",
     "title2": "Select the tags that describe your meetup",
     "createChip": "Create",
     "chip1": "It's okay if your English isn't good",
@@ -375,11 +375,11 @@
 
   "createMeetupScreen4": {
     "title": "Enter a meetup title",
-    "title.placeholder": "Let's have lunch at school :)",
-    "title.numError": "At least 2 characters",
+    "title_placeholder": "Let's have lunch at school :)",
+    "title_numError": "At least 2 characters",
     "addDescription": "Add a description",
-    "addDescription.placeholder": "Enter a description of meetup",
-    "deleteDescription": "Delete a description",
+    "addDescription_placeholder": "Enter a description of meetup",
+    "deleteDescription": "Delete a description. ",
     "createMeetup": "Create a meetup"
   },
 
@@ -726,7 +726,8 @@
   },
 
   "homeScreen": {
-    "title": "Hi, \nExplore and join the meetups",
+    "title1": "Hi,",
+    "title2": "\nExplore and join the meetups!",
     "category": {
       "food": "Food",
       "langExchange": "Language",
@@ -737,9 +738,9 @@
       "hobby": "Hobby",
       "etc": "ETC"
     },
-    "schoolMeetups": "Meetups from my Univ.",
+    "schoolMeetups": "Meetups in my Univ.",
     "findTags": {
-      "title": "태그로 찾기",
+      "title": "Search by tags",
       "chip1": "It's okay if your English isn't good",
       "chip2": "It's okay if your Korean isn't good",
       "chip3": "Vegetarian",
@@ -749,11 +750,11 @@
       "chip7": "It's okay to come alone",
       "chip8": "Late arrivals accepted"
     },
-    "upcoming": "님\n 다가오는 모임이 있어요",
-    "chat": "채팅",
+    "upcoming": "\nThere is an upcoming meetup!",
+    "chat": "chat",
     "homeTooltip": "Verify University and create a meetup!",
     "verifyModal": {
-      "title": "Please Verify your University to create your meetup",
+      "title": "Please Verify your University\nto create your meetup",
       "subtitle": "Verify and Create your meetup",
       "cancel": "Cancel",
       "verify": "Verify"
@@ -785,11 +786,12 @@
     "title": "Account",
     "accountInfo": {
       "title": "Account info",
-      "kakako": "Kakao Account",
-      "apple": "Apple Account",
-      "google": "Google Account",
-      "email": "Email Account"
+      "kakako": "Kakao",
+      "apple": "Apple",
+      "google": "Google",
+      "email": "Email"
     },
+    "signUp": "Account",
     "changePw": "Change password",
     "logout": "Logout",
     "logoutModal": {
@@ -877,7 +879,7 @@
     },
     "setNotificationModal": {
       "title": "The device's notification setting is off",
-      "subtitle": "Please allow the device to set notifications by Settings > Notifications > BISKIT",
+      "subtitle": "Please allow the device to set notifications\n by Settings > Notifications > BISKIT",
       "cancel": "Cancel",
       "allow": "Allow"
     }
@@ -885,7 +887,7 @@
 
   "setBlockScreen": {
     "header": "Manage blocked user",
-    "unblock": "Unblock",
+    "blocked": "Blocked",
     "block": "Block",
     "noUser": "No blocked users found"
   },
@@ -894,8 +896,10 @@
     "header": "Warning History",
     "acWarnings": "Accumulated warnings",
     "warning": "Warning",
-    "description": "The warnings have been accumulated due to a violation of service usage regulations.",
-    "noWarnings": "No warnings found"
+    "description1": "The warnings have been accumulated",
+    "description2": "due to a violation of service usage regulations.",
+    "noWarnings": "No warnings found",
+    "count": "times"
   },
 
   "noticeScreen": {
@@ -917,5 +921,12 @@
     "header": "Terms and Policies",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy"
+  },
+
+  "modal": {
+    "cancel": "cancel",
+    "confirm": "confirm",
+    "edit": "edit",
+    "delete": "delete"
   }
 }

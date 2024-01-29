@@ -7,6 +7,7 @@ import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/setting/view/announcement_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,7 +47,7 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '문의하기',
+      title: 'inquiryScreen.header'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,
@@ -65,7 +66,7 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '문의 내용',
+                  'inquiryScreen.label'.tr(),
                   style: getTsBody14Sb(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -103,7 +104,7 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
                         maxLines: null,
                         minLines: null,
                         decoration: InputDecoration(
-                          hintText: '문의내용을 입력해주세요',
+                          hintText: 'inquiryScreen.placeholder'.tr(),
                           border: InputBorder.none,
                           isDense: true,
                           contentPadding: EdgeInsets.zero,
@@ -134,12 +135,12 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
                       Navigator.popAndPushNamed(
                           context, AnnouncementScreen.routeName);
                     },
-                    title: '문의가 접수되었습니다',
+                    title: 'inquiryScreen.completeModal.title'.tr(),
                     rightBackgroundColor: kColorBgPrimary,
                     rightTextColor: kColorContentOnBgPrimary);
               },
               child: FilledButtonWidget(
-                text: '비스킷팀에게 보내기',
+                text: 'inquiryScreen.completeModal.ok'.tr(),
                 isEnable: content.isNotEmpty ? true : false,
                 height: 52,
               ),

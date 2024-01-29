@@ -37,7 +37,7 @@ class _AnnouncementDetailScreenState
       context: context,
       list: [
         MoreButton(
-            text: '수정하기',
+            text: 'modal.edit'.tr(),
             color: kColorContentDefault,
             onTap: () async {
               bool isBack = await Navigator.push(
@@ -55,7 +55,7 @@ class _AnnouncementDetailScreenState
               }
             }),
         MoreButton(
-          text: '삭제하기',
+          text: 'modal.delete'.tr(),
           color: kColorContentError,
           onTap: () {
             deleteNotice();
@@ -71,7 +71,7 @@ class _AnnouncementDetailScreenState
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
     return DefaultLayout(
-      title: '공지사항',
+      title: 'noticeScreen.header'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,

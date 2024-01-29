@@ -78,8 +78,9 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
       },
       rightBackgroundColor: kColorBgError,
       rightTextColor: kColorContentError,
-      rightButton: '삭제',
-      title: '삭제하시겠어요?',
+      rightButton: 'deleteKeywordModal.delete'.tr(),
+      leftButton: 'deleteKeywordModal.cancel'.tr(),
+      title: 'deleteKeywordModal.title'.tr(),
     );
   }
 

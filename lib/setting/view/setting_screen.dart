@@ -14,6 +14,7 @@ import 'package:biskit_app/setting/view/notification_setting_screen.dart';
 import 'package:biskit_app/setting/view/terms_and_policies_screen.dart';
 import 'package:biskit_app/setting/view/user_block_list_screen.dart';
 import 'package:biskit_app/setting/view/warning_history_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -45,7 +46,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(systemProvider);
     return DefaultLayout(
-      title: '설정',
+      title: 'settingScreen.title'.tr(),
       appBarBackgroundColor: kColorBgDefault,
       backgroundColor: kColorBorderWeak,
       shape: const Border(
@@ -58,7 +59,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
         child: Column(
           children: [
             ListWidget(
-              text: '계정',
+              text: 'settingScreen.account'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -71,7 +72,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             _buildDivider(),
             ListWidget(
-              text: '언어',
+              text: 'settingScreen.lang'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               selectText: (state is UserSystenModelError ||
                       state is UserSystemModelLoading)
@@ -89,7 +90,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               },
             ),
             ListWidget(
-              text: '알림',
+              text: 'settingScreen.notification'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -102,7 +103,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             _buildDivider(),
             ListWidget(
-              text: '차단 사용자 관리',
+              text: 'settingScreen.blockedUser'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -114,7 +115,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               },
             ),
             ListWidget(
-              text: '경고 내역',
+              text: 'settingScreen.warning'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -127,7 +128,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             ),
             _buildDivider(),
             ListWidget(
-              text: '공지사항',
+              text: 'settingScreen.notice'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -139,22 +140,22 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               },
             ),
             ListWidget(
-              text: '이용 가이드',
+              text: 'settingScreen.guide'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const WebViewScreen(
+                    builder: (context) => WebViewScreen(
                       url: kUseGuideUrl,
-                      title: '이용 가이드',
+                      title: 'settingScreen.guide'.tr(),
                     ),
                   ),
                 );
               },
             ),
             ListWidget(
-              text: '문의하기',
+              text: 'settingScreen.inquiry'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -178,7 +179,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
             //   },
             // ),
             ListWidget(
-              text: '약관 및 정책',
+              text: 'settingScreen.terms'.tr(),
               selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
               onTapCallback: () {
                 Navigator.push(
@@ -190,8 +191,8 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               },
             ),
             ListWidget(
-              text: '앱 버전',
-              selectText: '업데이트가 필요해요',
+              text: 'settingScreen.ver'.tr(),
+              selectText: 'settingScreen.update'.tr(),
               onTapCallback: () {},
             ),
             Container(
@@ -204,7 +205,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               ),
               color: kColorBorderWeak,
               child: Text(
-                '앱 버전 $deviceVersion',
+                '${'settingScreen.ver'.tr()} $deviceVersion',
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorContentWeakest,
                 ),

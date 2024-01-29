@@ -1,5 +1,8 @@
 import 'package:biskit_app/profile/model/available_language_model.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,6 +30,7 @@ class MeetUpCreateStep3Tab extends ConsumerStatefulWidget {
 class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
   late FocusNode customTagFocusNode;
   late final TextEditingController customTagController;
+  String? selectedLang;
 
   @override
   void initState() {
@@ -46,6 +50,12 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
     final createMeetUpState = ref.watch(createMeetUpProvider);
+    if (selectedLang == null) {
+      setState(() {
+        selectedLang =
+            (ref.watch(systemProvider) as UserSystemModel).system_language;
+      });
+    }
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -71,7 +81,7 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                     height: 32,
                   ),
                   Text(
-                    '모임에서 사용하고 싶은 언어를\n순서대로 선택해주세요',
+                    'createMeetupScreen3.title1'.tr(),
                     style: getTsHeading18(context).copyWith(
                       color: kColorContentDefault,
                     ),
@@ -90,7 +100,9 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                               userState.profile!.available_languages.firstWhere(
                                   (element) => element.language.id == id);
                           return ChipWidget(
-                            text: languageModel.language.kr_name,
+                            text: selectedLang == 'kr'
+                                ? languageModel.language.kr_name
+                                : languageModel.language.en_name,
                             order: index + 1,
                             isSelected: true,
                             onClickSelect: () {
@@ -105,7 +117,9 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                                 .contains(e1.language.id))
                             .map((e) {
                           return ChipWidget(
-                            text: e.language.kr_name,
+                            text: selectedLang == 'kr'
+                                ? e.language.kr_name
+                                : e.language.en_name,
                             order: null,
                             isSelected: false,
                             onClickSelect: () {
@@ -126,7 +140,7 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '태그로 모임을 소개해보세요',
+                    'createMeetupScreen3.title2'.tr(),
                     style: getTsHeading18(context).copyWith(
                       color: kColorContentDefault,
                     ),
@@ -140,7 +154,7 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                     children: [
                       if (createMeetUpState!.custom_tags.length < 10)
                         ChipWidget(
-                          text: "직접입력",
+                          text: "createMeetupScreen3.createChip".tr(),
                           isSelected: false,
                           onTapEnter: (e) {
                             ref
@@ -174,7 +188,7 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                       ),
                       ...widget.tags.map(
                         (e) => ChipWidget(
-                          text: e.kr_name,
+                          text: selectedLang == 'kr' ? e.kr_name : e.en_name,
                           isSelected: createMeetUpState.tag_ids.contains(e.id),
                           onClickSelect: () {
                             ref.read(createMeetUpProvider.notifier).onTapTag(e);

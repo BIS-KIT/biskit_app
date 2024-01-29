@@ -105,13 +105,13 @@ String getLanMaxDescription(String levelStr) {
 
 String getSnsTypeString(String? snsType) {
   if (snsType == null) {
-    return '이메일';
+    return 'accountScreen.accountInfo.email'.tr();
   } else if (snsType == SnsType.apple.name) {
-    return '애플';
+    return 'accountScreen.accountInfo.apple'.tr();
   } else if (snsType == SnsType.kakao.name) {
-    return '카카오';
+    return 'accountScreen.accountInfo.kakako'.tr();
   } else {
-    return '구글';
+    return 'accountScreen.accountInfo.google'.tr();
   }
 }
 

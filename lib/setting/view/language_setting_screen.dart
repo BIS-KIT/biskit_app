@@ -2,8 +2,8 @@ import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +41,7 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
       });
     }
     return DefaultLayout(
-        title: '언어',
+        title: 'setLangScreen.header'.tr(),
         shape: const Border(
           bottom: BorderSide(
             width: 1,
@@ -77,7 +77,7 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          '한국어',
+                          'setLangScreen.korean'.tr(),
                           style: getTsBody16Rg(context)
                               .copyWith(color: kColorContentWeak),
                         ),
@@ -110,7 +110,7 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          '영어',
+                          'setLangScreen.english'.tr(),
                           style: getTsBody16Rg(context)
                               .copyWith(color: kColorContentWeak),
                         ),

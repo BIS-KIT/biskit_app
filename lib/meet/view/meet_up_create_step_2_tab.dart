@@ -15,7 +15,9 @@ import 'package:flutter_svg/svg.dart';
 import '../../common/utils/date_util.dart';
 
 class MeetUpCreateStep2Tab extends ConsumerStatefulWidget {
-  const MeetUpCreateStep2Tab({super.key});
+  final String selectedLang;
+
+  const MeetUpCreateStep2Tab({super.key, required this.selectedLang});
 
   @override
   ConsumerState<MeetUpCreateStep2Tab> createState() =>
@@ -23,7 +25,9 @@ class MeetUpCreateStep2Tab extends ConsumerStatefulWidget {
 }
 
 class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
-  final DateFormat dateFormat = DateFormat('MM/dd (E) a hh:mm');
+  final DateFormat dateFormatUS = DateFormat('MM/dd (E) a hh:mm', 'en_US');
+  final DateFormat dateFormatKO = DateFormat('MM/dd (E) a hh:mm', 'ko_KR');
+
   DateTime? selectedDateTime;
   // int limitNum = 2;
 
@@ -76,7 +80,7 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
             Expanded(
               child: Center(
                 child: Text(
-                  '날짜 선택',
+                  'selectDateBottomSheet.title'.tr(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentDefault,
                   ),
@@ -127,8 +131,8 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
                   tempDay,
                 );
               },
-              child: const FilledButtonWidget(
-                text: '선택',
+              child: FilledButtonWidget(
+                text: 'selectDateBottomSheet.next'.tr(),
                 isEnable: true,
               ),
             ),
@@ -137,7 +141,6 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
       ),
     );
 
-    logger.d(tempDay);
     if (tempDay != null) {
       setState(() {
         selectedDateTime = tempDay;
@@ -176,7 +179,7 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
                 height: 32,
               ),
               Text(
-                '언제 만날까요?',
+                'createMeetupScreen2.title1'.tr(),
                 style: getTsHeading18(context).copyWith(
                   color: kColorContentDefault,
                 ),
@@ -189,7 +192,9 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
                 child: OutlinedButtonWidget(
                   text: selectedDateTime == null
                       ? ''
-                      : dateFormat.format(selectedDateTime!),
+                      : widget.selectedLang == 'kr'
+                          ? dateFormatKO.format(selectedDateTime!)
+                          : dateFormatUS.format(selectedDateTime!),
                   height: 52,
                   isEnable: true,
                 ),
@@ -203,7 +208,7 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '최대 인원을 알려주세요',
+                'createMeetupScreen2.title2'.tr(),
                 style: getTsHeading18(context).copyWith(
                   color: kColorContentDefault,
                 ),

@@ -339,7 +339,7 @@
     "title": "장소 선택",
     "find": "장소 검색",
     "noResult": "검색 결과가 없어요",
-    "create": "장소 입력 ''"
+    "create": "장소 입력"
   },
 
   "createMeetupScreen2": {
@@ -359,7 +359,7 @@
   },
 
   "createMeetupScreen3": {
-    "title1": "S모임에서 사용하고 싶은 언어를\n순서대로 선택해주세요",
+    "title1": "모임에서 사용하고 싶은 언어를\n순서대로 선택해주세요",
     "title2": "태그로 모임을 소개해보세요",
     "createChip": "직접입력",
     "chip1": "영어 못해도 괜찮아요",
@@ -375,10 +375,10 @@
 
   "createMeetupScreen4": {
     "title": "제목을 입력해주세요",
-    "title.placeholder": "학교 앞에서 같이 밥먹고 공부해요",
-    "title.numError": "2자 이상으로 입력해주세요",
+    "title_placeholder": "학교 앞에서 같이 밥먹고 공부해요",
+    "title_numError": "2자 이상으로 입력해주세요",
     "addDescription": "모임설명 추가",
-    "addDescription.placeholder": "모임설명을 입력해주세요",
+    "addDescription_placeholder": "모임설명을 입력해주세요",
     "deleteDescription": "모임설명 삭제",
     "createMeetup": "모임 만들기"
   },
@@ -726,7 +726,8 @@
   },
 
   "homeScreen": {
-    "title": "님\n새로운 모임을 찾아볼까요?",
+    "title1": "",
+    "title2": "님\n새로운 모임을 찾아볼까요?",
     "category": {
       "food": "푸드",
       "langExchange": "언어교환",
@@ -753,7 +754,7 @@
     "chat": "채팅",
     "homeTooltip": "학교 인증하고 모임을 만들어보세요!",
     "verifyModal": {
-      "title": "학교 인증을 하면 모임을 만들 수 있어요",
+      "title": "학교 인증을 하면\n모임을 만들 수 있어요",
       "subtitle": "간단히 인증하고 모임을 만들어보세요",
       "cancel": "취소",
       "verify": "인증하기"
@@ -785,11 +786,12 @@
     "title": "계정",
     "accountInfo": {
       "title": "가입정보",
-      "kakako": "카카오 회원가입",
-      "apple": "애플 회원가입",
-      "google": "구글 회원가입",
-      "email": "이메일 회원가입"
+      "kakako": "카카오",
+      "apple": "애플",
+      "google": "구글",
+      "email": "이메일"
     },
+    "signUp": "회원가입",
     "changePw": "비밀번호 변경",
     "logout": "로그아웃",
     "logoutModal": {
@@ -877,7 +879,7 @@
     },
     "setNotificationModal": {
       "title": "기기의 알림 설정이 꺼져있어요",
-      "subtitle": "휴대폰 설정 > 알림 > BISKIT에서 알림을 허용해주세요",
+      "subtitle": "휴대폰 설정 > 알림 > BISKIT\n에서 알림을 허용해주세요",
       "cancel": "취소",
       "allow": "알림 켜기"
     }
@@ -885,7 +887,7 @@
 
   "setBlockScreen": {
     "header": "차단 사용자 관리",
-    "unblock": "차단중",
+    "blocked": "차단중",
     "block": "차단하기",
     "noUser": "차단한 사용자가 없어요"
   },
@@ -894,8 +896,10 @@
     "header": "경고 내역",
     "acWarnings": "누적 경고 횟수",
     "warning": "경고",
-    "description": "서비스 이용규정 위반으로 경고가 3회 누적되었습니다.",
-    "noWarnings": "경고 내역이 없어요"
+    "description1": "서비스 이용규정 위반으로 경고가",
+    "description2": "회 누적되었습니다.",
+    "noWarnings": "경고 내역이 없어요",
+    "count": "회"
   },
 
   "noticeScreen": {
@@ -917,5 +921,12 @@
     "header": "약관 및 정책",
     "terms": "서비스 이용약관",
     "privacy": "개인정보 처리방침"
+  },
+
+  "modal": {
+    "cancel": "취소",
+    "confirm": "확인",
+    "edit": "수정하기",
+    "delete": "삭제하기"
   }
 }
