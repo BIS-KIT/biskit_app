@@ -212,7 +212,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
-                    context.pushReplacementNamed(
+                    context.goNamed(
                       SignUpAgreeScreen.routeName,
                       extra: SignUpModel(),
                     );

@@ -325,6 +325,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       GestureDetector(
                         onTap: () {
                           context.goNamed(EmailLoginScreen.routeName);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const EmailLoginScreen(),
+                          //   ),
+                          // );
                         },
                         child: _buildEmail(context),
                       ),
