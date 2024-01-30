@@ -1,14 +1,5 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:extended_wrap/extended_wrap.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/components/badge_emoji_widget.dart';
@@ -37,6 +28,14 @@ import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:extended_wrap/extended_wrap.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MeetUpDetailScreen extends ConsumerStatefulWidget {
   final MeetUpModel meetUpModel;
@@ -914,8 +913,18 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             ),
           ),
           if (meetUpDetailModel != null &&
-              (meetUpDetailModel!.foreign_count == 0 ||
-                  meetUpDetailModel!.korean_count == 0))
+              (((ref.watch(userMeProvider) as UserModel)
+                              .user_nationality[0]
+                              .nationality
+                              .code ==
+                          'kr' &&
+                      meetUpDetailModel!.korean_count == 0) ||
+                  (ref.watch(userMeProvider) as UserModel)
+                              .user_nationality[0]
+                              .nationality
+                              .code !=
+                          'kr' &&
+                      meetUpDetailModel!.foreign_count == 0))
             Container(
               margin: const EdgeInsets.only(top: 8),
               padding: const EdgeInsets.only(
@@ -947,7 +956,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                     height: 8,
                   ),
                   Text(
-                    "첫 ${meetUpDetailModel!.foreign_count == 0 ? '외국인' : '한국인'} 참가자가 되어보세요",
+                    meetUpDetailModel!.foreign_count == 0
+                        ? 'meetupDetailScreen.firstForeigner'.tr()
+                        : 'meetupDetailScreen.firstKorean'.tr(),
                     style: getTsBody16Sb(context)
                         .copyWith(color: kColorContentPlaceholder),
                   ),
