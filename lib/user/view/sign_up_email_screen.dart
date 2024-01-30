@@ -107,20 +107,21 @@ class _SignUpEmailScreenState extends ConsumerState<SignUpEmailScreen> {
     setState(() {
       if (email.isValidEmailFormat()) {
         isButtonEnable = true;
+        checkValueEmail();
       } else {
         isButtonEnable = false;
       }
     });
-    checkValueEmail();
   }
 
   checkValueEmail() {
-    if (email.isEmpty) {
-      setState(() {
-        emailError = 'signUpEmailScreen.email.error1'.tr();
-      });
-      return false;
-    } else if (!email.isValidEmailFormat()) {
+    // if (email.isEmpty) {
+    //   setState(() {
+    //     emailError = 'signUpEmailScreen.email.error1'.tr();
+    //   });
+    //   return false;
+    // } else
+    if (!email.isValidEmailFormat()) {
       setState(() {
         emailError = 'signUpEmailScreen.email.error2'.tr();
       });

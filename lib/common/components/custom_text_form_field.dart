@@ -23,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLines;
   final Color borderColor;
   final bool autofocus;
+  final Function()? onEditingComplete;
   const CustomTextFormField({
     Key? key,
     this.textAlign = TextAlign.start,
@@ -43,6 +44,7 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLines = 1,
     this.borderColor = kColorBgElevation3,
     this.autofocus = false,
+    this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -57,6 +59,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
     );
     return TextFormField(
+      onEditingComplete: onEditingComplete,
       maxLines: maxLines,
       onFieldSubmitted: onFieldSubmitted,
       textAlign: textAlign,

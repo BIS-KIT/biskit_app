@@ -67,7 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         'signInWithGoogle.FirebaseAuth.instance.signInWithCredential(credential)>>>[${userCredential.user!.uid}]$userCredential');
     if (userCredential.user != null) {
       await login(
-        // email: userCredential.user!.email,
+        snsEmail: userCredential.user!.email,
         snsId: userCredential.user!.uid,
         snsType: SnsType.google,
       );
@@ -98,7 +98,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           // email: authResult.user!.email,
           snsId: authResult.user!.uid,
           snsType: SnsType.apple,
-          iOsEmail: appleCredential.email,
+          snsEmail: appleCredential.email,
           iOsFirstName: appleCredential.givenName,
           iOsLastName: appleCredential.familyName,
         );
@@ -147,7 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
 
     await login(
-      // email: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+      snsEmail: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
       snsId: user.id.toString(),
       snsType: SnsType.kakao,
     );
@@ -156,7 +156,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   login({
     required String snsId,
     required SnsType snsType,
-    String? iOsEmail,
+    String? snsEmail,
     String? iOsLastName,
     String? iOsFirstName,
   }) async {
@@ -176,12 +176,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ? SignUpModel(
                 sns_type: snsType.name,
                 sns_id: snsId,
-                email: iOsEmail,
+                email: snsEmail,
                 name: '$iOsFirstName $iOsLastName',
               )
             : SignUpModel(
                 sns_type: snsType.name,
                 sns_id: snsId,
+                email: snsEmail ?? '',
               ),
       );
     } else if (userModelBase is UserModelError) {

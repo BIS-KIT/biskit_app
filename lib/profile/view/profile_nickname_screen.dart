@@ -35,11 +35,12 @@ class ProfileNicknameScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
+  String localeCode = kEn;
   PhotoModel? selectedPhotoModel;
   String? randomProfile;
 
   late final TextEditingController controller;
-  // String nickName = '';
+  // Map<String, String>? nickNameMap;
   String? nickNameError;
   bool isNickNameOk = false;
 
@@ -53,14 +54,20 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
       ..addListener(() {
         onSearchChanged(controller.text);
       });
-
     init();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    localeCode = context.locale.languageCode;
   }
 
   init() async {
     final res = await ref.read(profileRepositoryProvider).getRandomNickname();
     if (res != null) {
-      String temp = res.data['kr_nick_name'] ?? '';
+      String keyName = localeCode == kEn ? 'en_nick_name' : 'kr_nick_name';
+      String temp = res[keyName] ?? '';
 
       controller.text = temp.replaceAll(' ', '');
     }
@@ -94,8 +101,9 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
             .read(profileRepositoryProvider)
             .getCheckNickName(value)) {
           // 이미 사용중일 때
+          String tempStr = 'uploadPhotoScreen.nickname.duplicateError'.tr();
           setState(() {
-            nickNameError = 'uploadPhotoScreen.nickname.duplicateError'.tr();
+            nickNameError = tempStr;
             isNickNameOk = false;
           });
         } else {
@@ -166,6 +174,15 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // String nickName = '';
+    // if (nickNameMap != null) {
+    //   if (context.locale.toString() == kEn) {
+    //     nickName = nickNameMap!['en_nick_name'] ?? '';
+    //   } else {
+    //     nickName = nickNameMap!['kr_nick_name'] ?? '';
+    //   }
+    //   controller.text = nickName;
+    // }
     return DefaultLayout(
       title: '',
       actions: [
@@ -316,7 +333,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                     children: [
                       TextInputWidget(
                         controller: controller,
-                        title: 'uploadPhotoScreen.nickname'.tr(),
+                        title: 'uploadPhotoScreen.nickname.title'.tr(),
                         hintText: 'uploadPhotoScreen.placeholder'.tr(),
                         maxLength: 12,
                         // onChanged: onSearchChanged,

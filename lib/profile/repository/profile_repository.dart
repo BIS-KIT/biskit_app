@@ -35,19 +35,30 @@ class ProfileRepository {
     required this.baseUrl,
   });
 
-  getRandomNickname() async {
-    final res = await dio.get(
-      '$baseUrl/random-nickname',
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
-    );
+  Future<Map<String, String>?> getRandomNickname() async {
+    Map<String, String>? result;
+    try {
+      final res = await dio.get(
+        '$baseUrl/random-nickname',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        logger.d(res.toString());
+        result = {
+          'kr_nick_name': res.data['kr_nick_name'].toString(),
+          'en_nick_name': res.data['en_nick_name'].toString(),
+        };
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
 
-    logger.d(res.toString());
-    return res;
+    return result;
   }
 
   Future<String?> getRandomProfile() async {

@@ -24,6 +24,7 @@ class TextInputWidget extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final ValueChanged<String>? onFieldSubmitted;
   final bool autofocus;
+  final Function()? onEditingComplete;
   const TextInputWidget({
     Key? key,
     required this.title,
@@ -43,6 +44,7 @@ class TextInputWidget extends StatelessWidget {
     this.inputFormatters,
     this.onFieldSubmitted,
     this.autofocus = false,
+    this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -76,6 +78,7 @@ class TextInputWidget extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
           inputFormatters: inputFormatters,
+          onEditingComplete: onEditingComplete,
         ),
       ],
     );
