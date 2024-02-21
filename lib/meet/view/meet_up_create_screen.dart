@@ -1,23 +1,20 @@
+import 'package:biskit_app/common/components/progress_bar_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/meet/model/tag_model.dart';
+import 'package:biskit_app/meet/model/topic_model.dart';
+import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_create_step_1_tab.dart';
+import 'package:biskit_app/meet/view/meet_up_create_step_2_tab.dart';
+import 'package:biskit_app/meet/view/meet_up_create_step_3_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
-import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
-import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:biskit_app/common/components/progress_bar_widget.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/meet/model/tag_model.dart';
-import 'package:biskit_app/meet/model/topic_model.dart';
-import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
-import 'package:biskit_app/meet/view/meet_up_create_step_1_tab.dart';
-import 'package:biskit_app/meet/view/meet_up_create_step_2_tab.dart';
-import 'package:biskit_app/meet/view/meet_up_create_step_3_tab.dart';
 
 import '../../common/components/filled_button_widget.dart';
 import '../../common/layout/default_layout.dart';
@@ -123,18 +120,18 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
           leftCall: () {
             Navigator.pop(context);
           },
-          leftButton: '계속 수정',
+          leftButton: 'meetupDetailScreen.modal.cancelEditModal.continue'.tr(),
           rightCall: () {
             isPop = true;
             ref.read(createMeetUpProvider.notifier).init();
             Navigator.pop(context);
             Navigator.pop(context, [true]);
           },
-          rightButton: '수정 취소',
+          rightButton: 'meetupDetailScreen.modal.cancelEditModal.cancel'.tr(),
           rightBackgroundColor: kColorBgError,
           rightTextColor: kColorContentError,
-          title: '모임 수정을 취소하시겠어요?',
-          content: '저장하지 않은 수정 사항은 사라져요',
+          title: 'meetupDetailScreen.modal.cancelEditModal.title'.tr(),
+          content: 'meetupDetailScreen.modal.cancelEditModal.subtitle'.tr(),
         );
       } else {
         await showConfirmModal(
@@ -195,12 +192,6 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     final viewInsets = MediaQuery.of(context).viewInsets;
     final padding = MediaQuery.of(context).padding;
 
-    if (selectedLang == null) {
-      setState(() {
-        selectedLang =
-            (ref.watch(systemProvider) as UserSystemModel).system_language;
-      });
-    }
     return WillPopScope(
       onWillPop: onWillPop,
       child: DefaultLayout(
@@ -232,11 +223,11 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                 children: [
                   MeetUpCreateStep1Tab(
                     topics: topics,
+                    systemModel: ref.watch(systemProvider),
                     topPadding: padding.top,
-                    selectedLang: selectedLang!,
                   ),
                   MeetUpCreateStep2Tab(
-                    selectedLang: selectedLang!,
+                    systemModel: ref.watch(systemProvider),
                   ),
                   MeetUpCreateStep3Tab(
                     tags: tags,
@@ -266,7 +257,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                       height: 56,
                       text: pageIndex == 3
                           ? widget.isEditMode
-                              ? '수정하기'
+                              ? 'createMeetupScreen4.editComplete'.tr()
                               : 'createMeetupScreen4.createMeetup'.tr()
                           : 'createMeetupScreen1.next'.tr(),
                       isEnable: isButtonEnable(),
@@ -285,7 +276,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                       height: 52,
                       text: pageIndex == 3
                           ? widget.isEditMode
-                              ? '수정하기'
+                              ? 'createMeetupScreen4.editComplete'.tr()
                               : 'createMeetupScreen4.createMeetup'.tr()
                           : 'createMeetupScreen3.next'.tr(),
                       isEnable: isButtonEnable(),

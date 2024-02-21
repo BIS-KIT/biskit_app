@@ -1,29 +1,28 @@
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/setting/model/user_system_model.dart';
-import 'package:biskit_app/setting/provider/system_provider.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/place_search_screen.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MeetUpCreateStep1Tab extends ConsumerStatefulWidget {
   final List<TopicModel> topics;
   final double topPadding;
-  final String selectedLang;
+  final UserSystemModelBase? systemModel;
 
   const MeetUpCreateStep1Tab({
     super.key,
     required this.topics,
     required this.topPadding,
-    required this.selectedLang,
+    required this.systemModel,
   });
 
   @override
@@ -109,7 +108,11 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                           ...topicList
                               .map(
                                 (e) => ChipWidget(
-                                  text: widget.selectedLang == 'kr'
+                                  text: widget.systemModel is UserSystemModel &&
+                                          (widget.systemModel
+                                                      as UserSystemModel)
+                                                  .system_language ==
+                                              'ko'
                                       ? e.kr_name
                                       : e.en_name,
                                   isSelected: createMeetUpState.topic_ids
