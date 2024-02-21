@@ -11,7 +11,9 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,15 +32,15 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   final List<MeetUpListOrder> meetUpListOrder = [
     MeetUpListOrder(
       state: MeetUpOrderState.created_time,
-      text: '등록순',
+      text: 'exploreMeetupScreen.sort.latest'.tr(),
     ),
     MeetUpListOrder(
       state: MeetUpOrderState.meeting_time,
-      text: '일시순',
+      text: 'exploreMeetupScreen.sort.upcoming'.tr(),
     ),
     MeetUpListOrder(
       state: MeetUpOrderState.deadline_soon,
-      text: '마감임박순',
+      text: 'exploreMeetupScreen.sort.almostFull'.tr(),
     ),
   ];
 
@@ -52,7 +54,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     // ref.read(meetUpFilterProvider.notifier).tempSave();
     showBiskitBottomSheet(
       context: context,
-      title: '필터',
+      title: 'exploreFilterBottomSheet.title'.tr(),
       rightIcon: 'assets/icons/ic_cancel_line_24.svg',
       onRightTap: () {
         Navigator.pop(context);
@@ -286,6 +288,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
           return MeetUpCardWidget(
             model: meetUpModel,
             userModel: ref.watch(userMeProvider),
+            systemModel: ref.watch(systemProvider),
             onTapMeetUp: () {
               Navigator.push(
                 context,

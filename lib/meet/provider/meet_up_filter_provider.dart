@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
@@ -7,6 +5,8 @@ import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final meetUpFilterProvider =
     StateNotifierProvider<MeetUpFilterStateNotifiar, MeetUpState>(
@@ -45,107 +45,113 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
         await ref.read(createMeetUpProvider.notifier).getTags(isCustom: false);
     return [
       MeetUpFilterGroup(
-        groupText: '날짜',
+        groupText: 'exploreFilterBottomSheet.date.title'.tr(),
         filterType: MeetUpFilterType.time,
         filterViewType: MeetUpFilterViewType.days,
         filterList: [
           MeetUpFilterModel(
-            text: '오늘',
+            text: 'exploreFilterBottomSheet.date.today'.tr(),
             isSeleted: false,
             value: 'TODAY',
           ),
           MeetUpFilterModel(
-            text: '내일',
+            text: 'exploreFilterBottomSheet.date.tomorrow'.tr(),
             isSeleted: false,
             value: 'TOMORROW',
           ),
           MeetUpFilterModel(
-            text: '이번주',
+            text: 'exploreFilterBottomSheet.date.thisWeek'.tr(),
             isSeleted: false,
             value: 'THIS_WEEK',
           ),
           MeetUpFilterModel(
-            text: '다음주',
+            text: 'exploreFilterBottomSheet.date.nextWeek'.tr(),
             isSeleted: false,
             value: 'NEXT_WEEK',
           ),
         ],
       ),
       MeetUpFilterGroup(
-        groupText: '요일',
+        groupText: 'exploreFilterBottomSheet.day.title'.tr(),
         filterType: MeetUpFilterType.time,
         filterViewType: MeetUpFilterViewType.week,
         filterList: [
           MeetUpFilterModel(
-            text: '월',
+            text: 'exploreFilterBottomSheet.day.mon'.tr(),
             isSeleted: false,
             value: 'MONDAY',
           ),
           MeetUpFilterModel(
-            text: '화',
+            text: 'exploreFilterBottomSheet.day.tue'.tr(),
             isSeleted: false,
             value: 'TUESDAY',
           ),
           MeetUpFilterModel(
-            text: '수',
+            text: 'exploreFilterBottomSheet.day.wed'.tr(),
             isSeleted: false,
             value: 'WEDNESDAY',
           ),
           MeetUpFilterModel(
-            text: '목',
+            text: 'exploreFilterBottomSheet.day.thu'.tr(),
             isSeleted: false,
             value: 'THURSDAY',
           ),
           MeetUpFilterModel(
-            text: '금',
+            text: 'exploreFilterBottomSheet.day.fri'.tr(),
             isSeleted: false,
             value: 'FRIDAY',
           ),
           MeetUpFilterModel(
-            text: '토',
+            text: 'exploreFilterBottomSheet.day.sat'.tr(),
             isSeleted: false,
             value: 'SATURDAY',
           ),
           MeetUpFilterModel(
-            text: '일',
+            text: 'exploreFilterBottomSheet.day.sun'.tr(),
             isSeleted: false,
             value: 'SUNDAY',
           ),
         ],
       ),
       MeetUpFilterGroup(
-        groupText: '시간',
+        groupText: 'exploreFilterBottomSheet.time.title'.tr(),
         filterType: MeetUpFilterType.time,
         filterViewType: MeetUpFilterViewType.time,
         filterList: [
           MeetUpFilterModel(
-            text: '오전',
+            text: 'exploreFilterBottomSheet.time.morning'.tr(),
             isSeleted: false,
             value: 'MORNING',
           ),
           MeetUpFilterModel(
-            text: '오후',
+            text: 'exploreFilterBottomSheet.time.afternoon'.tr(),
             isSeleted: false,
             value: 'AFTERNOON',
           ),
           MeetUpFilterModel(
-            text: '저녁',
+            text: 'exploreFilterBottomSheet.time.dinner'.tr(),
             isSeleted: false,
             value: 'EVENING',
           ),
         ],
       ),
       MeetUpFilterGroup(
-        groupText: '주최자 국적',
+        groupText: 'exploreFilterBottomSheet.hostNationality.title'.tr(),
         filterType: MeetUpFilterType.national,
         filterViewType: MeetUpFilterViewType.national,
         filterList: [
-          MeetUpFilterModel(text: '한국인', isSeleted: false, value: 'KOREAN'),
-          MeetUpFilterModel(text: '외국인', isSeleted: false, value: 'FOREIGNER'),
+          MeetUpFilterModel(
+              text: 'exploreFilterBottomSheet.hostNationality.korean'.tr(),
+              isSeleted: false,
+              value: 'KOREAN'),
+          MeetUpFilterModel(
+              text: 'exploreFilterBottomSheet.hostNationality.foreigner'.tr(),
+              isSeleted: false,
+              value: 'FOREIGNER'),
         ],
       ),
       MeetUpFilterGroup(
-        groupText: '모임 주제',
+        groupText: 'exploreFilterBottomSheet.category.title'.tr(),
         filterType: MeetUpFilterType.topic,
         filterViewType: MeetUpFilterViewType.topic,
         filterList: topicList
@@ -159,7 +165,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
             .toList(),
       ),
       MeetUpFilterGroup(
-        groupText: '태그',
+        groupText: 'exploreFilterBottomSheet.tag.title'.tr(),
         filterType: MeetUpFilterType.tag,
         filterViewType: MeetUpFilterViewType.tag,
         filterList: tagList

@@ -5,6 +5,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -174,8 +175,8 @@ class _MeetUpFilterSheetWidgetState
                         onTap: () {
                           zeroInit();
                         },
-                        child: const OutlinedButtonWidget(
-                          text: '초기화',
+                        child: OutlinedButtonWidget(
+                          text: 'exploreFilterBottomSheet.reset'.tr(),
                           isEnable: true,
                           leftIconPath: 'assets/icons/ic_reset_line_24.svg',
                         ),
@@ -191,7 +192,8 @@ class _MeetUpFilterSheetWidgetState
                             Navigator.of(context).pop();
                           },
                           child: FilledButtonWidget(
-                            text: '${totalCount ?? 0}개 모임보기',
+                            text:
+                                '${totalCount ?? 0}${'exploreFilterBottomSheet.view'.tr()}',
                             isEnable: true,
                           ),
                         ),
