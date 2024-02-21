@@ -3,43 +3,43 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:biskit_app/common/components/badge_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/level_bar_widget.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/components/univ_student_graduate_status.dart';
 import 'package:biskit_app/common/components/univ_student_status_list_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/model/university_graduate_status_model.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/components/lang_list_widget.dart';
 import 'package:biskit_app/profile/model/available_language_create_model.dart';
+import 'package:biskit_app/profile/model/profile_model.dart';
+import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
 import 'package:biskit_app/profile/provider/use_language_provider.dart';
+import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:biskit_app/user/model/user_university_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:biskit_app/common/components/badge_widget.dart';
-import 'package:biskit_app/common/components/level_bar_widget.dart';
-import 'package:biskit_app/common/components/outlined_button_widget.dart';
-import 'package:biskit_app/common/components/text_input_widget.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/utils/input_validate_util.dart';
-import 'package:biskit_app/common/utils/string_util.dart';
-import 'package:biskit_app/profile/model/profile_model.dart';
-import 'package:biskit_app/profile/model/student_verification_model.dart';
-import 'package:biskit_app/profile/repository/profile_repository.dart';
-import 'package:biskit_app/user/model/user_university_model.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
@@ -153,7 +153,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         if (!isOk) {
           // 이미 사용중일 때
           setState(() {
-            nickNameError = '이미 사용중인 닉네임이에요';
+            nickNameError = 'editProfileScreen.nickname.duplicateError'.tr();
             isNickNameOk = false;
           });
         } else {
@@ -166,12 +166,12 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       } else {
         if (value.length < 2) {
           setState(() {
-            nickNameError = '2자 이상 입력해주세요';
+            nickNameError = 'editProfileScreen.nickname.numError'.tr();
             isNickNameOk = false;
           });
         } else {
           setState(() {
-            nickNameError = '한글/영문/숫자만 사용가능해요';
+            nickNameError = 'editProfileScreen.nickname.formatError'.tr();
             isNickNameOk = false;
           });
         }
@@ -321,7 +321,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       },
       child: DefaultLayout(
         leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
-        title: '프로필 수정',
+        title: 'editProfileScreen.title'.tr(),
         actions: [
           GestureDetector(
             onTap: () {
@@ -335,7 +335,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 horizontal: 8,
               ),
               child: Text(
-                '저장',
+                'editProfileScreen.save'.tr(),
                 style: getTsBody16Sb(context).copyWith(
                   color: isSaveEnable
                       ? kColorContentDefault
@@ -389,7 +389,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '학교 정보',
+            'editProfileScreen.univInfo.label'.tr(),
             style: getTsBody16Sb(context).copyWith(
               color: kColorContentDefault,
             ),
@@ -407,7 +407,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           child: Row(
                             children: [
                               Text(
-                                '학교',
+                                'editProfileScreen.univInfo.univ'.tr(),
                                 style: getTsBody16Sb(context).copyWith(
                                   color: kColorContentWeak,
                                 ),
@@ -431,8 +431,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           onTap: () {
                             onTapCertifyUniv();
                           },
-                          child: const FilledButtonWidget(
-                            text: '학교 인증하기',
+                          child: FilledButtonWidget(
+                            text: 'editProfileScreen.univInfo.verifyUniv'.tr(),
                             height: 40,
                             isEnable: true,
                           ),
@@ -449,7 +449,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           child: Row(
                             children: [
                               Text(
-                                '학교',
+                                'editProfileScreen.univInfo.univ'.tr(),
                                 style: getTsBody16Sb(context).copyWith(
                                   color: kColorContentDisabled,
                                 ),
@@ -481,7 +481,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 child: Row(
                   children: [
                     Text(
-                      '소속',
+                      'editProfileScreen.univInfo.degree'.tr(),
                       style: getTsBody16Sb(context).copyWith(
                         color: kColorContentWeak,
                       ),
@@ -512,7 +512,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 child: Row(
                   children: [
                     Text(
-                      '학적상태',
+                      'editProfileScreen.univInfo.state'.tr(),
                       style: getTsBody16Sb(context).copyWith(
                         color: kColorContentWeak,
                       ),
@@ -537,7 +537,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 onTap: () async {
                   final result1 = await showBiskitBottomSheet(
                     context: context,
-                    title: '소속 선택',
+                    title: 'editProfileScreen.univ.selectDegree'.tr(),
                     // leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
                     isDismissible: false,
                     onLeftTap: () async {
@@ -558,7 +558,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   if (result1 != null && mounted) {
                     final result2 = await showBiskitBottomSheet(
                       context: context,
-                      title: '학적상태 선택',
+                      title: 'editProfileScreen.univ.selectState'.tr(),
                       leftIcon: 'assets/icons/ic_arrow_back_ios_line_24.svg',
                       isDismissible: false,
                       onLeftTap: () async {
@@ -586,8 +586,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   }
                   checkValue();
                 },
-                child: const OutlinedButtonWidget(
-                  text: '수정하기',
+                child: OutlinedButtonWidget(
+                  text: 'editProfileScreen.univ.edit'.tr(),
                   isEnable: true,
                   height: 44,
                 ),
@@ -610,7 +610,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '사용가능언어',
+            'availableLang.label'.tr(),
             style: getTsBody16Sb(context).copyWith(
               color: kColorContentDefault,
             ),
@@ -630,7 +630,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     ),
                   ),
                   child: Text(
-                    '사용가능언어를\n1개 이상 선택해주세요',
+                    'availableLang.noLang'.tr(),
                     textAlign: TextAlign.center,
                     style: getTsBody16Rg(context).copyWith(
                       color: kColorContentError,
@@ -719,7 +719,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   .setSelectedList(useLanguageModelList);
               showDefaultModalBottomSheet(
                 context: context,
-                title: '언어 선택',
+                title: 'availableLang.chooseLang'.tr(),
                 titleRightButton: true,
                 enableDrag: false,
                 isDismissible: false,
@@ -737,8 +737,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 ),
               );
             },
-            child: const OutlinedButtonWidget(
-              text: '수정하기',
+            child: OutlinedButtonWidget(
+              text: 'availableLang.edit'.tr(),
               isEnable: true,
               height: 44,
             ),
@@ -758,7 +758,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '좋아하는 것',
+            'editProfileScreen.favorites.label'.tr(),
             style: getTsBody16Sb(context).copyWith(
               color: kColorContentDefault,
             ),
@@ -802,8 +802,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 ),
               );
             },
-            child: const OutlinedButtonWidget(
-              text: '수정하기',
+            child: OutlinedButtonWidget(
+              text: 'editProfileScreen.favorites.edit'.tr(),
               isEnable: true,
               height: 44,
             ),
@@ -971,11 +971,11 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             children: [
               TextInputWidget(
                 controller: nickNameController,
-                title: '닉네임',
+                title: 'editProfileScreen.nickname.label'.tr(),
                 titleStyle: getTsBody16Sb(context).copyWith(
                   color: kColorContentDefault,
                 ),
-                hintText: '닉네임을 입력해주세요',
+                hintText: 'editProfileScreen.nickname.placeholder'.tr(),
                 maxLength: 12,
                 // onChanged: onSearchChanged,
                 errorText: nickNameError,
@@ -1003,7 +1003,9 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    isNickNameOk ? '사용 가능한 닉네임이에요' : '한글/영문/숫자 2자 이상',
+                    isNickNameOk
+                        ? 'editProfileScreen.nickname.available'.tr()
+                        : 'editProfileScreen.nickname.numError'.tr(),
                     style: getTsCaption12Rg(context).copyWith(
                       color: isNickNameOk
                           ? kColorContentSeccess
@@ -1023,7 +1025,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '자기소개',
+                'editProfileScreen.aboutMe.label'.tr(),
                 style: getTsBody16Sb(context).copyWith(
                   color: kColorContentDefault,
                 ),
@@ -1052,7 +1054,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   maxLength: 300,
                   decoration: InputDecoration(
                     counterText: '',
-                    hintText: '나에 대해 소개해볼까요?',
+                    hintText: 'editProfileScreen.aboutMe.placeholder'.tr(),
                     hintStyle: getTsBody16Rg(context).copyWith(
                       color: kColorContentPlaceholder,
                     ),

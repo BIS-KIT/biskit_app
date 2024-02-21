@@ -11,6 +11,7 @@ import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -90,7 +91,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                         height: 20,
                       ),
                       Text(
-                        '후기',
+                        'othersProfileScreen.review'.tr(),
                         style: getTsHeading18(context).copyWith(
                           color: kColorContentDefault,
                         ),
@@ -123,7 +124,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
               height: width,
               child: Center(
                 child: Text(
-                  '아직 후기가 없어요',
+                  'othersProfileScreen.noReview'.tr(),
                   style: getTsBody14Sb(context).copyWith(
                     color: kColorContentWeakest,
                   ),
@@ -206,7 +207,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
           ),
           Expanded(
             child: Text(
-              '프로필',
+              'othersProfileScreen.title'.tr(),
               style: getTsHeading20(context).copyWith(
                 color: kColorContentDefault,
               ),
@@ -251,7 +252,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
       context: context,
       list: [
         MoreButton(
-          text: '신고하기',
+          text: 'othersProfileScreen.actionSheet.report'.tr(),
           color: kColorContentError,
           onTap: () async {
             Navigator.pop(context);
@@ -268,7 +269,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
         ),
         if (isBan != null && isBan!)
           MoreButton(
-            text: '차단 해제',
+            text: 'othersProfileScreen.actionSheet.unblock'.tr(),
             color: kColorContentDefault,
             onTap: () async {
               Navigator.pop(context);
@@ -282,7 +283,8 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                 });
                 showSnackBar(
                   context: context,
-                  text: '${profileUserModel!.profile!.nick_name}님을 차단 해제했어요.',
+                  text:
+                      '${profileUserModel!.profile!.nick_name}${'othersProfileScreen.blockToast'.tr()}',
                   margin: const EdgeInsets.only(
                     bottom: 40,
                     left: 12,
@@ -294,7 +296,7 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
           ),
         if (isBan != null && !isBan!)
           MoreButton(
-            text: '차단하기',
+            text: 'othersProfileScreen.actionSheet.block'.tr(),
             color: kColorContentError,
             onTap: () async {
               Navigator.pop(context);
@@ -308,7 +310,8 @@ class _ProfileViewScreenState extends ConsumerState<ProfileViewScreen> {
                 });
                 showSnackBar(
                   context: context,
-                  text: '${profileUserModel!.profile!.nick_name}님을 차단했어요.',
+                  text:
+                      '${profileUserModel!.profile!.nick_name}${'othersProfileScreen.blockToast'.tr()}',
                   margin: const EdgeInsets.only(
                     bottom: 40,
                     left: 12,

@@ -1,8 +1,14 @@
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
+import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/date_util.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,18 +16,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:biskit_app/common/components/outlined_button_widget.dart';
-import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/meet/model/meet_up_model.dart';
-
 class ScheduleCardWidget extends ConsumerWidget {
   final MeetUpModel meetUpModel;
+  final UserSystemModelBase? systemModel;
   final double width;
   const ScheduleCardWidget({
     Key? key,
     required this.meetUpModel,
+    required this.systemModel,
     required this.width,
   }) : super(key: key);
 
@@ -30,9 +32,10 @@ class ScheduleCardWidget extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
-    final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
-
+    final DateFormat dateFormatUS = DateFormat('MM/dd (EEE)', 'en_US');
+    final DateFormat dateFormatKO = DateFormat('MM/dd (EEE)', 'ko_KR');
+    final DateFormat timeFormatUS = DateFormat('a h:mm', 'en_US');
+    final DateFormat timeFormatKO = DateFormat('a h:mm', 'ko_KR');
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
@@ -92,7 +95,12 @@ class ScheduleCardWidget extends ConsumerWidget {
                       Text(
                         getMeetUpDateStr(
                           meetUpDateStr: meetUpModel.meeting_time,
-                          dateFormat: dateFormat1,
+                          dateFormat: context is UserSystemModel &&
+                                  (systemModel as UserSystemModel)
+                                          .system_language ==
+                                      'ko'
+                              ? dateFormatKO
+                              : dateFormatUS,
                         ),
                         // meetUpModel.meeting_time.isEmpty
                         //     ? ''
@@ -108,8 +116,14 @@ class ScheduleCardWidget extends ConsumerWidget {
                       Text(
                         meetUpModel.meeting_time.isEmpty
                             ? ''
-                            : dateFormat2.format(
-                                DateTime.parse(meetUpModel.meeting_time)),
+                            : systemModel is UserSystemModel &&
+                                    (systemModel as UserSystemModel)
+                                            .system_language ==
+                                        'ko'
+                                ? timeFormatKO.format(
+                                    DateTime.parse(meetUpModel.meeting_time))
+                                : timeFormatUS.format(
+                                    DateTime.parse(meetUpModel.meeting_time)),
                         style: getTsHeading18(context).copyWith(
                           color: kColorContentWeak,
                         ),

@@ -1,24 +1,24 @@
 import 'dart:math';
 
-import 'package:biskit_app/common/components/new_badge_widget.dart';
-import 'package:biskit_app/profile/components/language_card_widget.dart';
-import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
-import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/profile/components/language_card_widget.dart';
+import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/view/profile_edit_screen.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/view/introduction_view_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileCardWidget extends StatelessWidget {
   final UserModel userState;
@@ -202,7 +202,7 @@ class ProfileCardWidget extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  '학교 인증 대기중',
+                                  'myPageScreen.pending'.tr(),
                                   style: getTsBody14Rg(context).copyWith(
                                     color: kColorContentWeaker,
                                   ),
@@ -229,7 +229,7 @@ class ProfileCardWidget extends StatelessWidget {
                                 height: 4,
                               ),
                               Text(
-                                '학교를 인증해주세요',
+                                'myPageScreen.verificationRequired'.tr(),
                                 style: getTsBody14Rg(context).copyWith(
                                   color: kColorContentWeaker,
                                 ),
@@ -260,8 +260,8 @@ class ProfileCardWidget extends StatelessWidget {
                                     ),
                                   );
                                 },
-                                child: const FilledButtonWidget(
-                                  text: '학교 인증하기',
+                                child: FilledButtonWidget(
+                                  text: 'myPageScreen.verifyUniv'.tr(),
                                   height: 40,
                                   isEnable: true,
                                 ),
@@ -402,8 +402,8 @@ class ProfileCardWidget extends StatelessWidget {
                     ),
                   );
                 },
-                child: const OutlinedButtonWidget(
-                  text: '프로필 수정',
+                child: OutlinedButtonWidget(
+                  text: 'myPageScreen.editProfile'.tr(),
                   height: 40,
                   isEnable: true,
                 ),

@@ -2,19 +2,19 @@
 
 import 'dart:io';
 
-import 'package:biskit_app/common/const/data.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/provider/firebase_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final chatRepositoryProvider = Provider<ChatRepository>((ref) => ChatRepository(
       dio: ref.watch(dioProvider),
@@ -226,8 +226,7 @@ class ChatRepository {
     // 최초 입장시 안내문구 : 입장문구
     await sendMsg(
       chatMsgType: ChatMsgType.text,
-      msg:
-          '비스킷은 서로 배려하며 소통하는 커뮤니티를 만들어가고 있어요. 모든 구성원들의 언어와 문화차이를 존중해주세요. 부적절하거나 불쾌감을 주는 컨텐츠를 게시할 경우 서비스 이용에 제재를 받을 수 있습니다.',
+      msg: 'chatroomScreen.description'.tr(),
       userId: user.id,
       chatRoomUid: chatRoom.uid,
       chatRowType: ChatRowType.noticeOnlyMe,
@@ -235,7 +234,7 @@ class ChatRepository {
     // 최초 입장시 안내문구 : 참여문구
     await sendMsg(
       chatMsgType: ChatMsgType.text,
-      msg: '${user.profile!.nick_name}님이 참여했습니다.',
+      msg: '${user.profile!.nick_name}${'chatroomScreen.join'.tr()}',
       userId: user.id,
       chatRoomUid: chatRoom.uid,
       chatRowType: ChatRowType.noticeJoin,

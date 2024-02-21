@@ -1,8 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/components/avatar_with_flag_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
@@ -14,18 +18,13 @@ import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'package:biskit_app/chat/model/chat_msg_model.dart';
-import 'package:biskit_app/chat/repository/chat_repository.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
 
 import '../../common/utils/date_util.dart';
 
@@ -262,7 +261,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           child: Row(
             children: [
               Text(
-                '참여자',
+                'chatroomScreen.chatBottomSheet.title'.tr(),
                 style: getTsBody16Sb(context).copyWith(
                   color: kColorContentDefault,
                 ),
@@ -1127,7 +1126,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         setState(() {});
                       },
                       decoration: InputDecoration(
-                        hintText: '메세지 입력...',
+                        hintText: 'chatroomScreen.placeholder'.tr(),
                         hintStyle: getTsBody16Rg(context).copyWith(
                           color: kColorContentPlaceholder,
                         ),

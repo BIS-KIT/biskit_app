@@ -7,7 +7,9 @@ import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/provider/meet_up_search_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -109,7 +111,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                       child: SearchBarWidget(
                         controller: controller,
                         autofocus: true,
-                        hintText: '모임의 키워드로 찾아보세요',
+                        hintText: 'searchMeetupScreen.placeholder'.tr(),
                         onChanged: (value) {},
                         onFieldSubmitted: (p0) {
                           _search();
@@ -139,6 +141,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                             return MeetUpCardWidget(
                               model: state.data[index],
                               userModel: ref.watch(userMeProvider),
+                              systemModel: ref.watch(systemProvider),
                               onTapMeetUp: () {
                                 Navigator.push(
                                   context,
@@ -185,7 +188,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                 height: 8,
               ),
               Text(
-                '검색겨롸가 없어요',
+                'searchMeetupScreen.noResult'.tr(),
                 style: getTsBody16Sb(context).copyWith(
                   color: kColorContentPlaceholder,
                 ),
@@ -212,7 +215,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  '원하는 모임이 없다면 직접 만들어볼까요?',
+                  'searchMeetupScreen.makeMeetup'.tr(),
                   style: getTsBody14Rg(context).copyWith(
                     color: kColorContentWeaker,
                   ),
@@ -233,8 +236,8 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                           ),
                         );
                       },
-                      child: const OutlinedButtonWidget(
-                        text: '모임 만들기',
+                      child: OutlinedButtonWidget(
+                        text: 'searchMeetupScreen.createMeetup'.tr(),
                         height: 44,
                         isEnable: true,
                       ),

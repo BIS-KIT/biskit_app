@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/time_picker_widget.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../components/filled_button_widget.dart';
 import '../const/colors.dart';
@@ -154,7 +154,7 @@ showReviewMoreBottomSheet({
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '수정하기',
+                  'detailReviewScreen.actionSheet.edit'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentDefault,
                   ),
@@ -178,7 +178,7 @@ showReviewMoreBottomSheet({
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '삭제하기',
+                  'detailReviewScreen.actionSheet.remove'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentError,
                   ),
@@ -206,7 +206,7 @@ showReviewMoreBottomSheet({
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '취소',
+                  'detailReviewScreen.actionSheet.cancel'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentDefault,
                   ),

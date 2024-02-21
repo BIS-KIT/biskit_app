@@ -247,6 +247,15 @@
     "done": "Done"
   },
 
+  "langLevel": {
+    "level": "level",
+    "mastery": "Mastery",
+    "advanced": "Advanced",
+    "intermediate": "Intermediate",
+    "elementary": "Elementary",
+    "beginner": "Beginner"
+  },
+
   "langLevelBottomSheet": {
     "title": "Select level",
     "mastery": {
@@ -322,7 +331,7 @@
     "chip5": "Study",
     "chip6": "Cultural Art",
     "chip7": "Hobby",
-    "chip8": "Create",
+    "custom": "Create",
     "title2": "Where do you want to meet?",
     "chooseLocation": "Select location",
     "next": "Next"
@@ -380,7 +389,8 @@
     "addDescription": "Add a description",
     "addDescription_placeholder": "Enter a description of meetup",
     "deleteDescription": "Delete a description. ",
-    "createMeetup": "Create a meetup"
+    "createMeetup": "Create a meetup",
+    "editComplete": "Save"
   },
 
   "selectTopicIconBottomSheet": {
@@ -400,17 +410,25 @@
     "members": "Members",
     "firstForeigner": "Be the first international member",
     "firstKorean": "Be the first Korean member",
-    "langLevel": "Language level of members",
-    "advancedMost": "Advanced are the most",
-    "langLevelMix": "Mix of different levels",
-
+    "langLevel": {
+      "label": "Language level of members",
+      "mastery": "Most people are at the proficient level",
+      "advanced": "Most people are at the advanced level",
+      "intermediate": "Most people are at the intermediate level",
+      "elementary": "Most people are at the basic level",
+      "beginner": "Most people are at the beginner level",
+      "mixed": "Different levels are mixed",
+      "count": ""
+    },
     "btn": {
       "request": "Request to join the meetup",
       "chat": "Join Group chat",
       "adminMember": "Member administration",
       "pending": "Pending Acceptance",
       "full": "This meetup is full",
-      "end": "This meetup has ended"
+      "end": "This meetup has ended",
+      "verify": "Verify your school and join",
+      "warning": "Join available after school verification approval"
     },
 
     "actionSheet": {
@@ -421,10 +439,10 @@
       "report": "Report"
     },
 
-    "Modal": {
+    "modal": {
       "deleteModal": {
         "title": "Delete the meetup?",
-        "subtitle": "All data including group chatting will be lost and cannot be restored",
+        "subtitle": "All data including group chatting\nwill be lost and cannot be restored",
         "cancel": "Cancel",
         "delete": "Delete"
       },
@@ -451,6 +469,7 @@
     "title": "Meetup members",
     "request": {
       "title": "Join Requests",
+      "members": "Members",
       "decline": "Decline",
       "accept": "Accept",
       "none": "No join requests found"
@@ -552,13 +571,13 @@
       "tag8": "Late arrivals accepted"
     },
     "reset": "Reset",
-    "view": "View n meetups"
+    "view": " meetups"
   },
 
   "searchMeetupScreen": {
     "placeholder": "Search by keywords",
     "noResult": "No Result Found",
-    "makeMeetup": "Why don't you make your own meetup?",
+    "makeMeetup": "How about make your own meetup?",
     "createMeetup": "Create meetup"
   },
 
@@ -570,7 +589,7 @@
   "chatroomScreen": {
     "description": "BISKIT is a caring and communicative community. Please respect the language and cultural differences of all members. Posting inappropriate or offensive content may result in a ban from the service.",
     "join": " joined this chatroom",
-    "placeholder": "Type a Message",
+    "placeholder": "Type a Message...",
     "chatBottomSheet": {
       "title": "Members"
     },
@@ -593,6 +612,8 @@
     "editProfile": "Edit Profile",
     "verifyUniv": "Verify University",
     "availableLan": "Available Languages",
+    "pending": "Verification pending",
+    "verificationRequired": "Please verify your school",
     "tap": {
       "myMeetup": {
         "title": "My meetups",
@@ -620,8 +641,16 @@
     "title": "Edit Profile",
     "nickname": {
       "label": "Nickname",
+      "placeholder": "Please enter your nickname",
       "numError": "At least 2 characters",
-      "overlapError": "This nickname is already in use"
+      "available": "This nickname is available",
+      "duplicateError": "This nickname is already in use",
+      "formatError": "Only available in Korean/English/numbers"
+    },
+    "univ": {
+      "selectDegree": "Select degree",
+      "selectState": "Select state",
+      "edit": "Edit"
     },
     "aboutMe": {
       "label": "About me",
@@ -631,11 +660,11 @@
       "label": "Favorites",
       "edit": "Edit"
     },
-    "availableLan": {
+    "availableLang": {
       "label": "Available Languages",
       "edit": "Edit",
-      "noLan": "사Choose at least one language",
-      "chooseLan": "Select Languages"
+      "noLang": "Choose at least\none language",
+      "chooseLang": "Select Languages"
     },
     "univInfo": {
       "label": "University Information",
@@ -656,6 +685,7 @@
   "othersProfileScreen": {
     "title": "Profile",
     "review": "Review",
+    "noReview": "No Reviews",
     "pending": "Verification pending",
     "required": "Verification required",
     "actionSheet": {
@@ -664,7 +694,7 @@
       "unblock": "Unblock",
       "cancel": "Cancel"
     },
-    "blockToast": "Blocked Successfully"
+    "blockToast": "\nBlocked Successfully"
   },
 
   "othersFavoriteScreen": {
@@ -674,7 +704,7 @@
   "reportScreen": {
     "title": "Report",
     "label": "Why are you reporting?",
-    "Placeholder": "Please enter your report",
+    "placeholder": "Please enter your report",
     "description": "Users with 3 or more cumulative reports are restricted from creating and joining meetups",
     "send": "Send",
     "completeModal": {
@@ -685,7 +715,8 @@
 
   "selectReviewScreen": {
     "title": "Which meetup\ndo you want to record?",
-    "host": "Host"
+    "host": "Host",
+    "label": "record your meetups!"
   },
 
   "writeReviewScreen": {
@@ -750,7 +781,7 @@
       "chip7": "It's okay to come alone",
       "chip8": "Late arrivals accepted"
     },
-    "upcoming": "\nThere is an upcoming meetup!",
+    "upcoming": ",\nThere is an upcoming meetup!",
     "chat": "chat",
     "homeTooltip": "Verify University and create a meetup!",
     "verifyModal": {
@@ -763,7 +794,9 @@
       "title": "Verify Pending",
       "subtitle": "BISKIT allows only student-authenticated users to participate in meetings to ensure safety. We'll authenticate as soon as possible",
       "ok": "OK"
-    }
+    },
+    "makeMeetup": "How about make your own meetup?",
+    "createMeetup": "Create meetup"
   },
 
   "settingScreen": {

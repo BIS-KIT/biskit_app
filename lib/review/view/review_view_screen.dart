@@ -1,18 +1,10 @@
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/setting/view/report_screen.dart';
-import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_view_screen.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
@@ -23,6 +15,13 @@ import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/repository/review_repository.dart';
 import 'package:biskit_app/review/view/review_edit_screen.dart';
+import 'package:biskit_app/setting/view/report_screen.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ReviewViewScreen extends ConsumerStatefulWidget {
   static String get routeName => 'reviewView';
@@ -107,7 +106,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
               leftCall: () {
                 Navigator.pop(context);
               },
-              leftButton: '취소',
+              leftButton: 'detailReviewScreen.deleteReviewModal.cancel'.tr(),
               rightCall: () async {
                 if (resReviewModel == null) return;
                 await ref
@@ -119,11 +118,11 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
                 Navigator.pop(context);
                 Navigator.pop(context, [true]);
               },
-              rightButton: '삭제',
+              rightButton: 'detailReviewScreen.deleteReviewModal.delete'.tr(),
               rightBackgroundColor: kColorBgError,
               rightTextColor: kColorContentError,
-              title: '모임 후기를 삭제하시겠어요?',
-              content: '삭제한 후기는 복구할 수 없어요',
+              title: 'detailReviewScreen.deleteReviewModal.title'.tr(),
+              content: 'detailReviewScreen.deleteReviewModal.subtitle'.tr(),
             );
           },
         );
@@ -159,7 +158,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
     userState = ref.watch(userMeProvider);
     final size = MediaQuery.of(context).size;
     return DefaultLayout(
-      title: '후기',
+      title: 'detailReviewScreen.title'.tr(),
       backgroundColor: kColorBgElevation1,
       actions: [
         if (resReviewModel != null &&

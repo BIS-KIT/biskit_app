@@ -78,8 +78,8 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                       state is UserSystemModelLoading)
                   ? ''
                   : (state as UserSystemModel).system_language == kEn
-                      ? '영어'
-                      : '한국어',
+                      ? 'setLangScreen.english'.tr()
+                      : 'setLangScreen.korean'.tr(),
               onTapCallback: () {
                 Navigator.push(
                   context,
