@@ -7,6 +7,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -55,7 +56,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
               right: 10,
             ),
             child: Text(
-              '채팅',
+              'chatListScreen.title'.tr(),
               style: getTsHeading20(context).copyWith(
                 color: Colors.black,
               ),
@@ -141,7 +142,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                             height: 8,
                           ),
                           Text(
-                            '채팅방이 없어요',
+                            'chatListScreen.noResult'.tr(),
                             style: getTsBody16Rg(context).copyWith(
                               color: kColorContentWeakest,
                             ),
