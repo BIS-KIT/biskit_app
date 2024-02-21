@@ -1,9 +1,3 @@
-import 'package:biskit_app/user/repository/users_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
@@ -11,6 +5,12 @@ import 'package:biskit_app/profile/repository/profile_repository.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:biskit_app/user/repository/users_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class IntroductionViewScreen extends ConsumerStatefulWidget {
   final bool isEditorEnable;
@@ -169,7 +169,7 @@ class _IntroductionViewScreenState
               ),
               Expanded(
                 child: Text(
-                  widget.isEditorEnable ? '좋아하는 것' : '',
+                  widget.isEditorEnable ? 'myFavoriteScreen.title'.tr() : '',
                   textAlign: TextAlign.center,
                   style: getTsBody16Sb(context).copyWith(
                     color: kColorContentDefault,
@@ -243,7 +243,7 @@ class _IntroductionViewScreenState
               right: 20,
             ),
             child: Text(
-              '${widget.nickName ?? ''}님이\n좋아하는 것들이에요',
+              '${widget.nickName ?? ''}${'othersFavoriteScreen.title'.tr()}',
               textAlign: TextAlign.left,
               style: getTsHeading20(context).copyWith(
                 color: kColorContentDefault,

@@ -1,9 +1,9 @@
 import 'package:biskit_app/alarm/model/alarm_list_model.dart';
 import 'package:biskit_app/alarm/model/alarm_model.dart';
 import 'package:biskit_app/alarm/provider/alarm_provider.dart';
+import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -11,14 +11,16 @@ import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/profile/components/profile_card_widget.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
+import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/review/components/review_write_card_widget.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
-import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
+import 'package:biskit_app/setting/view/setting_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:biskit_app/setting/view/setting_screen.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -289,7 +291,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
           Row(
             children: [
               _buildChip(
-                text: '참여중',
+                text: 'myPageScreen.tap.myMeetup.joining'.tr(),
                 profileMeetingState: profileMeetingState,
                 status: ProfileMeetingStatus.APPROVE,
               ),
@@ -297,7 +299,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                 width: 4,
               ),
               _buildChip(
-                text: '승인대기',
+                text: 'myPageScreen.tap.myMeetup.pending'.tr(),
                 profileMeetingState: profileMeetingState,
                 status: ProfileMeetingStatus.PENDING,
               ),
@@ -305,7 +307,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                 width: 4,
               ),
               _buildChip(
-                text: '지난모임',
+                text: 'myPageScreen.tap.myMeetup.past'.tr(),
                 profileMeetingState: profileMeetingState,
                 status: ProfileMeetingStatus.PAST,
               ),
@@ -342,6 +344,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                     MeetUpCardWidget(
                                       model: e,
                                       userModel: userState,
+                                      systemModel: ref.watch(systemProvider),
                                       isHostTag: userState.id == e.creator.id,
                                       isParticipantsStatusTag: false,
                                       onTapMeetUp: () {
@@ -375,11 +378,11 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
   String _getEmptyText(ProfileMeetingStatus status) {
     String str = '';
     if (status == ProfileMeetingStatus.APPROVE) {
-      str = '참여중인 모임이 없어요';
+      str = 'myPageScreen.tap.myMeetup.noJoiningMeetups'.tr();
     } else if (status == ProfileMeetingStatus.PENDING) {
-      str = '승인대기중인 모임이 없어요';
+      str = 'myPageScreen.tap.myMeetup.noPendingMeetups'.tr();
     } else {
-      str = '지난 모임이 없어요';
+      str = 'myPageScreen.tap.myMeetup.noPastMeetups'.tr();
     }
     return str;
   }

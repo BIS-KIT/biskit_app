@@ -1,15 +1,15 @@
-import 'package:biskit_app/setting/model/report_res_model.dart';
-import 'package:biskit_app/setting/repository/setting_repository.dart';
-import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/setting/model/report_res_model.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ignore: constant_identifier_names
 enum ReportContentType { Meeting, Review, User }
@@ -49,7 +49,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '신고하기',
+      title: 'reportScreen.title'.tr(),
       shape: const Border(
         bottom: BorderSide(
           width: 1,
@@ -68,7 +68,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '신고 내용',
+                  'reportScreen.label'.tr(),
                   style: getTsBody14Sb(context).copyWith(
                     color: kColorContentWeak,
                   ),
@@ -106,7 +106,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                         maxLines: null,
                         minLines: null,
                         decoration: InputDecoration(
-                          hintText: '신고내용을 입력해주세요',
+                          hintText: 'reportScreen.placeholder'.tr(),
                           border: InputBorder.none,
                           isDense: true,
                           contentPadding: EdgeInsets.zero,
@@ -123,7 +123,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                       height: 16,
                     ),
                     Text(
-                      '누적 신고 횟수가 3회 이상인 유저는 모임 생성 및 참여가 제한됩니다.',
+                      'reportScreen.description'.tr(),
                       style: getTsBody14Rg(context).copyWith(
                         color: kColorContentWeakest,
                       ),
@@ -159,7 +159,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      title: '신고가 접수되었습니다. 검토까지 최대 24시간이 소요됩니다.',
+                      title: 'reportScreen.completeModal.title'.tr(),
                       rightBackgroundColor: kColorBgPrimary,
                       rightTextColor: kColorContentOnBgPrimary,
                     );
@@ -167,7 +167,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                 }
               },
               child: FilledButtonWidget(
-                text: '비스킷팀에게 보내기',
+                text: 'reportScreen.send'.tr(),
                 isEnable: content.isNotEmpty,
                 height: 52,
               ),
