@@ -1,9 +1,12 @@
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:biskit_app/meet/model/meet_up_request_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/profile/components/profile_list_widget.dart';
@@ -13,10 +16,6 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -57,7 +56,8 @@ class _MeetUpMemberManagementScreenState
   void onTapReject(MeetUpRequestModel model) async {
     showConfirmModal(
       context: context,
-      title: '${model.user.profile!.nick_name}님의 참여를 거절하시겠어요?',
+      title:
+          '${model.user.profile!.nick_name}${'adminMemberScreen.modal.declineModal.title'.tr()}',
       leftCall: () {
         Navigator.of(context).pop();
       },
@@ -83,7 +83,8 @@ class _MeetUpMemberManagementScreenState
   void onTapApprove(MeetUpRequestModel model) async {
     showConfirmModal(
       context: context,
-      title: '${model.user.profile!.nick_name}님의 참여를 수락하시겠어요?',
+      title:
+          '${model.user.profile!.nick_name}${'adminMemberScreen.modal.acceptModal.title'.tr()}',
       leftCall: () {
         Navigator.of(context).pop();
       },
@@ -102,9 +103,9 @@ class _MeetUpMemberManagementScreenState
         if (!mounted) return;
         Navigator.of(context).pop();
       },
-      leftButton: '취소',
+      leftButton: 'adminMemberScreen.modal.acceptModal.cancel'.tr(),
       leftTextColor: kColorContentWeak,
-      rightButton: '수락',
+      rightButton: 'adminMemberScreen.modal.acceptModal.accept'.tr(),
       rightBackgroundColor: kColorBgPrimary,
       rightTextColor: kColorContentOnBgPrimary,
     );
@@ -115,7 +116,7 @@ class _MeetUpMemberManagementScreenState
       context: context,
       list: [
         MoreButton(
-          text: '내보내기',
+          text: 'adminMemberScreen.modal.removeModal.remove'.tr(),
           color: kColorContentError,
           onTap: () async {
             bool isOk =
@@ -145,7 +146,7 @@ class _MeetUpMemberManagementScreenState
   Widget build(BuildContext context) {
     return DefaultLayout(
       backgroundColor: kColorBgDefault,
-      title: '모임원 관리',
+      title: 'adminMemberScreen.title'.tr(),
       child: SingleChildScrollView(
         padding: const EdgeInsets.only(
           top: 16,
@@ -159,7 +160,7 @@ class _MeetUpMemberManagementScreenState
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '참여 대기자',
+                  'adminMemberScreen.request.title'.tr(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentDefault,
                   ),
@@ -243,8 +244,10 @@ class _MeetUpMemberManagementScreenState
                                             onTap: () {
                                               onTapReject(model);
                                             },
-                                            child: const OutlinedButtonWidget(
-                                              text: '거절',
+                                            child: OutlinedButtonWidget(
+                                              text:
+                                                  'adminMemberScreen.request.decline'
+                                                      .tr(),
                                               isEnable: true,
                                               height: 44,
                                             ),
@@ -258,8 +261,10 @@ class _MeetUpMemberManagementScreenState
                                             onTap: () {
                                               onTapApprove(model);
                                             },
-                                            child: const FilledButtonWidget(
-                                              text: '수락',
+                                            child: FilledButtonWidget(
+                                              text:
+                                                  'adminMemberScreen.request.accept'
+                                                      .tr(),
                                               isEnable: true,
                                               height: 44,
                                             ),
@@ -289,7 +294,7 @@ class _MeetUpMemberManagementScreenState
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  '참여자',
+                  'adminMemberScreen.request.members'.tr(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentDefault,
                   ),
