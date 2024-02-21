@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/view/my_meet_up_list_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ReviewWriteCardWidget extends StatelessWidget {
   final double? width;
@@ -46,7 +46,7 @@ class ReviewWriteCardWidget extends StatelessWidget {
               height: 8,
             ),
             Text(
-              '인증샷을 남겨보세요',
+              'selectReviewScreen.label'.tr(),
               style: getTsBody14Sb(context).copyWith(
                 color: kColorContentWeaker,
               ),

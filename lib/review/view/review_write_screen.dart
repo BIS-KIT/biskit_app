@@ -1,21 +1,21 @@
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/widget_util.dart';
+import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/review/components/review_card_widget.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/view/review_view_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/review/components/review_card_widget.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/common/utils/widget_util.dart';
-import 'package:biskit_app/common/view/photo_manager_screen.dart';
-import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -61,7 +61,7 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
     final size = MediaQuery.of(context).size;
     final userState = ref.watch(userMeProvider);
     return DefaultLayout(
-      title: '후기 작성',
+      title: 'writeReviewScreen.title'.tr(),
       leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
       onTapLeading: () async {
         await showConfirmModal(
@@ -69,16 +69,16 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
           leftCall: () {
             Navigator.pop(context);
           },
-          leftButton: '취소',
+          leftButton: 'writeReviewScreen.leavePageModal.cancel'.tr(),
           rightCall: () {
             Navigator.pop(context);
             Navigator.pop(context, [true]);
           },
-          rightButton: '나가기',
+          rightButton: 'writeReviewScreen.leavePageModal.leave'.tr(),
           rightBackgroundColor: kColorBgError,
           rightTextColor: kColorContentError,
-          title: '나가시겠어요?',
-          content: '작성한 내용이 모두 사라져요',
+          title: 'writeReviewScreen.leavePageModal.title'.tr(),
+          content: 'writeReviewScreen.leavePageModal.subtitle'.tr(),
         );
       },
       child: userState != null && userState is UserModel
@@ -138,7 +138,7 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
                                     decoration: InputDecoration(
                                       counterText: '',
                                       hintText:
-                                          '즐거웠던 모임 경험을 들려주세요.(선택)\n\n부적절하거나 불쾌감을 줄 수 있는 컨텐츠는 제재를 받을 수 있습니다.',
+                                          'writeReviewScreen.placeholder'.tr(),
                                       hintStyle:
                                           getTsBody16Rg(context).copyWith(
                                         color: kColorContentPlaceholder,
@@ -189,7 +189,7 @@ class _ReviewWriteScreenState extends ConsumerState<ReviewWriteScreen> {
                         });
                       },
                       child: FilledButtonWidget(
-                        text: '후기 남기기',
+                        text: 'writeReviewScreen.done'.tr(),
                         isEnable: !isLoading,
                       ),
                     ),

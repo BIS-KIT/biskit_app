@@ -1,18 +1,18 @@
+import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/enums.dart';
+import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
+import 'package:biskit_app/review/components/review_card_widget.dart';
+import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:biskit_app/review/provider/review_provider.dart';
 import 'package:biskit_app/review/repository/review_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/layout/default_layout.dart';
-import 'package:biskit_app/review/components/review_card_widget.dart';
-import 'package:biskit_app/review/model/res_review_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ReviewEditScreen extends ConsumerStatefulWidget {
@@ -83,7 +83,7 @@ class _ReviewEditScreenState extends ConsumerState<ReviewEditScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return DefaultLayout(
-      title: '후기 수정',
+      title: 'editReviewScreen.title'.tr(),
       leadingIconPath: 'assets/icons/ic_cancel_line_24.svg',
       onTapLeading: () async {
         Navigator.pop(context);
@@ -195,7 +195,7 @@ class _ReviewEditScreenState extends ConsumerState<ReviewEditScreen> {
                   });
                 },
                 child: FilledButtonWidget(
-                  text: '후기 수정하기',
+                  text: 'editReviewScreen.title'.tr(),
                   isEnable: textEditingController.text.isNotEmpty,
                 ),
               ),
