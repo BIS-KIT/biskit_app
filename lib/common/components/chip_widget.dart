@@ -1,5 +1,6 @@
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -117,7 +118,7 @@ class ChipWidget extends StatelessWidget {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 border: InputBorder.none,
-                                hintText: '직접입력',
+                                hintText: 'createMeetupScreen1.custom'.tr(),
                                 hintStyle: getTsBody14Rg(context).copyWith(
                                   color: kColorContentOnBgPrimary,
                                 ),

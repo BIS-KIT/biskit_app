@@ -55,17 +55,17 @@ int getLevelServerValueToInt(String value) {
 String getLevelServerValueToKrString(String value) {
   switch (value) {
     case 'PROFICIENT':
-      return '능숙';
+      return 'langLevel.mastery'.tr();
     case 'ADVANCED':
-      return '고급';
+      return 'langLevel.advanced'.tr();
     case 'INTERMEDIATE':
-      return '중급';
+      return 'langLevel.intermediate'.tr();
     case 'BASIC':
-      return '기초';
+      return 'langLevel.elementary'.tr();
     case 'BEGINNER':
-      return '초보';
+      return 'langLevel.beginner'.tr();
     default:
-      return '레벨';
+      return 'langLevel.level'.tr();
   }
 }
 
@@ -89,15 +89,15 @@ String getLevelSubTitle(int level) {
 String getLanMaxDescription(String levelStr) {
   switch (levelStr) {
     case '능숙':
-      return '능숙한 사람이 가장 많아요';
+      return 'meetupDetailScreen.langLevel.mastery'.tr();
     case '고급':
-      return '고급인 사람이 가장 많아요';
+      return 'meetupDetailScreen.langLevel.advanced'.tr();
     case '중급':
-      return '중급인 사람이 가장 많아요';
+      return 'meetupDetailScreen.langLevel.intermediate'.tr();
     case '기초':
-      return '기초인 사람이 가장 많아요';
+      return 'meetupDetailScreen.langLevel.elementary'.tr();
     case '초보':
-      return '초보인 사람이 가장 많아요';
+      return 'meetupDetailScreen.langLevel.beginner'.tr();
     default:
       return '';
   }
