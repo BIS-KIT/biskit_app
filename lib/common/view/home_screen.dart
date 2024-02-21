@@ -18,6 +18,7 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -268,6 +269,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               child: ScheduleCardWidget(
                 meetUpModel: homeState.approveMeetings[0],
+                systemModel: ref.watch(systemProvider),
                 width: size.width - 40,
               ),
             )
@@ -278,6 +280,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => ScheduleCardWidget(
                 meetUpModel: homeState.approveMeetings[index],
+                systemModel: ref.watch(systemProvider),
                 width: size.width - 80,
               ),
               separatorBuilder: (context, index) => const SizedBox(
@@ -302,7 +305,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               vertical: 4,
             ),
             child: Text(
-              '${userState.profile!.nick_name}님\n다가오는 모임이 있어요',
+              '${userState.profile!.nick_name}${'homeScreen.upcoming'.tr()}',
               style: getTsHeading20(context).copyWith(
                 color: kColorContentOnBgPrimary,
               ),
@@ -330,7 +333,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Column(
         children: [
           Text(
-            '원하는 모임이 없다면 직접 만들어볼까요?',
+            'homeScreen.makeMeetup'.tr(),
             style: getTsBody14Sb(context).copyWith(
               color: kColorContentWeaker,
             ),
@@ -347,11 +350,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               );
             },
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 OutlinedButtonWidget(
-                  text: '모임 만들기',
+                  text: 'homeScreen.createMeetup'.tr(),
                   isEnable: true,
                   height: 44,
                   leftIconPath: 'assets/icons/ic_plus_line_24.svg',
@@ -460,6 +463,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ? MeetUpCardWidget(
                     model: homeState.meetings[0],
                     userModel: ref.watch(userMeProvider),
+                    systemModel: ref.watch(systemProvider),
                     sizeType: MeetUpCardSizeType.M,
                     width: size.width - 40,
                     onTapMeetUp: () {
@@ -482,6 +486,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemBuilder: (context, index) => MeetUpCardWidget(
                       model: homeState.meetings[index],
                       userModel: ref.watch(userMeProvider),
+                      systemModel: ref.watch(systemProvider),
                       sizeType: MeetUpCardSizeType.M,
                       width: size.width - 80,
                       onTapMeetUp: () {

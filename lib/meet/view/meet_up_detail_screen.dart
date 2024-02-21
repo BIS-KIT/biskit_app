@@ -25,6 +25,8 @@ import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/profile/model/language_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/setting/view/report_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -75,8 +77,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   final GlobalKey _mainBoxKey = GlobalKey();
   final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
   final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
+  final DateFormat dateFormatUS = DateFormat('MM/dd (EEE)', 'en_US');
+  final DateFormat dateFormatKO = DateFormat('MM/dd (EEE)', 'ko_KR');
+  final DateFormat timeFormatUS = DateFormat('a h:mm', 'en_US');
+  final DateFormat timeFormatKO = DateFormat('a h:mm', 'ko_KR');
 
   UserModel? userState;
+  UserSystemModel? systemState;
   MeetUpDetailModel? meetUpDetailModel;
   List<AvailableLanguageModel> availableLangList = [];
   // Set<LanguageModel> langSet = <LanguageModel>{};
@@ -173,7 +180,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             list.map((e) => e.value).toList().toSet().length > 1;
         if (isAllLevelEqual) {
           // 모든 레벨이 같은 경우
-          description = '다양한 레벨이 섞여있어요';
+          description = 'meetupDetailScreen.langLevel.mixed'.tr();
         } else {
           ChartDataModel chartDataModel = list.reduce((a, b) {
             if (a.value > b.value) {
@@ -213,12 +220,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   onTapJoin() async {
     showConfirmModal(
       context: context,
-      title: '참여하시겠어요?',
-      leftButton: '취소',
+      title: 'meetupDetailScreen.modal.requestModal.title'.tr(),
+      leftButton: 'meetupDetailScreen.modal.requestModal.cancel'.tr(),
       leftCall: () {
         Navigator.pop(context);
       },
-      rightButton: '참여신청',
+      rightButton: 'meetupDetailScreen.modal.requestModal.join'.tr(),
       rightBackgroundColor: kColorBgPrimary,
       rightTextColor: kColorContentOnBgPrimary,
       rightCall: () async {
@@ -273,7 +280,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         context: context,
         list: [
           MoreButton(
-            text: '수정하기',
+            text: 'meetupDetailScreen.actionSheet.edit'.tr(),
             color: kColorContentDefault,
             onTap: () async {
               if (meetUpDetailModel == null) return;
@@ -330,19 +337,19 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             },
           ),
           MoreButton(
-            text: '삭제하기',
+            text: 'meetupDetailScreen.modal.deleteModal.title'.tr(),
             color: kColorContentError,
             onTap: () async {
               Navigator.pop(context);
               showConfirmModal(
                 context: context,
-                title: '모임을 삭제하시겠어요?',
-                content: '모임 삭제시 채팅방이\n함께 삭제되며 복구할 수 없어요',
-                leftButton: '취소',
+                title: 'meetupDetailScreen.actionSheet.delete'.tr(),
+                content: 'meetupDetailScreen.modal.deleteModal.subtitle'.tr(),
+                leftButton: 'meetupDetailScreen.modal.deleteModal.cancel'.tr(),
                 leftCall: () {
                   Navigator.pop(context);
                 },
-                rightButton: '삭제',
+                rightButton: 'meetupDetailScreen.modal.deleteModal.delete'.tr(),
                 rightBackgroundColor: kColorBgError,
                 rightTextColor: kColorContentError,
                 rightCall: () async {
@@ -370,7 +377,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         context: context,
         list: [
           MoreButton(
-            text: '모임 나가기',
+            text: 'meetupDetailScreen.actionSheet.leave'.tr(),
             color: kColorContentError,
             onTap: () async {
               bool isOk =
@@ -390,7 +397,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             },
           ),
           MoreButton(
-            text: '신고하기',
+            text: 'meetupDetailScreen.actionSheet.report'.tr(),
             color: kColorContentError,
             onTap: () {
               Navigator.pop(context);
@@ -413,7 +420,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         context: context,
         list: [
           MoreButton(
-            text: '신고하기',
+            text: 'meetupDetailScreen.actionSheet.report'.tr(),
             color: kColorContentError,
             onTap: () {
               Navigator.pop(context);
@@ -442,6 +449,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   @override
   Widget build(BuildContext context) {
     userState = ref.watch(userMeProvider) as UserModel;
+    systemState = ref.watch(systemProvider) as UserSystemModel;
     // final size = MediaQuery.of(context).size;
     final paddig = MediaQuery.of(context).padding;
     return Scaffold(
@@ -613,7 +621,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
-              "모임 참가자들의 언어 레벨",
+              "meetupDetailScreen.langLevel.label".tr(),
               style: getTsHeading18(context).copyWith(
                 color: kColorContentDefault,
               ),
@@ -726,8 +734,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             );
             await ref.read(userMeProvider.notifier).getMe();
           },
-          child: const FilledButtonWidget(
-            text: '학교 인증하고 참여하기',
+          child: FilledButtonWidget(
+            text: 'meetupDetailScreen.btn.verify'.tr(),
             isEnable: true,
           ),
         );
@@ -735,8 +743,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               .profile!.student_verification!.verification_status ==
           VerificationStatus.PENDING.name) {
         // 학생증 인증 대기 상태
-        return const FilledButtonWidget(
-          text: '학교 인증 승인 후 참여 가능',
+        return FilledButtonWidget(
+          text: 'meetupDetailScreen.btn.warning'.tr(),
           isEnable: false,
         );
       } else {
@@ -745,8 +753,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             onTap: () {
               onTapMembersManagement();
             },
-            child: const FilledButtonWidget(
-              text: '모임원 관리',
+            child: FilledButtonWidget(
+              text: 'adminMemberScreen.title'.tr(),
               isEnable: true,
             ),
           );
@@ -756,21 +764,21 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             onTap: () {
               onTapChatting();
             },
-            child: const FilledButtonWidget(
-              text: '채팅하기',
+            child: FilledButtonWidget(
+              text: 'meetupDetailScreen.btn.chat'.tr(),
               isEnable: true,
             ),
           );
         } else {
           if (participationStatus != null) {
             if (participationStatus == VerificationStatus.PENDING.name) {
-              return const FilledButtonWidget(
-                text: '참여 수락 대기중',
+              return FilledButtonWidget(
+                text: 'meetupDetailScreen.btn.pending'.tr(),
                 isEnable: false,
               );
             } else if (participationStatus == VerificationStatus.PENDING.name) {
-              return const FilledButtonWidget(
-                text: '참여 수락 대기중',
+              return FilledButtonWidget(
+                text: 'meetupDetailScreen.btn.pending'.tr(),
                 isEnable: false,
               );
             }
@@ -779,8 +787,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             onTap: () {
               onTapJoin();
             },
-            child: const FilledButtonWidget(
-              text: '참여신청',
+            child: FilledButtonWidget(
+              text: 'meetupDetailScreen.btn.request'.tr(),
               isEnable: true,
               height: 52,
             ),
@@ -788,8 +796,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         }
       }
     } else {
-      return const FilledButtonWidget(
-        text: '종료된 모임이에요',
+      return FilledButtonWidget(
+        text: 'meetupDetailScreen.btn.end'.tr(),
         isEnable: false,
         height: 52,
       );
@@ -896,7 +904,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             child: Row(
               children: [
                 Text(
-                  "참가자",
+                  "meetupDetailScreen.members".tr(),
                   style: getTsHeading18(context)
                       .copyWith(color: kColorContentDefault),
                 ),
@@ -1004,7 +1012,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "모임 소개",
+            "meetupDetailScreen.introduction".tr(),
             style:
                 getTsHeading18(context).copyWith(color: kColorContentDefault),
           ),
@@ -1152,14 +1160,20 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              if (meetUpDetailModel != null)
+                              if (meetUpDetailModel != null &&
+                                  systemState != null)
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : dateFormat1.format(
-                                          DateTime.parse(
-                                              meetUpDetailModel!.meeting_time),
-                                        ),
+                                      : systemState!.system_language == 'ko'
+                                          ? dateFormatKO.format(
+                                              DateTime.parse(meetUpDetailModel!
+                                                  .meeting_time),
+                                            )
+                                          : dateFormatUS.format(
+                                              DateTime.parse(meetUpDetailModel!
+                                                  .meeting_time),
+                                            ),
                                   textAlign: TextAlign.center,
                                   style: getTsBody14Rg(context).copyWith(
                                     color: kColorContentWeak,
@@ -1174,14 +1188,20 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              if (meetUpDetailModel != null)
+                              if (meetUpDetailModel != null &&
+                                  systemState != null)
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : dateFormat2.format(
-                                          DateTime.parse(
-                                              meetUpDetailModel!.meeting_time),
-                                        ),
+                                      : systemState!.system_language == 'ko'
+                                          ? timeFormatKO.format(
+                                              DateTime.parse(meetUpDetailModel!
+                                                  .meeting_time),
+                                            )
+                                          : timeFormatUS.format(
+                                              DateTime.parse(meetUpDetailModel!
+                                                  .meeting_time),
+                                            ),
                                   textAlign: TextAlign.center,
                                   style: getTsBody14Rg(context).copyWith(
                                     color: kColorContentWeak,
@@ -1224,7 +1244,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${meetUpDetailModel!.current_participants}/${meetUpDetailModel!.max_participants}명',
+                                  '${meetUpDetailModel!.current_participants}/${meetUpDetailModel!.max_participants}${'meetupDetailScreen.langLevel.count'.tr()}',
                                   textAlign: TextAlign.center,
                                   style: getTsBody14Rg(context).copyWith(
                                     color: kColorContentWeak,
@@ -1244,15 +1264,18 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                   }
                                   if (isKorean &&
                                       meetUpDetailModel!.korean_count == 0) {
-                                    return const NewBadgeWidget(
-                                      text: '한국인 모집',
+                                    return NewBadgeWidget(
+                                      text: 'meetupDetailScreen.recruitKorean'
+                                          .tr(),
                                       type: BadgeType.secondary,
                                       size: BadgeSize.M,
                                     );
                                   } else if (!isKorean &&
                                       meetUpDetailModel!.foreign_count == 0) {
-                                    return const NewBadgeWidget(
-                                      text: '외국인 모집',
+                                    return NewBadgeWidget(
+                                      text:
+                                          'meetupDetailScreen.recruitForeigner'
+                                              .tr(),
                                       type: BadgeType.secondary,
                                       size: BadgeSize.M,
                                     );
@@ -1358,7 +1381,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               color: kColorBgOverlay.withOpacity(0.7),
             ),
             child: Text(
-              '${chartDatas[chartLangSelectedIndex].dataList[i].title} ${chartDatas[chartLangSelectedIndex].dataList[i].value}명',
+              '${chartDatas[chartLangSelectedIndex].dataList[i].title} ${chartDatas[chartLangSelectedIndex].dataList[i].value}${'meetupDetailScreen.langLevel.count'.tr()}',
               style: getTsCaption12Rg(context).copyWith(
                 color: kColorContentInverse,
               ),

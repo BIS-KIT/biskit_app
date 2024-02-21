@@ -1,17 +1,17 @@
-import 'package:biskit_app/common/components/new_badge_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:extended_wrap/extended_wrap.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:biskit_app/common/components/flag_widget.dart';
+import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:extended_wrap/extended_wrap.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 enum MeetUpCardSizeType { L, M }
 
@@ -23,6 +23,7 @@ class MeetUpCardWidget extends StatefulWidget {
   final bool isHostTag;
   final bool isParticipantsStatusTag;
   final UserModelBase? userModel;
+  final UserSystemModelBase? systemModel;
   const MeetUpCardWidget({
     Key? key,
     required this.model,
@@ -32,6 +33,7 @@ class MeetUpCardWidget extends StatefulWidget {
     this.isHostTag = false,
     this.isParticipantsStatusTag = true,
     required this.userModel,
+    required this.systemModel,
   }) : super(key: key);
 
   @override
@@ -62,8 +64,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormat1 = DateFormat('MM/dd(EEE)', 'ko');
-    final DateFormat dateFormat2 = DateFormat('a h:mm', 'ko');
+    final DateFormat dateFormatUS = DateFormat('MM/dd (EEE)', 'en_US');
+    final DateFormat dateFormatKO = DateFormat('MM/dd (EEE)', 'ko_KR');
+    final DateFormat timeFormatUS = DateFormat('a h:mm', 'en_US');
+    final DateFormat timeFormatKO = DateFormat('a h:mm', 'ko_KR');
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -181,7 +185,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           ),
                         ),
                         child: Text(
-                          '모임장',
+                          'selectReviewScreen.host'.tr(),
                           style: getTsCaption12Sb(context).copyWith(
                             color: kColorContentSecondary,
                           ),
@@ -258,7 +262,12 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       Text(
                         getMeetUpDateStr(
                           meetUpDateStr: widget.model.meeting_time,
-                          dateFormat: dateFormat1,
+                          dateFormat: widget.systemModel is UserSystemModel &&
+                                  (widget.systemModel as UserSystemModel)
+                                          .system_language ==
+                                      'ko'
+                              ? dateFormatKO
+                              : dateFormatUS,
                         ),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
@@ -279,8 +288,14 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       Text(
                         widget.model.meeting_time.isEmpty
                             ? ''
-                            : dateFormat2.format(
-                                DateTime.parse(widget.model.meeting_time)),
+                            : widget.systemModel is UserSystemModel &&
+                                    (widget.systemModel as UserSystemModel)
+                                            .system_language ==
+                                        'ko'
+                                ? timeFormatKO.format(
+                                    DateTime.parse(widget.model.meeting_time))
+                                : timeFormatUS.format(
+                                    DateTime.parse(widget.model.meeting_time)),
                         style: getTsBody14Rg(context).copyWith(
                           color: kColorContentWeaker,
                         ),
@@ -322,9 +337,14 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           ),
                           Text(
                             getMeetUpDateStr(
-                              meetUpDateStr: widget.model.meeting_time,
-                              dateFormat: dateFormat1,
-                            ),
+                                meetUpDateStr: widget.model.meeting_time,
+                                dateFormat: widget.systemModel
+                                            is UserSystemModel &&
+                                        (widget.systemModel as UserSystemModel)
+                                                .system_language ==
+                                            'ko'
+                                    ? dateFormatKO
+                                    : dateFormatUS),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),
@@ -344,8 +364,14 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           Text(
                             widget.model.meeting_time.isEmpty
                                 ? ''
-                                : dateFormat2.format(
-                                    DateTime.parse(widget.model.meeting_time)),
+                                : widget.systemModel is UserSystemModel &&
+                                        (widget.systemModel as UserSystemModel)
+                                                .system_language ==
+                                            'ko'
+                                    ? timeFormatKO.format(DateTime.parse(
+                                        widget.model.meeting_time))
+                                    : timeFormatUS.format(DateTime.parse(
+                                        widget.model.meeting_time)),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),
