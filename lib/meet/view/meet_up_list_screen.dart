@@ -181,6 +181,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   }
 
   Padding _buildFilter() {
+    // FIXME: 선택된 태그 번역 처리 필요, 태그가 선택되었음에도 처음 몇 초간은 모든 모임이 뜸
     final filterState = ref.watch(meetUpFilterProvider);
     final List<MeetUpFilterGroup> groupList = [];
 
@@ -317,7 +318,9 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
               height: 8,
             ),
             Text(
-              filterState.isFilterSelected ? '조건에 맞는 모임이 없어요' : '모임이 없어요',
+              filterState.isFilterSelected
+                  ? 'filteredMeetupScreen.moMatched'.tr()
+                  : 'filteredMeetupScreen.noData'.tr(),
               style: getTsBody16Sb(context).copyWith(
                 color: kColorContentPlaceholder,
               ),
@@ -343,7 +346,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '탐색',
+            'searchMeetupScreen.title'.tr(),
             style: getTsHeading20(context).copyWith(
               color: kColorContentDefault,
             ),

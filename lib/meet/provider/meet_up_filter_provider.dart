@@ -150,6 +150,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
               value: 'FOREIGNER'),
         ],
       ),
+      // FIXME: e.kr_name 언어 대응되도록 수정
       MeetUpFilterGroup(
         groupText: 'exploreFilterBottomSheet.category.title'.tr(),
         filterType: MeetUpFilterType.topic,
