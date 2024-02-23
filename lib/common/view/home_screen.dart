@@ -18,6 +18,7 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -89,6 +90,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final userState = ref.watch(userMeProvider);
     final homeState = ref.watch(homeProvider);
+    final systemState = ref.watch(systemProvider);
 
     return SafeArea(
       top: false,
@@ -101,7 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 _buildNavigatorBar(
                   isApproveMeetupEmpty: true,
                 ),
-                if (userState is UserModel)
+                if (userState is UserModel && systemState is UserSystemModel)
                   Expanded(
                     child: SingleChildScrollView(
                       physics: const ClampingScrollPhysics(),
@@ -134,6 +136,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 _buildTag(
                                   context,
                                   homeState,
+                                  systemState,
                                 ),
 
                                 const SizedBox(
@@ -159,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   isApproveMeetupEmpty: false,
                   color: _color,
                 ),
-                if (userState is UserModel)
+                if (userState is UserModel && systemState is UserSystemModel)
                   Expanded(
                     child: SingleChildScrollView(
                       controller: scrollController,
@@ -211,6 +214,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         _buildTag(
                                           context,
                                           homeState,
+                                          systemState,
                                         ),
 
                                         const SizedBox(
@@ -367,7 +371,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Padding _buildTag(BuildContext context, HomeState homeState) {
+  Padding _buildTag(
+      BuildContext context, HomeState homeState, UserSystemModel systemState) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -400,8 +405,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         onTapTag(t);
                       },
                       child: BtnTagWidget(
-                        label: t.kr_name.isNotEmpty ? t.kr_name : t.en_name,
-                        emoji: '',
+                        label: systemState.system_language == 'kr'
+                            ? t.kr_name
+                            : t.en_name,
+                        emoji: ' ${t.icon} ',
                       ),
                     ),
                   )
