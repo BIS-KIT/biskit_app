@@ -98,7 +98,7 @@ class ScheduleCardWidget extends ConsumerWidget {
                           dateFormat: context is UserSystemModel &&
                                   (systemModel as UserSystemModel)
                                           .system_language ==
-                                      'ko'
+                                      'kr'
                               ? dateFormatKO
                               : dateFormatUS,
                         ),
@@ -119,7 +119,7 @@ class ScheduleCardWidget extends ConsumerWidget {
                             : systemModel is UserSystemModel &&
                                     (systemModel as UserSystemModel)
                                             .system_language ==
-                                        'ko'
+                                        'kr'
                                 ? timeFormatKO.format(
                                     DateTime.parse(meetUpModel.meeting_time))
                                 : timeFormatUS.format(

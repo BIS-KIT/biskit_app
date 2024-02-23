@@ -265,7 +265,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           dateFormat: widget.systemModel is UserSystemModel &&
                                   (widget.systemModel as UserSystemModel)
                                           .system_language ==
-                                      'ko'
+                                      'kr'
                               ? dateFormatKO
                               : dateFormatUS,
                         ),
@@ -291,7 +291,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             : widget.systemModel is UserSystemModel &&
                                     (widget.systemModel as UserSystemModel)
                                             .system_language ==
-                                        'ko'
+                                        'kr'
                                 ? timeFormatKO.format(
                                     DateTime.parse(widget.model.meeting_time))
                                 : timeFormatUS.format(
@@ -342,7 +342,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                                             is UserSystemModel &&
                                         (widget.systemModel as UserSystemModel)
                                                 .system_language ==
-                                            'ko'
+                                            'kr'
                                     ? dateFormatKO
                                     : dateFormatUS),
                             style: getTsBody14Rg(context).copyWith(
@@ -367,7 +367,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                                 : widget.systemModel is UserSystemModel &&
                                         (widget.systemModel as UserSystemModel)
                                                 .system_language ==
-                                            'ko'
+                                            'kr'
                                     ? timeFormatKO.format(DateTime.parse(
                                         widget.model.meeting_time))
                                     : timeFormatUS.format(DateTime.parse(

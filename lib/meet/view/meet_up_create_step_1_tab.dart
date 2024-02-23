@@ -112,7 +112,7 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                                           (widget.systemModel
                                                       as UserSystemModel)
                                                   .system_language ==
-                                              'ko'
+                                              'kr'
                                       ? e.kr_name
                                       : e.en_name,
                                   isSelected: createMeetUpState.topic_ids

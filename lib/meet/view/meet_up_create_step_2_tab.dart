@@ -195,7 +195,7 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
                       : widget.systemModel is UserSystemModel &&
                               (widget.systemModel as UserSystemModel)
                                       .system_language ==
-                                  'ko'
+                                  'kr'
                           ? dateFormatKO.format(selectedDateTime!)
                           : dateFormatUS.format(selectedDateTime!),
                   height: 52,
