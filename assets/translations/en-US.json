@@ -575,10 +575,16 @@
   },
 
   "searchMeetupScreen": {
+    "title": "Meetups",
     "placeholder": "Search by keywords",
     "noResult": "No Result Found",
     "makeMeetup": "How about make your own meetup?",
     "createMeetup": "Create meetup"
+  },
+
+  "filteredMeetupScreen": {
+    "moMatched": "No Matched Meetups",
+    "noData": "No Result Found"
   },
 
   "chatListScreen": {
@@ -783,6 +789,10 @@
     },
     "upcoming": ",\nThere is an upcoming meetup!",
     "chat": "chat",
+    "date": {
+      "tomorrow": "Tomorrow",
+      "today": "Today"
+    },
     "homeTooltip": "Verify University and create a meetup!",
     "verifyModal": {
       "title": "Please Verify your University\nto create your meetup",

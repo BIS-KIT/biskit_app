@@ -628,29 +628,32 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            height: 36,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => ChipWidget(
-                text: chartDatas[index].lang.kr_name,
-                isSelected: index == chartLangSelectedIndex,
-                selectedColor: kColorBgInverseWeak,
-                selectedBorderColor: kColorBgInverseWeak,
-                selectedTextColor: kColorContentInverse,
-                onClickSelect: () {
-                  setState(() {
-                    chartLangSelectedIndex = index;
-                    chartTouchedIndex = 0;
-                  });
-                },
+          if (systemState != null)
+            SizedBox(
+              height: 36,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => ChipWidget(
+                  text: systemState!.system_language == 'kr'
+                      ? chartDatas[index].lang.kr_name
+                      : chartDatas[index].lang.en_name,
+                  isSelected: index == chartLangSelectedIndex,
+                  selectedColor: kColorBgInverseWeak,
+                  selectedBorderColor: kColorBgInverseWeak,
+                  selectedTextColor: kColorContentInverse,
+                  onClickSelect: () {
+                    setState(() {
+                      chartLangSelectedIndex = index;
+                      chartTouchedIndex = 0;
+                    });
+                  },
+                ),
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: 6,
+                ),
+                itemCount: chartDatas.length,
               ),
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 6,
-              ),
-              itemCount: chartDatas.length,
             ),
-          ),
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -1165,7 +1168,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : systemState!.system_language == 'ko'
+                                      : systemState!.system_language == 'kr'
                                           ? dateFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
@@ -1193,7 +1196,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : systemState!.system_language == 'ko'
+                                      : systemState!.system_language == 'kr'
                                           ? timeFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
