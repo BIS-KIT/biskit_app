@@ -5,6 +5,10 @@ import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,6 +47,15 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
             );
     List<TagModel> tagList =
         await ref.read(createMeetUpProvider.notifier).getTags(isCustom: false);
+
+    UserSystemModel? userSystem = await ref
+        .read(settingRepositoryProvider)
+        .getUserSystem(userId: (ref.watch(userMeProvider) as UserModel).id);
+
+    // XXX: 아래 코드로 하면 문제가 되는 것 같음
+    // String selectedLang =
+    //     (ref.watch(systemProvider) as UserSystemModel).system_language;
+
     return [
       MeetUpFilterGroup(
         groupText: 'exploreFilterBottomSheet.date.title'.tr(),
@@ -150,7 +163,6 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
               value: 'FOREIGNER'),
         ],
       ),
-      // FIXME: e.kr_name 언어 대응되도록 수정
       MeetUpFilterGroup(
         groupText: 'exploreFilterBottomSheet.category.title'.tr(),
         filterType: MeetUpFilterType.topic,
@@ -158,7 +170,8 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
         filterList: topicList
             .map(
               (e) => MeetUpFilterModel(
-                text: e.kr_name,
+                text:
+                    userSystem?.system_language == 'kr' ? e.kr_name : e.en_name,
                 isSeleted: false,
                 value: e.id.toString(),
               ),
@@ -172,7 +185,8 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
         filterList: tagList
             .map(
               (e) => MeetUpFilterModel(
-                text: e.kr_name,
+                text:
+                    userSystem?.system_language == 'kr' ? e.kr_name : e.en_name,
                 isSeleted: false,
                 value: e.id.toString(),
               ),
