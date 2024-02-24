@@ -7,11 +7,13 @@ class TagModel {
   final String kr_name;
   final String en_name;
   final bool is_custom;
+  final String icon;
   TagModel({
     required this.id,
     required this.kr_name,
     required this.en_name,
     required this.is_custom,
+    required this.icon,
   });
 
   TagModel copyWith({
@@ -19,12 +21,14 @@ class TagModel {
     String? kr_name,
     String? en_name,
     bool? is_custom,
+    String? icon,
   }) {
     return TagModel(
       id: id ?? this.id,
       kr_name: kr_name ?? this.kr_name,
       en_name: en_name ?? this.en_name,
       is_custom: is_custom ?? this.is_custom,
+      icon: icon ?? this.icon,
     );
   }
 
@@ -34,6 +38,7 @@ class TagModel {
       'kr_name': kr_name,
       'en_name': en_name,
       'is_custom': is_custom,
+      'icon': icon,
     };
   }
 
@@ -43,6 +48,7 @@ class TagModel {
       kr_name: map['kr_name'] ?? '',
       en_name: map['en_name'] ?? '',
       is_custom: map['is_custom'] ?? false,
+      icon: map['icon'] ?? '',
     );
   }
 
@@ -53,7 +59,7 @@ class TagModel {
 
   @override
   String toString() {
-    return 'TagModel(id: $id, kr_name: $kr_name, en_name: $en_name, is_custom: $is_custom)';
+    return 'TagModel(id: $id, kr_name: $kr_name, en_name: $en_name, is_custom: $is_custom, icon: $icon,)';
   }
 
   @override
@@ -64,7 +70,8 @@ class TagModel {
         other.id == id &&
         other.kr_name == kr_name &&
         other.en_name == en_name &&
-        other.is_custom == is_custom;
+        other.is_custom == is_custom &&
+        other.icon == icon;
   }
 
   @override
@@ -72,6 +79,7 @@ class TagModel {
     return id.hashCode ^
         kr_name.hashCode ^
         en_name.hashCode ^
-        is_custom.hashCode;
+        is_custom.hashCode ^
+        icon.hashCode;
   }
 }

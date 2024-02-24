@@ -575,10 +575,16 @@
   },
 
   "searchMeetupScreen": {
+    "title": "탐색",
     "placeholder": "모임의 키워드로 찾아보세요",
     "noResult": "검색결과가 없어요",
     "makeMeetup": "원하는 모임이 없다면 직접 만들어볼까요?",
     "createMeetup": "모임 만들기"
+  },
+
+  "filteredMeetupScreen": {
+    "moMatched": "조건에 맞는 모임이 없어요",
+    "noData": "모임이 없어요"
   },
 
   "chatListScreen": {
@@ -596,7 +602,7 @@
 
     "unableLeaveModal": {
       "title": "모임 종료 전에는 나갈 수 없어요",
-      "subtitle": "모임 종료 전 채팅방에서 나가기 위해선모임 상세페이지-모임 나가기를 진행해주세요",
+      "subtitle": "모임 상세 > 더보기 > 모임 나가기로 나간 후에\n채팅방에서 나갈 수 있어요",
       "ok": "확인"
     },
 
@@ -782,6 +788,10 @@
       "chip8": "늦참가능"
     },
     "upcoming": "님,\n 다가오는 모임이 있어요",
+    "date": {
+      "tomorrow": "내일",
+      "today": "오늘"
+    },
     "chat": "채팅",
     "homeTooltip": "학교 인증하고 모임을 만들어보세요!",
     "verifyModal": {
@@ -959,6 +969,7 @@
   "modal": {
     "cancel": "취소",
     "confirm": "확인",
+    "reject": "거절",
     "edit": "수정하기",
     "delete": "삭제하기"
   }

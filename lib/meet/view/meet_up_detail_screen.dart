@@ -523,7 +523,18 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                         children: [
                                           ...meetUpDetailModel!.topics.map(
                                             (topic) => NewBadgeWidget(
-                                                text: topic.kr_name,
+                                                text: topic.is_custom
+                                                    ? topic.kr_name.isNotEmpty
+                                                        ? topic.kr_name
+                                                        : topic.en_name
+                                                    : systemState
+                                                                is UserSystemModel &&
+                                                            (systemState
+                                                                        as UserSystemModel)
+                                                                    .system_language ==
+                                                                'kr'
+                                                        ? topic.kr_name
+                                                        : topic.en_name,
                                                 type: BadgeType.primary,
                                                 size: BadgeSize.M),
                                           ),
@@ -628,29 +639,32 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            height: 36,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => ChipWidget(
-                text: chartDatas[index].lang.kr_name,
-                isSelected: index == chartLangSelectedIndex,
-                selectedColor: kColorBgInverseWeak,
-                selectedBorderColor: kColorBgInverseWeak,
-                selectedTextColor: kColorContentInverse,
-                onClickSelect: () {
-                  setState(() {
-                    chartLangSelectedIndex = index;
-                    chartTouchedIndex = 0;
-                  });
-                },
+          if (systemState != null)
+            SizedBox(
+              height: 36,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => ChipWidget(
+                  text: systemState!.system_language == 'kr'
+                      ? chartDatas[index].lang.kr_name
+                      : chartDatas[index].lang.en_name,
+                  isSelected: index == chartLangSelectedIndex,
+                  selectedColor: kColorBgInverseWeak,
+                  selectedBorderColor: kColorBgInverseWeak,
+                  selectedTextColor: kColorContentInverse,
+                  onClickSelect: () {
+                    setState(() {
+                      chartLangSelectedIndex = index;
+                      chartTouchedIndex = 0;
+                    });
+                  },
+                ),
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: 6,
+                ),
+                itemCount: chartDatas.length,
               ),
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 6,
-              ),
-              itemCount: chartDatas.length,
             ),
-          ),
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -1036,7 +1050,16 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               children: [
                 ...meetUpDetailModel!.tags.map(
                   (tag) => BadgeEmojiWidget(
-                    label: tag.kr_name.isNotEmpty ? tag.kr_name : tag.en_name,
+                    label: tag.is_custom
+                        ? tag.kr_name.isNotEmpty
+                            ? tag.kr_name
+                            : tag.en_name
+                        : ref.watch(systemProvider) is UserSystemModel &&
+                                (ref.watch(systemProvider) as UserSystemModel)
+                                        .system_language ==
+                                    'kr'
+                            ? tag.kr_name
+                            : tag.en_name,
                   ),
                 ),
               ],
@@ -1165,7 +1188,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : systemState!.system_language == 'ko'
+                                      : systemState!.system_language == 'kr'
                                           ? dateFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
@@ -1193,7 +1216,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : systemState!.system_language == 'ko'
+                                      : systemState!.system_language == 'kr'
                                           ? timeFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
@@ -1332,7 +1355,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                       width: 4,
                                     ),
                                     Text(
-                                      lang.kr_name,
+                                      systemState is UserSystemModel &&
+                                              (systemState as UserSystemModel)
+                                                      .system_language ==
+                                                  'kr'
+                                          ? lang.kr_name
+                                          : lang.en_name,
                                       style: getTsBody14Rg(context).copyWith(
                                         color: kColorContentWeak,
                                       ),

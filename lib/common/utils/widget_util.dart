@@ -101,7 +101,7 @@ showMoreBottomSheet({
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '취소',
+                  'modal.cancel'.tr(),
                   style: getTsBody16Rg(context).copyWith(
                     color: kColorContentDefault,
                   ),
@@ -475,10 +475,10 @@ showConfirmModal({
   required BuildContext context,
   String title = '',
   String content = '',
-  String leftButton = '취소',
+  String? leftButton,
   Color? leftBackgroundColor,
   Color? leftTextColor,
-  String rightButton = '확인',
+  String? rightButton,
   Color rightBackgroundColor = kColorContentError,
   Color rightTextColor = kColorBgDefault,
   Function? leftCall,
@@ -547,7 +547,7 @@ showConfirmModal({
                       leftCall();
                     },
                     child: OutlinedButtonWidget(
-                      text: leftButton,
+                      text: leftButton ?? 'modal.cancel'.tr(),
                       isEnable: true,
                       height: 44,
                     ),
@@ -563,7 +563,7 @@ showConfirmModal({
                     rightCall();
                   },
                   child: FilledButtonWidget(
-                    text: rightButton,
+                    text: rightButton ?? 'modal.confirm'.tr(),
                     isEnable: true,
                     backgroundColor: rightBackgroundColor,
                     fontColor: rightTextColor,

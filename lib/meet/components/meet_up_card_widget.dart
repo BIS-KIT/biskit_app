@@ -265,7 +265,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           dateFormat: widget.systemModel is UserSystemModel &&
                                   (widget.systemModel as UserSystemModel)
                                           .system_language ==
-                                      'ko'
+                                      'kr'
                               ? dateFormatKO
                               : dateFormatUS,
                         ),
@@ -291,7 +291,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             : widget.systemModel is UserSystemModel &&
                                     (widget.systemModel as UserSystemModel)
                                             .system_language ==
-                                        'ko'
+                                        'kr'
                                 ? timeFormatKO.format(
                                     DateTime.parse(widget.model.meeting_time))
                                 : timeFormatUS.format(
@@ -342,7 +342,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                                             is UserSystemModel &&
                                         (widget.systemModel as UserSystemModel)
                                                 .system_language ==
-                                            'ko'
+                                            'kr'
                                     ? dateFormatKO
                                     : dateFormatUS),
                             style: getTsBody14Rg(context).copyWith(
@@ -367,7 +367,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                                 : widget.systemModel is UserSystemModel &&
                                         (widget.systemModel as UserSystemModel)
                                                 .system_language ==
-                                            'ko'
+                                            'kr'
                                     ? timeFormatKO.format(DateTime.parse(
                                         widget.model.meeting_time))
                                     : timeFormatUS.format(DateTime.parse(
@@ -419,7 +419,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     maxLines: 2,
                     children: widget.model.tags
                         .map(
-                          (e) => Container(
+                          (tag) => Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 6,
                               vertical: 4,
@@ -431,7 +431,17 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                               ),
                             ),
                             child: Text(
-                              e.kr_name.isNotEmpty ? e.kr_name : e.en_name,
+                              tag.is_custom
+                                  ? tag.kr_name.isNotEmpty
+                                      ? tag.kr_name
+                                      : tag.en_name
+                                  : widget.systemModel is UserSystemModel &&
+                                          (widget.systemModel
+                                                      as UserSystemModel)
+                                                  .system_language ==
+                                              'kr'
+                                      ? tag.kr_name
+                                      : tag.en_name,
                               style: getTsCaption12Rg(context).copyWith(
                                 color: kColorContentWeaker,
                               ),

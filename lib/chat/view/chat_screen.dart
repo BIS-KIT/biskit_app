@@ -377,13 +377,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                           // 모임 시간이 지난 경우
                           showConfirmModal(
                             context: context,
-                            title: '채팅방에서 나가시겠어요?',
-                            content: '대화 내용이 모두 사라져요',
-                            leftButton: '취소',
+                            title:
+                                'chatroomScreen.leaveChatroomModal.title'.tr(),
+                            content:
+                                'chatroomScreen.leaveChatroomModal.subtitle'
+                                    .tr(),
+                            leftButton:
+                                'chatroomScreen.leaveChatroomModal.cancel'.tr(),
                             leftCall: () {
                               Navigator.pop(context);
                             },
-                            rightButton: '나가기',
+                            rightButton:
+                                'chatroomScreen.leaveChatroomModal.leave'.tr(),
                             rightTextColor: kColorContentError,
                             rightBackgroundColor: kColorBgError,
                             rightCall: () async {
@@ -401,9 +406,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                           // 모임이 안 끝난 경우
                           showDefaultModal(
                             context: context,
-                            title: '모임 종료 전에는 나갈 수 없어요',
+                            title: 'chatroomScreen.unableLeaveModal.title'.tr(),
                             content:
-                                '모임 상세 > 더보기 > 모임 나가기로 나간 후에 채팅방에서 나갈 수 있어요',
+                                'chatroomScreen.unableLeaveModal.subtitle'.tr(),
                             function: () {
                               Navigator.pop(context);
                             },

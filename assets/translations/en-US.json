@@ -575,10 +575,16 @@
   },
 
   "searchMeetupScreen": {
+    "title": "Meetups",
     "placeholder": "Search by keywords",
     "noResult": "No Result Found",
     "makeMeetup": "How about make your own meetup?",
     "createMeetup": "Create meetup"
+  },
+
+  "filteredMeetupScreen": {
+    "moMatched": "No Matched Meetups",
+    "noData": "No Result Found"
   },
 
   "chatListScreen": {
@@ -595,8 +601,8 @@
     },
 
     "unableLeaveModal": {
-      "title": "You can't leave until the end of the meetup",
-      "subtitle": "Leave the meetup in the meetup page before you leave chatroom",
+      "title": "You can't leave\nuntil the end of the meetup",
+      "subtitle": "Leave the meetup in the meetup page\nbefore you leave the chatroom",
       "ok": "OK"
     },
 
@@ -783,6 +789,10 @@
     },
     "upcoming": ",\nThere is an upcoming meetup!",
     "chat": "chat",
+    "date": {
+      "tomorrow": "Tomorrow",
+      "today": "Today"
+    },
     "homeTooltip": "Verify University and create a meetup!",
     "verifyModal": {
       "title": "Please Verify your University\nto create your meetup",
@@ -957,9 +967,10 @@
   },
 
   "modal": {
-    "cancel": "cancel",
-    "confirm": "confirm",
-    "edit": "edit",
-    "delete": "delete"
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "reject": "Reject",
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

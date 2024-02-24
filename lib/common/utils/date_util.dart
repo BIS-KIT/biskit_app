@@ -60,9 +60,9 @@ getMeetUpDateStr({
   final DateTime meetupDate = DateTime.parse(meetUpDateStr);
 
   if (now.day - meetupDate.day == 0) {
-    return '오늘';
+    return 'homeScreen.date.today'.tr();
   } else if (now.day - meetupDate.day == -1) {
-    return '내일';
+    return 'homeScreen.date.tomorrow'.tr();
   } else {
     return dateFormat.format(meetupDate);
   }

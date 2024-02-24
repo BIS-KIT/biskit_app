@@ -12,6 +12,8 @@ import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/profile/components/profile_list_widget.dart';
 import 'package:biskit_app/profile/components/profile_list_with_subtext_widget.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -33,7 +35,9 @@ class MeetUpMemberManagementScreen extends ConsumerStatefulWidget {
 
 class _MeetUpMemberManagementScreenState
     extends ConsumerState<MeetUpMemberManagementScreen> {
-  final DateFormat dateFormat = DateFormat('MM/dd(EEE) a hh:mm', 'ko');
+  final DateFormat dateFormatUS = DateFormat('MM/dd(EEE) a hh:mm', 'en_US');
+  final DateFormat dateFormatKO = DateFormat('MM/dd(EEE) a hh:mm', 'ko_KR');
+
   List<MeetUpRequestModel> requests = [];
   List<UserModel> users = [];
   @override
@@ -57,7 +61,7 @@ class _MeetUpMemberManagementScreenState
     showConfirmModal(
       context: context,
       title:
-          '${model.user.profile!.nick_name}${'adminMemberScreen.modal.declineModal.title'.tr()}',
+          '${model.user.profile!.nick_name} ${'adminMemberScreen.modal.declineModal.title'.tr()}',
       leftCall: () {
         Navigator.of(context).pop();
       },
@@ -72,9 +76,9 @@ class _MeetUpMemberManagementScreenState
         if (!mounted) return;
         Navigator.of(context).pop();
       },
-      leftButton: '취소',
+      leftButton: 'modal.cancel'.tr(),
       leftTextColor: kColorContentWeak,
-      rightButton: '거절',
+      rightButton: 'modal.reject'.tr(),
       rightBackgroundColor: kColorBgError,
       rightTextColor: kColorContentError,
     );
@@ -204,8 +208,14 @@ class _MeetUpMemberManagementScreenState
                                             profilePath: model
                                                 .user.profile!.profile_photo,
                                             isCreator: false,
-                                            subText:
-                                                '${dateFormat.format(DateTime.parse(model.created_time))} 신청',
+                                            subText: ref.watch(systemProvider)
+                                                        is UserSystemModel &&
+                                                    (ref.watch(systemProvider)
+                                                                as UserSystemModel)
+                                                            .system_language ==
+                                                        'kr'
+                                                ? '${dateFormatKO.format(DateTime.parse(model.created_time))} 신청'
+                                                : '${dateFormatUS.format(DateTime.parse(model.created_time))} Request',
                                             introductions: const [],
                                             onTap: () {
                                               if (model.user.profile == null) {
