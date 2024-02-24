@@ -601,8 +601,8 @@
     },
 
     "unableLeaveModal": {
-      "title": "You can't leave until the end of the meetup",
-      "subtitle": "Leave the meetup in the meetup page before you leave chatroom",
+      "title": "You can't leave\nuntil the end of the meetup",
+      "subtitle": "Leave the meetup in the meetup page\nbefore you leave the chatroom",
       "ok": "OK"
     },
 
@@ -967,9 +967,10 @@
   },
 
   "modal": {
-    "cancel": "cancel",
-    "confirm": "confirm",
-    "edit": "edit",
-    "delete": "delete"
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "reject": "Reject",
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

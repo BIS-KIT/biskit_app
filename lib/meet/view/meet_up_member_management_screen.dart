@@ -61,7 +61,7 @@ class _MeetUpMemberManagementScreenState
     showConfirmModal(
       context: context,
       title:
-          '${model.user.profile!.nick_name}${'adminMemberScreen.modal.declineModal.title'.tr()}',
+          '${model.user.profile!.nick_name} ${'adminMemberScreen.modal.declineModal.title'.tr()}',
       leftCall: () {
         Navigator.of(context).pop();
       },
@@ -76,9 +76,9 @@ class _MeetUpMemberManagementScreenState
         if (!mounted) return;
         Navigator.of(context).pop();
       },
-      leftButton: '취소',
+      leftButton: 'modal.cancel'.tr(),
       leftTextColor: kColorContentWeak,
-      rightButton: '거절',
+      rightButton: 'modal.reject'.tr(),
       rightBackgroundColor: kColorBgError,
       rightTextColor: kColorContentError,
     );

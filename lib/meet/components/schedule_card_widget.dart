@@ -212,8 +212,8 @@ class ScheduleCardWidget extends ConsumerWidget {
                     onTap: () {
                       onTapChat(ref, context);
                     },
-                    child: const OutlinedButtonWidget(
-                      text: '채팅',
+                    child: OutlinedButtonWidget(
+                      text: 'homeScreen.chat'.tr(),
                       isEnable: true,
                       height: 40,
                     ),
