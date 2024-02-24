@@ -558,7 +558,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             },
                             child: CategoryItemWidget(
                               iconPath: e.icon_url,
-                              text: e.kr_name,
+                              text: ref.watch(systemProvider)
+                                          is UserSystemModel &&
+                                      (ref.watch(systemProvider)
+                                                  as UserSystemModel)
+                                              .system_language ==
+                                          'kr'
+                                  ? e.kr_name
+                                  : e.en_name,
                             ),
                           ),
                         )
@@ -580,7 +587,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       },
                       child: CategoryItemWidget(
                         iconPath: e.icon_url,
-                        text: e.kr_name,
+                        text: ref.watch(systemProvider) is UserSystemModel &&
+                                (ref.watch(systemProvider) as UserSystemModel)
+                                        .system_language ==
+                                    'kr'
+                            ? e.kr_name
+                            : e.en_name,
                       ),
                     ),
                   )

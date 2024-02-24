@@ -523,7 +523,14 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                         children: [
                                           ...meetUpDetailModel!.topics.map(
                                             (topic) => NewBadgeWidget(
-                                                text: topic.kr_name,
+                                                text: systemState
+                                                            is UserSystemModel &&
+                                                        (systemState
+                                                                    as UserSystemModel)
+                                                                .system_language ==
+                                                            'kr'
+                                                    ? topic.kr_name
+                                                    : topic.en_name,
                                                 type: BadgeType.primary,
                                                 size: BadgeSize.M),
                                           ),
@@ -1335,7 +1342,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                       width: 4,
                                     ),
                                     Text(
-                                      lang.kr_name,
+                                      systemState is UserSystemModel &&
+                                              (systemState as UserSystemModel)
+                                                      .system_language ==
+                                                  'kr'
+                                          ? lang.kr_name
+                                          : lang.en_name,
                                       style: getTsBody14Rg(context).copyWith(
                                         color: kColorContentWeak,
                                       ),

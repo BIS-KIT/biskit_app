@@ -160,14 +160,14 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                               setState(() {});
                               // ref.read(reviewProvider.notifier).fetchItems();
                             },
-                            tabs: const [
+                            tabs: [
                               Tab(
                                 height: 25,
-                                text: '내 모임',
+                                text: 'myPageScreen.tap.myMeetup.title'.tr(),
                               ),
                               Tab(
                                 height: 25,
-                                text: '후기',
+                                text: 'myPageScreen.tap.review.title'.tr(),
                               ),
                             ],
                           ),
