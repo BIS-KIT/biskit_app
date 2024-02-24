@@ -523,14 +523,18 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                         children: [
                                           ...meetUpDetailModel!.topics.map(
                                             (topic) => NewBadgeWidget(
-                                                text: systemState
-                                                            is UserSystemModel &&
-                                                        (systemState
-                                                                    as UserSystemModel)
-                                                                .system_language ==
-                                                            'kr'
-                                                    ? topic.kr_name
-                                                    : topic.en_name,
+                                                text: topic.is_custom
+                                                    ? topic.kr_name.isNotEmpty
+                                                        ? topic.kr_name
+                                                        : topic.en_name
+                                                    : systemState
+                                                                is UserSystemModel &&
+                                                            (systemState
+                                                                        as UserSystemModel)
+                                                                    .system_language ==
+                                                                'kr'
+                                                        ? topic.kr_name
+                                                        : topic.en_name,
                                                 type: BadgeType.primary,
                                                 size: BadgeSize.M),
                                           ),
@@ -1046,7 +1050,16 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               children: [
                 ...meetUpDetailModel!.tags.map(
                   (tag) => BadgeEmojiWidget(
-                    label: tag.kr_name.isNotEmpty ? tag.kr_name : tag.en_name,
+                    label: tag.is_custom
+                        ? tag.kr_name.isNotEmpty
+                            ? tag.kr_name
+                            : tag.en_name
+                        : ref.watch(systemProvider) is UserSystemModel &&
+                                (ref.watch(systemProvider) as UserSystemModel)
+                                        .system_language ==
+                                    'kr'
+                            ? tag.kr_name
+                            : tag.en_name,
                   ),
                 ),
               ],
