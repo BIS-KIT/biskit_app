@@ -1,17 +1,16 @@
 import 'dart:convert';
 
-import 'package:biskit_app/common/provider/firebase_provider.dart';
-import 'package:biskit_app/common/secure_storage/secure_storage.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/api_res_model.dart';
 import 'package:biskit_app/common/model/login_response.dart';
+import 'package:biskit_app/common/provider/firebase_provider.dart';
+import 'package:biskit_app/common/secure_storage/secure_storage.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -177,6 +176,7 @@ class AuthRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
     );

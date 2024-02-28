@@ -1,19 +1,18 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
+import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/model/profile_photo_model.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
+import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:biskit_app/common/const/data.dart';
-import 'package:biskit_app/common/dio/dio.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
-import 'package:biskit_app/profile/model/profile_create_model.dart';
-import 'package:biskit_app/user/model/user_model.dart';
 
 import '../model/profile_response_model.dart';
 
@@ -44,6 +43,7 @@ class ProfileRepository {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
       );
@@ -69,6 +69,7 @@ class ProfileRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
     );
@@ -90,6 +91,7 @@ class ProfileRepository {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'accessToken': 'true',
           },
         ),
         queryParameters: {
@@ -117,6 +119,7 @@ class ProfileRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
       queryParameters: {
@@ -146,6 +149,7 @@ class ProfileRepository {
             headers: {
               'Content-Type': 'application/json',
               'Accept': 'application/json',
+              'accessToken': 'true',
             },
           ),
           queryParameters: {

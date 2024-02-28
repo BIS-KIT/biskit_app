@@ -274,6 +274,7 @@ class ChatRepository {
               'Content-Type':
                   file == null ? 'application/json' : 'multipart/form-data',
               'Accept': 'application/json',
+              'accessToken': 'true',
             },
           ),
           queryParameters: {
