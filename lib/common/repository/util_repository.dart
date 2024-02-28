@@ -39,6 +39,7 @@ class UtilRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
     );
@@ -58,6 +59,7 @@ class UtilRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
       queryParameters: {
@@ -84,6 +86,7 @@ class UtilRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
       queryParameters: {
@@ -111,6 +114,7 @@ class UtilRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
       queryParameters: isCustom == null
@@ -134,6 +138,7 @@ class UtilRepository {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'accessToken': 'true',
         },
       ),
       queryParameters: isCustom == null
