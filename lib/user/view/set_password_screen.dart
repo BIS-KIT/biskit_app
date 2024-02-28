@@ -1,22 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
-import 'package:biskit_app/user/repository/auth_repository.dart';
-import 'package:biskit_app/setting/view/setting_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:biskit_app/common/components/filled_button_widget.dart';
+import 'package:biskit_app/common/components/full_bleed_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
+import 'package:biskit_app/setting/view/setting_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/view/set_password_completed_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 // 비밀번호 설정 페이지로 이동하는 페이지 1. 가입 2. 찾기 3. 재설정
@@ -28,11 +27,9 @@ class SetPasswordScreen extends ConsumerStatefulWidget {
   final SignUpModel? signUpModel;
   final PageType pageType;
 
-  final String? token;
   const SetPasswordScreen({
     super.key,
     this.signUpModel,
-    this.token,
     required this.pageType,
   });
 

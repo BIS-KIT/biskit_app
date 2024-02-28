@@ -4,15 +4,15 @@ import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/components/tooltip_widget.dart';
+import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/input_validate_util.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:biskit_app/common/const/colors.dart';
-import 'package:biskit_app/common/const/fonts.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class FindPasswordScreen extends ConsumerStatefulWidget {
@@ -103,7 +103,6 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => SetPasswordScreen(
                       pageType: PageType.find,
-                      token: res['token'],
                     )));
           } else {
             setState(() {
