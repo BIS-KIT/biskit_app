@@ -14,6 +14,54 @@
       },
       "oauth_client": [
         {
+          "client_id": "713106577735-0jl6jioniasnr1c1d8gg3d0b15b81mtn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "fcafecb298059f0437b8d05b133f8507b0d17469"
+          }
+        },
+        {
+          "client_id": "713106577735-5tmo4dgaip67j431bpcne4u8ahdqmv6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "ff04e5632f5c2119700829c58451090e7d17bbb3"
+          }
+        },
+        {
+          "client_id": "713106577735-ch09vahg343ac8sh4rbot9v8rn93i0jj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "bd809381921a709caf2eac69e07f272a27f8ed00"
+          }
+        },
+        {
+          "client_id": "713106577735-k0cpt5n6n7qd5ha7f99jdf9a19lk46un.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "c2cf0ccd0d15db3c35b6c908da9c6d6d1c9423e7"
+          }
+        },
+        {
+          "client_id": "713106577735-n4gru6evmlgc7s3huvdc3uasebaknuag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "da7c99863a3abb912482c9bd0bf30bc58b4907db"
+          }
+        },
+        {
+          "client_id": "713106577735-scs2u577m2euqrvh8jvsrampieor6ppp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "035df53bcc8a4d778f97a76a63b7f6a9a41da1c5"
+          }
+        },
+        {
           "client_id": "713106577735-lhsb379m1aqai9esbrscbg03bl08nlks.apps.googleusercontent.com",
           "client_type": 3
         }
