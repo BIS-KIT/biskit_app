@@ -38,19 +38,11 @@
           }
         },
         {
-          "client_id": "713106577735-k0cpt5n6n7qd5ha7f99jdf9a19lk46un.apps.googleusercontent.com",
+          "client_id": "713106577735-sbb3kgqhdaqb6dbln32ee48brce44evv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.teambiskit.biskit",
-            "certificate_hash": "c2cf0ccd0d15db3c35b6c908da9c6d6d1c9423e7"
-          }
-        },
-        {
-          "client_id": "713106577735-n4gru6evmlgc7s3huvdc3uasebaknuag.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.teambiskit.biskit",
-            "certificate_hash": "da7c99863a3abb912482c9bd0bf30bc58b4907db"
+            "certificate_hash": "15457542f461201439dc09be8c73bebf1de91fc6"
           }
         },
         {
@@ -82,7 +74,7 @@
               "client_id": "713106577735-2upvrcmlqj1rgvoh6d7salkr3c97cgak.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.teambiskit.biskit"
+                "bundle_id": "com.example.biskitApp"
               }
             }
           ]
