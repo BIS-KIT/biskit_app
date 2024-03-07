@@ -783,6 +783,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               isEnable: true,
             ),
           );
+        } else if (meetUpDetailModel!.current_participants ==
+            meetUpDetailModel!.max_participants) {
+          return FilledButtonWidget(
+            text: 'meetupDetailScreen.btn.full'.tr(),
+            isEnable: false,
+          );
         } else {
           if (participationStatus != null) {
             if (participationStatus == VerificationStatus.PENDING.name) {
