@@ -477,7 +477,7 @@
     "members": "Members",
     "modal": {
       "acceptModal": {
-        "title": "Accept to join the meetup?",
+        "title": "\nAccept to join the meetup?",
         "cancel": "Cancel",
         "accept": "Accept"
       },
