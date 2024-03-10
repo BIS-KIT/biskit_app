@@ -315,12 +315,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(6),
-            child: SvgPicture.asset(
-              'assets/icons/ic_chevron_right_line_24.svg',
-              width: 24,
-              height: 24,
+          GestureDetector(
+            onTap: () {
+              ref.read(rootProvider.notifier).onTapBottomNav(
+                    index: 4,
+                  );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: SvgPicture.asset(
+                'assets/icons/ic_chevron_right_line_24.svg',
+                width: 24,
+                height: 24,
+              ),
             ),
           ),
         ],
@@ -444,15 +451,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const SizedBox(
                   width: 8,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: SvgPicture.asset(
-                    'assets/icons/ic_chevron_right_line_24.svg',
-                    width: 24,
-                    height: 24,
-                    colorFilter: const ColorFilter.mode(
-                      kColorContentWeakest,
-                      BlendMode.srcIn,
+                GestureDetector(
+                  onTap: () {
+                    ref.read(rootProvider.notifier).onTapBottomNav(
+                          index: 1,
+                        );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: SvgPicture.asset(
+                      'assets/icons/ic_chevron_right_line_24.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        kColorContentWeakest,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),
