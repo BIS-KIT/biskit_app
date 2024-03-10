@@ -54,8 +54,8 @@
     "newPassword": {
       "title": "새 비밀번호",
       "placeholder": "새 비밀번호를 입력해주세요",
-      "description": "영문, 숫자, 특수문자 조합 8-16자로 입력해주세요",
-      "numError": "영문, 숫자, 특수문자 조합 8-16자로 입력해주세요"
+      "description": "영문, 숫자, 특수문자 조합 8-16자",
+      "numError": "영문, 숫자, 특수문자 조합 8-16자"
     },
     "confirmPassword": {
       "title": "비밀번호 확인",
@@ -127,8 +127,8 @@
     "password": {
       "title": "비밀번호",
       "placeholder": "비밀번호를 입력해주세요",
-      "description": "영문, 숫자, 특수문자 조합 8-16자로 입력해주세요",
-      "numError": "영문, 숫자, 특수문자 조합 8-16자로 입력해주세요"
+      "description": "영문, 숫자, 특수문자 조합 8-16자",
+      "numError": "영문, 숫자, 특수문자 조합 8-16자"
     },
     "confirmPassword": {
       "title": "비밀번호 확인",
@@ -858,8 +858,8 @@
     "newPw": {
       "label": "새 비밀번호",
       "placeholder": "새 비밀번호를 입력해주세요",
-      "description": "영문, 숫자, 특수문자 조합 8-16자로 입력해주세요",
-      "numError": "영문, 숫자, 특수문자 조합 8-16자로 입력해주세요",
+      "description": "영문, 숫자, 특수문자 조합 8-16자",
+      "numError": "영문, 숫자, 특수문자 조합 8-16자",
       "overlapError": "현재 비밀번호와 다르게 입력해주세요"
     },
     "confirmPw": {
