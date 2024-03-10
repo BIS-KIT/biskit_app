@@ -46,7 +46,7 @@
   },
 
   "changePasswordScreen": {
-    "title": "Change password"
+    "title": "Change Password"
   },
 
   "resetPasswordScreen3": {
@@ -54,8 +54,8 @@
     "newPassword": {
       "title": "New Password",
       "placeholder": "Enter a new password",
-      "description": "At least 8 characters",
-      "numError": "At least 8 characters"
+      "description": "8 to 16 characters including combination of numbers, symbols and letters",
+      "numError": "8 to 16 characters including combination of numbers, symbols and letters"
     },
     "confirmPassword": {
       "title": "Confirm Password",
@@ -66,7 +66,7 @@
     "alert": {
       "error": "failed to reset password"
     },
-    "complete": "Reset Password"
+    "complete": "Done"
   },
 
   "resetPasswordCompleteScreen": {
@@ -127,8 +127,8 @@
     "password": {
       "title": "Password",
       "placeholder": "Enter a password",
-      "description": "At least 8 characters",
-      "numError": "At least 8 characters"
+      "description": "8 to 16 characters including combination of numbers, symbols and letters",
+      "numError": "8 to 16 characters including combination of numbers, symbols and letters"
     },
     "confirmPassword": {
       "title": "Confirm password",
@@ -835,7 +835,7 @@
       "email": "Email"
     },
     "signUp": "Account",
-    "changePw": "Change password",
+    "changePw": "Change Password",
     "logout": "Logout",
     "logoutModal": {
       "title": "Log out from BISKIT?",
@@ -858,8 +858,8 @@
     "newPw": {
       "label": "New Password",
       "placeholder": "Enter a new password",
-      "description": "At least 8 characters",
-      "numError": "At least 8 characters",
+      "description": "8 to 16 characters including combination of numbers, symbols and letters",
+      "numError": "8 to 16 characters including combination of numbers, symbols and letters",
       "overlapError": "The new password must be different from the current password"
     },
     "confirmPw": {
@@ -868,7 +868,7 @@
       "correctPw:": "The password is correct",
       "incorrectError": "Those passwords didn’t match"
     },
-    "done": "Change password",
+    "done": "Done",
     "changePwTooltip": "Password has been changed successfully"
   },
 
@@ -946,7 +946,8 @@
   },
 
   "noticeScreen": {
-    "header": "Notices"
+    "header": "Notice",
+    "noNotice": "No Notifications"
   },
 
   "inquiryScreen": {
