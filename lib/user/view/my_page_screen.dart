@@ -7,7 +7,9 @@ import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/profile/components/profile_card_widget.dart';
 import 'package:biskit_app/profile/provider/profile_meeting_provider.dart';
@@ -47,9 +49,23 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
 
   UserModelBase? userState;
 
+// FIXME: 리뷰 등록/수정할 때마다 이 부분이 실행되어야 함. 지금은 위젯이 최초에 초기화될 때 한 번만 실행되어서, 리뷰 상태가 바뀌어도 pastMeetings 에 대한 판단이 바로 업데이트되지 않음.
+// past meetings(후기 작성 가능 모임)가 있는지를 판단하는 부분
+  init() async {
+    final CursorPagination<MeetUpModel>? cursorPagination =
+        await ref.read(profileMeetingProvider.notifier).getMyMeeting(
+              skip: 0,
+              limit: 20,
+            );
+    if (cursorPagination != null) {
+      isReviewWriteEnable = cursorPagination.meta.totalCount != 0;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    init();
     scrollController.addListener(() {
       if (scrollController.offset >
               scrollController.position.maxScrollExtent - 300 &&
@@ -254,26 +270,77 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
         );
       }
     } else {
-      return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 164,
-              child: Center(
-                child: Text(
-                  '모임에 참여하고 후기를 남겨보세요',
-                  style: getTsBody14Sb(context).copyWith(
-                    color: kColorContentWeakest,
-                  ),
+      if (reviewState.data.isEmpty) {
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 164,
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'myPageScreen.tap.review.leaveReview'.tr(),
+                      style: getTsBody14Sb(context).copyWith(
+                        color: kColorContentWeaker,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+      } else {
+        double width = (size.width - 40 - 8) / 2;
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 8,
+            children: [
+              ...reviewState.data
+                  .map(
+                    (e) => GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReviewViewScreen(
+                              model: e,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Hero(
+                        tag: '$kReviewTagName/${e.id}',
+                        child: ReviewCardWidget(
+                          width: width,
+                          imagePath: e.image_url,
+                          reviewImgType: ReviewImgType.networkImage,
+                          flagCodeList: e.creator.user_nationality
+                              .map((e) => e.nationality.code)
+                              .toList(),
+                          isShowDelete: false,
+                          isShowFlag: true,
+                          isShowLock: false,
+                          isShowLogo: false,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+        );
+      }
     }
   }
 
