@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
@@ -85,8 +84,12 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
           Container(),
       ],
       child: noticeData == null
-          ? const Center(
-              child: CustomLoading(),
+          ? Center(
+              child: Text(
+                'noticeScreen.noNotice'.tr(),
+                style: getTsBody16Sb(context)
+                    .copyWith(color: kColorContentWeakest),
+              ),
             )
           : ListView.builder(
               itemCount: noticeData!.notices.length,

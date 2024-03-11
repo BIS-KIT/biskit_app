@@ -83,106 +83,112 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
 
     if (alarmData!.alarms.isEmpty) {
       return DefaultLayout(
-        title: '알림',
-        child: Text(
-          '알림이 없어요',
+        title: 'alarmListScreen.header'.tr(),
+        child: Center(
+            child: Text(
+          'alarmListScreen.noData'.tr(),
           style: getTsBody16Rg(context).copyWith(color: kColorContentWeakest),
-        ),
+        )),
       );
     }
 
     return DefaultLayout(
-      title: '알림',
+      title: 'alarmListScreen.header'.tr(),
       child: Column(
         children: [
           Expanded(
-            child: Center(
-              child: ListView.builder(
-                itemCount: alarmData!.alarms.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: alarmData!.alarms[index].is_read
-                          ? kColorBgElevation1
-                          : kColorBgDefault,
-                      border: const Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: kColorBorderWeak,
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 32,
-                            height: 32,
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: kColorBgSecondaryWeak,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/icons/ic_megaphone_fill_24.svg',
-                              width: 24,
-                              height: 24,
-                              colorFilter: const ColorFilter.mode(
-                                kColorContentSecondary,
-                                BlendMode.srcIn,
+            child: (alarmData == null)
+                ? const CustomLoading()
+                : Center(
+                    child: ListView.builder(
+                      itemCount: alarmData!.alarms.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: alarmData!.alarms[index].is_read
+                                ? kColorBgElevation1
+                                : kColorBgDefault,
+                            border: const Border(
+                              bottom: BorderSide(
+                                width: 1,
+                                color: kColorBorderWeak,
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Expanded(
-                            child: Column(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 20),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  alarmData!.alarms[index].title,
-                                  style: getTsBody14Sb(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  alarmData!.alarms[index].content,
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  dayFormat.format(
-                                    DateTime.parse(
-                                      alarmData!.alarms[index].created_time,
+                                Container(
+                                  width: 32,
+                                  height: 32,
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: kColorBgSecondaryWeak,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
                                     ),
                                   ),
-                                  style: getTsCaption12Rg(context).copyWith(
-                                    color: kColorContentWeakest,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/ic_megaphone_fill_24.svg',
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: const ColorFilter.mode(
+                                      kColorContentSecondary,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        alarmData!.alarms[index].title,
+                                        style: getTsBody14Sb(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      Text(
+                                        alarmData!.alarms[index].content,
+                                        style: getTsBody14Rg(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        dayFormat.format(
+                                          DateTime.parse(
+                                            alarmData!
+                                                .alarms[index].created_time,
+                                          ),
+                                        ),
+                                        style:
+                                            getTsCaption12Rg(context).copyWith(
+                                          color: kColorContentWeakest,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
           ),
         ],
       ),

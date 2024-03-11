@@ -610,7 +610,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'availableLang.label'.tr(),
+            'editProfileScreen.availableLang.label'.tr(),
             style: getTsBody16Sb(context).copyWith(
               color: kColorContentDefault,
             ),
@@ -719,7 +719,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                   .setSelectedList(useLanguageModelList);
               showDefaultModalBottomSheet(
                 context: context,
-                title: 'availableLang.chooseLang'.tr(),
+                title: 'editProfileScreen.availableLang.chooseLang'.tr(),
                 titleRightButton: true,
                 enableDrag: false,
                 isDismissible: false,
@@ -738,7 +738,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
               );
             },
             child: OutlinedButtonWidget(
-              text: 'availableLang.edit'.tr(),
+              text: 'editProfileScreen.availableLang.edit'.tr(),
               isEnable: true,
               height: 44,
             ),

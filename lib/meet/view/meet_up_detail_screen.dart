@@ -176,8 +176,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
       } else {
         // 레벨이 1개 이상인 경우
 
-        bool isAllLevelEqual =
-            list.map((e) => e.value).toList().toSet().length > 1;
+        bool isAllLevelEqual = list.map((e) => e.value).toList().length != 1 &&
+            list.map((e) => e.value).toList().toSet().length == 1;
+
         if (isAllLevelEqual) {
           // 모든 레벨이 같은 경우
           description = 'meetupDetailScreen.langLevel.mixed'.tr();
@@ -380,20 +381,33 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             text: 'meetupDetailScreen.actionSheet.leave'.tr(),
             color: kColorContentError,
             onTap: () async {
-              bool isOk =
-                  await ref.read(meetUpRepositoryProvider).postExitMeeting(
-                        user_id: userState!.id,
-                        meeting_id: meetUpDetailModel!.id,
-                      );
-              if (isOk) {
-                await ref.read(chatRepositoryProvider).chatExist(
-                      chatRoomUid: meetUpDetailModel!.chat_id,
-                      userId: userState!.id,
-                    );
-                await init();
-                if (!mounted) return;
-                Navigator.pop(context);
-              }
+              await showConfirmModal(
+                context: context,
+                leftCall: () {
+                  Navigator.pop(context);
+                },
+                leftButton: 'meetupDetailScreen.modal.leaveModal.cancel'.tr(),
+                rightCall: () async {
+                  bool isOk =
+                      await ref.read(meetUpRepositoryProvider).postExitMeeting(
+                            user_id: userState!.id,
+                            meeting_id: meetUpDetailModel!.id,
+                          );
+                  if (isOk) {
+                    await ref.read(chatRepositoryProvider).chatExist(
+                          chatRoomUid: meetUpDetailModel!.chat_id,
+                          userId: userState!.id,
+                        );
+                    await init();
+                    if (!mounted) return;
+                    Navigator.pop(context);
+                  }
+                },
+                rightButton: 'meetupDetailScreen.modal.leaveModal.delete'.tr(),
+                rightBackgroundColor: kColorBgError,
+                rightTextColor: kColorContentError,
+                title: 'meetupDetailScreen.modal.leaveModal.title'.tr(),
+              );
             },
           ),
           MoreButton(
@@ -782,6 +796,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               text: 'meetupDetailScreen.btn.chat'.tr(),
               isEnable: true,
             ),
+          );
+        } else if (meetUpDetailModel!.current_participants ==
+            meetUpDetailModel!.max_participants) {
+          return FilledButtonWidget(
+            text: 'meetupDetailScreen.btn.full'.tr(),
+            isEnable: false,
           );
         } else {
           if (participationStatus != null) {

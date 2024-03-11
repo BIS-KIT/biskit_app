@@ -1,14 +1,14 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:biskit_app/common/components/level_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/profile/model/available_language_model.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UseLanguageModalWidget extends StatelessWidget {
   final List<AvailableLanguageModel> available_languages;
@@ -45,7 +45,7 @@ class UseLanguageModalWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '사용가능언어',
+                      'editProfileScreen.availableLang.label'.tr(),
                       style: getTsHeading18(context).copyWith(
                         color: kColorContentDefault,
                       ),

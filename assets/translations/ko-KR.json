@@ -54,8 +54,8 @@
     "newPassword": {
       "title": "새 비밀번호",
       "placeholder": "새 비밀번호를 입력해주세요",
-      "description": "8자 이상으로 입력해주세요",
-      "numError": "8자 이상으로 입력해주세요"
+      "description": "영문, 숫자, 특수문자 조합 8-16자",
+      "numError": "영문, 숫자, 특수문자 조합 8-16자"
     },
     "confirmPassword": {
       "title": "비밀번호 확인",
@@ -127,8 +127,8 @@
     "password": {
       "title": "비밀번호",
       "placeholder": "비밀번호를 입력해주세요",
-      "description": "8자 이상으로 입력해주세요",
-      "numError": "8자 이상으로 입력해주세요"
+      "description": "영문, 숫자, 특수문자 조합 8-16자",
+      "numError": "영문, 숫자, 특수문자 조합 8-16자"
     },
     "confirmPassword": {
       "title": "비밀번호 확인",
@@ -477,7 +477,7 @@
     "members": "모임 멤버",
     "modal": {
       "acceptModal": {
-        "title": "님의 참여를 수락하시겠어요?",
+        "title": "님의\n참여를 수락하시겠어요?",
         "cancel": "취소",
         "accept": "수락"
       },
@@ -787,7 +787,7 @@
       "chip7": "혼자와도 괜찮아요",
       "chip8": "늦참가능"
     },
-    "upcoming": "님,\n 다가오는 모임이 있어요",
+    "upcoming": "님,\n다가오는 모임이 있어요",
     "date": {
       "tomorrow": "내일",
       "today": "오늘"
@@ -807,6 +807,11 @@
     },
     "makeMeetup": "원하는 모임이 없다면 직접 만들어볼까요?",
     "createMeetup": "모임 만들기"
+  },
+
+  "alarmListScreen": {
+    "header": "알림",
+    "noData": "알림이 없어요"
   },
 
   "settingScreen": {
@@ -858,8 +863,8 @@
     "newPw": {
       "label": "새 비밀번호",
       "placeholder": "새 비밀번호를 입력해주세요",
-      "description": "8자 이상으로 입력해주세요",
-      "numError": "8자 이상으로 입력해주세요",
+      "description": "영문, 숫자, 특수문자 조합 8-16자",
+      "numError": "영문, 숫자, 특수문자 조합 8-16자",
       "overlapError": "현재 비밀번호와 다르게 입력해주세요"
     },
     "confirmPw": {
@@ -946,7 +951,8 @@
   },
 
   "noticeScreen": {
-    "header": "공지사항"
+    "header": "공지사항",
+    "noNotice": "공지사항이 없어요"
   },
 
   "inquiryScreen": {

@@ -206,15 +206,15 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           isKorean = true;
                         }
                         if (isKorean && widget.model.korean_count == 0) {
-                          return const NewBadgeWidget(
-                            text: '한국인 모집',
+                          return NewBadgeWidget(
+                            text: 'meetupDetailScreen.recruitKorean'.tr(),
                             type: BadgeType.secondary,
                             size: BadgeSize.M,
                           );
                         } else if (!isKorean &&
                             widget.model.foreign_count == 0) {
-                          return const NewBadgeWidget(
-                            text: '외국인 모집',
+                          return NewBadgeWidget(
+                            text: 'meetupDetailScreen.recruitForeigner'.tr(),
                             type: BadgeType.secondary,
                             size: BadgeSize.M,
                           );

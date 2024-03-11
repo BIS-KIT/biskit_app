@@ -8,6 +8,7 @@ import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/set_password_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,7 +53,7 @@ class _CurrentPasswordVerifyScreenState
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '비밀번호 변경',
+      title: "changePwScreen.title".tr(),
       child: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -71,19 +72,19 @@ class _CurrentPasswordVerifyScreenState
                           height: 16,
                         ),
                         TextInputWidget(
-                          title: "현재 비밀번호",
-                          hintText: "현재 비밀번호를 입력해주세요",
+                          title: "changePwScreen.label".tr(),
+                          hintText: "changePwScreen.placeholder".tr(),
                           autofocus: true,
                           errorText: currentPasswordError,
                           onChanged: (value) {
+                            setState(() {
+                              currentPassword = value;
+                            });
                             if (currentPasswordError!.isNotEmpty) {
                               setState(() {
                                 currentPasswordError = null;
                               });
                             }
-                            setState(() {
-                              currentPassword = value;
-                            });
                           },
                           obscureText: obscureText,
                           suffixIcon: GestureDetector(
@@ -118,14 +119,15 @@ class _CurrentPasswordVerifyScreenState
                   },
                   child: MediaQuery.of(context).viewInsets.bottom != 0
                       ? FullBleedButtonWidget(
-                          text: '다음',
+                          text: "changePwScreen.next".tr(),
                           isEnable: isButtonActive,
                         )
                       : Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 34),
                           child: FilledButtonWidget(
-                              text: '다음', isEnable: isButtonActive),
+                              text: "changePwScreen.next".tr(),
+                              isEnable: isButtonActive),
                         ),
                 ),
               ),

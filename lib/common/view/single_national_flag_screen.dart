@@ -1,8 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/list_flag_widget.dart';
@@ -11,9 +6,12 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/model/national_flag_model.dart';
-import 'package:biskit_app/common/view/multi_national_flag_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/view/sign_up_university_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../repository/util_repository.dart';
@@ -226,27 +224,28 @@ class _SingleNationalFlagScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          // check
-                          selectedModel = null;
-                        });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MultiNationalFlagScreen(
-                                signUpModel: widget.signUpModel,
-                              ),
-                            ));
-                      },
-                      child: Text(
-                        'signUpNationalityScreen.multinational'.tr(),
-                        style: getTsBody14Rg(context).copyWith(
-                          color: kColorContentWeakest,
-                        ),
-                      ),
-                    ),
+                    // XXX: 이중국적은 우선 빼기로 결정
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     setState(() {
+                    //       // check
+                    //       selectedModel = null;
+                    //     });
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => MultiNationalFlagScreen(
+                    //             signUpModel: widget.signUpModel,
+                    //           ),
+                    //         ));
+                    //   },
+                    //   child: Text(
+                    //     'signUpNationalityScreen.multinational'.tr(),
+                    //     style: getTsBody14Rg(context).copyWith(
+                    //       color: kColorContentWeakest,
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 16,
                     ),
