@@ -809,6 +809,11 @@
     "createMeetup": "Create meetup"
   },
 
+  "alarmListScreen": {
+    "header": "Notifications",
+    "noData": "No Notifications"
+  },
+
   "settingScreen": {
     "title": "Settings",
     "account": "Account",

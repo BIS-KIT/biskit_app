@@ -809,6 +809,11 @@
     "createMeetup": "모임 만들기"
   },
 
+  "alarmListScreen": {
+    "header": "알림",
+    "noData": "알림이 없어요"
+  },
+
   "settingScreen": {
     "title": "설정",
     "account": "계정",
