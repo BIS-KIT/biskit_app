@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "713106577735-b1975biag8m58b58rsa6jkecjj5ntd7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teambiskit.biskit",
+            "certificate_hash": "1af597603d6879ef46f613ce5a6094fc79a5ae80"
+          }
+        },
+        {
           "client_id": "713106577735-ch09vahg343ac8sh4rbot9v8rn93i0jj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
