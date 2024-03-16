@@ -1,17 +1,17 @@
-import 'package:biskit_app/common/components/filled_button_widget.dart';
-import 'package:biskit_app/common/const/enums.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:biskit_app/common/components/custom_text_form_field.dart';
+import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/radio_widget.dart';
 import 'package:biskit_app/common/components/text_input_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/view/single_national_flag_screen.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class NameBirthGenderScreen extends StatefulWidget {
   static String get routeName => 'nameBirthGender';
@@ -234,9 +234,10 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
               textInputAction: TextInputAction.go,
               focusNode: nameFocusNode,
               initialValue: name,
-              readOnly: widget.signUpModel.name != null &&
-                  widget.signUpModel.sns_type == SnsType.apple.name &&
-                  widget.signUpModel.name!.isNotEmpty,
+              // XXX: 애플 회원가입 시 자동으로 이름 입력되지 않는걸로 결정
+              // readOnly: widget.signUpModel.name != null &&
+              //     widget.signUpModel.sns_type == SnsType.apple.name &&
+              //     widget.signUpModel.name!.isNotEmpty,
               onFieldSubmitted: (value) {
                 FocusScope.of(context).requestFocus(birthYearFocusNode);
               },
