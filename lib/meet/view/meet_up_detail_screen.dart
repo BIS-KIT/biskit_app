@@ -346,13 +346,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             },
           ),
           MoreButton(
-            text: 'meetupDetailScreen.modal.deleteModal.title'.tr(),
+            text: 'meetupDetailScreen.actionSheet.delete'.tr(),
             color: kColorContentError,
             onTap: () async {
               Navigator.pop(context);
               showConfirmModal(
                 context: context,
-                title: 'meetupDetailScreen.actionSheet.delete'.tr(),
+                title: 'meetupDetailScreen.modal.deleteModal.title'.tr(),
                 content: 'meetupDetailScreen.modal.deleteModal.subtitle'.tr(),
                 leftButton: 'meetupDetailScreen.modal.deleteModal.cancel'.tr(),
                 leftCall: () {
