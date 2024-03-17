@@ -87,16 +87,16 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                           ScrollViewKeyboardDismissBehavior.onDrag,
                       itemBuilder: (context, index) {
                         ChatRoomFirstUserInfo? chatRoomFirstUserInfo;
+
                         if (docs[index]
                             .firstUserInfoList
-                            .map((element) => element.userId)
-                            .toList()
-                            .contains(userState.id)) {
+                            .any((element) => element.userId == userState.id)) {
                           chatRoomFirstUserInfo = docs[index]
                               .firstUserInfoList
-                              .singleWhere(
+                              .firstWhere(
                                   (element) => element.userId == userState.id);
                         }
+
                         return Container(
                           decoration: const BoxDecoration(
                             border: Border(
