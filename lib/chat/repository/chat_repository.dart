@@ -96,6 +96,10 @@ class ChatRepository {
           'lastMsgDate',
           descending: true,
         )
+        .orderBy(
+          'createDate',
+          descending: true,
+        )
         .snapshots();
   }
 

@@ -522,7 +522,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                     chatRoomUid: widget.chatRoomUid,
                                     fromTimestamp: chatRoomModel!
                                         .firstUserInfoList
-                                        .singleWhere((element) =>
+                                        .firstWhere((element) =>
                                             element.userId ==
                                             (userState as UserModel).id)
                                         .firstJoinDate,

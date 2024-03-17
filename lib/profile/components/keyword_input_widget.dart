@@ -1,10 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:biskit_app/common/components/btn_icon_widget.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../common/components/custom_text_form_field.dart';
 import '../../common/const/colors.dart';
@@ -77,8 +76,7 @@ class _KeywordInputWidgetState extends State<KeywordInputWidget> {
   }
 
   getButtonEnable() {
-    return keywordController.text.isNotEmpty &&
-        contextController.text.isNotEmpty;
+    return keywordController.text.isNotEmpty;
   }
 
   onTapSubmit() {

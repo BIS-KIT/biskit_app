@@ -55,16 +55,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await googleUser?.authentication;
 
       // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      try {
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+        userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        logger.d(
+            'signInWithGoogle.FirebaseAuth.instance.signInWithCredential(credential)>>>[${userCredential.user!.uid}]$userCredential');
+      } catch (e) {
+        return;
+      }
     }
-    logger.d(
-        'signInWithGoogle.FirebaseAuth.instance.signInWithCredential(credential)>>>[${userCredential.user!.uid}]$userCredential');
+
     if (userCredential.user != null) {
       await login(
         snsEmail: userCredential.user!.email,
@@ -99,8 +103,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           snsId: authResult.user!.uid,
           snsType: SnsType.apple,
           snsEmail: appleCredential.email,
-          iOsFirstName: appleCredential.givenName,
-          iOsLastName: appleCredential.familyName,
+          // iOsFirstName: appleCredential.givenName,
+          // iOsLastName: appleCredential.familyName,
         );
       }
     } catch (error) {
@@ -112,10 +116,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void signInWithKakao() async {
     if (await kakao.isKakaoTalkInstalled()) {
       try {
-        await kakao.UserApi.instance.loginWithKakaoTalk();
+        await kakao.UserApi.instance.loginWithKakaoAccount();
+        // await kakao.UserApi.instance.loginWithKakaoTalk();
         logger.d('카카오톡으로 로그인 성공');
+
+        kakao.User user = await kakao.UserApi.instance.me();
+        logger.d('사용자 정보 요청 성공'
+            '\n회원번호: ${user.id}'
+            '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
+
+        await login(
+          snsEmail: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+          snsId: user.id.toString(),
+          snsType: SnsType.kakao,
+        );
       } catch (error) {
-        logger.d('카카오톡으로 로그인 실패 $error');
+        logger.d('카카오톡으로 로그인 실패1 $error');
 
         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
@@ -127,8 +143,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           final kakao.OAuthToken result =
               await kakao.UserApi.instance.loginWithKakaoAccount();
           logger.d('카카오계정으로 로그인 성공 : ${result.toJson()}');
+
+          kakao.User user = await kakao.UserApi.instance.me();
+          logger.d('사용자 정보 요청 성공'
+              '\n회원번호: ${user.id}'
+              '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
+
+          await login(
+            snsEmail:
+                user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+            snsId: user.id.toString(),
+            snsType: SnsType.kakao,
+          );
         } catch (error) {
-          logger.d('카카오계정으로 로그인 실패 $error');
+          logger.d('카카오계정으로 로그인 실패2 $error');
+          if (error is PlatformException && error.code == 'CANCELED') {
+            return;
+          }
         }
       }
     } else {
@@ -136,21 +167,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         final kakao.OAuthToken result =
             await kakao.UserApi.instance.loginWithKakaoAccount();
         logger.d('카카오계정으로 로그인 성공 : ${result.toJson()}');
+
+        kakao.User user = await kakao.UserApi.instance.me();
+        logger.d('사용자 정보 요청 성공'
+            '\n회원번호: ${user.id}'
+            '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
+
+        await login(
+          snsEmail: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
+          snsId: user.id.toString(),
+          snsType: SnsType.kakao,
+        );
       } catch (error) {
-        logger.d('카카오계정으로 로그인 실패 $error');
+        logger.d('카카오계정으로 로그인 실패3 $error');
+        if (error is PlatformException && error.code == 'CANCELED') {
+          return;
+        }
       }
     }
-
-    kakao.User user = await kakao.UserApi.instance.me();
-    logger.d('사용자 정보 요청 성공'
-        '\n회원번호: ${user.id}'
-        '\nkakaoAccount: ${user.kakaoAccount?.toJson()}');
-
-    await login(
-      snsEmail: user.kakaoAccount == null ? null : user.kakaoAccount!.email,
-      snsId: user.id.toString(),
-      snsType: SnsType.kakao,
-    );
   }
 
   login({
@@ -177,7 +211,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 sns_type: snsType.name,
                 sns_id: snsId,
                 email: snsEmail,
-                name: '$iOsFirstName $iOsLastName',
+                // XXX: 애플로그인 이름 자동 입력 안 되도록
+                // name: '$iOsFirstName $iOsLastName',
               )
             : SignUpModel(
                 sns_type: snsType.name,

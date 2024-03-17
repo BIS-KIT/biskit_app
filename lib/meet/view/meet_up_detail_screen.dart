@@ -124,7 +124,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     meetUpDetailModel = await ref
         .read(meetUpRepositoryProvider)
         .getMeetUpDetail(widget.meetUpModel.id);
-
     for (var u in meetUpDetailModel!.participants) {
       availableLangList.addAll(u.profile!.available_languages);
     }
@@ -151,12 +150,15 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   }
 
   setChartDatas() {
-    for (var l in meetUpDetailModel!.languages) {
+    // XXX: 모임상세-참가자 사용언어를 기존에는 모임에서 사용할 언어만 filtering 하여 보여줬는데, 모임 참여자들의 언어는 모두 노출시키도록 수정
+    // TODO: 더 좋은 로직이 있을지 생각해보자..
+    for (var l in availableLangList) {
+      // for (var l in meetUpDetailModel!.languages) {
       List<ChartDataModel> list = [];
       String description = '';
 
       Set<String> levelSet = availableLangList
-          .where((element) => element.language.id == l.id)
+          .where((element) => element.language.id == l.language.id)
           .map((e) => e.level)
           .toSet();
       for (var level in levelSet) {
@@ -164,7 +166,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           title: getLevelServerValueToKrString(level),
           value: availableLangList
               .where((element) =>
-                  element.language.id == l.id && element.level == level)
+                  element.language.id == l.language.id &&
+                  element.level == level)
               .length,
         ));
       }
@@ -195,11 +198,16 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         }
       }
 
-      chartDatas.add(ChartDataListModel(
-        lang: l,
-        dataList: list,
-        description: description,
-      ));
+// TODO: availableLangList에는 참여자들의 언어 모델이 다 들어가있기 때문에 겹치는 공통된 언어가 있는 경우 모임 상세 화면에서 언어 리스트가 중복으로 노출됨. 이런 문제 때문에 조건문으로 분기처리 했는데, 더 좋은 로직으로 리팩터링이 필요...
+      if ((chartDatas.map((e) => e.lang)).contains(l.language)) {
+        return;
+      } else {
+        chartDatas.add(ChartDataListModel(
+          lang: l.language,
+          dataList: list,
+          description: description,
+        ));
+      }
     }
   }
 
@@ -338,13 +346,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             },
           ),
           MoreButton(
-            text: 'meetupDetailScreen.modal.deleteModal.title'.tr(),
+            text: 'meetupDetailScreen.actionSheet.delete'.tr(),
             color: kColorContentError,
             onTap: () async {
               Navigator.pop(context);
               showConfirmModal(
                 context: context,
-                title: 'meetupDetailScreen.actionSheet.delete'.tr(),
+                title: 'meetupDetailScreen.modal.deleteModal.title'.tr(),
                 content: 'meetupDetailScreen.modal.deleteModal.subtitle'.tr(),
                 leftButton: 'meetupDetailScreen.modal.deleteModal.cancel'.tr(),
                 leftCall: () {
