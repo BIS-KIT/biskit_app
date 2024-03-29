@@ -2,6 +2,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/utils/local_notification_util.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/permission_util.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -24,7 +25,7 @@ class RootStateNotifier extends StateNotifier<RootState> {
           ),
         ) {
     //
-    initFcm();
+    initFcm(ref);
   }
 
   init() async {
@@ -34,7 +35,8 @@ class RootStateNotifier extends StateNotifier<RootState> {
     );
   }
 
-  initFcm() async {
+  initFcm(final Ref ref) async {
+    logger.d('initFcm');
     // 알림
     criticalNotification =
         await ref.read(systemProvider.notifier).getCriticalNotification();
@@ -47,7 +49,9 @@ class RootStateNotifier extends StateNotifier<RootState> {
     // 파이어베이스 메시징 처리
     await requestPermission();
     // 파이어베이스 메시지 포그라운드 처리
-    await foregroundFcm();
+    await foregroundFcm(ref);
+    // 파이어베이스 메시지 백그라운드 처리
+    await backgroundFcm(ref);
   }
 
   // setTabController(TabController controller) {
