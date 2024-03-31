@@ -5,6 +5,7 @@ import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
+import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_1_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_2_tab.dart';
@@ -317,6 +318,8 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
               MeetUpModel model =
                   await ref.read(meetUpRepositoryProvider).getMeeting(result);
               if (!mounted) return;
+              ref.read(meetUpProvider.notifier).paginate(forceRefetch: true);
+
               Navigator.pop(context);
               Navigator.push(
                 context,
