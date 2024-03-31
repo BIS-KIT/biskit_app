@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/utils/GlobalVariable.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/view/name_birth_gender_screen.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
@@ -34,6 +35,7 @@ final routerProvider = Provider((ref) {
   final provider = ref.read(routeProvider);
 
   return GoRouter(
+    navigatorKey: GlobalVariable.navState,
     routes: provider.routes,
     initialLocation: '/splash',
     refreshListenable: provider,
