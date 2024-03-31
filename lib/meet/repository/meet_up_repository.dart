@@ -555,7 +555,9 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
       );
 
       logger.d(res);
-      if (res.statusCode == 201 || res.statusCode == 200) {
+      if (res.statusCode == 201 ||
+          res.statusCode == 200 ||
+          res.statusCode == 204) {
         isOk = true;
 
         // 채팅방 삭제
