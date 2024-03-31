@@ -366,8 +366,12 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                     final bool isOk = await ref
                         .read(meetUpRepositoryProvider)
                         .deleteMeeting(meetUpDetailModel!);
+                    final bool chatDeleteIsOk = await ref
+                        .read(chatRepositoryProvider)
+                        .deleteChatRoom(
+                            chatRoomUid: meetUpDetailModel!.chat_id);
                     if (!mounted) return;
-                    if (isOk) {
+                    if (isOk && chatDeleteIsOk) {
                       ref.read(homeProvider.notifier).init();
                       Navigator.pop(context);
                       Navigator.pop(context);

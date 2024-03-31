@@ -334,7 +334,14 @@ class ChatRepository {
   }
 
   deleteChatRoom({required String chatRoomUid}) async {
-    await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).delete();
+    bool isOk = true;
+    try {
+      await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).delete();
+    } catch (e) {
+      isOk = false;
+    }
+    logger.d('isOk: $isOk');
+    return isOk;
   }
 
   chatExist({
