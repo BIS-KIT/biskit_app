@@ -67,6 +67,8 @@ class _PaginationListViewState<T extends IModelWithId>
         widget.scrollUp != null) {
       // 스크롤 Up 시
       widget.scrollUp!();
+      // XXX: 모임 데이터 refetch
+      ref.read(widget.provider.notifier).paginate(forceRefetch: true);
     }
     if (controller.position.userScrollDirection == ScrollDirection.reverse &&
         widget.scrollDown != null) {
