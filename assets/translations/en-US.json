@@ -487,7 +487,7 @@
         "decline": "Decline"
       },
       "removeModal": {
-        "title": "Remove from the meetup?",
+        "title": "\nRemove from the meetup?",
         "cancel": "Cancel",
         "remove": "Remove"
       }
