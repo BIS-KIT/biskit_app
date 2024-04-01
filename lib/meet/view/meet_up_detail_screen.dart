@@ -84,7 +84,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   final DateFormat timeFormatKO = DateFormat('a h:mm', 'ko_KR');
 
   UserModel? userState;
-  UserSystemModel? systemState;
+  UserSystemModelBase? systemState;
   MeetUpDetailModel? meetUpDetailModel;
   List<AvailableLanguageModel> availableLangList = [];
   // Set<LanguageModel> langSet = <LanguageModel>{};
@@ -497,7 +497,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   @override
   Widget build(BuildContext context) {
     userState = ref.watch(userMeProvider) as UserModel;
-    systemState = ref.watch(systemProvider) as UserSystemModel;
+    systemState = ref.watch(systemProvider);
     // final size = MediaQuery.of(context).size;
     final paddig = MediaQuery.of(context).padding;
     return Scaffold(
@@ -687,13 +687,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          if (systemState != null)
+          if (systemState is UserSystemModel)
             SizedBox(
               height: 36,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) => ChipWidget(
-                  text: systemState!.system_language == 'kr'
+                  text: (systemState as UserSystemModel).system_language == 'kr'
                       ? chartDatas[index].lang.kr_name
                       : chartDatas[index].lang.en_name,
                   isSelected: index == chartLangSelectedIndex,
@@ -1238,11 +1238,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               if (meetUpDetailModel != null &&
-                                  systemState != null)
+                                  systemState is UserSystemModel)
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : systemState!.system_language == 'kr'
+                                      : (systemState as UserSystemModel)
+                                                  .system_language ==
+                                              'kr'
                                           ? dateFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
@@ -1266,11 +1268,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                               ),
                               const SizedBox(width: 4),
                               if (meetUpDetailModel != null &&
-                                  systemState != null)
+                                  systemState is UserSystemModel)
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : systemState!.system_language == 'kr'
+                                      : (systemState as UserSystemModel)
+                                                  .system_language ==
+                                              'kr'
                                           ? timeFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
