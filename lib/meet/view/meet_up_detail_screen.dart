@@ -4,7 +4,6 @@ import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/components/badge_emoji_widget.dart';
 import 'package:biskit_app/common/components/chip_widget.dart';
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/new_badge_widget.dart';
 import 'package:biskit_app/common/components/number_badge_widget.dart';
@@ -12,6 +11,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
@@ -38,6 +38,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MeetUpDetailScreen extends ConsumerStatefulWidget {
@@ -99,7 +100,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   String? participationStatus;
 
-  bool isLoading = false;
   @override
   void initState() {
     init();
@@ -240,9 +240,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
       rightBackgroundColor: kColorBgPrimary,
       rightTextColor: kColorContentOnBgPrimary,
       rightCall: () async {
-        setState(() {
-          isLoading = true;
-        });
+        context.loaderOverlay.show();
 
         final bool isOk =
             await ref.read(meetUpRepositoryProvider).postJoinRequest(
@@ -252,10 +250,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
         if (isOk) {
           init();
         }
-        setState(() {
-          isLoading = false;
-        });
+
         if (!mounted) return;
+        context.loaderOverlay.hide();
         Navigator.pop(context);
       },
     );
@@ -371,22 +368,29 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 rightBackgroundColor: kColorBgError,
                 rightTextColor: kColorContentError,
                 rightCall: () async {
+                  bool chatDeleteIsOk = false;
                   if (meetUpDetailModel != null) {
-                    setState(() {
-                      isLoading = true;
-                    });
+                    context.loaderOverlay.show();
+
                     final bool isOk = await ref
                         .read(meetUpRepositoryProvider)
                         .deleteMeeting(meetUpDetailModel!);
-                    final bool chatDeleteIsOk = await ref
-                        .read(chatRepositoryProvider)
-                        .deleteChatRoom(
-                            chatRoomUid: meetUpDetailModel!.chat_id);
+                    if (isOk) {
+                      chatDeleteIsOk = await ref
+                          .read(chatRepositoryProvider)
+                          .deleteChatRoom(
+                              chatRoomUid: meetUpDetailModel!.chat_id);
+                    }
                     if (!mounted) return;
-                    setState(() {
-                      isLoading = false;
-                    });
+                    context.loaderOverlay.hide();
+
                     if (isOk && chatDeleteIsOk) {
+                      ref.read(homeProvider.notifier).init();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    } else {
+                      // TODO: 에러 처리 추가 (토스트?)
+                      logger.d('모임 삭제 실패');
                       ref.read(homeProvider.notifier).init();
                       Navigator.pop(context);
                       Navigator.pop(context);
@@ -415,9 +419,8 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 },
                 leftButton: 'meetupDetailScreen.modal.leaveModal.cancel'.tr(),
                 rightCall: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
+                  context.loaderOverlay.show();
+
                   bool isOk =
                       await ref.read(meetUpRepositoryProvider).postExitMeeting(
                             user_id: userState!.id,
@@ -428,14 +431,13 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                           chatRoomUid: meetUpDetailModel!.chat_id,
                           userId: userState!.id,
                         );
-                    await init();
-                    if (!mounted) return;
-
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Navigator.pop(context);
                   }
+                  if (!mounted) return;
+                  context.loaderOverlay.hide();
+                  ref.read(homeProvider.notifier).init();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 },
                 rightButton: 'meetupDetailScreen.modal.leaveModal.delete'.tr(),
                 rightBackgroundColor: kColorBgError,
@@ -780,7 +782,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   Widget _buildBottomButton() {
     if (meetUpDetailModel == null) return Container();
-    if (isLoading) return const CustomLoading();
     if (meetUpDetailModel!.is_active && userState != null) {
       if (userState!.profile!.student_verification == null) {
         // 학생증 인증 안한 상태

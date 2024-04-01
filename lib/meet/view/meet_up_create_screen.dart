@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/progress_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -17,6 +16,7 @@ import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/components/filled_button_widget.dart';
 import '../../common/layout/default_layout.dart';
@@ -203,96 +203,94 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
             : 'assets/icons/ic_arrow_back_ios_line_24.svg',
         backgroundColor: kColorBgDefault,
         onTapLeading: onWillPop,
-        child: isCreateLoading
-            ? const CustomLoading()
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 4,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ProgressBarWidget(
+                isFirstDone: true,
+                isSecondDone: pageIndex > 0,
+                isThirdDone: pageIndex > 1,
+                isFourthDone: pageIndex > 2,
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: controller,
                 children: [
-                  const SizedBox(
-                    height: 4,
+                  MeetUpCreateStep1Tab(
+                    topics: topics,
+                    systemModel: ref.watch(systemProvider),
+                    topPadding: padding.top,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ProgressBarWidget(
-                      isFirstDone: true,
-                      isSecondDone: pageIndex > 0,
-                      isThirdDone: pageIndex > 1,
-                      isFourthDone: pageIndex > 2,
-                    ),
+                  MeetUpCreateStep2Tab(
+                    systemModel: ref.watch(systemProvider),
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: controller,
-                      children: [
-                        MeetUpCreateStep1Tab(
-                          topics: topics,
-                          systemModel: ref.watch(systemProvider),
-                          topPadding: padding.top,
-                        ),
-                        MeetUpCreateStep2Tab(
-                          systemModel: ref.watch(systemProvider),
-                        ),
-                        MeetUpCreateStep3Tab(
-                          tags: tags,
-                        ),
-                        const MeetUpCreateStep4Tab(),
-                      ],
-                    ),
+                  MeetUpCreateStep3Tab(
+                    tags: tags,
                   ),
-
-                  // 하단 버튼
-                  Builder(builder: (context) {
-                    if (viewInsets.bottom <= 150) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16,
-                          bottom: 34,
-                          left: 20,
-                          right: 20,
-                        ),
-                        child: GestureDetector(
-                          onTap: isCreateLoading
-                              ? null
-                              : () async {
-                                  onTapSubmitButton();
-                                },
-                          child: FilledButtonWidget(
-                            height: 56,
-                            text: pageIndex == 3
-                                ? widget.isEditMode
-                                    ? 'createMeetupScreen4.editComplete'.tr()
-                                    : 'createMeetupScreen4.createMeetup'.tr()
-                                : 'createMeetupScreen1.next'.tr(),
-                            isEnable: isButtonEnable(),
-                          ),
-                        ),
-                      );
-                    } else {
-                      if (pageIndex == 3) {
-                        return GestureDetector(
-                          onTap: isCreateLoading
-                              ? null
-                              : () {
-                                  onTapSubmitButton();
-                                },
-                          child: FilledButtonWidget(
-                            height: 52,
-                            text: pageIndex == 3
-                                ? widget.isEditMode
-                                    ? 'createMeetupScreen4.editComplete'.tr()
-                                    : 'createMeetupScreen4.createMeetup'.tr()
-                                : 'createMeetupScreen3.next'.tr(),
-                            isEnable: isButtonEnable(),
-                          ),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }
-                  }),
+                  const MeetUpCreateStep4Tab(),
                 ],
               ),
+            ),
+
+            // 하단 버튼
+            Builder(builder: (context) {
+              if (viewInsets.bottom <= 150) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    bottom: 34,
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: GestureDetector(
+                    onTap: isCreateLoading
+                        ? null
+                        : () async {
+                            onTapSubmitButton();
+                          },
+                    child: FilledButtonWidget(
+                      height: 56,
+                      text: pageIndex == 3
+                          ? widget.isEditMode
+                              ? 'createMeetupScreen4.editComplete'.tr()
+                              : 'createMeetupScreen4.createMeetup'.tr()
+                          : 'createMeetupScreen1.next'.tr(),
+                      isEnable: isButtonEnable(),
+                    ),
+                  ),
+                );
+              } else {
+                if (pageIndex == 3) {
+                  return GestureDetector(
+                    onTap: isCreateLoading
+                        ? null
+                        : () {
+                            onTapSubmitButton();
+                          },
+                    child: FilledButtonWidget(
+                      height: 52,
+                      text: pageIndex == 3
+                          ? widget.isEditMode
+                              ? 'createMeetupScreen4.editComplete'.tr()
+                              : 'createMeetupScreen4.createMeetup'.tr()
+                          : 'createMeetupScreen3.next'.tr(),
+                      isEnable: isButtonEnable(),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }
+            }),
+          ],
+        ),
       ),
     );
   }
@@ -307,20 +305,25 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
           controller.animateTo(pageIndex + 1);
         } else {
           if (widget.isEditMode) {
+            context.loaderOverlay.show();
+
             bool result = false;
             result = await ref
                 .read(createMeetUpProvider.notifier)
                 .putUpdateMeetUp(widget.editMeetingId!);
             if (result && mounted) {
+              context.loaderOverlay.hide();
               Navigator.pop(context, widget.isEditMode ? true : [true]);
             }
           } else {
+            context.loaderOverlay.show();
             int? result =
                 await ref.read(createMeetUpProvider.notifier).createMeetUp();
             if (result != null) {
               MeetUpModel model =
                   await ref.read(meetUpRepositoryProvider).getMeeting(result);
               if (!mounted) return;
+              context.loaderOverlay.hide();
               ref.read(meetUpProvider.notifier).paginate(forceRefetch: true);
 
               Navigator.pop(context);

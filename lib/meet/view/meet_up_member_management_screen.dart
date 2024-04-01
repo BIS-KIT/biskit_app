@@ -1,5 +1,4 @@
 import 'package:biskit_app/chat/repository/chat_repository.dart';
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -21,6 +20,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class MeetUpMemberManagementScreen extends ConsumerStatefulWidget {
   final MeetUpDetailModel meetUpDetailModel;
@@ -41,8 +41,6 @@ class _MeetUpMemberManagementScreenState
 
   List<MeetUpRequestModel> requests = [];
   List<UserModel> users = [];
-
-  bool isLoading = false;
 
   @override
   void initState() {
@@ -70,9 +68,8 @@ class _MeetUpMemberManagementScreenState
         Navigator.of(context).pop();
       },
       rightCall: () async {
-        setState(() {
-          isLoading = true;
-        });
+        context.loaderOverlay.show();
+
         bool isOk =
             await ref.read(meetUpRepositoryProvider).postJoinReject(model.id);
         if (isOk) {
@@ -80,10 +77,8 @@ class _MeetUpMemberManagementScreenState
             requests.remove(model);
           });
         }
-        setState(() {
-          isLoading = false;
-        });
         if (!mounted) return;
+        context.loaderOverlay.hide();
         Navigator.of(context).pop();
       },
       leftButton: 'modal.cancel'.tr(),
@@ -103,9 +98,8 @@ class _MeetUpMemberManagementScreenState
         Navigator.of(context).pop();
       },
       rightCall: () async {
-        setState(() {
-          isLoading = true;
-        });
+        context.loaderOverlay.show();
+
         bool isOk = await ref.read(meetUpRepositoryProvider).postJoinApprove(
               id: model.id,
               chatRoomUid: widget.meetUpDetailModel.chat_id,
@@ -117,10 +111,8 @@ class _MeetUpMemberManagementScreenState
             users.add(model.user);
           });
         }
-        setState(() {
-          isLoading = false;
-        });
         if (!mounted) return;
+        context.loaderOverlay.hide();
         Navigator.of(context).pop();
       },
       leftButton: 'adminMemberScreen.modal.acceptModal.cancel'.tr(),
@@ -147,9 +139,7 @@ class _MeetUpMemberManagementScreenState
                 Navigator.of(context).pop();
               },
               rightCall: () async {
-                setState(() {
-                  isLoading = true;
-                });
+                context.loaderOverlay.show();
 
                 bool isOk =
                     await ref.read(meetUpRepositoryProvider).postExitMeeting(
@@ -167,13 +157,10 @@ class _MeetUpMemberManagementScreenState
                       .toList();
                   setState(() {});
                   if (!mounted) return;
-                  Navigator.of(context).pop();
                 }
-
-                setState(() {
-                  isLoading = false;
-                });
                 if (!mounted) return;
+                context.loaderOverlay.hide();
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               leftButton: 'adminMemberScreen.modal.removeModal.cancel'.tr(),
@@ -201,149 +188,141 @@ class _MeetUpMemberManagementScreenState
         ),
         child: Column(
           children: [
-            isLoading
-                ? const CustomLoading()
-                :
-                // 참여 대기자
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'adminMemberScreen.request.title'.tr(),
-                        style: getTsHeading18(context).copyWith(
-                          color: kColorContentDefault,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      if (requests.isEmpty) _buildEmptyCard(context),
-                      if (requests.isNotEmpty)
-                        ...requests
-                            .mapIndexed((index, model) => Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                        top: 8,
-                                        left: 16,
-                                        bottom: 16,
-                                        right: 16,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: kColorBgDefault,
-                                        border: Border.all(
-                                          width: 1,
-                                          color: kColorBorderDefalut,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(12),
-                                        ),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                child:
-                                                    ProfileListWithSubtextWidget(
-                                                  userNationalityModel: model
-                                                      .user.user_nationality[0],
-                                                  name: model
-                                                      .user.profile!.nick_name,
-                                                  profilePath: model.user
-                                                      .profile!.profile_photo,
-                                                  isCreator: false,
-                                                  subText: ref.watch(
-                                                                  systemProvider)
-                                                              is UserSystemModel &&
-                                                          (ref.watch(systemProvider)
-                                                                      as UserSystemModel)
-                                                                  .system_language ==
-                                                              'kr'
-                                                      ? '${dateFormatKO.format(DateTime.parse(model.created_time))} 신청'
-                                                      : '${dateFormatUS.format(DateTime.parse(model.created_time))} Request',
-                                                  introductions: const [],
-                                                  onTap: () {
-                                                    if (model.user.profile ==
-                                                        null) {
-                                                      return;
-                                                    }
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProfileViewScreen(
-                                                          userId: model.user.id,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              SvgPicture.asset(
-                                                'assets/icons/ic_chevron_right_line_24.svg',
-                                                width: 24,
-                                                height: 24,
-                                                colorFilter:
-                                                    const ColorFilter.mode(
-                                                  kColorContentWeakest,
-                                                  BlendMode.srcIn,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 8,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    onTapReject(model);
-                                                  },
-                                                  child: OutlinedButtonWidget(
-                                                    text:
-                                                        'adminMemberScreen.request.decline'
-                                                            .tr(),
-                                                    isEnable: true,
-                                                    height: 44,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    onTapApprove(model);
-                                                  },
-                                                  child: FilledButtonWidget(
-                                                    text:
-                                                        'adminMemberScreen.request.accept'
-                                                            .tr(),
-                                                    isEnable: true,
-                                                    height: 44,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    if (index != requests.length - 1)
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                  ],
-                                ))
-                            .toList()
-                    ],
+            // 참여 대기자
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'adminMemberScreen.request.title'.tr(),
+                  style: getTsHeading18(context).copyWith(
+                    color: kColorContentDefault,
                   ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                if (requests.isEmpty) _buildEmptyCard(context),
+                if (requests.isNotEmpty)
+                  ...requests
+                      .mapIndexed((index, model) => Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  top: 8,
+                                  left: 16,
+                                  bottom: 16,
+                                  right: 16,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: kColorBgDefault,
+                                  border: Border.all(
+                                    width: 1,
+                                    color: kColorBorderDefalut,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: ProfileListWithSubtextWidget(
+                                            userNationalityModel:
+                                                model.user.user_nationality[0],
+                                            name: model.user.profile!.nick_name,
+                                            profilePath: model
+                                                .user.profile!.profile_photo,
+                                            isCreator: false,
+                                            subText: ref.watch(systemProvider)
+                                                        is UserSystemModel &&
+                                                    (ref.watch(systemProvider)
+                                                                as UserSystemModel)
+                                                            .system_language ==
+                                                        'kr'
+                                                ? '${dateFormatKO.format(DateTime.parse(model.created_time))} 신청'
+                                                : '${dateFormatUS.format(DateTime.parse(model.created_time))} Request',
+                                            introductions: const [],
+                                            onTap: () {
+                                              if (model.user.profile == null) {
+                                                return;
+                                              }
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileViewScreen(
+                                                    userId: model.user.id,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/icons/ic_chevron_right_line_24.svg',
+                                          width: 24,
+                                          height: 24,
+                                          colorFilter: const ColorFilter.mode(
+                                            kColorContentWeakest,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              onTapReject(model);
+                                            },
+                                            child: OutlinedButtonWidget(
+                                              text:
+                                                  'adminMemberScreen.request.decline'
+                                                      .tr(),
+                                              isEnable: true,
+                                              height: 44,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              onTapApprove(model);
+                                            },
+                                            child: FilledButtonWidget(
+                                              text:
+                                                  'adminMemberScreen.request.accept'
+                                                      .tr(),
+                                              isEnable: true,
+                                              height: 44,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (index != requests.length - 1)
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                            ],
+                          ))
+                      .toList()
+              ],
+            ),
 
             const SizedBox(
               height: 40,
