@@ -67,8 +67,6 @@ class _PaginationListViewState<T extends IModelWithId>
         widget.scrollUp != null) {
       // 스크롤 Up 시
       widget.scrollUp!();
-      // XXX: 모임 데이터 refetch
-      ref.read(widget.provider.notifier).paginate(forceRefetch: true);
     }
     if (controller.position.userScrollDirection == ScrollDirection.reverse &&
         widget.scrollDown != null) {
@@ -92,7 +90,6 @@ class _PaginationListViewState<T extends IModelWithId>
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(widget.provider);
-
     // 완전 처음 로딩일때
     if (state is CursorPaginationLoading) {
       return const Center(

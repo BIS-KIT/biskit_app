@@ -8,6 +8,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/common/view/photo_view_screen.dart';
@@ -25,6 +26,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/utils/date_util.dart';
 
@@ -61,6 +63,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   @override
   void initState() {
     super.initState();
+    logger.d('chatRoomUid: ${widget.chatRoomUid}');
+    if (widget.chatRoomUid.isEmpty) return;
     scrollController = ScrollController();
     scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addObserver(this);
@@ -69,9 +73,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
   initFetchData() async {
+    context.loaderOverlay.show();
     await fetchChatRoom();
     await fetchMeetUp();
     await fetchBlockUsers();
+    if (!mounted) return;
+    context.loaderOverlay.hide();
     setState(() {});
   }
 
@@ -236,6 +243,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             FieldValue.arrayRemove([(userState as UserModel).id]),
       },
     );
+    logger.d('chatRoomUid: ${widget.chatRoomUid}, disconnected');
   }
 
   @override
@@ -243,7 +251,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     WidgetsBinding.instance.removeObserver(this);
     textEditingController.dispose();
     scrollController.dispose();
-    disConnectChatRoom();
     super.dispose();
   }
 
@@ -470,315 +477,337 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   @override
   Widget build(BuildContext context) {
     userState = ref.watch(userMeProvider);
-    return DefaultLayout(
-      title: chatRoomModel == null ? '' : chatRoomModel!.title,
-      onTapLeading: () {
+    return WillPopScope(
+      onWillPop: () async {
         disConnectChatRoom();
-        Navigator.pop(context);
+        return true;
       },
-      shape: const Border(
-        bottom: BorderSide(
-          color: kColorBorderDefalut,
-          width: 1,
-        ),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            viewBottomSheet();
+      child: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.velocity.pixelsPerSecond.dx > 50) {
+            disConnectChatRoom();
+            Navigator.pop(context);
+          }
+        },
+        child: DefaultLayout(
+          title: chatRoomModel == null ? '' : chatRoomModel!.title,
+          onTapLeading: () {
+            disConnectChatRoom();
+            Navigator.pop(context);
           },
-          child: Container(
-            width: 44,
-            height: 44,
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.only(right: 10),
-            child: SvgPicture.asset(
-              'assets/icons/ic_more_horiz_line_24.svg',
-              width: 24,
-              height: 24,
+          shape: const Border(
+            bottom: BorderSide(
+              color: kColorBorderDefalut,
+              width: 1,
             ),
           ),
-        ),
-      ],
-      child: userState != null &&
-              userState is UserModel &&
-              chatRoomModel != null
-          ? Stack(
-              children: [
-                Container(
-                  color: kColorBgElevation2,
-                  child: Column(
-                    children: [
-                      if (blockUserIds != null)
-                        Expanded(
-                          child: StreamBuilder(
-                            stream: ref
-                                .read(chatRepositoryProvider)
-                                .getChatMsgStream(
-                                  chatRoomUid: widget.chatRoomUid,
-                                  fromTimestamp: chatRoomModel!
-                                      .firstUserInfoList
-                                      .firstWhere((element) =>
-                                          element.userId ==
-                                          (userState as UserModel).id)
-                                      .firstJoinDate,
-                                  limit: _limit,
-                                  blockUserIds: blockUserIds!,
-                                ),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.data != null &&
-                                  snapshot.data!.isNotEmpty) {
-                                list = snapshot.data!;
-                                return ListView.builder(
-                                  controller: scrollController,
-                                  keyboardDismissBehavior:
-                                      ScrollViewKeyboardDismissBehavior.onDrag,
-                                  padding: const EdgeInsets.only(
-                                    left: 20,
-                                    right: 20,
-                                    top: 60,
-                                  ),
-                                  reverse: true,
-                                  itemCount: list.length,
-                                  itemBuilder: (context, index) {
-                                    ChatMsgModel chatMsgModel = list[index];
-                                    Widget widgetMsg = const Row();
-
-                                    double topPaddingSize = 16;
-                                    bool isProfileView = true;
-                                    bool isMsgTimeView = true;
-                                    bool isDayNoticeView = false;
-
-                                    if (index + 1 < list.length) {
-                                      // 이 후 메시지 값을 가져온다
-
-                                      // 1일 차이가 나는지 확인
-                                      if (getDayDifference(
-                                            list[index + 1].createDate.toDate(),
-                                            list[index].createDate.toDate(),
-                                          ).abs() >
-                                          0) {
-                                        isDayNoticeView = true;
-                                      } else {
-                                        isDayNoticeView = false;
-                                      }
-
-                                      if (list[index + 1].chatRowType ==
-                                              ChatRowType.message.name &&
-                                          list[index + 1].createUserId ==
-                                              list[index].createUserId) {
-                                        // 이전 메시지가 내가 쓴 메시지라면
-
-                                        if (getTimestampDifferenceMin(
-                                                    list[index + 1].createDate,
-                                                    list[index].createDate)
-                                                .abs() <
-                                            1) {
-                                          topPaddingSize = isDayNoticeView
-                                              ? 16
-                                              : 8; // 간격 줄이기
-                                          isProfileView = false; // 프로파일 가리기
-                                        }
-                                      }
-                                    }
-                                    if (index - 1 >= 0) {
-                                      // 이 전 메시지 값을 가져온다
-                                      if (list[index - 1].chatRowType ==
-                                              ChatRowType.message.name &&
-                                          list[index - 1].createUserId ==
-                                              list[index].createUserId) {
-                                        // 이전 메시지가 내가 쓴 메시지라면
-
-                                        if (getTimestampDifferenceMin(
-                                                    list[index - 1].createDate,
-                                                    list[index].createDate)
-                                                .abs() <
-                                            1) {
-                                          isMsgTimeView = false; // 채팅 시간 가리기
-                                        }
-                                      }
-                                    }
-
-                                    if (chatMsgModel.chatRowType ==
-                                        ChatRowType.message.name) {
-                                      if (chatMsgModel.createUserId ==
-                                          (userState as UserModel).id) {
-                                        // 나의 메시지
-                                        widgetMsg = _buildMyMsg(
-                                          context,
-                                          list[index],
-                                          topPaddingSize,
-                                          isMsgTimeView,
-                                        );
-                                      } else {
-                                        // 상대방 메시지
-                                        widgetMsg = _buildOtherMsg(
-                                          context,
-                                          list[index],
-                                          topPaddingSize,
-                                          isMsgTimeView,
-                                          isProfileView,
-                                        );
-                                      }
-                                    } else {
-                                      widgetMsg = _buildNotice(list[index],
-                                          (userState as UserModel).id);
-                                    }
-
-                                    // 제일 처음에 상단 여백을 제공
-
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        if (isDayNoticeView)
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 16,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                _buildNoticeBubble(
-                                                  '${dayFormat.format(getDateTimeByTimestamp(list[index].createDate))}요일',
-                                                  null,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        widgetMsg,
-                                      ],
-                                    );
-                                  },
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                          ),
-                        ),
-                      _buildInput(context, (userState as UserModel)),
-                    ],
-                  ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                viewBottomSheet();
+              },
+              child: Container(
+                width: 44,
+                height: 44,
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(right: 10),
+                child: SvgPicture.asset(
+                  'assets/icons/ic_more_horiz_line_24.svg',
+                  width: 24,
+                  height: 24,
                 ),
-                if (meetUpModel != null)
-                  // 모임카드
-                  GestureDetector(
-                    onTap: () {
-                      onTapMeetupCard();
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        top: 8,
-                        left: 20,
-                        right: 20,
-                      ),
-                      padding: const EdgeInsets.only(
-                        top: 12,
-                        left: 16,
-                        bottom: 12,
-                        right: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: kColorBgDefault,
-                        border: Border.all(
-                          width: 1,
-                          color: kColorBorderDefalut,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                      ),
-                      child: Row(
+              ),
+            ),
+          ],
+          child: userState != null &&
+                  userState is UserModel &&
+                  chatRoomModel != null
+              ? Stack(
+                  children: [
+                    Container(
+                      color: kColorBgElevation2,
+                      child: Column(
                         children: [
-                          SvgPicture.asset(
-                            'assets/icons/ic_calendar_check_fill_24.svg',
-                            width: 20,
-                            height: 20,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentWeaker,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Text(
-                                  infoDateFormat1.format(
-                                    DateTime.parse(meetUpModel!.created_time),
-                                  ),
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  '·',
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeakest,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  msgDateFormat.format(
-                                    DateTime.parse(meetUpModel!.created_time),
-                                  ),
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeak,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  '·',
-                                  style: getTsBody14Rg(context).copyWith(
-                                    color: kColorContentWeakest,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    meetUpModel!.location,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: getTsBody14Rg(context).copyWith(
-                                      color: kColorContentWeak,
+                          if (blockUserIds != null)
+                            Expanded(
+                              child: StreamBuilder(
+                                stream: ref
+                                    .read(chatRepositoryProvider)
+                                    .getChatMsgStream(
+                                      chatRoomUid: widget.chatRoomUid,
+                                      fromTimestamp: chatRoomModel!
+                                          .firstUserInfoList
+                                          .firstWhere((element) =>
+                                              element.userId ==
+                                              (userState as UserModel).id)
+                                          .firstJoinDate,
+                                      limit: _limit,
+                                      blockUserIds: blockUserIds!,
                                     ),
-                                  ),
-                                ),
-                              ],
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data != null &&
+                                      snapshot.data!.isNotEmpty) {
+                                    list = snapshot.data!;
+                                    return ListView.builder(
+                                      controller: scrollController,
+                                      keyboardDismissBehavior:
+                                          ScrollViewKeyboardDismissBehavior
+                                              .onDrag,
+                                      padding: const EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        top: 60,
+                                      ),
+                                      reverse: true,
+                                      itemCount: list.length,
+                                      itemBuilder: (context, index) {
+                                        ChatMsgModel chatMsgModel = list[index];
+                                        Widget widgetMsg = const Row();
+
+                                        double topPaddingSize = 16;
+                                        bool isProfileView = true;
+                                        bool isMsgTimeView = true;
+                                        bool isDayNoticeView = false;
+
+                                        if (index + 1 < list.length) {
+                                          // 이 후 메시지 값을 가져온다
+
+                                          // 1일 차이가 나는지 확인
+                                          if (getDayDifference(
+                                                list[index + 1]
+                                                    .createDate
+                                                    .toDate(),
+                                                list[index].createDate.toDate(),
+                                              ).abs() >
+                                              0) {
+                                            isDayNoticeView = true;
+                                          } else {
+                                            isDayNoticeView = false;
+                                          }
+
+                                          if (list[index + 1].chatRowType ==
+                                                  ChatRowType.message.name &&
+                                              list[index + 1].createUserId ==
+                                                  list[index].createUserId) {
+                                            // 이전 메시지가 내가 쓴 메시지라면
+
+                                            if (getTimestampDifferenceMin(
+                                                        list[index + 1]
+                                                            .createDate,
+                                                        list[index].createDate)
+                                                    .abs() <
+                                                1) {
+                                              topPaddingSize = isDayNoticeView
+                                                  ? 16
+                                                  : 8; // 간격 줄이기
+                                              isProfileView = false; // 프로파일 가리기
+                                            }
+                                          }
+                                        }
+                                        if (index - 1 >= 0) {
+                                          // 이 전 메시지 값을 가져온다
+                                          if (list[index - 1].chatRowType ==
+                                                  ChatRowType.message.name &&
+                                              list[index - 1].createUserId ==
+                                                  list[index].createUserId) {
+                                            // 이전 메시지가 내가 쓴 메시지라면
+
+                                            if (getTimestampDifferenceMin(
+                                                        list[index - 1]
+                                                            .createDate,
+                                                        list[index].createDate)
+                                                    .abs() <
+                                                1) {
+                                              isMsgTimeView =
+                                                  false; // 채팅 시간 가리기
+                                            }
+                                          }
+                                        }
+
+                                        if (chatMsgModel.chatRowType ==
+                                            ChatRowType.message.name) {
+                                          if (chatMsgModel.createUserId ==
+                                              (userState as UserModel).id) {
+                                            // 나의 메시지
+                                            widgetMsg = _buildMyMsg(
+                                              context,
+                                              list[index],
+                                              topPaddingSize,
+                                              isMsgTimeView,
+                                            );
+                                          } else {
+                                            // 상대방 메시지
+                                            widgetMsg = _buildOtherMsg(
+                                              context,
+                                              list[index],
+                                              topPaddingSize,
+                                              isMsgTimeView,
+                                              isProfileView,
+                                            );
+                                          }
+                                        } else {
+                                          widgetMsg = _buildNotice(list[index],
+                                              (userState as UserModel).id);
+                                        }
+
+                                        // 제일 처음에 상단 여백을 제공
+
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            if (isDayNoticeView)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 16,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    _buildNoticeBubble(
+                                                      '${dayFormat.format(getDateTimeByTimestamp(list[index].createDate))}요일',
+                                                      null,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            widgetMsg,
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          SvgPicture.asset(
-                            'assets/icons/ic_chevron_right_line_24.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentWeakest,
-                              BlendMode.srcIn,
-                            ),
-                          ),
+                          _buildInput(context, (userState as UserModel)),
                         ],
                       ),
                     ),
-                  ),
-              ],
-            )
-          : Container(),
+                    if (meetUpModel != null)
+                      // 모임카드
+                      GestureDetector(
+                        onTap: () {
+                          onTapMeetupCard();
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                            top: 8,
+                            left: 20,
+                            right: 20,
+                          ),
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            left: 16,
+                            bottom: 12,
+                            right: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: kColorBgDefault,
+                            border: Border.all(
+                              width: 1,
+                              color: kColorBorderDefalut,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/ic_calendar_check_fill_24.svg',
+                                width: 20,
+                                height: 20,
+                                colorFilter: const ColorFilter.mode(
+                                  kColorContentWeaker,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      infoDateFormat1.format(
+                                        DateTime.parse(
+                                            meetUpModel!.created_time),
+                                      ),
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeak,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      '·',
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeakest,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      msgDateFormat.format(
+                                        DateTime.parse(
+                                            meetUpModel!.created_time),
+                                      ),
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeak,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      '·',
+                                      style: getTsBody14Rg(context).copyWith(
+                                        color: kColorContentWeakest,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        meetUpModel!.location,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: getTsBody14Rg(context).copyWith(
+                                          color: kColorContentWeak,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              SvgPicture.asset(
+                                'assets/icons/ic_chevron_right_line_24.svg',
+                                width: 24,
+                                height: 24,
+                                colorFilter: const ColorFilter.mode(
+                                  kColorContentWeakest,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                )
+              : Container(),
+        ),
+      ),
     );
   }
 
