@@ -50,11 +50,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
 
     UserSystemModel? userSystem = await ref
         .read(settingRepositoryProvider)
-        .getUserSystem(userId: (ref.watch(userMeProvider) as UserModel).id);
-
-    // XXX: 아래 코드로 하면 문제가 되는 것 같음
-    // String selectedLang =
-    //     (ref.watch(systemProvider) as UserSystemModel).system_language;
+        .getUserSystem(userId: (ref.read(userMeProvider) as UserModel).id);
 
     return [
       MeetUpFilterGroup(
@@ -214,6 +210,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
 
   saveFilter({
     int? totalCount,
+    bool? isHomeTagAndTopic = false,
     required List<MeetUpFilterGroup> filterGroupList,
     required bool isSelected,
   }) async {
@@ -222,8 +219,9 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       filterGroupList: filterGroupList,
       isFilterSelected: isSelected,
     );
-
-    await paginate();
+    if (isHomeTagAndTopic == false) {
+      await paginate();
+    }
   }
 
   setOrderBy(MeetUpOrderState meetUpOrderState) async {
@@ -260,6 +258,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     await saveFilter(
       filterGroupList: filterGroupList,
       isSelected: true,
+      isHomeTagAndTopic: true,
       totalCount: await getMeetingsCount(filterGroupList),
     );
   }

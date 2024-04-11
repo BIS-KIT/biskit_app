@@ -1,9 +1,9 @@
-import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final systemProvider =
     StateNotifierProvider<SystemStateNotifier, UserSystemModelBase?>((ref) {
@@ -24,10 +24,9 @@ class SystemStateNotifier extends StateNotifier<UserSystemModelBase?> {
   }
   Future<void> getUserSystem() async {
     try {
-      UserModelBase? userState = ref.watch(userMeProvider);
       UserSystemModel? res =
           await ref.read(settingRepositoryProvider).getUserSystem(
-                userId: (userState as UserModel).id,
+                userId: (ref.read(userMeProvider) as UserModel).id,
               );
       state = res;
     } catch (e) {
