@@ -68,7 +68,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void onTapCategory(TopicModel topicModel) {
-    ref.read(rootProvider.notifier).onTapBottomNav(index: 1);
+    ref.read(rootProvider.notifier).onTapBottomNav(
+          index: 1,
+          isLoading: true,
+        );
     ref.read(meetUpFilterProvider.notifier).onTapTopicAndTag(
           type: MeetUpFilterType.topic,
           id: topicModel.id,
@@ -76,7 +79,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void onTapTag(TagModel tagModel) {
-    ref.read(rootProvider.notifier).onTapBottomNav(index: 1);
+    ref.read(rootProvider.notifier).onTapBottomNav(index: 1, isLoading: true);
     ref.read(meetUpFilterProvider.notifier).onTapTopicAndTag(
           type: MeetUpFilterType.tag,
           id: tagModel.id,

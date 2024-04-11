@@ -1,3 +1,4 @@
+import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
@@ -35,9 +36,13 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
   }
 
   init() async {
-    state = state.copyWith(
-      filterGroupList: await getInitFixFilterGroupList(),
-    );
+    if (ref.watch(rootProvider).isLoading == true) {
+      return;
+    } else {
+      state = state.copyWith(
+        filterGroupList: await getInitFixFilterGroupList(),
+      );
+    }
   }
 
   Future<List<MeetUpFilterGroup>> getInitFixFilterGroupList() async {
@@ -214,6 +219,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
 
   saveFilter({
     int? totalCount,
+    bool? isHomeTagAndTopic = false,
     required List<MeetUpFilterGroup> filterGroupList,
     required bool isSelected,
   }) async {
@@ -222,8 +228,9 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       filterGroupList: filterGroupList,
       isFilterSelected: isSelected,
     );
-
-    await paginate();
+    if (isHomeTagAndTopic == false) {
+      await paginate();
+    }
   }
 
   setOrderBy(MeetUpOrderState meetUpOrderState) async {
@@ -260,6 +267,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     await saveFilter(
       filterGroupList: filterGroupList,
       isSelected: true,
+      isHomeTagAndTopic: true,
       totalCount: await getMeetingsCount(filterGroupList),
     );
   }

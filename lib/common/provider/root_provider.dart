@@ -22,6 +22,8 @@ class RootStateNotifier extends StateNotifier<RootState> {
           RootState(
             scafoldBackgroundColor: kColorBgElevation1,
             index: 0,
+            // 홈에서 태그나 토픽 선택해서 탐색 탭으로 넘어가는 경우 = true
+            isLoading: false,
           ),
         ) {
     //
@@ -77,6 +79,7 @@ class RootStateNotifier extends StateNotifier<RootState> {
 
   void onTapBottomNav({
     required final int index,
+    final bool isLoading = false,
     final Color color = kColorBgDefault,
   }) {
     ref.read(userMeProvider.notifier).getMe();
@@ -98,6 +101,7 @@ class RootStateNotifier extends StateNotifier<RootState> {
     state = state.copyWith(
       index: index,
       scafoldBackgroundColor: scafoldColor,
+      isLoading: isLoading,
     );
     // tabController.animateTo(index);
     // tabListener(index);
@@ -113,19 +117,23 @@ class RootStateNotifier extends StateNotifier<RootState> {
 class RootState {
   final Color scafoldBackgroundColor;
   final int index;
+  final bool? isLoading;
   RootState({
     required this.scafoldBackgroundColor,
     required this.index,
+    required this.isLoading,
   });
 
   RootState copyWith({
     Color? scafoldBackgroundColor,
     int? index,
+    bool? isLoading,
   }) {
     return RootState(
       scafoldBackgroundColor:
           scafoldBackgroundColor ?? this.scafoldBackgroundColor,
       index: index ?? this.index,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

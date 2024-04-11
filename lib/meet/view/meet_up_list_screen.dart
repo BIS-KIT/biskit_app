@@ -2,6 +2,7 @@ import 'package:biskit_app/common/components/chip_widget.dart';
 import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
@@ -71,6 +72,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   @override
   Widget build(BuildContext context) {
     final filterState = ref.watch(meetUpFilterProvider);
+    final rootState = ref.watch(rootProvider);
     return GestureDetector(
       onTap: () {
         if (isPopupMenuVisible) {
@@ -99,7 +101,10 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                 _buildFilter(),
 
                 // List
-                _buildList(context, filterState),
+                if (rootState.isLoading == false ||
+                    (rootState.isLoading == true &&
+                        filterState.isFilterSelected))
+                  _buildList(context, filterState)
               ],
             ),
             _buildPopUpMenu(context),
