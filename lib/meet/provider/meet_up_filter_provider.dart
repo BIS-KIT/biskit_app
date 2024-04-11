@@ -1,4 +1,3 @@
-import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/model/meet_up_list_order.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
@@ -7,7 +6,9 @@ import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
-import 'package:biskit_app/setting/provider/system_provider.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,13 +35,9 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
   }
 
   init() async {
-    if (ref.read(rootProvider).isLoading == true) {
-      return;
-    } else {
-      state = state.copyWith(
-        filterGroupList: await getInitFixFilterGroupList(),
-      );
-    }
+    state = state.copyWith(
+      filterGroupList: await getInitFixFilterGroupList(),
+    );
   }
 
   Future<List<MeetUpFilterGroup>> getInitFixFilterGroupList() async {
@@ -51,8 +48,9 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     List<TagModel> tagList =
         await ref.read(createMeetUpProvider.notifier).getTags(isCustom: false);
 
-    String selectedLang =
-        (ref.watch(systemProvider) as UserSystemModel).system_language;
+    UserSystemModel? userSystem = await ref
+        .read(settingRepositoryProvider)
+        .getUserSystem(userId: (ref.read(userMeProvider) as UserModel).id);
 
     return [
       MeetUpFilterGroup(
@@ -168,7 +166,8 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
         filterList: topicList
             .map(
               (e) => MeetUpFilterModel(
-                text: selectedLang == 'kr' ? e.kr_name : e.en_name,
+                text:
+                    userSystem?.system_language == 'kr' ? e.kr_name : e.en_name,
                 isSeleted: false,
                 value: e.id.toString(),
               ),
@@ -182,7 +181,8 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
         filterList: tagList
             .map(
               (e) => MeetUpFilterModel(
-                text: selectedLang == 'kr' ? e.kr_name : e.en_name,
+                text:
+                    userSystem?.system_language == 'kr' ? e.kr_name : e.en_name,
                 isSeleted: false,
                 value: e.id.toString(),
               ),
@@ -231,7 +231,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     await paginate();
   }
 
-  Future<void> onTapTopicAndTag({
+  void onTapTopicAndTag({
     required MeetUpFilterType type,
     required int id,
   }) async {
