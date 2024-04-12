@@ -11,6 +11,8 @@ import 'package:biskit_app/common/view/home_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_list_screen.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+import 'package:biskit_app/setting/model/user_system_model.dart';
+import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/view/my_page_screen.dart';
@@ -51,6 +53,12 @@ class _RootTabState extends ConsumerState<RootTab>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    updateUserOSLanguage();
+  }
+
+  @override
   void dispose() {
     // controller.removeListener(tabListener);
     super.dispose();
@@ -58,6 +66,20 @@ class _RootTabState extends ConsumerState<RootTab>
 
   void tabListener() {
     // ref.read(rootProvider.notifier).tabListener(controller.index);
+  }
+
+  updateUserOSLanguage() async {
+    UserSystemModelBase? systemState = ref.watch(systemProvider);
+    try {
+      if (systemState is UserSystemModel) {
+        await ref.watch(systemProvider.notifier).updateUserOSLanguage(
+              systemId: systemState.id,
+              selectedLang: context.locale.languageCode == 'en' ? 'en' : 'kr',
+            );
+      }
+    } finally {
+      setState(() {});
+    }
   }
 
   @override
