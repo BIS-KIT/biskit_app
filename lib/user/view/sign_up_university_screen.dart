@@ -1,9 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loader_overlay/loader_overlay.dart';
-
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/components/univ_list_widget.dart';
@@ -20,6 +15,10 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/user/model/sign_up_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/model/university_student_status_model.dart';
 
@@ -215,9 +214,12 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
       apiResModel = await ref.read(authRepositoryProvider).signUpEmail(
             widget.signUpModel.copyWith(
               university_id: universitySet!.universityModel.id,
-              department: universitySet!.universityStudentStatusModel.kname,
-              education_status:
-                  universitySet!.universityGraduateStatusModel.kname,
+              department: context.locale.languageCode == 'en'
+                  ? universitySet!.universityStudentStatusModel.ename
+                  : universitySet!.universityStudentStatusModel.kname,
+              education_status: context.locale.languageCode == 'en'
+                  ? universitySet!.universityGraduateStatusModel.ename
+                  : universitySet!.universityGraduateStatusModel.kname,
             ),
           );
       if (!mounted) return;
@@ -293,7 +295,11 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        universitySet!.universityModel.kr_name,
+                                        context.locale.languageCode == 'en'
+                                            ? universitySet!
+                                                .universityModel.en_name
+                                            : universitySet!
+                                                .universityModel.kr_name,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -326,8 +332,13 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        universitySet!
-                                            .universityStudentStatusModel.kname,
+                                        context.locale.languageCode == 'en'
+                                            ? universitySet!
+                                                .universityStudentStatusModel
+                                                .ename
+                                            : universitySet!
+                                                .universityStudentStatusModel
+                                                .kname,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),
@@ -360,9 +371,13 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        universitySet!
-                                            .universityGraduateStatusModel
-                                            .kname,
+                                        context.locale.countryCode == 'en'
+                                            ? universitySet!
+                                                .universityGraduateStatusModel
+                                                .ename
+                                            : universitySet!
+                                                .universityGraduateStatusModel
+                                                .kname,
                                         style: getTsBody16Rg(context).copyWith(
                                           color: kColorContentWeak,
                                         ),

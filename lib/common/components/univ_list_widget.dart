@@ -1,9 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/common/components/custom_loading.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-
 import 'package:biskit_app/common/components/check_circle.dart';
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/components/search_bar_widget.dart';
@@ -11,6 +8,9 @@ import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_model.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
 import '../const/colors.dart';
 
@@ -33,7 +33,6 @@ class _UnivListWidgetState extends State<UnivListWidget> {
   UniversityModel? selectedModel;
   bool isLoading = false;
   final TextEditingController searchBarController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -88,14 +87,17 @@ class _UnivListWidgetState extends State<UnivListWidget> {
   }
 
   onChanged(String value) {
+    String languageCode = context.locale.languageCode;
+
     if (value.isEmpty) {
       setState(() {
         tempList = univerisyList;
       });
     } else {
       List<UniversityModel> searchList = univerisyList
-          .where((n) => '${n.en_name.toLowerCase()} ${n.kr_name.toLowerCase()}'
-              .contains(value.toLowerCase()))
+          .where((n) =>
+              '${(languageCode == 'en' ? n.en_name : n.kr_name).toLowerCase()} ${(languageCode == 'en' ? n.en_name : n.kr_name).toLowerCase()}'
+                  .contains(value.toLowerCase()))
           .toList();
       setState(() {
         tempList = searchList;
@@ -113,7 +115,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
             SearchBarWidget(
               controller: searchBarController,
               onChanged: (value) {},
-              hintText: '학교 검색',
+              hintText: 'selectUnivBottomSheet.search'.tr(),
             ),
             Expanded(
                 child: isLoading
@@ -143,7 +145,9 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                                       onTapTile(e);
                                     },
                                     centerWidget: Text(
-                                      e.kr_name,
+                                      context.locale.languageCode == 'en'
+                                          ? e.en_name
+                                          : e.kr_name,
                                       style: getTsBody16Rg(context).copyWith(
                                         color: kColorContentWeak,
                                       ),
@@ -168,7 +172,7 @@ class _UnivListWidgetState extends State<UnivListWidget> {
                   // onTapSelectUnivStudentStatus();
                 },
                 child: FilledButtonWidget(
-                  text: '다음',
+                  text: 'selectUnivBottomSheet.next'.tr(),
                   isEnable: selectedModel != null,
                 ),
               ),
