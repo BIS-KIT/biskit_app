@@ -124,7 +124,10 @@ class _RootTabState extends ConsumerState<RootTab>
                 if (userState != null &&
                     userState is UserModel &&
                     userState.profile != null &&
-                    userState.profile!.student_verification == null) {
+                    (userState.profile!.student_verification == null ||
+                        userState.profile!.student_verification!
+                                .verification_status ==
+                            VerificationStatus.REJECTED.name)) {
                   // 인증을 안했을때
                   showConfirmModal(
                     context: context,
@@ -153,9 +156,12 @@ class _RootTabState extends ConsumerState<RootTab>
                 } else if (userState != null &&
                     userState is UserModel &&
                     userState.profile != null &&
-                    userState.profile!.student_verification!
-                            .verification_status ==
-                        VerificationStatus.PENDING.name) {
+                    (userState.profile!.student_verification!
+                                .verification_status ==
+                            VerificationStatus.PENDING.name ||
+                        userState.profile!.student_verification!
+                                .verification_status ==
+                            VerificationStatus.REJECTED.name)) {
                   showDefaultModal(
                     context: context,
                     title: 'homeScreen.pendingModal.title'.tr(),
@@ -219,7 +225,10 @@ class _RootTabState extends ConsumerState<RootTab>
           if (userState != null &&
               userState is UserModel &&
               userState.profile != null &&
-              userState.profile!.student_verification == null &&
+              (userState.profile!.student_verification == null ||
+                  userState
+                          .profile!.student_verification!.verification_status ==
+                      VerificationStatus.REJECTED.name) &&
               isFirstToolTip)
             Column(
               mainAxisSize: MainAxisSize.min,

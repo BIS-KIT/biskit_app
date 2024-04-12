@@ -8,7 +8,6 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/profile/components/language_card_widget.dart';
 import 'package:biskit_app/profile/components/use_language_modal_widget.dart';
 import 'package:biskit_app/profile/model/student_verification_model.dart';
@@ -142,8 +141,9 @@ class ProfileCardWidget extends StatelessWidget {
                       if (isMe) {
                         StudentVerificationModel? studentVerification =
                             userState.profile!.student_verification;
-                        if (studentVerification != null) {
-                          logger.d(studentVerification.toString());
+                        if (studentVerification != null &&
+                            studentVerification.verification_status !=
+                                VerificationStatus.REJECTED.name) {
                           if (studentVerification.verification_status ==
                               VerificationStatus.APPROVE.name) {
                             return Column(
