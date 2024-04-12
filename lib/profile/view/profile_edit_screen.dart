@@ -630,7 +630,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     ),
                   ),
                   child: Text(
-                    'availableLang.noLang'.tr(),
+                    'editProfileScreen.availableLang.noLang'.tr(),
                     textAlign: TextAlign.center,
                     style: getTsBody16Rg(context).copyWith(
                       color: kColorContentError,
