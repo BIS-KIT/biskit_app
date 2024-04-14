@@ -782,7 +782,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   Widget _buildBottomButton() {
     if (meetUpDetailModel == null) return Container();
     if (meetUpDetailModel!.is_active && userState != null) {
-      if (userState!.profile!.student_verification == null) {
+      if (userState!.profile!.student_verification == null ||
+          userState!.profile!.student_verification!.verification_status ==
+              VerificationStatus.REJECTED.name) {
         // 학생증 인증 안한 상태
         return GestureDetector(
           onTap: () async {
