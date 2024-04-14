@@ -1,15 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:biskit_app/profile/model/student_verification_model.dart';
-import 'package:biskit_app/user/model/user_model.dart';
-import 'package:biskit_app/user/provider/user_me_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:photo_manager/photo_manager.dart';
-
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/tooltip_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
@@ -22,7 +13,16 @@ import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/photo_manager_screen.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/model/student_card_model.dart';
+import 'package:biskit_app/profile/model/student_verification_model.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:biskit_app/user/model/user_model.dart';
+import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class ProfileIdConfirmScreen extends ConsumerStatefulWidget {
   static String get routeName => 'profileIdConfirm';
@@ -70,6 +70,7 @@ class _ProfileIdConfirmScreenState
 
   // 인증하기
   onTapAuthenticate() async {
+    context.loaderOverlay.show();
     final UserModelBase? userModelBase = ref.watch(userMeProvider);
     String? studentCardPhoto = await studentCardPhotoUpload();
 
@@ -86,6 +87,8 @@ class _ProfileIdConfirmScreenState
         Navigator.pop(context);
       }
     }
+    if (!mounted) return;
+    context.loaderOverlay.hide();
   }
 
   // 등록하기
@@ -110,14 +113,16 @@ class _ProfileIdConfirmScreenState
                   )
                 : widget.profileCreateModel!,
           );
-      if (!mounted) return;
-      context.loaderOverlay.hide();
     }
+
+    if (!mounted) return;
+    context.loaderOverlay.hide();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return DefaultLayout(
       title: '',
       leadingIconPath: widget.isEditor
@@ -212,7 +217,7 @@ class _ProfileIdConfirmScreenState
                             submit(false);
                           },
                           child: Text(
-                            '다음에 할게요',
+                            'verifyUnivScreen.later'.tr(),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorBorderStrong,
                             ),
@@ -225,23 +230,28 @@ class _ProfileIdConfirmScreenState
                   ),
                   widget.isEditor
                       ? GestureDetector(
-                          onTap: () {
-                            onTapAuthenticate();
+                          onTap: () async {
+                            await onTapAuthenticate();
                           },
                           child: FilledButtonWidget(
-                            text: '인증하기',
+                            text: 'verifyUnivScreen.verify'.tr(),
                             fontSize: FontSize.l,
                             isEnable: selectedPhotoModel != null,
                           ),
                         )
                       : GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            // context.loaderOverlay.show();
+
                             if (selectedPhotoModel != null) {
-                              submit(true);
+                              await submit(true);
                             }
+                            // if (mounted) {
+                            //   context.loaderOverlay.hide();
+                            // }
                           },
                           child: FilledButtonWidget(
-                            text: '작성 완료',
+                            text: 'verifyUnivScreen.done'.tr(),
                             fontSize: FontSize.l,
                             isEnable: selectedPhotoModel != null,
                           ),
@@ -282,7 +292,7 @@ class _ProfileIdConfirmScreenState
                   height: 24,
                 ),
                 Text(
-                  '학생증 올리기',
+                  'verifyUnivScreen.addIdCard.title'.tr(),
                   style: getTsHeading18(context).copyWith(
                     color: kColorContentOnBgPrimary,
                   ),
@@ -291,7 +301,7 @@ class _ProfileIdConfirmScreenState
                   height: 8,
                 ),
                 Text(
-                  '(모바일)학생증 또는 학적증명자료',
+                  'verifyUnivScreen.addIdCard.subtitle'.tr(),
                   style: getTsBody14Rg(context).copyWith(
                     color: kColorContentOnBgPrimary,
                   ),
@@ -306,13 +316,13 @@ class _ProfileIdConfirmScreenState
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '실명, 학교, 학과, 학번',
+                'verifyUnivScreen.addIdCard.description1'.tr(),
                 style: getTsBody14Sb(context).copyWith(
                   color: kColorContentWeaker,
                 ),
               ),
               Text(
-                '이 정확히 나오도록 올려주세요',
+                'verifyUnivScreen.addIdCard.description2'.tr(),
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorContentWeaker,
                 ),
@@ -332,7 +342,7 @@ class _ProfileIdConfirmScreenState
           height: 8,
         ),
         Text(
-          '학교 인증을 하면\n모임에 참여할 수 있어요',
+          'verifyUnivScreen.title'.tr(),
           style: getTsHeading24(context).copyWith(
             color: kColorContentDefault,
           ),
@@ -342,8 +352,7 @@ class _ProfileIdConfirmScreenState
         ),
         TooltipWidget(
           preferredDirection: AxisDirection.down,
-          tooltipText:
-              '비스킷은 안전한 모임을 위해 학생 인증된 사용자 대상으로 모임참여를 허용하고 있어요. 타인의 학생증을 도용시 서비스 이용이 제한되며 형사처벌의 대상이 될 수 있습니다.',
+          tooltipText: 'verifyUnivScreen.reason.description'.tr(),
           child: Row(
             children: [
               SvgPicture.asset(
@@ -359,7 +368,7 @@ class _ProfileIdConfirmScreenState
                 width: 4,
               ),
               Text(
-                '학생인증이 왜 필요한가요?',
+                'verifyUnivScreen.reason.label'.tr(),
                 style: getTsBody14Rg(context).copyWith(
                   color: kColorContentWeaker,
                 ),
