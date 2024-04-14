@@ -1,8 +1,6 @@
 import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/utils/GlobalVariable.dart';
-import 'package:biskit_app/meet/model/meet_up_model.dart';
-import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/setting/view/announcement_screen.dart';
 import 'package:biskit_app/setting/view/warning_history_screen.dart';
@@ -31,20 +29,18 @@ Future requestPermission() async {
 }
 
 void handlePageRouting(Map payload, final Ref ref) async {
-  MeetUpModel? meetUpModel;
+  // if (payload['meeting_id'] != null) {
+  //   meetUpModel = await ref
+  //       .read(meetUpRepositoryProvider)
+  //       .getMeeting(int.parse(payload['meeting_id']));
+  // }
 
   if (payload['meeting_id'] != null) {
-    meetUpModel = await ref
-        .read(meetUpRepositoryProvider)
-        .getMeeting(int.parse(payload['meeting_id']));
-  }
-
-  if (payload['meeting_id'] != null && meetUpModel != null) {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
         builder: (context) => MeetUpDetailScreen(
-          meetUpModel: meetUpModel!,
-          userModel: ref.watch(userMeProvider),
+          meetupId: int.parse(payload['meeting_id']),
+          userModel: ref.read(userMeProvider),
         ),
       ),
     );
@@ -61,7 +57,6 @@ void handlePageRouting(Map payload, final Ref ref) async {
       ),
     );
   } else if (payload['chat_id'] != null) {
-    logger.d('chat_id~~');
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
         builder: (context) => ChatScreen(chatRoomUid: payload['chat_id']),

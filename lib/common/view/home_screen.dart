@@ -495,7 +495,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => MeetUpDetailScreen(
-                            meetUpModel: homeState.meetings[0],
+                            meetupId: homeState.meetings[0].id,
                             userModel: ref.watch(userMeProvider),
                           ),
                         ),
@@ -518,7 +518,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => MeetUpDetailScreen(
-                              meetUpModel: homeState.meetings[index],
+                              meetupId: homeState.meetings[index].id,
                               userModel: ref.watch(userMeProvider),
                             ),
                           ),

@@ -152,7 +152,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         context,
         MaterialPageRoute(
           builder: (context) => MeetUpDetailScreen(
-            meetUpModel: meetUpModel!,
+            meetupId: meetUpModel!.id,
             userModel: ref.watch(userMeProvider),
           ),
         ));

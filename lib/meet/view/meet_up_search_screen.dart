@@ -147,7 +147,7 @@ class _MeetUpSearchScreenState extends ConsumerState<MeetUpSearchScreen>
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => MeetUpDetailScreen(
-                                      meetUpModel: state.data[index],
+                                      meetupId: state.data[index].id,
                                       userModel: ref.watch(userMeProvider),
                                     ),
                                   ),

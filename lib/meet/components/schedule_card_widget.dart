@@ -43,7 +43,7 @@ class ScheduleCardWidget extends ConsumerWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MeetUpDetailScreen(
-              meetUpModel: meetUpModel,
+              meetupId: meetUpModel.id,
               userModel: ref.watch(userMeProvider),
             ),
           ),
@@ -95,10 +95,7 @@ class ScheduleCardWidget extends ConsumerWidget {
                       Text(
                         getMeetUpDateStr(
                           meetUpDateStr: meetUpModel.meeting_time,
-                          dateFormat: context is UserSystemModel &&
-                                  (systemModel as UserSystemModel)
-                                          .system_language ==
-                                      'kr'
+                          dateFormat: context.locale.languageCode == 'ko'
                               ? dateFormatKO
                               : dateFormatUS,
                         ),
@@ -116,10 +113,7 @@ class ScheduleCardWidget extends ConsumerWidget {
                       Text(
                         meetUpModel.meeting_time.isEmpty
                             ? ''
-                            : systemModel is UserSystemModel &&
-                                    (systemModel as UserSystemModel)
-                                            .system_language ==
-                                        'kr'
+                            : context.locale.languageCode == 'ko'
                                 ? timeFormatKO.format(
                                     DateTime.parse(meetUpModel.meeting_time))
                                 : timeFormatUS.format(
