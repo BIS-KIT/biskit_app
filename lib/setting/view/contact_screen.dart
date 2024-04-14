@@ -4,7 +4,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
-import 'package:biskit_app/setting/view/announcement_screen.dart';
+import 'package:biskit_app/setting/view/notice_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -133,7 +133,7 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
                     rightCall: () async {
                       Navigator.pop(context);
                       Navigator.popAndPushNamed(
-                          context, AnnouncementScreen.routeName);
+                          context, NoticeScreen.routeName);
                     },
                     title: 'inquiryScreen.completeModal.title'.tr(),
                     rightBackgroundColor: kColorBgPrimary,

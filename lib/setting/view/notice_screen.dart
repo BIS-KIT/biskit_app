@@ -2,9 +2,9 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
-import 'package:biskit_app/setting/provider/notification_provider.dart';
-import 'package:biskit_app/setting/view/announcement_detail_screen.dart';
-import 'package:biskit_app/setting/view/write_announcement_screen.dart';
+import 'package:biskit_app/setting/provider/notice_provider.dart';
+import 'package:biskit_app/setting/view/notice_detail_screen.dart';
+import 'package:biskit_app/setting/view/write_notice_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,16 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AnnouncementScreen extends ConsumerStatefulWidget {
-  static String get routeName => 'announcement';
+class NoticeScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'notice';
 
-  const AnnouncementScreen({super.key});
+  const NoticeScreen({super.key});
 
   @override
-  ConsumerState<AnnouncementScreen> createState() => _AnnouncementScreenState();
+  ConsumerState<NoticeScreen> createState() => _NoticeScreenState();
 }
 
-class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
+class _NoticeScreenState extends ConsumerState<NoticeScreen> {
   final DateFormat dateFormat = DateFormat('yyyy.MM.dd', 'ko');
 
   @override
@@ -31,7 +31,7 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final noticeState = ref.watch(notificationProvider);
+    final noticeState = ref.watch(noticeProvider);
     final userState = ref.read(userMeProvider);
     return DefaultLayout(
       title: 'noticeScreen.header'.tr(),
@@ -48,7 +48,7 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const WriteAnnouncementScreen(),
+                  builder: (context) => const WriteNoticeScreen(),
                 ),
               );
             },
@@ -94,7 +94,7 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AnnouncementDetailScreen(
+                              builder: (context) => NoticeDetailScreen(
                                 notice: noticeState.notices[index],
                               ),
                             ),

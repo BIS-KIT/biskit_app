@@ -3,8 +3,8 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/setting/model/notice_model.dart';
-import 'package:biskit_app/setting/provider/notification_provider.dart';
-import 'package:biskit_app/setting/view/write_announcement_screen.dart';
+import 'package:biskit_app/setting/provider/notice_provider.dart';
+import 'package:biskit_app/setting/view/write_notice_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,27 +12,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AnnouncementDetailScreen extends ConsumerStatefulWidget {
+class NoticeDetailScreen extends ConsumerStatefulWidget {
   final NoticeModel notice;
-  const AnnouncementDetailScreen({
+  const NoticeDetailScreen({
     Key? key,
     required this.notice,
   }) : super(key: key);
 
   @override
-  ConsumerState<AnnouncementDetailScreen> createState() =>
-      _AnnouncementDetailScreenState();
+  ConsumerState<NoticeDetailScreen> createState() => _NoticeDetailScreenState();
 }
 
-class _AnnouncementDetailScreenState
-    extends ConsumerState<AnnouncementDetailScreen> {
+class _NoticeDetailScreenState extends ConsumerState<NoticeDetailScreen> {
   final DateFormat dateFormat = DateFormat('yyyy.MM.dd', 'ko');
 
   deleteNotice() async {
-    await ref.read(notificationProvider.notifier).deleteNotice(
+    await ref.read(noticeProvider.notifier).deleteNotice(
         noticeId: widget.notice.id, userId: widget.notice.user.id);
-    // await ref.read(settingRepositoryProvider).deleteNotice(
-    //     notice_id: widget.notice.id, user_id: widget.notice.user.id);
   }
 
   onTapMore() {
@@ -46,7 +42,7 @@ class _AnnouncementDetailScreenState
               bool isBack = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => WriteAnnouncementScreen(
+                  builder: (context) => WriteNoticeScreen(
                     isEditMode: true,
                     notice: widget.notice,
                   ),

@@ -4,7 +4,7 @@ import 'package:biskit_app/setting/model/notice_model.dart';
 import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final notificationProvider =
+final noticeProvider =
     StateNotifierProvider<NoticeListStateNotifier, NoticeListModelBase?>((ref) {
   return NoticeListStateNotifier(ref: ref);
 });

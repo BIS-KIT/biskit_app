@@ -3,28 +3,27 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/setting/model/notice_model.dart';
-import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/setting/provider/notice_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
-class WriteAnnouncementScreen extends ConsumerStatefulWidget {
+class WriteNoticeScreen extends ConsumerStatefulWidget {
   final bool isEditMode;
   final NoticeModel? notice;
-  const WriteAnnouncementScreen({
+  const WriteNoticeScreen({
     Key? key,
     this.isEditMode = false,
     this.notice,
   }) : super(key: key);
 
   @override
-  ConsumerState<WriteAnnouncementScreen> createState() =>
-      _WriteAnnouncementScreenState();
+  ConsumerState<WriteNoticeScreen> createState() => _WriteNoticeScreenState();
 }
 
-class _WriteAnnouncementScreenState
-    extends ConsumerState<WriteAnnouncementScreen> {
+class _WriteNoticeScreenState extends ConsumerState<WriteNoticeScreen> {
   late final FocusNode titleFocusNode;
   late final TextEditingController titleController;
   late final FocusNode contentFocusNode;
@@ -57,17 +56,17 @@ class _WriteAnnouncementScreenState
     super.dispose();
   }
 
-  void createNotice() async {
+  Future<void> createNotice() async {
     int userId = (ref.watch(userMeProvider) as UserModel).id;
     await ref
-        .read(settingRepositoryProvider)
-        .createNotice(title: title, content: content, user_id: userId);
+        .read(noticeProvider.notifier)
+        .createNotice(title: title, content: content, userId: userId);
   }
 
   void updateNotice() async {
-    await ref.read(settingRepositoryProvider).updateNotice(
-        notice_id: widget.notice!.id,
-        user_id: widget.notice!.user.id,
+    await ref.read(noticeProvider.notifier).updateNotice(
+        noticeId: widget.notice!.id,
+        userId: widget.notice!.user.id,
         title: title,
         content: content);
   }
@@ -92,11 +91,14 @@ class _WriteAnnouncementScreenState
           child: GestureDetector(
             onTap: () async {
               if (!isButtonEnable) return;
+              context.loaderOverlay.show();
               if (widget.isEditMode) {
                 updateNotice();
               } else {
-                createNotice();
+                await createNotice();
               }
+              if (!mounted) return;
+              context.loaderOverlay.hide();
               Navigator.pop(context, true);
             },
             child: Text(
