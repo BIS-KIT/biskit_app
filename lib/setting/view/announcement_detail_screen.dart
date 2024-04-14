@@ -3,7 +3,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/setting/model/notice_model.dart';
-import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/setting/provider/notification_provider.dart';
 import 'package:biskit_app/setting/view/write_announcement_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -27,9 +27,12 @@ class AnnouncementDetailScreen extends ConsumerStatefulWidget {
 class _AnnouncementDetailScreenState
     extends ConsumerState<AnnouncementDetailScreen> {
   final DateFormat dateFormat = DateFormat('yyyy.MM.dd', 'ko');
+
   deleteNotice() async {
-    await ref.read(settingRepositoryProvider).deleteNotice(
-        notice_id: widget.notice.id, user_id: widget.notice.user.id);
+    await ref.read(notificationProvider.notifier).deleteNotice(
+        noticeId: widget.notice.id, userId: widget.notice.user.id);
+    // await ref.read(settingRepositoryProvider).deleteNotice(
+    //     notice_id: widget.notice.id, user_id: widget.notice.user.id);
   }
 
   onTapMore() {

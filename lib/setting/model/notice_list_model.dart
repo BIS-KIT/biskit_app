@@ -2,11 +2,21 @@
 
 import 'dart:convert';
 
+import 'package:biskit_app/setting/model/notice_model.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:biskit_app/setting/model/notice_model.dart';
+abstract class NoticeListModelBase {}
 
-class NoticeListModel {
+class NoticeListModelError extends NoticeListModelBase {
+  final String message;
+  NoticeListModelError({
+    required this.message,
+  });
+}
+
+class NoticeListModelLoading extends NoticeListModelBase {}
+
+class NoticeListModel extends NoticeListModelBase {
   final List<NoticeModel> notices;
   final int total_count;
   NoticeListModel({

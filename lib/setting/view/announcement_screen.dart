@@ -2,7 +2,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
-import 'package:biskit_app/setting/repository/setting_repository.dart';
+import 'package:biskit_app/setting/provider/notification_provider.dart';
 import 'package:biskit_app/setting/view/announcement_detail_screen.dart';
 import 'package:biskit_app/setting/view/write_announcement_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -22,29 +22,17 @@ class AnnouncementScreen extends ConsumerStatefulWidget {
 }
 
 class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
-  NoticeListModel? noticeData;
   final DateFormat dateFormat = DateFormat('yyyy.MM.dd', 'ko');
 
   @override
   void initState() {
-    init();
     super.initState();
-  }
-
-  Future<void> init() async {
-    NoticeListModel? res =
-        await ref.read(settingRepositoryProvider).getNoticeList();
-    setState(() {
-      noticeData = res;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userMeProvider);
-    if (noticeData == null) {
-      init();
-    }
+    final noticeState = ref.watch(notificationProvider);
+    final userState = ref.read(userMeProvider);
     return DefaultLayout(
       title: 'noticeScreen.header'.tr(),
       shape: const Border(
@@ -54,18 +42,15 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
         ),
       ),
       actions: [
-        if (userState != null && userState is UserModel && userState.is_admin)
+        if (userState is UserModel && userState.is_admin)
           GestureDetector(
             onTap: () async {
-              final bool? refresh = await Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const WriteAnnouncementScreen(),
                 ),
               );
-              if (refresh == true) {
-                init();
-              }
             },
             behavior: HitTestBehavior.opaque,
             child: Container(
@@ -83,7 +68,7 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
         else
           Container(),
       ],
-      child: noticeData == null
+      child: noticeState == null
           ? Center(
               child: Text(
                 'noticeScreen.noNotice'.tr(),
@@ -91,80 +76,86 @@ class _AnnouncementScreenState extends ConsumerState<AnnouncementScreen> {
                     .copyWith(color: kColorContentWeakest),
               ),
             )
-          : ListView.builder(
-              itemCount: noticeData!.notices.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: kColorBorderWeak,
-                      ),
-                    ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () async {
-                      final bool? refresh = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AnnouncementDetailScreen(
-                            notice: noticeData!.notices[index],
+          : noticeState is NoticeListModel
+              ? ListView.builder(
+                  itemCount: noticeState.notices.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: kColorBorderWeak,
                           ),
                         ),
-                      );
-                      if (refresh == true) {
-                        init();
-                      }
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 20,
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  noticeData!.notices[index].title,
-                                  style: getTsBody16Rg(context)
-                                      .copyWith(color: kColorContentWeak),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  dateFormat.format(DateTime.parse(
-                                      noticeData!.notices[index].created_time)),
-                                  style: getTsBody14Rg(context)
-                                      .copyWith(color: kColorContentWeakest),
-                                ),
-                              ],
+                      child: GestureDetector(
+                        onTap: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AnnouncementDetailScreen(
+                                notice: noticeState.notices[index],
+                              ),
                             ),
+                          );
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
                           ),
-                          const SizedBox(
-                            width: 8,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      noticeState.notices[index].title,
+                                      style: getTsBody16Rg(context)
+                                          .copyWith(color: kColorContentWeak),
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      dateFormat.format(DateTime.parse(
+                                          noticeState
+                                              .notices[index].created_time)),
+                                      style: getTsBody14Rg(context).copyWith(
+                                          color: kColorContentWeakest),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              SvgPicture.asset(
+                                'assets/icons/ic_chevron_right_line_24.svg',
+                                width: 24,
+                                height: 24,
+                                colorFilter: const ColorFilter.mode(
+                                  kColorContentWeakest,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ],
                           ),
-                          SvgPicture.asset(
-                            'assets/icons/ic_chevron_right_line_24.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              kColorContentWeakest,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    );
+                  },
+                )
+              : Center(
+                  child: Text(
+                    'noticeScreen.noNotice'.tr(),
+                    style: getTsBody16Sb(context)
+                        .copyWith(color: kColorContentWeakest),
                   ),
-                );
-              },
-            ),
+                ),
     );
   }
 }
