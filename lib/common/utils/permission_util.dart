@@ -2,7 +2,7 @@ import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/utils/GlobalVariable.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
-import 'package:biskit_app/setting/view/announcement_screen.dart';
+import 'package:biskit_app/setting/view/notice_screen.dart';
 import 'package:biskit_app/setting/view/warning_history_screen.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -47,7 +47,7 @@ void handlePageRouting(Map payload, final Ref ref) async {
   } else if (payload['notice_id'] != null) {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
-        builder: (context) => const AnnouncementScreen(),
+        builder: (context) => const NoticeScreen(),
       ),
     );
   } else if (payload['report_id'] != null) {

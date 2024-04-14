@@ -1,9 +1,11 @@
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/setting/model/notice_model.dart';
 import 'package:biskit_app/setting/provider/notice_provider.dart';
+import 'package:biskit_app/setting/repository/setting_repository.dart';
 import 'package:biskit_app/setting/view/write_notice_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -13,11 +15,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NoticeDetailScreen extends ConsumerStatefulWidget {
-  final NoticeModel notice;
-  const NoticeDetailScreen({
+  final NoticeModel? notice;
+  final int noticeId;
+
+  NoticeDetailScreen({
     Key? key,
-    required this.notice,
-  }) : super(key: key);
+    this.notice,
+    int? noticeId,
+  })  : noticeId = notice?.id ?? noticeId!,
+        super(key: key);
 
   @override
   ConsumerState<NoticeDetailScreen> createState() => _NoticeDetailScreenState();
@@ -25,10 +31,38 @@ class NoticeDetailScreen extends ConsumerStatefulWidget {
 
 class _NoticeDetailScreenState extends ConsumerState<NoticeDetailScreen> {
   final DateFormat dateFormat = DateFormat('yyyy.MM.dd', 'ko');
+  NoticeModel? noticeDetail;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setNotice();
+  }
+
+  setNotice() async {
+    if (widget.notice == null) {
+      noticeDetail = await ref
+          .read(settingRepositoryProvider)
+          .getNotice(notice_id: widget.noticeId);
+    } else {
+      noticeDetail = widget.notice;
+    }
+    setState(() {});
+  }
+
+  getNotice() async {
+    ref.read(settingRepositoryProvider).getNotice(notice_id: widget.noticeId);
+  }
 
   deleteNotice() async {
-    await ref.read(noticeProvider.notifier).deleteNotice(
-        noticeId: widget.notice.id, userId: widget.notice.user.id);
+    await ref
+        .read(noticeProvider.notifier)
+        .deleteNotice(noticeId: widget.noticeId, userId: noticeDetail!.user.id);
   }
 
   onTapMore() {
@@ -97,54 +131,58 @@ class _NoticeDetailScreenState extends ConsumerState<NoticeDetailScreen> {
           ),
       ],
       backgroundColor: kColorBgElevation1,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 1,
-                    color: kColorBorderDefalut,
+      child: noticeDetail == null
+          ? const Center(
+              child: CustomLoading(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color: kColorBorderDefalut,
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            noticeDetail!.title,
+                            style: getTsHeading18(context)
+                                .copyWith(color: kColorContentWeak),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            dateFormat.format(
+                                DateTime.parse(noticeDetail!.created_time)),
+                            style: getTsBody14Rg(context)
+                                .copyWith(color: kColorContentWeakest),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.notice.title,
-                      style: getTsHeading18(context)
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      noticeDetail!.content,
+                      style: getTsBody16Rg(context)
                           .copyWith(color: kColorContentWeak),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      dateFormat
-                          .format(DateTime.parse(widget.notice.created_time)),
-                      style: getTsBody14Rg(context)
-                          .copyWith(color: kColorContentWeakest),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                widget.notice.content,
-                style:
-                    getTsBody16Rg(context).copyWith(color: kColorContentWeak),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

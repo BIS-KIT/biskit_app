@@ -7,6 +7,7 @@ import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/setting/view/notice_detail_screen.dart';
 import 'package:biskit_app/setting/view/warning_history_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
@@ -124,16 +125,14 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
         ),
       );
     }
-    // if (alarm.obj_name == 'Notice') {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) =>
-    //           AnnouncementDetailScreen(notice:),
-
-    //     ),
-    //   );
-    // }
+    if (alarm.obj_name == 'Notice') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NoticeDetailScreen(noticeId: alarm.obj_id),
+        ),
+      );
+    }
   }
 
   @override

@@ -284,6 +284,21 @@ class SettingRepository {
     return NoticeListModel.fromMap(res.data);
   }
 
+  Future<NoticeModel> getNotice({required int notice_id}) async {
+    final res = await dio.get(
+      '$baseUrl/notice/$notice_id',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'accessToken': 'true',
+        },
+      ),
+    );
+    logger.d(res.data);
+    return NoticeModel.fromMap(res.data);
+  }
+
   Future<NoticeModel?> createNotice({
     required String title,
     required String content,
