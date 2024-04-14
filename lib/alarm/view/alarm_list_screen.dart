@@ -1,10 +1,13 @@
 import 'package:biskit_app/alarm/model/alarm_list_model.dart';
+import 'package:biskit_app/alarm/model/alarm_model.dart';
 import 'package:biskit_app/alarm/provider/alarm_provider.dart';
 import 'package:biskit_app/alarm/repository/alarm_repository.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/setting/view/warning_history_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -22,7 +25,7 @@ class AlarmListScreen extends ConsumerStatefulWidget {
 class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
   AlarmListModel? alarmData;
   final DateFormat dayFormat = DateFormat('MM/dd hh:mm', 'ko');
-
+  UserModelBase? userState;
   @override
   void initState() {
     super.initState();
@@ -35,11 +38,11 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
   }
 
   Future<void> getAlarmList() async {
-    final userState = ref.read(userMeProvider);
+    userState = ref.read(userMeProvider);
     if (userState != null && userState is UserModel) {
       AlarmListModel? res = await ref
           .read(alarmRepositoryProvider)
-          .getAlarmList(user_id: userState.id);
+          .getAlarmList(user_id: (userState as UserModel).id);
       setState(() {
         alarmData = res;
       });
@@ -73,29 +76,64 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
     }
   }
 
-  Map<String, dynamic> getNotificationImageAndBg(String title) {
-    if (title.contains('모임')) {
+  Map<String, dynamic> getNotificationImageAndBg(String? category) {
+    if (category == 'Meeting') {
       return {
         'imagePath': 'assets/icons/ic_person_fill_24.svg',
         'bgColor': kColorBgElevation2,
         'iconColor': kColorContentWeakest,
       };
     }
-    if (title == '공지') {
+    if (category == 'Notice') {
       return {
         'imagePath': 'assets/icons/ic_megaphone_fill_24.svg',
         'bgColor': kColorBgSecondaryWeak,
         'iconColor': kColorContentSecondary,
       };
     }
-    if (title == '경고') {
+    if (category == 'Report') {
       return {
         'imagePath': 'assets/icons/ic_siren_fill_24.svg',
         'bgColor': kColorBgError,
         'iconColor': kColorContentError,
       };
     }
-    return {};
+    // 아무것도 해당 안 될 경우
+    return {
+      'imagePath': 'assets/icons/ic_person_fill_24.svg',
+      'bgColor': kColorBgElevation2,
+      'iconColor': kColorContentWeakest,
+    };
+  }
+
+  void pageRouting(AlarmModel alarm) {
+    if (alarm.obj_name == 'Meeting') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              MeetUpDetailScreen(meetupId: alarm.obj_id!, userModel: userState),
+        ),
+      );
+    }
+    if (alarm.obj_name == 'Report') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WarningHistoryScreen(),
+        ),
+      );
+    }
+    // if (alarm.obj_name == 'Notice') {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) =>
+    //           AnnouncementDetailScreen(notice:),
+
+    //     ),
+    //   );
+    // }
   }
 
   @override
@@ -124,9 +162,11 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         Map<String, dynamic> imageAndBg =
                             getNotificationImageAndBg(
-                                alarmData!.alarms[index].title);
+                                alarmData!.alarms[index].obj_name);
                         return GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            pageRouting(alarmData!.alarms[index]);
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               color: alarmData!.alarms[index].is_read
