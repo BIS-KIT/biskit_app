@@ -315,10 +315,12 @@
     "addIdCard": {
       "title": "학생증 올리기",
       "subtitle": "(모바일)학생증 또는 학적증명자료",
-      "description": "실명, 학교, 학과, 학번이 정확히 나오도록 올려주세요."
+      "description1": "실명, 학교, 학과, 학번",
+      "description2": "이 정확히 나오도록 올려주세요."
     },
     "later": "다음에 할게요",
-    "done": "작성 완료"
+    "done": "작성 완료",
+    "verify": "인증하기"
   },
 
   "createMeetupScreen1": {

@@ -1,10 +1,14 @@
 import 'package:biskit_app/alarm/model/alarm_list_model.dart';
+import 'package:biskit_app/alarm/model/alarm_model.dart';
 import 'package:biskit_app/alarm/provider/alarm_provider.dart';
 import 'package:biskit_app/alarm/repository/alarm_repository.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
+import 'package:biskit_app/setting/view/notice_detail_screen.dart';
+import 'package:biskit_app/setting/view/warning_history_screen.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -22,7 +26,7 @@ class AlarmListScreen extends ConsumerStatefulWidget {
 class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
   AlarmListModel? alarmData;
   final DateFormat dayFormat = DateFormat('MM/dd hh:mm', 'ko');
-
+  UserModelBase? userState;
   @override
   void initState() {
     super.initState();
@@ -35,11 +39,11 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
   }
 
   Future<void> getAlarmList() async {
-    final userState = ref.watch(userMeProvider);
+    userState = ref.read(userMeProvider);
     if (userState != null && userState is UserModel) {
       AlarmListModel? res = await ref
           .read(alarmRepositoryProvider)
-          .getAlarmList(user_id: userState.id);
+          .getAlarmList(user_id: (userState as UserModel).id);
       setState(() {
         alarmData = res;
       });
@@ -69,19 +73,71 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
           ref.watch(alarmProvider.notifier).readAlarm(updatedAlarms);
         }
       }
+      setState(() {});
+    }
+  }
+
+  Map<String, dynamic> getNotificationImageAndBg(String? category) {
+    if (category == 'Meeting') {
+      return {
+        'imagePath': 'assets/icons/ic_person_fill_24.svg',
+        'bgColor': kColorBgElevation2,
+        'iconColor': kColorContentWeakest,
+      };
+    }
+    if (category == 'Notice') {
+      return {
+        'imagePath': 'assets/icons/ic_megaphone_fill_24.svg',
+        'bgColor': kColorBgSecondaryWeak,
+        'iconColor': kColorContentSecondary,
+      };
+    }
+    if (category == 'Report') {
+      return {
+        'imagePath': 'assets/icons/ic_siren_fill_24.svg',
+        'bgColor': kColorBgError,
+        'iconColor': kColorContentError,
+      };
+    }
+    // 아무것도 해당 안 될 경우
+    return {
+      'imagePath': 'assets/icons/ic_person_fill_24.svg',
+      'bgColor': kColorBgElevation2,
+      'iconColor': kColorContentWeakest,
+    };
+  }
+
+  void pageRouting(AlarmModel alarm) {
+    if (alarm.obj_name == 'Meeting') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              MeetUpDetailScreen(meetupId: alarm.obj_id!, userModel: userState),
+        ),
+      );
+    }
+    if (alarm.obj_name == 'Report') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WarningHistoryScreen(),
+        ),
+      );
+    }
+    if (alarm.obj_name == 'Notice') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NoticeDetailScreen(noticeId: alarm.obj_id),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (alarmData == null) {
-      initializeData();
-      return const Center(
-        child: CustomLoading(),
-      );
-    }
-
-    if (alarmData!.alarms.isEmpty) {
+    if (alarmData != null && alarmData!.alarms.isEmpty) {
       return DefaultLayout(
         title: 'alarmListScreen.header'.tr(),
         child: Center(
@@ -103,86 +159,96 @@ class _AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                     child: ListView.builder(
                       itemCount: alarmData!.alarms.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: alarmData!.alarms[index].is_read
-                                ? kColorBgElevation1
-                                : kColorBgDefault,
-                            border: const Border(
-                              bottom: BorderSide(
-                                width: 1,
-                                color: kColorBorderWeak,
+                        Map<String, dynamic> imageAndBg =
+                            getNotificationImageAndBg(
+                                alarmData!.alarms[index].obj_name);
+                        return GestureDetector(
+                          onTap: () {
+                            pageRouting(alarmData!.alarms[index]);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: alarmData!.alarms[index].is_read
+                                  ? kColorBgElevation1
+                                  : kColorBgDefault,
+                              border: const Border(
+                                bottom: BorderSide(
+                                  width: 1,
+                                  color: kColorBorderWeak,
+                                ),
                               ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 20),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 32,
-                                  height: 32,
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: const BoxDecoration(
-                                    color: kColorBgSecondaryWeak,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 20),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: imageAndBg['bgColor'],
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      imageAndBg['imagePath'],
+                                      width: 24,
+                                      height: 24,
+                                      colorFilter: ColorFilter.mode(
+                                        imageAndBg['iconColor'],
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/ic_megaphone_fill_24.svg',
-                                    width: 24,
-                                    height: 24,
-                                    colorFilter: const ColorFilter.mode(
-                                      kColorContentSecondary,
-                                      BlendMode.srcIn,
-                                    ),
+                                  const SizedBox(
+                                    width: 12,
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        alarmData!.alarms[index].title,
-                                        style: getTsBody14Sb(context).copyWith(
-                                          color: kColorContentWeak,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        alarmData!.alarms[index].content,
-                                        style: getTsBody14Rg(context).copyWith(
-                                          color: kColorContentWeak,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        dayFormat.format(
-                                          DateTime.parse(
-                                            alarmData!
-                                                .alarms[index].created_time,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          alarmData!.alarms[index].title,
+                                          style:
+                                              getTsBody14Sb(context).copyWith(
+                                            color: kColorContentWeak,
                                           ),
                                         ),
-                                        style:
-                                            getTsCaption12Rg(context).copyWith(
-                                          color: kColorContentWeakest,
+                                        const SizedBox(
+                                          height: 4,
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          alarmData!.alarms[index].content,
+                                          style:
+                                              getTsBody14Rg(context).copyWith(
+                                            color: kColorContentWeak,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                          dayFormat.format(
+                                            DateTime.parse(
+                                              alarmData!
+                                                  .alarms[index].created_time,
+                                            ),
+                                          ),
+                                          style: getTsCaption12Rg(context)
+                                              .copyWith(
+                                            color: kColorContentWeakest,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );

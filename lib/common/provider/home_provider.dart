@@ -1,11 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/common/repository/util_repository.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/profile/repository/profile_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final homeProvider = StateNotifierProvider<HomeStateNotifier, HomeState>(
   (ref) => HomeStateNotifier(
@@ -39,6 +38,17 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
   }
 
   init() async {
+    List<MeetUpModel>? approveMeetings =
+        await profileRepository.getMyApproveMeetings(
+      skip: 0,
+      limit: 5,
+    );
+
+    List<MeetUpModel> sortedApproveMeetings =
+        List<MeetUpModel>.from(approveMeetings!);
+    sortedApproveMeetings
+        .sort((a, b) => a.meeting_time.compareTo(b.meeting_time));
+
     state = state.copyWith(
       fixTopics: await utilRepository.getTopics(
         isCustom: false,
@@ -48,10 +58,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
         skip: 0,
         limit: 5,
       ),
-      approveMeetings: await profileRepository.getMyApproveMeetings(
-        skip: 0,
-        limit: 5,
-      ),
+      approveMeetings: sortedApproveMeetings,
     );
     if (state.approveMeetings.isNotEmpty) {
       // ref.read(rootProvider.notifier).setScaffoldColor(Colors);

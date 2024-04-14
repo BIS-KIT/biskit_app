@@ -8,12 +8,16 @@ class AlarmModel {
   final bool is_read;
   final int id;
   final String created_time;
+  final String? obj_name;
+  final int? obj_id;
   AlarmModel({
     required this.title,
     required this.content,
     required this.is_read,
     required this.id,
     required this.created_time,
+    this.obj_name,
+    this.obj_id,
   });
 
   AlarmModel copyWith({
@@ -22,6 +26,8 @@ class AlarmModel {
     bool? is_read,
     int? id,
     String? created_time,
+    String? obj_name,
+    int? obj_id,
   }) {
     return AlarmModel(
       title: title ?? this.title,
@@ -29,6 +35,8 @@ class AlarmModel {
       is_read: is_read ?? this.is_read,
       id: id ?? this.id,
       created_time: created_time ?? this.created_time,
+      obj_name: obj_name ?? this.obj_name,
+      obj_id: obj_id ?? this.obj_id,
     );
   }
 
@@ -39,6 +47,8 @@ class AlarmModel {
       'is_read': is_read,
       'id': id,
       'created_time': created_time,
+      'obj_name': obj_name,
+      'obj_id': obj_id,
     };
   }
 
@@ -49,6 +59,8 @@ class AlarmModel {
       is_read: map['is_read'] ?? false,
       id: map['id']?.toInt() ?? 0,
       created_time: map['created_time'] ?? '',
+      obj_name: map['obj_name'] ?? '',
+      obj_id: map['obj_id'] ?? 0,
     );
   }
 
@@ -59,7 +71,7 @@ class AlarmModel {
 
   @override
   String toString() {
-    return 'AlarmModel(title: $title, content: $content, is_read: $is_read, id: $id, created_time: $created_time)';
+    return 'AlarmModel(title: $title, content: $content, is_read: $is_read, id: $id, created_time: $created_time, obj_name: $obj_name, obj_id: $obj_id)';
   }
 
   @override
@@ -71,7 +83,9 @@ class AlarmModel {
         other.content == content &&
         other.is_read == is_read &&
         other.id == id &&
-        other.created_time == created_time;
+        other.created_time == created_time &&
+        other.obj_name == obj_name &&
+        other.obj_id == obj_id;
   }
 
   @override
@@ -80,6 +94,8 @@ class AlarmModel {
         content.hashCode ^
         is_read.hashCode ^
         id.hashCode ^
-        created_time.hashCode;
+        created_time.hashCode ^
+        obj_name.hashCode ^
+        obj_id.hashCode;
   }
 }

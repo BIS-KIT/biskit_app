@@ -1,10 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:biskit_app/profile/model/available_language_create_model.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/level_bar_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
@@ -15,10 +9,15 @@ import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/profile/components/lang_level_list_widget.dart';
 import 'package:biskit_app/profile/components/lang_list_widget.dart';
+import 'package:biskit_app/profile/model/available_language_create_model.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/model/use_language_model.dart';
 import 'package:biskit_app/profile/provider/use_language_provider.dart';
 import 'package:biskit_app/profile/view/profile_keyword_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileLanguageScreen extends ConsumerStatefulWidget {
@@ -233,7 +232,9 @@ class _ProfileLanguageScreenState extends ConsumerState<ProfileLanguageScreen> {
               child: Row(
                 children: [
                   Text(
-                    e.languageModel.kr_name,
+                    context.locale.languageCode == 'en'
+                        ? e.languageModel.en_name
+                        : e.languageModel.kr_name,
                     style: getTsBody16Sb(context).copyWith(
                       color: kColorContentWeak,
                     ),

@@ -16,7 +16,6 @@ import 'package:biskit_app/common/utils/string_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/model/create_meet_up_model.dart';
 import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
-import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
@@ -42,12 +41,12 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MeetUpDetailScreen extends ConsumerStatefulWidget {
-  final MeetUpModel meetUpModel;
+  final int meetupId;
   final UserModelBase? userModel;
 
   const MeetUpDetailScreen({
     Key? key,
-    required this.meetUpModel,
+    required this.meetupId,
     required this.userModel,
   }) : super(key: key);
 
@@ -125,7 +124,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   init() async {
     meetUpDetailModel = await ref
         .read(meetUpRepositoryProvider)
-        .getMeetUpDetail(widget.meetUpModel.id);
+        .getMeetUpDetail(widget.meetupId);
     for (var u in meetUpDetailModel!.participants) {
       availableLangList.addAll(u.profile!.available_languages);
     }
@@ -143,7 +142,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
     if (user is UserModel) {
       participationStatus =
           await ref.read(meetUpRepositoryProvider).getCheckMeetingRequestStatus(
-                meeting_id: widget.meetUpModel.id,
+                meeting_id: widget.meetupId,
                 user_id: user.id,
               );
       // logger.d(participationStatus);
@@ -244,7 +243,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
         final bool isOk =
             await ref.read(meetUpRepositoryProvider).postJoinRequest(
-                  meeting_id: widget.meetUpModel.id,
+                  meeting_id: widget.meetupId,
                   user_id: userState!.id,
                 );
         if (isOk) {
@@ -289,7 +288,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   }
 
   onTapMore() {
-    if (userState!.id == widget.meetUpModel.creator.id) {
+    if (userState!.id == meetUpDetailModel!.creator.id) {
       // 모임장
       showMoreBottomSheet(
         context: context,
@@ -456,7 +455,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 MaterialPageRoute(
                   builder: (context) => ReportScreen(
                     contentType: ReportContentType.Meeting,
-                    contentId: widget.meetUpModel.id,
+                    contentId: widget.meetupId,
                   ),
                 ),
               );
@@ -479,7 +478,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                 MaterialPageRoute(
                   builder: (context) => ReportScreen(
                     contentType: ReportContentType.Meeting,
-                    contentId: widget.meetUpModel.id,
+                    contentId: widget.meetupId,
                   ),
                 ),
               );
@@ -783,7 +782,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
   Widget _buildBottomButton() {
     if (meetUpDetailModel == null) return Container();
     if (meetUpDetailModel!.is_active && userState != null) {
-      if (userState!.profile!.student_verification == null) {
+      if (userState!.profile!.student_verification == null ||
+          userState!.profile!.student_verification!.verification_status ==
+              VerificationStatus.REJECTED.name) {
         // 학생증 인증 안한 상태
         return GestureDetector(
           onTap: () async {
@@ -1243,9 +1244,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : (systemState as UserSystemModel)
-                                                  .system_language ==
-                                              'kr'
+                                      : context.locale.languageCode == 'ko'
                                           ? dateFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
@@ -1273,9 +1272,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : (systemState as UserSystemModel)
-                                                  .system_language ==
-                                              'kr'
+                                      : context.locale.languageCode ==
+                                              'ko'
+                                                  'kr'
                                           ? timeFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),

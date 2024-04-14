@@ -35,7 +35,6 @@ class ProfileNicknameScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
-  String localeCode = kEn;
   PhotoModel? selectedPhotoModel;
   String? randomProfile;
 
@@ -54,25 +53,30 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
       ..addListener(() {
         onSearchChanged(controller.text);
       });
-    init();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    localeCode = context.locale.languageCode;
+    init();
   }
 
   init() async {
-    final res = await ref.read(profileRepositoryProvider).getRandomNickname();
-    if (res != null) {
-      String keyName = localeCode == kEn ? 'en_nick_name' : 'kr_nick_name';
-      String temp = res[keyName] ?? '';
+    String languageCode = context.locale.languageCode;
 
+    context.loaderOverlay.show();
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .getRandomNickname(languageCode == 'en' ? 'en' : 'kr');
+    if (res != null) {
+      String keyName = languageCode == 'en' ? 'en_nick_name' : 'kr_nick_name';
+      String temp = res[keyName] ?? '';
       controller.text = temp.replaceAll(' ', '');
     }
     randomProfile =
         await ref.read(profileRepositoryProvider).getRandomProfile();
+    if (!mounted) return;
+    context.loaderOverlay.hide();
     setState(() {});
   }
 

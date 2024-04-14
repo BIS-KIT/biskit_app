@@ -420,7 +420,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen>
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 MeetUpDetailScreen(
-                                              meetUpModel: e,
+                                              meetupId: e.id,
                                               userModel: userState,
                                             ),
                                           ),

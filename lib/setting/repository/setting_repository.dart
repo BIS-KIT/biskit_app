@@ -2,16 +2,17 @@
 
 import 'dart:convert';
 
+import 'package:biskit_app/common/const/data.dart';
+import 'package:biskit_app/common/dio/dio.dart';
 import 'package:biskit_app/common/secure_storage/secure_storage.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/setting/model/blocked_user_list_model.dart';
 import 'package:biskit_app/setting/model/notice_list_model.dart';
+import 'package:biskit_app/setting/model/notice_model.dart';
 import 'package:biskit_app/setting/model/report_res_model.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:biskit_app/common/const/data.dart';
-import 'package:biskit_app/common/dio/dio.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final settingRepositoryProvider = Provider<SettingRepository>((ref) {
@@ -283,11 +284,27 @@ class SettingRepository {
     return NoticeListModel.fromMap(res.data);
   }
 
-  Future<void> createNotice({
+  Future<NoticeModel> getNotice({required int notice_id}) async {
+    final res = await dio.get(
+      '$baseUrl/notice/$notice_id',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'accessToken': 'true',
+        },
+      ),
+    );
+    logger.d(res.data);
+    return NoticeModel.fromMap(res.data);
+  }
+
+  Future<NoticeModel?> createNotice({
     required String title,
     required String content,
     required int user_id,
   }) async {
+    NoticeModel? notice;
     try {
       final res = await dio.post(
         '$baseUrl/notice',
@@ -304,18 +321,21 @@ class SettingRepository {
           'user_id': user_id,
         }),
       );
-      logger.d(res);
+      logger.d('createPost: $res');
+      notice = NoticeModel.fromMap(res.data);
     } on DioException catch (e) {
       logger.e(e.toString());
     }
+    return notice;
   }
 
-  Future<void> deleteNotice({
+  Future<int?> deleteNotice({
     required int notice_id,
     required int user_id,
   }) async {
+    int? deletedNoticeId;
     try {
-      final res = await dio.delete('$baseUrl/notice/$notice_id',
+      await dio.delete('$baseUrl/notice/$notice_id',
           options: Options(
             headers: {
               'Content-Type': 'application/json',
@@ -326,18 +346,20 @@ class SettingRepository {
           queryParameters: {
             'user_id': user_id,
           });
-      logger.d(res);
+      deletedNoticeId = notice_id;
     } on DioException catch (e) {
       logger.e(e.toString());
     }
+    return deletedNoticeId;
   }
 
-  Future<void> updateNotice({
+  Future<NoticeModel?> updateNotice({
     required int notice_id,
     required int user_id,
     required String title,
     required String content,
   }) async {
+    NoticeModel? notice;
     try {
       final res = await dio.put(
         '$baseUrl/notice/$notice_id',
@@ -357,9 +379,11 @@ class SettingRepository {
         }),
       );
       logger.d(res);
+      notice = NoticeModel.fromMap(res.data);
     } on DioException catch (e) {
       logger.e(e.toString());
     }
+    return notice;
   }
 
   Future<void> createContact({

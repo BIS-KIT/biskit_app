@@ -34,7 +34,7 @@ class ProfileRepository {
     required this.baseUrl,
   });
 
-  Future<Map<String, String>?> getRandomNickname() async {
+  Future<Map<String, String>?> getRandomNickname(String? osLang) async {
     Map<String, String>? result;
     try {
       final res = await dio.get(
@@ -46,6 +46,9 @@ class ProfileRepository {
             'accessToken': 'true',
           },
         ),
+        queryParameters: {
+          'os_lang': osLang ?? 'kr',
+        },
       );
       if (res.statusCode == 200) {
         logger.d(res.toString());

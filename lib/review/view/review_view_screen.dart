@@ -69,7 +69,7 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => MeetUpDetailScreen(
-          meetUpModel: meetUpModel!,
+          meetupId: meetUpModel!.id,
           userModel: ref.watch(userMeProvider),
         ),
       ),
@@ -161,22 +161,23 @@ class _ReviewViewScreenState extends ConsumerState<ReviewViewScreen> {
       title: 'detailReviewScreen.title'.tr(),
       backgroundColor: kColorBgElevation1,
       actions: [
-        if (resReviewModel != null &&
-            userState != null &&
-            userState is UserModel &&
-            (userState as UserModel).id == resReviewModel!.creator.id)
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              'assets/icons/ic_ios_share_line_24.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                kColorContentDefault,
-                BlendMode.srcIn,
-              ),
-            ),
-          ),
+        // XXX: 공유 기능 추가 후 다시
+        // if (resReviewModel != null &&
+        //     userState != null &&
+        //     userState is UserModel &&
+        //     (userState as UserModel).id == resReviewModel!.creator.id)
+        //   Padding(
+        //     padding: const EdgeInsets.all(10),
+        //     child: SvgPicture.asset(
+        //       'assets/icons/ic_ios_share_line_24.svg',
+        //       width: 24,
+        //       height: 24,
+        //       colorFilter: const ColorFilter.mode(
+        //         kColorContentDefault,
+        //         BlendMode.srcIn,
+        //       ),
+        //     ),
+        //   ),
         GestureDetector(
           onTap: () {
             onTapMore();

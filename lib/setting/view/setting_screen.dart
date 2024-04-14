@@ -7,9 +7,9 @@ import 'package:biskit_app/common/view/web_view_screen.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/setting/view/account_setting_screen.dart';
-import 'package:biskit_app/setting/view/announcement_screen.dart';
 import 'package:biskit_app/setting/view/contact_screen.dart';
 import 'package:biskit_app/setting/view/language_setting_screen.dart';
+import 'package:biskit_app/setting/view/notice_screen.dart';
 import 'package:biskit_app/setting/view/notification_setting_screen.dart';
 import 'package:biskit_app/setting/view/terms_and_policies_screen.dart';
 import 'package:biskit_app/setting/view/user_block_list_screen.dart';
@@ -134,7 +134,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AnnouncementScreen(),
+                    builder: (context) => const NoticeScreen(),
                   ),
                 );
               },
@@ -190,11 +190,12 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                 );
               },
             ),
-            ListWidget(
-              text: 'settingScreen.ver'.tr(),
-              selectText: 'settingScreen.update'.tr(),
-              onTapCallback: () {},
-            ),
+            // TODO: 스토어 앱 버전 가져와서 비교
+            // ListWidget(
+            //   text: 'settingScreen.ver'.tr(),
+            //   selectText: 'settingScreen.update'.tr(),
+            //   onTapCallback: () {},
+            // ),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.only(

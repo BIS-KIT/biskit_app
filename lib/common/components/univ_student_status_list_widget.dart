@@ -1,7 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-
 import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/filled_button_widget.dart';
@@ -9,6 +6,8 @@ import 'package:biskit_app/common/components/list_widget_temp.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/university_student_status_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
 class UnivStudentStatusListWidget extends StatefulWidget {
   final UniversityStudentStatusModel? selectedUnivStudentStatusModel;
@@ -102,7 +101,9 @@ class _UnivListWidgetState extends State<UnivStudentStatusListWidget> {
                             widget.onTap(e);
                           },
                           centerWidget: Text(
-                            e.kname,
+                            context.locale.languageCode == 'en'
+                                ? e.ename
+                                : e.kname,
                             style: getTsBody16Rg(context).copyWith(
                               color: kColorContentWeak,
                             ),
