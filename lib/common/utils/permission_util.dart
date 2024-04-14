@@ -2,7 +2,7 @@ import 'package:biskit_app/chat/view/chat_screen.dart';
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/utils/GlobalVariable.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
-import 'package:biskit_app/setting/view/notice_screen.dart';
+import 'package:biskit_app/setting/view/notice_detail_screen.dart';
 import 'package:biskit_app/setting/view/warning_history_screen.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,37 +29,31 @@ Future requestPermission() async {
 }
 
 void handlePageRouting(Map payload, final Ref ref) async {
-  // if (payload['meeting_id'] != null) {
-  //   meetUpModel = await ref
-  //       .read(meetUpRepositoryProvider)
-  //       .getMeeting(int.parse(payload['meeting_id']));
-  // }
-
-  if (payload['meeting_id'] != null) {
+  if (payload['obj_name'] == 'Meeting') {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
         builder: (context) => MeetUpDetailScreen(
-          meetupId: int.parse(payload['meeting_id']),
+          meetupId: int.parse(payload['obj_id']),
           userModel: ref.read(userMeProvider),
         ),
       ),
     );
-  } else if (payload['notice_id'] != null) {
+  } else if (payload['obj_name'] == 'Notice') {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
-        builder: (context) => const NoticeScreen(),
+        builder: (context) => NoticeDetailScreen(noticeId: payload['obj_id']),
       ),
     );
-  } else if (payload['report_id'] != null) {
+  } else if (payload['obj_name'] == 'Report') {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
         builder: (context) => const WarningHistoryScreen(),
       ),
     );
-  } else if (payload['chat_id'] != null) {
+  } else if (payload['obj_name'] == 'Chat') {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
-        builder: (context) => ChatScreen(chatRoomUid: payload['chat_id']),
+        builder: (context) => ChatScreen(chatRoomUid: payload['obj_id']),
       ),
     );
   }
@@ -83,11 +77,12 @@ localNotification(Map payload, final Ref ref, final String ground) async {
 
   if (ground == 'background') {
     handlePageRouting(payload, ref);
+    logger.d('payload(background): $payload');
   } else {
     await notifications.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (details) {
-        logger.d('payload: $payload');
+        logger.d('payload(foreground): $payload');
         handlePageRouting(payload, ref);
       },
       onDidReceiveBackgroundNotificationResponse: (details) {
@@ -112,12 +107,14 @@ foregroundFcm(final Ref ref) async {
         bool isSubAlarm = (payLoad['is_sub_alarm'] ?? '') == 'True';
 
         if (isMainAlarm && criticalNotification) {
+          logger.d('criticalNotification $criticalNotification');
           showNotification(message.notification!);
           localNotification(message.data, ref, 'foreground');
           return;
         }
 
         if (isSubAlarm && generalNotification) {
+          logger.d('generalNotification $generalNotification');
           showNotification(message.notification!);
           localNotification(message.data, ref, 'foreground');
           return;
