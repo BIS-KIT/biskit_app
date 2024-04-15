@@ -4,7 +4,6 @@ import 'package:biskit_app/alarm/provider/alarm_provider.dart';
 import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
-import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -99,177 +98,171 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return SafeArea(
       top: false,
       bottom: false,
-      child: homeState.fixTopics.isEmpty
-          ? const Center(
-              child: CustomLoading(),
-            )
-          : homeState.approveMeetings.isEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Navigation bar
-                    _buildNavigatorBar(
-                      isApproveMeetupEmpty: true,
-                    ),
-                    if (userState is UserModel &&
-                        systemState is UserSystemModel)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          child: Column(
-                            children: [
-                              // Category
-                              _buildCategory(
-                                userState,
-                                context,
-                                homeState,
-                                true,
-                              ),
-
-                              Container(
-                                color: kColorBgElevation1,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                child: Column(
-                                  children: [
-                                    // Meetup
-                                    if (homeState.meetings.isNotEmpty)
-                                      _buildMeetupList(
-                                        context,
-                                        homeState,
-                                        size,
-                                      ),
-
-                                    // Tag
-                                    _buildTag(
-                                      context,
-                                      homeState,
-                                      systemState,
-                                    ),
-
-                                    const SizedBox(
-                                      height: 36,
-                                    ),
-
-                                    // Make meetup card
-                                    _buildMakeMeetupCard(context),
-                                  ],
-                                ),
-                              ),
-                            ],
+      child: homeState.approveMeetings.isEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Navigation bar
+                _buildNavigatorBar(
+                  isApproveMeetupEmpty: true,
+                ),
+                if (userState is UserModel && systemState is UserSystemModel)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          // Category
+                          _buildCategory(
+                            userState,
+                            context,
+                            homeState,
+                            true,
                           ),
-                        ),
-                      )
-                  ],
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Navigation bar
-                    _buildNavigatorBar(
-                      isApproveMeetupEmpty: false,
-                      color: _color,
+
+                          Container(
+                            color: kColorBgElevation1,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                            ),
+                            child: Column(
+                              children: [
+                                // Meetup
+                                if (homeState.meetings.isNotEmpty)
+                                  _buildMeetupList(
+                                    context,
+                                    homeState,
+                                    size,
+                                  ),
+
+                                // Tag
+                                _buildTag(
+                                  context,
+                                  homeState,
+                                  systemState,
+                                ),
+
+                                const SizedBox(
+                                  height: 36,
+                                ),
+
+                                // Make meetup card
+                                _buildMakeMeetupCard(context),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    if (userState is UserModel &&
-                        systemState is UserSystemModel)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          physics: const ClampingScrollPhysics(),
-                          child: Column(
+                  )
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Navigation bar
+                _buildNavigatorBar(
+                  isApproveMeetupEmpty: false,
+                  color: _color,
+                ),
+                if (userState is UserModel && systemState is UserSystemModel)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          // Schedule
+                          Stack(
                             children: [
-                              // Schedule
-                              Stack(
+                              Column(
                                 children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 280,
-                                        color: kColorBgPrimary,
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 20,
-                                        ),
-                                        color: kColorBgElevation1,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            const SizedBox(
-                                              height: 73,
-                                            ),
-                                            // Category
-                                            _buildCategory(
-                                              userState,
-                                              context,
-                                              homeState,
-                                              false,
-                                            ),
-
-                                            const SizedBox(
-                                              height: 36,
-                                            ),
-                                            // Meetup
-                                            if (homeState.meetings.isNotEmpty)
-                                              _buildMeetupList(
-                                                context,
-                                                homeState,
-                                                size,
-                                              ),
-
-                                            // Tag
-                                            _buildTag(
-                                              context,
-                                              homeState,
-                                              systemState,
-                                            ),
-
-                                            const SizedBox(
-                                              height: 36,
-                                            ),
-
-                                            // Make meetup card
-                                            _buildMakeMeetupCard(context),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                  Container(
+                                    width: double.infinity,
+                                    height: 280,
+                                    color: kColorBgPrimary,
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
+                                      vertical: 20,
                                     ),
+                                    color: kColorBgElevation1,
                                     child: Column(
-                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
-                                        // title
-                                        _buildApproveTitle(
+                                        const SizedBox(
+                                          height: 73,
+                                        ),
+                                        // Category
+                                        _buildCategory(
                                           userState,
                                           context,
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
+                                          homeState,
+                                          false,
                                         ),
 
-                                        // Card area
-                                        _buildApproveCardArea(
-                                          homeState,
-                                          size,
+                                        const SizedBox(
+                                          height: 36,
                                         ),
+                                        // Meetup
+                                        if (homeState.meetings.isNotEmpty)
+                                          _buildMeetupList(
+                                            context,
+                                            homeState,
+                                            size,
+                                          ),
+
+                                        // Tag
+                                        _buildTag(
+                                          context,
+                                          homeState,
+                                          systemState,
+                                        ),
+
+                                        const SizedBox(
+                                          height: 36,
+                                        ),
+
+                                        // Make meetup card
+                                        _buildMakeMeetupCard(context),
                                       ],
                                     ),
                                   )
                                 ],
                               ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // title
+                                    _buildApproveTitle(
+                                      userState,
+                                      context,
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+
+                                    // Card area
+                                    _buildApproveCardArea(
+                                      homeState,
+                                      size,
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
-                        ),
+                        ],
                       ),
-                  ],
-                ),
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 
@@ -422,7 +415,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         onTapTag(t);
                       },
                       child: BtnTagWidget(
-                        label: systemState.system_language == 'kr'
+                        label: context.locale.languageCode == 'ko'
                             ? t.kr_name
                             : t.en_name,
                         emoji: ' ${t.icon} ',
@@ -582,12 +575,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             },
                             child: CategoryItemWidget(
                               iconPath: e.icon_url,
-                              text: ref.watch(systemProvider)
-                                          is UserSystemModel &&
-                                      (ref.watch(systemProvider)
-                                                  as UserSystemModel)
-                                              .system_language ==
-                                          'kr'
+                              text: context.locale.languageCode == 'ko'
                                   ? e.kr_name
                                   : e.en_name,
                             ),
