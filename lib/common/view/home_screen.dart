@@ -599,10 +599,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       },
                       child: CategoryItemWidget(
                         iconPath: e.icon_url,
-                        text: ref.watch(systemProvider) is UserSystemModel &&
-                                (ref.watch(systemProvider) as UserSystemModel)
-                                        .system_language ==
-                                    'kr'
+                        text: context.locale.languageCode == 'ko'
                             ? e.kr_name
                             : e.en_name,
                       ),
