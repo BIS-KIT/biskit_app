@@ -142,7 +142,7 @@
   "signUpNameScreen": {
     "name": {
       "title": "이름",
-      "placeholder": "이름을 입력해주세요",
+      "placeholder": "실명을 입력해주세요",
       "error": "한글 또는 영문으로 입력해주세요"
     },
     "birth": "생년월일",
@@ -531,7 +531,7 @@
     },
     "day": {
       "title": "요일",
-      "mon": "월.",
+      "mon": "월",
       "tue": "화",
       "wed": "수",
       "thu": "목",
