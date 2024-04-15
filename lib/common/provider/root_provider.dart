@@ -51,9 +51,9 @@ class RootStateNotifier extends StateNotifier<RootState> {
     // 파이어베이스 메시징 처리
     await requestPermission();
     // 파이어베이스 메시지 포그라운드 처리
-    await foregroundFcm(ref);
+    await foregroundFcm(ref, criticalNotification, generalNotification);
     // 파이어베이스 메시지 백그라운드 처리
-    await backgroundFcm(ref);
+    await backgroundFcm(ref, criticalNotification, generalNotification);
   }
 
   // setTabController(TabController controller) {
@@ -82,6 +82,8 @@ class RootStateNotifier extends StateNotifier<RootState> {
     final bool isLoading = false,
     final Color color = kColorBgDefault,
   }) {
+    logger.d('root tap: $index');
+
     ref.read(userMeProvider.notifier).getMe();
     Color? scafoldColor = color;
     if (index == 3) {
