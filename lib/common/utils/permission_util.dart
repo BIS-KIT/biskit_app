@@ -1,5 +1,4 @@
 import 'package:biskit_app/chat/view/chat_screen.dart';
-import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/utils/GlobalVariable.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/setting/view/notice_detail_screen.dart';
@@ -41,7 +40,8 @@ void handlePageRouting(Map payload, final Ref ref) async {
   } else if (payload['obj_name'] == 'Notice') {
     Navigator.of(GlobalVariable.navState.currentContext!).push(
       MaterialPageRoute(
-        builder: (context) => NoticeDetailScreen(noticeId: payload['obj_id']),
+        builder: (context) =>
+            NoticeDetailScreen(noticeId: int.parse(payload['obj_id'])),
       ),
     );
   } else if (payload['obj_name'] == 'Report') {
@@ -94,7 +94,8 @@ localNotification(Map payload, final Ref ref, final String ground) async {
   }
 }
 
-foregroundFcm(final Ref ref) async {
+foregroundFcm(final Ref ref, final bool criticalNotification,
+    final bool generalNotification) async {
   // foreground
   FirebaseMessaging.onMessage.listen(
     (RemoteMessage message) {
@@ -125,7 +126,8 @@ foregroundFcm(final Ref ref) async {
 }
 
 // FIXME: background 알림의 경우 클릭했을 때 한 번, 진입했을 때 한 번 더. 총 두 번 실행됨
-backgroundFcm(final Ref ref) async {
+backgroundFcm(final Ref ref, final bool criticalNotification,
+    final bool generalNotification) async {
   FirebaseMessaging.onMessageOpenedApp.listen(
     (RemoteMessage message) {
       logger.d('Got a message whilst in the background!');

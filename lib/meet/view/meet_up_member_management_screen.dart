@@ -59,7 +59,7 @@ class _MeetUpMemberManagementScreenState
     setState(() {});
   }
 
-  void onTapReject(MeetUpRequestModel model) async {
+  void onTapReject(MeetUpRequestModel model, String chatId) async {
     showConfirmModal(
       context: context,
       title:
@@ -73,6 +73,11 @@ class _MeetUpMemberManagementScreenState
         bool isOk =
             await ref.read(meetUpRepositoryProvider).postJoinReject(model.id);
         if (isOk) {
+          // 모임 퇴장 > 채팅방 나가기
+          await ref.read(chatRepositoryProvider).chatExist(
+                chatRoomUid: chatId,
+                userId: model.user.id,
+              );
           setState(() {
             requests.remove(model);
           });
@@ -89,7 +94,7 @@ class _MeetUpMemberManagementScreenState
     );
   }
 
-  void onTapApprove(MeetUpRequestModel model) async {
+  void onTapApprove(MeetUpRequestModel model, String chatId) async {
     showConfirmModal(
       context: context,
       title:
@@ -106,6 +111,11 @@ class _MeetUpMemberManagementScreenState
               userId: model.user.id,
             );
         if (isOk) {
+          // 모임 수락 > 채팅방 입장
+          await ref.read(chatRepositoryProvider).goChatRoom(
+                chatRoomUid: chatId,
+                user: model.user,
+              );
           setState(() {
             requests.remove(model);
             users.add(model.user);
@@ -281,7 +291,10 @@ class _MeetUpMemberManagementScreenState
                                         Expanded(
                                           child: GestureDetector(
                                             onTap: () {
-                                              onTapReject(model);
+                                              onTapReject(
+                                                  model,
+                                                  widget.meetUpDetailModel
+                                                      .chat_id);
                                             },
                                             child: OutlinedButtonWidget(
                                               text:
@@ -298,7 +311,10 @@ class _MeetUpMemberManagementScreenState
                                         Expanded(
                                           child: GestureDetector(
                                             onTap: () {
-                                              onTapApprove(model);
+                                              onTapApprove(
+                                                  model,
+                                                  widget.meetUpDetailModel
+                                                      .chat_id);
                                             },
                                             child: FilledButtonWidget(
                                               text:

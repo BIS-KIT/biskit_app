@@ -2,6 +2,7 @@ import 'package:biskit_app/common/components/check_circle.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,24 +21,19 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
   String? selectedLang;
 
   updateUserOSLanguage() async {
-    try {
-      await ref.read(systemProvider.notifier).updateUserOSLanguage(
-            systemId: (ref.watch(systemProvider) as UserSystemModel).id,
-            selectedLang: selectedLang,
-          );
-    } finally {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    }
+    await ref.read(systemProvider.notifier).updateUserOSLanguage(
+          systemId: (ref.watch(systemProvider) as UserSystemModel).id,
+          selectedLang: selectedLang,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    logger.d('Locale ${context.locale.languageCode}');
+    logger.d('Locale ${context.locale}');
     if (selectedLang == null) {
       setState(() {
-        selectedLang =
-            (ref.watch(systemProvider) as UserSystemModel).system_language;
+        selectedLang = context.locale.languageCode == 'ko' ? 'kr' : 'en';
       });
     }
     return DefaultLayout(
@@ -49,7 +45,9 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
           ),
         ),
         onTapLeading: () {
-          updateUserOSLanguage();
+          if (mounted) {
+            Navigator.pop(context);
+          }
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -63,6 +61,7 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
                       selectedLang = 'kr';
                     });
                     await context.setLocale(const Locale('ko', 'KR'));
+                    updateUserOSLanguage();
                   },
                   child: Row(
                     children: [
@@ -96,6 +95,7 @@ class _LanguageSettingScreenState extends ConsumerState<LanguageSettingScreen> {
                       },
                     );
                     await context.setLocale(const Locale('en', 'US'));
+                    updateUserOSLanguage();
                   },
                   child: Row(
                     children: [

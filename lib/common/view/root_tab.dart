@@ -71,10 +71,11 @@ class _RootTabState extends ConsumerState<RootTab>
   updateUserOSLanguage() async {
     UserSystemModelBase? systemState = ref.watch(systemProvider);
     try {
+      logger.d('Main Locale rootTab: ${context.locale.languageCode}');
       if (systemState is UserSystemModel) {
         await ref.watch(systemProvider.notifier).updateUserOSLanguage(
               systemId: systemState.id,
-              selectedLang: context.locale.languageCode == 'en' ? 'en' : 'kr',
+              selectedLang: context.locale.languageCode == 'ko' ? 'kr' : 'en',
             );
       }
     } finally {
