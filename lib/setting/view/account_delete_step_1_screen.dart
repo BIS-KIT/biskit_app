@@ -1,9 +1,10 @@
+import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/setting/view/account_delete_step_2_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:biskit_app/common/const/colors.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AccountDeleteStep1Screen extends ConsumerStatefulWidget {
@@ -19,23 +20,23 @@ class AccountDeleteStep1Screen extends ConsumerStatefulWidget {
 class _MeetUpCreateStep1TabState
     extends ConsumerState<AccountDeleteStep1Screen> {
   final List<String> reasons = [
-    "자주 사용하지 않아요",
-    "사용하기가 불편해요",
-    "개인정보가 걱정되어요",
-    "새로운 계정으로 가입할거에요",
-    "기타"
+    "deleteAccountScreen.reason1".tr(),
+    "deleteAccountScreen.reason2".tr(),
+    "deleteAccountScreen.reason3".tr(),
+    "deleteAccountScreen.reason4".tr(),
+    "deleteAccountScreen.reason5".tr(),
   ];
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '계정 삭제',
+      title: 'deleteAccountScreen.title'.tr(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Text(
-              "계정을 삭제하시려는\n이유가 무엇인가요?",
+              "deleteAccountScreen.reason".tr(),
               style: getTsHeading20(context).copyWith(
                 color: kColorContentDefault,
               ),

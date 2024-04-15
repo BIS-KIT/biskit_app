@@ -892,8 +892,10 @@
   "deleteAccountCautionScreen": {
     "header": "Delete account",
     "title": "Please check the precautions\nbefore deleting account",
-    "description1": "You can't sign up again for 7 days after deleting your account",
-    "description2": "Upon deletion of your account, all personal information registered in BISKIT will be deleted and destroyed, and will not be restored.",
+    "description1": "If you delete your account, you will not be able to rejoin.",
+    "description2": "using the email you are using. Deleting the account will also remove all personal information, created profiles and reviews, and these cannot be recovered.",
+    "description3": "Meetings created after the account deletion, as well as participated meetings and chat records, will remain and cannot be deleted after the account deletion. If you want to delete , please exit the meeting or delete the post before deleting the account.",
+    "description4": "Once the account is deleted, as personal information will be deleted, posts also cannot be deleted as wish.",
     "agree": "Agree to all",
     "delete": "Delete account",
 
