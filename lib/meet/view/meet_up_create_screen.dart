@@ -1,3 +1,4 @@
+import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/components/progress_bar_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
@@ -12,6 +13,7 @@ import 'package:biskit_app/meet/view/meet_up_create_step_2_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_3_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
+import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -193,6 +195,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
   Widget build(BuildContext context) {
     final viewInsets = MediaQuery.of(context).viewInsets;
     final padding = MediaQuery.of(context).padding;
+    final userState = ref.read(userMeProvider);
 
     return WillPopScope(
       onWillPop: onWillPop,
@@ -250,10 +253,10 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                     right: 20,
                   ),
                   child: GestureDetector(
-                    onTap: isCreateLoading
+                    onTap: (isCreateLoading || userState is! UserModel)
                         ? null
                         : () async {
-                            onTapSubmitButton();
+                            onTapSubmitButton(userState);
                           },
                     child: FilledButtonWidget(
                       height: 56,
@@ -269,10 +272,10 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
               } else {
                 if (pageIndex == 3) {
                   return GestureDetector(
-                    onTap: isCreateLoading
+                    onTap: (isCreateLoading || userState is! UserModel)
                         ? null
                         : () {
-                            onTapSubmitButton();
+                            onTapSubmitButton(userState);
                           },
                     child: FilledButtonWidget(
                       height: 52,
@@ -295,7 +298,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     );
   }
 
-  void onTapSubmitButton() async {
+  void onTapSubmitButton(UserModel userState) async {
     try {
       if (isButtonEnable()) {
         setState(() {
@@ -322,6 +325,13 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
             if (result != null) {
               MeetUpModel model =
                   await ref.read(meetUpRepositoryProvider).getMeeting(result);
+
+              // 채팅방 입장
+              await ref.read(chatRepositoryProvider).goChatRoom(
+                    chatRoomUid: model.chat_id,
+                    user: userState,
+                  );
+
               if (!mounted) return;
               context.loaderOverlay.hide();
               ref.read(meetUpProvider.notifier).paginate(forceRefetch: true);
@@ -332,7 +342,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                 MaterialPageRoute(
                   builder: (context) => MeetUpDetailScreen(
                     meetupId: model.id,
-                    userModel: ref.watch(userMeProvider),
+                    userModel: userState,
                   ),
                 ),
               );

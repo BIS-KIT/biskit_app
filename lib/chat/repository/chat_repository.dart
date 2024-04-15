@@ -349,9 +349,15 @@ class ChatRepository {
     required int userId,
   }) async {
     final DocumentSnapshot chatDoc = await getChatRoomById(chatRoomUid);
+
     logger.d(chatDoc.data());
     ChatRoomModel? chatRoomModel =
         ChatRoomModel.fromMap((chatDoc.data() as Map<String, dynamic>));
+
+    // 멤버에 없는 상태면 return
+    if (!chatRoomModel.firstUserInfoList
+        .any((element) => element.userId == userId)) return;
+
     await firebaseFirestore.collection('ChatRoom').doc(chatRoomUid).update(
       {
         'connectingUsers': FieldValue.arrayRemove([userId]),
