@@ -4,6 +4,7 @@ import 'package:biskit_app/alarm/provider/alarm_provider.dart';
 import 'package:biskit_app/alarm/view/alarm_list_screen.dart';
 import 'package:biskit_app/common/components/btn_tag_widget.dart';
 import 'package:biskit_app/common/components/category_item_widget.dart';
+import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -98,19 +99,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return SafeArea(
       top: false,
       bottom: false,
-      child: homeState.approveMeetings.isEmpty
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Navigation bar
-                _buildNavigatorBar(
-                  isApproveMeetupEmpty: true,
-                ),
-                if (userState is UserModel && systemState is UserSystemModel)
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: const ClampingScrollPhysics(),
-                      child: Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Navigation bar
+          _buildNavigatorBar(
+            isApproveMeetupEmpty: homeState.approveMeetings.isEmpty,
+            color: _color,
+          ),
+          if (homeState.fixTopics.isEmpty)
+            const Expanded(
+              child: Center(
+                child: CustomLoading(),
+              ),
+            )
+          else if (userState is UserModel && systemState is UserSystemModel)
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: homeState.approveMeetings.isEmpty
+                    ? Column(
                         children: [
                           // Category
                           _buildCategory(
@@ -152,25 +160,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                  )
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Navigation bar
-                _buildNavigatorBar(
-                  isApproveMeetupEmpty: false,
-                  color: _color,
-                ),
-                if (userState is UserModel && systemState is UserSystemModel)
-                  Expanded(
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      physics: const ClampingScrollPhysics(),
-                      child: Column(
+                      )
+                    : Column(
                         children: [
                           // Schedule
                           Stack(
@@ -259,10 +250,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-              ],
+              ),
             ),
+        ],
+      ),
     );
   }
 
