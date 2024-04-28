@@ -314,6 +314,8 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
             result = await ref
                 .read(createMeetUpProvider.notifier)
                 .putUpdateMeetUp(widget.editMeetingId!);
+            ref.read(meetUpProvider.notifier).paginate(forceRefetch: true);
+
             if (result && mounted) {
               context.loaderOverlay.hide();
               Navigator.pop(context, widget.isEditMode ? true : [true]);
