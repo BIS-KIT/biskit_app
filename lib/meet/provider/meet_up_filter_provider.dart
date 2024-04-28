@@ -53,33 +53,33 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
         .getUserSystem(userId: (ref.read(userMeProvider) as UserModel).id);
 
     return [
-      MeetUpFilterGroup(
-        groupText: 'exploreFilterBottomSheet.date.title'.tr(),
-        filterType: MeetUpFilterType.time,
-        filterViewType: MeetUpFilterViewType.days,
-        filterList: [
-          MeetUpFilterModel(
-            text: 'exploreFilterBottomSheet.date.today'.tr(),
-            isSeleted: false,
-            value: 'TODAY',
-          ),
-          MeetUpFilterModel(
-            text: 'exploreFilterBottomSheet.date.tomorrow'.tr(),
-            isSeleted: false,
-            value: 'TOMORROW',
-          ),
-          MeetUpFilterModel(
-            text: 'exploreFilterBottomSheet.date.thisWeek'.tr(),
-            isSeleted: false,
-            value: 'THIS_WEEK',
-          ),
-          MeetUpFilterModel(
-            text: 'exploreFilterBottomSheet.date.nextWeek'.tr(),
-            isSeleted: false,
-            value: 'NEXT_WEEK',
-          ),
-        ],
-      ),
+      // MeetUpFilterGroup(
+      //   groupText: 'exploreFilterBottomSheet.date.title'.tr(),
+      //   filterType: MeetUpFilterType.time,
+      //   filterViewType: MeetUpFilterViewType.days,
+      //   filterList: [
+      //     MeetUpFilterModel(
+      //       text: 'exploreFilterBottomSheet.date.today'.tr(),
+      //       isSeleted: false,
+      //       value: 'TODAY',
+      //     ),
+      //     MeetUpFilterModel(
+      //       text: 'exploreFilterBottomSheet.date.tomorrow'.tr(),
+      //       isSeleted: false,
+      //       value: 'TOMORROW',
+      //     ),
+      //     MeetUpFilterModel(
+      //       text: 'exploreFilterBottomSheet.date.thisWeek'.tr(),
+      //       isSeleted: false,
+      //       value: 'THIS_WEEK',
+      //     ),
+      //     MeetUpFilterModel(
+      //       text: 'exploreFilterBottomSheet.date.nextWeek'.tr(),
+      //       isSeleted: false,
+      //       value: 'NEXT_WEEK',
+      //     ),
+      //   ],
+      // ),
       MeetUpFilterGroup(
         groupText: 'exploreFilterBottomSheet.day.title'.tr(),
         filterType: MeetUpFilterType.time,
