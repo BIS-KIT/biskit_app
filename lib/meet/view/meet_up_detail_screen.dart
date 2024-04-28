@@ -152,16 +152,15 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
 
   setChartDatas() {
     // XXX: 모임상세-참가자 사용언어를 기존에는 모임에서 사용할 언어만 filtering 하여 보여줬는데, 모임 참여자들의 언어는 모두 노출시키도록 수정
-    // TODO: 더 좋은 로직이 있을지 생각해보자..
     for (var l in availableLangList) {
       // for (var l in meetUpDetailModel!.languages) {
       List<ChartDataModel> list = [];
       String description = '';
-
       Set<String> levelSet = availableLangList
           .where((element) => element.language.id == l.language.id)
           .map((e) => e.level)
           .toSet();
+
       for (var level in levelSet) {
         list.add(ChartDataModel(
           title: getLevelServerValueToKrString(level),
@@ -172,7 +171,6 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               .length,
         ));
       }
-
       // 챠트 설명 셋팅
       if (list.length == 1) {
         // 레벨이 1개인 경우
@@ -198,10 +196,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
           description = getLanMaxDescription(chartDataModel.title);
         }
       }
-
-// TODO: availableLangList에는 참여자들의 언어 모델이 다 들어가있기 때문에 겹치는 공통된 언어가 있는 경우 모임 상세 화면에서 언어 리스트가 중복으로 노출됨. 이런 문제 때문에 조건문으로 분기처리 했는데, 더 좋은 로직으로 리팩터링이 필요...
-      if ((chartDatas.map((e) => e.lang)).contains(l.language)) {
-        return;
+      // TODO: 리팩터링 필요
+      if ((chartDatas.map((e) => e.lang.id)).contains(l.language.id)) {
+        // return;
       } else {
         chartDatas.add(ChartDataListModel(
           lang: l.language,
