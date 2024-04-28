@@ -84,6 +84,7 @@ class _ProfileIdConfirmScreenState
               );
       if (studentVerificationModel != null) {
         if (!mounted) return;
+        ref.read(userMeProvider.notifier).getMe();
         Navigator.pop(context);
       }
     }
@@ -175,7 +176,7 @@ class _ProfileIdConfirmScreenState
               },
               child: Container(
                 width: size.width - 40,
-                height: size.width - 40,
+                height: size.height * 0.47,
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 1,

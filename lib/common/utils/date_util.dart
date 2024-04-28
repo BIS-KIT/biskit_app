@@ -59,11 +59,18 @@ getMeetUpDateStr({
   final DateTime now = DateTime.now();
   final DateTime meetupDate = DateTime.parse(meetUpDateStr);
 
-  if (now.day - meetupDate.day == 0) {
+  if (now.year == meetupDate.year &&
+      now.month == meetupDate.month &&
+      now.day == meetupDate.day) {
     return 'homeScreen.date.today'.tr();
-  } else if (now.day - meetupDate.day == -1) {
-    return 'homeScreen.date.tomorrow'.tr();
   } else {
-    return dateFormat.format(meetupDate);
+    final DateTime tomorrow = now.add(const Duration(days: 1));
+    if (tomorrow.year == meetupDate.year &&
+        tomorrow.month == meetupDate.month &&
+        tomorrow.day == meetupDate.day) {
+      return 'homeScreen.date.tomorrow'.tr();
+    } else {
+      return dateFormat.format(meetupDate);
+    }
   }
 }

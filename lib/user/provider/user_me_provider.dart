@@ -1,7 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
@@ -9,6 +5,9 @@ import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
 
@@ -111,6 +110,9 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
             if (['Incorrect credentials', 'User Not Found']
                 .contains(e.response!.data['detail'])) {
               userModelBase = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
+            } else if (e.response!.data['detail'] ==
+                'Account in the process of withdrawal') {
+              userModelBase = UserModelError(message: '사용할 수 없는 이메일입니다');
             } else {
               userModelBase = null;
             }

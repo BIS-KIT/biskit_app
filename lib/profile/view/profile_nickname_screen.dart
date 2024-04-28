@@ -42,6 +42,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
   // Map<String, String>? nickNameMap;
   String? nickNameError;
   bool isNickNameOk = false;
+  String? nickname;
 
   Timer? _debounce;
 
@@ -58,19 +59,23 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    init();
+    if (nickname == null) {
+      init();
+    }
   }
 
   init() async {
     String languageCode = context.locale.languageCode;
 
     context.loaderOverlay.show();
+    logger.d('nickname!!');
     final res = await ref
         .read(profileRepositoryProvider)
         .getRandomNickname(languageCode == 'en' ? 'en' : 'kr');
     if (res != null) {
       String keyName = languageCode == 'en' ? 'en_nick_name' : 'kr_nick_name';
       String temp = res[keyName] ?? '';
+      nickname = temp;
       controller.text = temp.replaceAll(' ', '');
     }
     randomProfile =
