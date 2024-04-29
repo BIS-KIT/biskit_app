@@ -198,6 +198,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                     if (widget.isParticipantsStatusTag)
                       Builder(builder: (context) {
                         bool isKorean = false;
+                        if (widget.model.current_participants ==
+                            widget.model.max_participants) {
+                          return Container();
+                        }
                         if ((widget.userModel as UserModel)
                             .user_nationality
                             .where((element) =>
@@ -205,16 +209,16 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                             .isNotEmpty) {
                           isKorean = true;
                         }
-                        if (isKorean && widget.model.korean_count == 0) {
+                        if (isKorean && widget.model.foreign_count == 0) {
                           return NewBadgeWidget(
-                            text: 'meetupDetailScreen.recruitKorean'.tr(),
+                            text: 'meetupDetailScreen.recruitForeigner'.tr(),
                             type: BadgeType.secondary,
                             size: BadgeSize.M,
                           );
                         } else if (!isKorean &&
-                            widget.model.foreign_count == 0) {
+                            widget.model.korean_count == 0) {
                           return NewBadgeWidget(
-                            text: 'meetupDetailScreen.recruitForeigner'.tr(),
+                            text: 'meetupDetailScreen.recruitKorean'.tr(),
                             type: BadgeType.secondary,
                             size: BadgeSize.M,
                           );

@@ -95,6 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final userState = ref.watch(userMeProvider);
     final homeState = ref.watch(homeProvider);
     final systemState = ref.watch(systemProvider);
+    final alarmState = ref.watch(alarmProvider);
 
     return SafeArea(
       top: false,
@@ -106,6 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           _buildNavigatorBar(
             isApproveMeetupEmpty: homeState.approveMeetings.isEmpty,
             color: _color,
+            alarmState: alarmState,
           ),
           if (homeState.fixTopics.isEmpty)
             const Expanded(
@@ -116,6 +118,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           else if (userState is UserModel && systemState is UserSystemModel)
             Expanded(
               child: SingleChildScrollView(
+                controller: scrollController,
                 physics: const ClampingScrollPhysics(),
                 child: homeState.approveMeetings.isEmpty
                     ? Column(
@@ -604,13 +607,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildNavigatorBar({
     required bool isApproveMeetupEmpty,
     Color? color,
+    AlarmListModelBase? alarmState,
   }) {
     final padding = MediaQuery.of(context).padding;
 
     bool hasUnreadAlarm() {
-      if (ref.watch(alarmProvider) is AlarmListModel) {
-        List<AlarmModel> alarms =
-            (ref.watch(alarmProvider) as AlarmListModel).alarms;
+      if (alarmState is AlarmListModel) {
+        List<AlarmModel> alarms = alarmState.alarms;
         for (var alarm in alarms) {
           if (alarm.is_read == false) {
             return true;

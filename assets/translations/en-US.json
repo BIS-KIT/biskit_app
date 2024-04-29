@@ -982,5 +982,9 @@
     "reject": "Reject",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "etc": {
+    "retry": "retry",
+    "noData": "noData"
   }
 }
