@@ -90,9 +90,9 @@ class PaginationProvider<T extends IModelWithId,
         logger.d('case1: $state');
         final pState = state as CursorPagination;
 
-        if (!pState.meta.hasMore) {
-          return;
-        }
+        // if (!pState.meta.hasMore) {
+        //   return;
+        // }
       }
 
       final isLoading = state is CursorPaginationLoading;
