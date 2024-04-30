@@ -949,7 +949,7 @@
     "acWarnings": "누적 경고 횟수",
     "warning": "경고",
     "description1": "서비스 이용규정 위반으로 경고가",
-    "description2": "회 누적되었습니다.",
+    "description2": "누적되었습니다.",
     "noWarnings": "경고 내역이 없어요",
     "count": "회"
   },

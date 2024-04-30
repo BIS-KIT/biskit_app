@@ -81,7 +81,7 @@ class _SetPasswordCompletedScreenState
                 height: 12,
               ),
               Text(
-                'pwChangedTitle.pwChangedText'.tr(),
+                'resetPasswordCompleteScreen.pwChangedText'.tr(),
                 style: getTsBody16Rg(context).copyWith(
                   color: kColorContentWeaker,
                 ),
