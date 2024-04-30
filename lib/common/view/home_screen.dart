@@ -7,6 +7,7 @@ import 'package:biskit_app/common/components/category_item_widget.dart';
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
@@ -19,6 +20,7 @@ import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_detail_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_search_screen.dart';
+import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
 import 'package:biskit_app/setting/model/user_system_model.dart';
 import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
@@ -158,7 +160,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
 
                                 // Make meetup card
-                                _buildMakeMeetupCard(context),
+                                _buildMakeMeetupCard(context, userState),
                               ],
                             ),
                           ),
@@ -219,7 +221,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         ),
 
                                         // Make meetup card
-                                        _buildMakeMeetupCard(context),
+                                        _buildMakeMeetupCard(
+                                            context, userState),
                                       ],
                                     ),
                                   )
@@ -332,7 +335,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Container _buildMakeMeetupCard(BuildContext context) {
+  Container _buildMakeMeetupCard(
+      BuildContext context, UserModelBase userState) {
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 32,
@@ -351,12 +355,61 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                createUpDownRoute(
-                  const MeetUpCreateScreen(),
-                ),
-              );
+              if (userState is UserModel &&
+                  userState.profile != null &&
+                  (userState.profile!.student_verification == null ||
+                      userState.profile!.student_verification!
+                              .verification_status ==
+                          VerificationStatus.REJECTED.name)) {
+                // 인증을 안했을때
+                showConfirmModal(
+                  context: context,
+                  title: 'homeScreen.verifyModal.title'.tr(),
+                  content: 'homeScreen.verifyModal.subtitle'.tr(),
+                  leftButton: 'homeScreen.verifyModal.cancel'.tr(),
+                  leftCall: () {
+                    Navigator.pop(context);
+                  },
+                  rightButton: 'homeScreen.verifyModal.verify'.tr(),
+                  rightBackgroundColor: kColorBgPrimary,
+                  rightTextColor: kColorContentOnBgPrimary,
+                  rightCall: () async {
+                    Navigator.pop(context);
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileIdConfirmScreen(
+                          isEditor: true,
+                        ),
+                      ),
+                    );
+                    await ref.read(userMeProvider.notifier).getMe();
+                  },
+                );
+              } else if (userState is UserModel &&
+                  userState.profile != null &&
+                  (userState.profile!.student_verification!
+                              .verification_status ==
+                          VerificationStatus.PENDING.name ||
+                      userState.profile!.student_verification!
+                              .verification_status ==
+                          VerificationStatus.REJECTED.name)) {
+                showDefaultModal(
+                  context: context,
+                  title: 'homeScreen.pendingModal.title'.tr(),
+                  content: 'homeScreen.pendingModal.subtitle'.tr(),
+                  function: () {
+                    Navigator.pop(context);
+                  },
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  createUpDownRoute(
+                    const MeetUpCreateScreen(),
+                  ),
+                );
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
