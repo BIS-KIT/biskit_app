@@ -22,19 +22,22 @@ class SystemStateNotifier extends StateNotifier<UserSystemModelBase?> {
   }) : super(UserSystemModelLoading()) {
     getUserSystem();
   }
-  Future<void> getUserSystem() async {
+  Future<int> getUserSystem() async {
+    int systemId = 0;
     try {
       UserSystemModel? res =
           await ref.read(settingRepositoryProvider).getUserSystem(
-                userId: (ref.read(userMeProvider) as UserModel).id,
+                userId: (ref.watch(userMeProvider) as UserModel).id,
               );
       state = res;
+      systemId = res!.id;
     } catch (e) {
       state = UserSystenModelError(
         message: e.toString(),
       );
       logger.e(e.toString());
     }
+    return systemId;
   }
 
   Future<void> updateUserOSLanguage({systemId, selectedLang}) async {
