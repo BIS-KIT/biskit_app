@@ -46,7 +46,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
   late FocusNode birthDayFocusNode;
   late FocusNode nameFocusNode;
   RadioWidgetValueType selectGender = RadioWidgetValueType.none;
-
+  bool isButtonEnable = false;
   @override
   void initState() {
     super.initState();
@@ -213,6 +213,15 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    isButtonEnable = isValidName &&
+        birthYear.isNotEmpty &&
+        birthYearError == null &&
+        birthMonth.isNotEmpty &&
+        birthMonthError == null &&
+        birthDay.isNotEmpty &&
+        birthDayError == null &&
+        isValidGender;
+
     return DefaultLayout(
       resizeToAvoidBottomInset: false,
       title: '',
@@ -418,6 +427,9 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
             const Spacer(),
             GestureDetector(
               onTap: () {
+                if (!isButtonEnable) {
+                  return;
+                }
                 context.pushNamed(
                   SingleNationalFlagScreen.routeName,
                   extra: widget.signUpModel.copyWith(
@@ -431,14 +443,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
               },
               child: FilledButtonWidget(
                 text: 'signUpNameScreen.next'.tr(),
-                isEnable: isValidName &&
-                    birthYear.isNotEmpty &&
-                    birthYearError == null &&
-                    birthMonth.isNotEmpty &&
-                    birthMonthError == null &&
-                    birthDay.isNotEmpty &&
-                    birthDayError == null &&
-                    isValidGender,
+                isEnable: isButtonEnable,
               ),
             ),
             const SizedBox(
