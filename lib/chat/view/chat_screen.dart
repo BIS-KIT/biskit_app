@@ -477,6 +477,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   @override
   Widget build(BuildContext context) {
     userState = ref.watch(userMeProvider);
+    final DateFormat dateFormatUS = DateFormat('MM/dd (EEE)', 'en_US');
+    final DateFormat dateFormatKO = DateFormat('MM/dd (EEE)', 'ko_KR');
+    final DateFormat timeFormatUS = DateFormat('a h:mm', 'en_US');
+    final DateFormat timeFormatKO = DateFormat('a h:mm', 'ko_KR');
+
     return WillPopScope(
       onWillPop: () async {
         disConnectChatRoom();
@@ -733,9 +738,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      infoDateFormat1.format(
+                                      (context.locale.languageCode == 'en'
+                                              ? dateFormatUS
+                                              : dateFormatKO)
+                                          .format(
                                         DateTime.parse(
-                                            meetUpModel!.created_time),
+                                            meetUpModel!.meeting_time),
                                       ),
                                       style: getTsBody14Rg(context).copyWith(
                                         color: kColorContentWeak,
@@ -754,9 +762,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                       width: 4,
                                     ),
                                     Text(
-                                      msgDateFormat.format(
+                                      (context.locale.languageCode == 'en'
+                                              ? timeFormatUS
+                                              : timeFormatKO)
+                                          .format(
                                         DateTime.parse(
-                                            meetUpModel!.created_time),
+                                            meetUpModel!.meeting_time),
                                       ),
                                       style: getTsBody14Rg(context).copyWith(
                                         color: kColorContentWeak,
@@ -1008,7 +1019,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               .any((element) => element.user_id == notice.createUserId) &&
           profilePhotoList.isNotEmpty) {
         // 기존에 프로필 정보가 없으면 처리
-        addProfilePhoto(notice.createUserId);
+        // addProfilePhoto(notice.createUserId);
       }
     }
     return Padding(
