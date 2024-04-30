@@ -68,7 +68,6 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
     String languageCode = context.locale.languageCode;
 
     context.loaderOverlay.show();
-    logger.d('nickname!!');
     final res = await ref
         .read(profileRepositoryProvider)
         .getRandomNickname(languageCode == 'en' ? 'en' : 'kr');
@@ -104,7 +103,6 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
       _debounce!.cancel();
     }
     _debounce = Timer(const Duration(milliseconds: 300), () async {
-      // logger.d('$value : ${value.isNickName()}');
       if (value.isNickName()) {
         if (!await ref
             .read(profileRepositoryProvider)
@@ -349,7 +347,7 @@ class _ProfileNicknameScreenState extends ConsumerState<ProfileNicknameScreen> {
                         errorText: nickNameError,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                              RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9]'))
+                              RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9：ㆍ]'))
                         ],
                         suffixIcon: controller.text.isNotEmpty
                             ? GestureDetector(
