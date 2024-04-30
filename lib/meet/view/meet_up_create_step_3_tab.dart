@@ -1,17 +1,14 @@
-import 'package:biskit_app/profile/model/available_language_model.dart';
-import 'package:biskit_app/setting/model/user_system_model.dart';
-import 'package:biskit_app/setting/provider/system_provider.dart';
-import 'package:collection/collection.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
+import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/components/chip_widget.dart';
 
@@ -30,7 +27,6 @@ class MeetUpCreateStep3Tab extends ConsumerStatefulWidget {
 class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
   late FocusNode customTagFocusNode;
   late final TextEditingController customTagController;
-  String? selectedLang;
 
   @override
   void initState() {
@@ -50,12 +46,7 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userMeProvider);
     final createMeetUpState = ref.watch(createMeetUpProvider);
-    if (selectedLang == null) {
-      setState(() {
-        selectedLang =
-            (ref.watch(systemProvider) as UserSystemModel).system_language;
-      });
-    }
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -100,9 +91,9 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                               userState.profile!.available_languages.firstWhere(
                                   (element) => element.language.id == id);
                           return ChipWidget(
-                            text: selectedLang == 'kr'
-                                ? languageModel.language.kr_name
-                                : languageModel.language.en_name,
+                            text: context.locale.languageCode == 'en'
+                                ? languageModel.language.en_name
+                                : languageModel.language.kr_name,
                             order: index + 1,
                             isSelected: true,
                             onClickSelect: () {
@@ -117,9 +108,9 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                                 .contains(e1.language.id))
                             .map((e) {
                           return ChipWidget(
-                            text: selectedLang == 'kr'
-                                ? e.language.kr_name
-                                : e.language.en_name,
+                            text: context.locale.languageCode == 'en'
+                                ? e.language.en_name
+                                : e.language.kr_name,
                             order: null,
                             isSelected: false,
                             onClickSelect: () {
@@ -188,7 +179,9 @@ class _MeetUpCreateStep3TabState extends ConsumerState<MeetUpCreateStep3Tab> {
                       ),
                       ...widget.tags.map(
                         (e) => ChipWidget(
-                          text: selectedLang == 'kr' ? e.kr_name : e.en_name,
+                          text: context.locale.languageCode == 'en'
+                              ? e.en_name
+                              : e.kr_name,
                           isSelected: createMeetUpState.tag_ids.contains(e.id),
                           onClickSelect: () {
                             ref.read(createMeetUpProvider.notifier).onTapTag(e);

@@ -573,14 +573,11 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                                     ? topic.kr_name.isNotEmpty
                                                         ? topic.kr_name
                                                         : topic.en_name
-                                                    : systemState
-                                                                is UserSystemModel &&
-                                                            (systemState
-                                                                        as UserSystemModel)
-                                                                    .system_language ==
-                                                                'kr'
-                                                        ? topic.kr_name
-                                                        : topic.en_name,
+                                                    : context.locale
+                                                                .languageCode ==
+                                                            'en'
+                                                        ? topic.en_name
+                                                        : topic.kr_name,
                                                 type: BadgeType.primary,
                                                 size: BadgeSize.M),
                                           ),
@@ -691,9 +688,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) => ChipWidget(
-                  text: (systemState as UserSystemModel).system_language == 'kr'
-                      ? chartDatas[index].lang.kr_name
-                      : chartDatas[index].lang.en_name,
+                  text: context.locale.languageCode == 'en'
+                      ? chartDatas[index].lang.en_name
+                      : chartDatas[index].lang.kr_name,
                   isSelected: index == chartLangSelectedIndex,
                   selectedColor: kColorBgInverseWeak,
                   selectedBorderColor: kColorBgInverseWeak,
@@ -1107,12 +1104,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                         ? tag.kr_name.isNotEmpty
                             ? tag.kr_name
                             : tag.en_name
-                        : ref.watch(systemProvider) is UserSystemModel &&
-                                (ref.watch(systemProvider) as UserSystemModel)
-                                        .system_language ==
-                                    'kr'
-                            ? tag.kr_name
-                            : tag.en_name,
+                        : context.locale.languageCode == 'en'
+                            ? tag.en_name
+                            : tag.kr_name,
                   ),
                 ),
               ],
@@ -1269,9 +1263,7 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                 Text(
                                   meetUpDetailModel!.meeting_time.isEmpty
                                       ? ''
-                                      : context.locale.languageCode ==
-                                              'ko'
-                                                  'kr'
+                                      : context.locale.languageCode == 'ko'
                                           ? timeFormatKO.format(
                                               DateTime.parse(meetUpDetailModel!
                                                   .meeting_time),
@@ -1410,12 +1402,9 @@ class _MeetUpDetailScreenState extends ConsumerState<MeetUpDetailScreen> {
                                       width: 4,
                                     ),
                                     Text(
-                                      systemState is UserSystemModel &&
-                                              (systemState as UserSystemModel)
-                                                      .system_language ==
-                                                  'kr'
-                                          ? lang.kr_name
-                                          : lang.en_name,
+                                      context.locale.languageCode == 'en'
+                                          ? lang.en_name
+                                          : lang.kr_name,
                                       style: getTsBody14Rg(context).copyWith(
                                         color: kColorContentWeak,
                                       ),
