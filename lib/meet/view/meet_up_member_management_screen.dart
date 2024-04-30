@@ -148,11 +148,11 @@ class _MeetUpMemberManagementScreenState
               },
               rightCall: () async {
                 context.loaderOverlay.show();
-
                 bool isOk =
                     await ref.read(meetUpRepositoryProvider).postExitMeeting(
                           user_id: userModel.id,
                           meeting_id: widget.meetUpDetailModel.id,
+                          is_fire: true,
                         );
                 if (isOk) {
                   await ref.read(chatRepositoryProvider).chatExist(

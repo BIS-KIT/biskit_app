@@ -578,19 +578,22 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   postExitMeeting({
     required int user_id,
     required int meeting_id,
+    bool? is_fire = false,
   }) async {
     bool isOk = false;
+
     try {
-      final res = await dio.post(
-        '$baseUrl/$meeting_id/user/$user_id/exit',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'accessToken': 'true',
-          },
-        ),
-      );
+      final res = await dio.post('$baseUrl/$meeting_id/user/$user_id/exit',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'accessToken': 'true',
+            },
+          ),
+          queryParameters: {
+            'is_fire': is_fire,
+          });
 
       logger.d(res);
       if (res.statusCode == 201 || res.statusCode == 200) {
