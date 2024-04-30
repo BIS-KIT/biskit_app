@@ -126,16 +126,16 @@ class _SingleNationalFlagScreenState
     } else {
       String locale = context.locale.languageCode;
       List<NationalFlagModel> searchList = nationalList
-          .where((n) => (locale == 'ko' ? n.kr_name : n.en_name)
+          .where((n) => (locale == 'en' ? n.en_name : n.kr_name)
               .toLowerCase()
               .contains(value.toLowerCase()))
           .toList();
 
       searchList.sort((a, b) {
-        int indexOfA = (locale == 'ko' ? a.kr_name : a.en_name)
+        int indexOfA = (locale == 'en' ? a.en_name : a.kr_name)
             .toLowerCase()
             .indexOf(value.toLowerCase());
-        int indexOfB = (locale == 'ko' ? a.kr_name : a.en_name)
+        int indexOfB = (locale == 'en' ? a.en_name : a.kr_name)
             .toLowerCase()
             .indexOf(value.toLowerCase());
         if (indexOfA >= 0 && indexOfB >= 0) {
