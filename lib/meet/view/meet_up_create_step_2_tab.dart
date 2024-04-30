@@ -192,12 +192,9 @@ class _MeetUpCreateStep2TabState extends ConsumerState<MeetUpCreateStep2Tab> {
                 child: OutlinedButtonWidget(
                   text: selectedDateTime == null
                       ? ''
-                      : widget.systemModel is UserSystemModel &&
-                              (widget.systemModel as UserSystemModel)
-                                      .system_language ==
-                                  'kr'
-                          ? dateFormatKO.format(selectedDateTime!)
-                          : dateFormatUS.format(selectedDateTime!),
+                      : context.locale.languageCode == 'en'
+                          ? dateFormatUS.format(selectedDateTime!)
+                          : dateFormatKO.format(selectedDateTime!),
                   height: 52,
                   isEnable: true,
                 ),

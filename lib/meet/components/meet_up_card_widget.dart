@@ -266,10 +266,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       Text(
                         getMeetUpDateStr(
                           meetUpDateStr: widget.model.meeting_time,
-                          dateFormat: widget.systemModel is UserSystemModel &&
-                                  (widget.systemModel as UserSystemModel)
-                                          .system_language ==
-                                      'en'
+                          dateFormat: context.locale.languageCode == 'en'
                               ? dateFormatUS
                               : dateFormatKO,
                         ),
@@ -292,10 +289,7 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                       Text(
                         widget.model.meeting_time.isEmpty
                             ? ''
-                            : widget.systemModel is UserSystemModel &&
-                                    (widget.systemModel as UserSystemModel)
-                                            .system_language ==
-                                        'en'
+                            : context.locale.languageCode == 'en'
                                 ? timeFormatUS.format(
                                     DateTime.parse(widget.model.meeting_time))
                                 : timeFormatKO.format(
@@ -342,13 +336,9 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           Text(
                             getMeetUpDateStr(
                                 meetUpDateStr: widget.model.meeting_time,
-                                dateFormat: widget.systemModel
-                                            is UserSystemModel &&
-                                        (widget.systemModel as UserSystemModel)
-                                                .system_language ==
-                                            'kr'
-                                    ? dateFormatKO
-                                    : dateFormatUS),
+                                dateFormat: context.locale.languageCode == 'en'
+                                    ? dateFormatUS
+                                    : dateFormatKO),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
                             ),
@@ -368,13 +358,10 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                           Text(
                             widget.model.meeting_time.isEmpty
                                 ? ''
-                                : widget.systemModel is UserSystemModel &&
-                                        (widget.systemModel as UserSystemModel)
-                                                .system_language ==
-                                            'kr'
-                                    ? timeFormatKO.format(DateTime.parse(
+                                : context.locale.languageCode == 'en'
+                                    ? timeFormatUS.format(DateTime.parse(
                                         widget.model.meeting_time))
-                                    : timeFormatUS.format(DateTime.parse(
+                                    : timeFormatKO.format(DateTime.parse(
                                         widget.model.meeting_time)),
                             style: getTsBody14Rg(context).copyWith(
                               color: kColorContentWeaker,
@@ -439,13 +426,9 @@ class _MeetUpCardWidgetState extends State<MeetUpCardWidget> {
                                   ? tag.kr_name.isNotEmpty
                                       ? tag.kr_name
                                       : tag.en_name
-                                  : widget.systemModel is UserSystemModel &&
-                                          (widget.systemModel
-                                                      as UserSystemModel)
-                                                  .system_language ==
-                                              'kr'
-                                      ? tag.kr_name
-                                      : tag.en_name,
+                                  : context.locale.languageCode == 'en'
+                                      ? tag.en_name
+                                      : tag.kr_name,
                               style: getTsCaption12Rg(context).copyWith(
                                 color: kColorContentWeaker,
                               ),
