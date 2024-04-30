@@ -43,6 +43,8 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
     if (warningHistories == null) {
       init();
     }
+    final size = MediaQuery.of(context).size;
+
     return DefaultLayout(
       title: 'setWarningScreen.header'.tr(),
       shape: const Border(
@@ -93,6 +95,7 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                           itemCount: warningHistories!.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
+                              width: size.width,
                               decoration: const BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
@@ -106,13 +109,6 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                                     vertical: 16, horizontal: 20),
                                 child: Row(
                                   children: [
-                                    // const ThumbnailIconNotifyWidget(
-                                    //   backgroundColor: kColorBgError,
-                                    //   iconColor: kColorContentError,
-                                    // TODO: siren icon 으로 변경해야함
-                                    //   iconUrl:
-                                    //       'assets/icons/ic_siren_fill_24.svg',
-                                    // ),
                                     Container(
                                       width: 32,
                                       height: 32,
@@ -131,37 +127,43 @@ class _WarningHistoryScreenState extends ConsumerState<WarningHistoryScreen> {
                                     const SizedBox(
                                       width: 12,
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'setWarningScreen.warning'.tr(),
-                                          style: getTsBody14Sb(context)
-                                              .copyWith(
-                                                  color: kColorContentWeak),
-                                        ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Text(
-                                          '${'setWarningScreen.description1'.tr()} ${index + 1} ${'setWarningScreen.count'.tr()} ${'setWarningScreen.description2'.tr()}',
-                                          style: getTsBody14Rg(context)
-                                              .copyWith(
-                                                  color: kColorContentWeak),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        Text(
-                                          dayFormat.format(DateTime.parse(
-                                              warningHistories![index]
-                                                  .created_time)),
-                                          style: getTsCaption12Rg(context)
-                                              .copyWith(
-                                                  color: kColorContentWeakest),
-                                        ),
-                                      ],
+                                    SizedBox(
+                                      width: size.width - 85,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'setWarningScreen.warning'.tr(),
+                                            style: getTsBody14Sb(context)
+                                                .copyWith(
+                                                    color: kColorContentWeak),
+                                          ),
+                                          const SizedBox(
+                                            height: 4,
+                                          ),
+                                          Text(
+                                            '${'setWarningScreen.description1'.tr()} ${index + 1} ${'setWarningScreen.count'.tr()} ${'setWarningScreen.description2'.tr()}',
+                                            style: getTsBody14Rg(context)
+                                                .copyWith(
+                                                    color: kColorContentWeak),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                            dayFormat.format(DateTime.parse(
+                                                warningHistories![index]
+                                                    .created_time)),
+                                            style: getTsCaption12Rg(context)
+                                                .copyWith(
+                                                    color:
+                                                        kColorContentWeakest),
+                                          ),
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),

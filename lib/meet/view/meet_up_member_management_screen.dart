@@ -12,8 +12,6 @@ import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/profile/components/profile_list_widget.dart';
 import 'package:biskit_app/profile/components/profile_list_with_subtext_widget.dart';
 import 'package:biskit_app/profile/view/profile_view_screen.dart';
-import 'package:biskit_app/setting/model/user_system_model.dart';
-import 'package:biskit_app/setting/provider/system_provider.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -247,14 +245,11 @@ class _MeetUpMemberManagementScreenState
                                             profilePath: model
                                                 .user.profile!.profile_photo,
                                             isCreator: false,
-                                            subText: ref.watch(systemProvider)
-                                                        is UserSystemModel &&
-                                                    (ref.watch(systemProvider)
-                                                                as UserSystemModel)
-                                                            .system_language ==
-                                                        'kr'
-                                                ? '${dateFormatKO.format(DateTime.parse(model.created_time))} 신청'
-                                                : '${dateFormatUS.format(DateTime.parse(model.created_time))} Request',
+                                            subText: context
+                                                        .locale.languageCode ==
+                                                    'en'
+                                                ? '${dateFormatUS.format(DateTime.parse(model.created_time))} Request'
+                                                : '${dateFormatKO.format(DateTime.parse(model.created_time))} 신청',
                                             introductions: const [],
                                             onTap: () {
                                               if (model.user.profile == null) {

@@ -108,13 +108,9 @@ class _MeetUpCreateStep1TabState extends ConsumerState<MeetUpCreateStep1Tab> {
                           ...topicList
                               .map(
                                 (e) => ChipWidget(
-                                  text: widget.systemModel is UserSystemModel &&
-                                          (widget.systemModel
-                                                      as UserSystemModel)
-                                                  .system_language ==
-                                              'kr'
-                                      ? e.kr_name
-                                      : e.en_name,
+                                  text: context.locale.languageCode == 'en'
+                                      ? e.en_name
+                                      : e.kr_name,
                                   isSelected: createMeetUpState.topic_ids
                                       .contains(e.id),
                                   onClickSelect: () {

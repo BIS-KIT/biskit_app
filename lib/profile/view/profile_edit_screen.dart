@@ -980,7 +980,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 // onChanged: onSearchChanged,
                 errorText: nickNameError,
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9]'))
+                  FilteringTextInputFormatter.allow(
+                      RegExp('[a-zA-Zㄱ-ㅎ가-힣0-9：ㆍ]'))
                 ],
                 suffixIcon: nickNameController.text.isNotEmpty
                     ? GestureDetector(

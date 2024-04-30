@@ -371,7 +371,7 @@ class _UniversityScreenState extends ConsumerState<UniversityScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        context.locale.countryCode == 'en'
+                                        context.locale.languageCode == 'en'
                                             ? universitySet!
                                                 .universityGraduateStatusModel
                                                 .ename
