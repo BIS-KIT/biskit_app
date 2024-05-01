@@ -13,6 +13,7 @@
     "login": "로그인",
     "signUp": "회원가입",
     "errorToast": "이메일 또는 비밀번호가 일치하지 않아요",
+    "deletedAccount": "사용할 수 없는 이메일입니다",
     "findEmail": "아이디 찾기",
     "resetPassword": "비밀번호 재설정"
   },
@@ -981,7 +982,8 @@
     "confirm": "확인",
     "reject": "거절",
     "edit": "수정하기",
-    "delete": "삭제하기"
+    "delete": "삭제하기",
+    "ok": "확인"
   },
   "etc": {
     "retry": "다시시도",

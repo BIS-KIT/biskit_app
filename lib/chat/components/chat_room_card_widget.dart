@@ -1,13 +1,13 @@
-import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
-import 'package:biskit_app/common/const/data.dart';
-import 'package:flutter/material.dart';
-
 import 'package:biskit_app/chat/model/chat_msg_model.dart';
 import 'package:biskit_app/chat/model/chat_room_model.dart';
+import 'package:biskit_app/common/components/thumbnail_icon_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
+import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/date_util.dart';
 import 'package:biskit_app/user/model/user_model.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
 class ChatRoomCardWidget extends StatefulWidget {
   final ChatRoomModel chatRoomModel;
@@ -124,6 +124,7 @@ class _ChatRoomCardWidgetState extends State<ChatRoomCardWidget> {
                         ? ''
                         : getDateTimeToString(
                             widget.chatRoomModel.lastMsgDate.toDate(),
+                            context.locale.languageCode,
                           ),
                     style: getTsCaption12Rg(context).copyWith(
                       color: kColorContentWeakest,

@@ -1,11 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
@@ -16,6 +11,10 @@ import 'package:biskit_app/profile/components/keyword_input_widget.dart';
 import 'package:biskit_app/profile/model/Introduction_create_model.dart';
 import 'package:biskit_app/profile/model/profile_create_model.dart';
 import 'package:biskit_app/profile/view/profile_id_confirm_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileKeywordScreen extends StatefulWidget {
   static String get routeName => 'profileKeyword';
@@ -143,7 +142,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}${'addKeywordScreen.title'.tr()}',
+                  '${context.locale.languageCode == 'en' ? 'Welcome ' : ''} ${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}${'addKeywordScreen.title'.tr()}',
                   style: getTsHeading24(context).copyWith(
                     color: kColorContentDefault,
                   ),

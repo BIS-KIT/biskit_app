@@ -13,6 +13,7 @@
     "login": "Sign in",
     "signUp": "Sign up",
     "errorToast": "Wrong email or Password",
+    "deletedAccount": "Not available Account",
     "findEmail": "Forgot email?",
     "resetPassword": "Forgot password?"
   },
@@ -286,7 +287,7 @@
   },
 
   "addKeywordScreen": {
-    "title": ",\nWhat's your favorite?",
+    "title": "!\nWhat's your favorite?",
     "subtitle": "You can meet friends with similar tastes",
     "next": "Next",
     "save": "save"
@@ -580,7 +581,7 @@
     "title": "Meetups",
     "placeholder": "Search by keywords",
     "noResult": "No Result Found",
-    "makeMeetup": "How about make your own meetup?",
+    "makeMeetup": "Create your own meetup and Enjoy it!",
     "createMeetup": "Create meetup"
   },
 
@@ -807,7 +808,7 @@
       "subtitle": "BISKIT allows only student-authenticated users to participate in meetings to ensure safety. We'll authenticate as soon as possible",
       "ok": "OK"
     },
-    "makeMeetup": "How about make your own meetup?",
+    "makeMeetup": "Create your own meetup and Enjoy it!",
     "createMeetup": "Create meetup"
   },
 
@@ -981,7 +982,8 @@
     "confirm": "Confirm",
     "reject": "Reject",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "ok": "ok"
   },
   "etc": {
     "retry": "retry",

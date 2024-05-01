@@ -437,7 +437,7 @@ class _MeetUpMemberManagementScreenState
             height: 8,
           ),
           Text(
-            '참여 대기자가 없어요',
+            'adminMemberScreen.request.none'.tr(),
             style: getTsBody16Sb(context).copyWith(
               color: kColorContentPlaceholder,
             ),

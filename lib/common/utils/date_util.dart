@@ -15,18 +15,21 @@ int getTimestampDifferenceMin(Timestamp t1, Timestamp t2) {
   return t1.toDate().minute - t2.toDate().minute;
 }
 
-String getDateTimeToString(DateTime dateTime) {
-  final DateFormat dayFormat1 = DateFormat('MM월 dd일', 'ko');
-  final DateFormat dayFormat2 = DateFormat('a hh:mm', 'ko');
+String getDateTimeToString(DateTime dateTime, String? langCode) {
+  final DateFormat dateFormatUS = DateFormat('MM/dd (EEE)', 'en_US');
+  final DateFormat dateFormatKO = DateFormat('MM월 dd일 (EEE)', 'ko_KR');
+  final DateFormat timeFormatUS = DateFormat('a h:mm', 'en_US');
+  final DateFormat timeFormatKO = DateFormat('a h:mm', 'ko_KR');
+
   int dayDiff = getDayDifference(dateTime, DateTime.now());
   if (dayDiff == 0) {
     // 오늘이면 시간으로 반환
-    return dayFormat2.format(dateTime);
+    return ((langCode == 'en' ? timeFormatUS : timeFormatKO)).format(dateTime);
   } else if (dayDiff.abs() == 1) {
     return '어제';
   } else {
     // 오늘이 아니면 날짜로 반환
-    return dayFormat1.format(dateTime);
+    return ((langCode == 'en' ? dateFormatUS : dateFormatKO)).format(dateTime);
   }
 }
 

@@ -110,7 +110,7 @@ class _NameBirthGenderScreenState extends State<NameBirthGenderScreen> {
       });
     } else if (!isValidNameType(name)) {
       setState(() {
-        nameError = '한글 또는 영문으로 입력해주세요';
+        nameError = 'signUpNameScreen.name.error'.tr();
       });
     } else {
       setState(() {

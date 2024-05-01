@@ -53,8 +53,8 @@ class _RootTabState extends ConsumerState<RootTab>
 
   @override
   void didChangeDependencies() {
-    updateUserOSLanguage();
     super.didChangeDependencies();
+    updateUserOSLanguage();
   }
 
   @override

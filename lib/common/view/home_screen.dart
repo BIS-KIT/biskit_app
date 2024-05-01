@@ -309,7 +309,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               vertical: 4,
             ),
             child: Text(
-              '${userState.profile!.nick_name}${'homeScreen.upcoming'.tr()}',
+              '${context.locale.languageCode == 'en' ? 'Hello ' : ''}${userState.profile!.nick_name}${'homeScreen.upcoming'.tr()}',
               style: getTsHeading20(context).copyWith(
                 color: kColorContentOnBgPrimary,
               ),

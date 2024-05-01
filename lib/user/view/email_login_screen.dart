@@ -72,7 +72,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
   bool checkEmail() {
     if (!email.isValidEmailFormat()) {
       setState(() {
-        emailError = '이메일 형식을 확인해주세요';
+        emailError = 'emailLoginScreen.email.error'.tr();
       });
       return false;
     } else {

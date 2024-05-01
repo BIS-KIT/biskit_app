@@ -53,9 +53,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   List<ProfilePhotoModel> profilePhotoList = [];
   late final TextEditingController textEditingController;
   late final ScrollController scrollController;
-  final DateFormat msgDateFormat = DateFormat('a hh:mm', 'ko');
-  final DateFormat dayFormat = DateFormat('yyyy년 MM월 dd일 EEE', 'ko');
-  final DateFormat infoDateFormat1 = DateFormat('MM/dd (EEE)', 'ko');
+
+  final DateFormat dayFormatUS = DateFormat('yyyy. MM. dd (EEE)', 'en_US');
+  final DateFormat dayFormatKO = DateFormat('yyyy년 MM월 dd일 (EEE)', 'ko_KR');
+  final DateFormat dateFormatUS = DateFormat('MM/dd (EEE)', 'en_US');
+  final DateFormat dateFormatKO = DateFormat('MM/dd (EEE)', 'ko_KR');
+  final DateFormat timeFormatUS = DateFormat('a hh:mm', 'en_US');
+  final DateFormat timeFormatKO = DateFormat('a hh:mm', 'ko_KR');
 
   // 블럭 유저들
   List<int>? blockUserIds;
@@ -417,6 +421,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                             title: 'chatroomScreen.unableLeaveModal.title'.tr(),
                             content:
                                 'chatroomScreen.unableLeaveModal.subtitle'.tr(),
+                            buttonText: 'modal.ok'.tr(),
                             function: () {
                               Navigator.pop(context);
                             },
@@ -672,7 +677,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     _buildNoticeBubble(
-                                                      '${dayFormat.format(getDateTimeByTimestamp(list[index].createDate))}요일',
+                                                      '${(context.locale.languageCode == 'en' ? dayFormatUS : dayFormatKO).format(getDateTimeByTimestamp(list[index].createDate))}${context.locale.languageCode == 'ko' ? '요일' : ''}',
                                                       null,
                                                     ),
                                                   ],
@@ -888,7 +893,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                     ),
                     if (isMsgTimeView)
                       Text(
-                        msgDateFormat.format(
+                        (context.locale.languageCode == 'en'
+                                ? timeFormatUS
+                                : timeFormatKO)
+                            .format(
                           chatMsgModel.createDate.toDate(),
                         ),
                         style: getTsCaption10Rg(context).copyWith(
@@ -925,7 +933,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           ),
           if (isMsgTimeView)
             Text(
-              msgDateFormat.format(
+              (context.locale.languageCode == 'en'
+                      ? timeFormatUS
+                      : timeFormatKO)
+                  .format(
                 chatMsgModel.createDate.toDate(),
               ),
               style: getTsCaption10Rg(context).copyWith(

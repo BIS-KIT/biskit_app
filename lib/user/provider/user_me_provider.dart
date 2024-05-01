@@ -6,6 +6,7 @@ import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/repository/auth_repository.dart';
 import 'package:biskit_app/user/repository/users_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -109,10 +110,12 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
           if (snsType == null) {
             if (['Incorrect credentials', 'User Not Found']
                 .contains(e.response!.data['detail'])) {
-              userModelBase = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
+              userModelBase =
+                  UserModelError(message: 'emailLoginScreen.errorToast'.tr());
             } else if (e.response!.data['detail'] ==
                 'Account in the process of withdrawal') {
-              userModelBase = UserModelError(message: '사용할 수 없는 이메일입니다');
+              userModelBase = UserModelError(
+                  message: 'emailLoginScreen.deletedAccount'.tr());
             } else {
               userModelBase = null;
             }
@@ -120,7 +123,8 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
             if ('User Not Found' == e.response!.data['detail']) {
               userModelBase = null;
             } else {
-              userModelBase = UserModelError(message: '이메일 또는 비밀번호가 일치하지 않아요');
+              userModelBase =
+                  UserModelError(message: 'emailLoginScreen.errorToast'.tr());
             }
           }
         }
