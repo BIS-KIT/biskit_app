@@ -98,15 +98,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       UserCredential authResult =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       logger.d('_authResult : ${authResult.toString()}');
+      logger.d('appleCredential : ${appleCredential.givenName}');
+      logger.d('appleCredential : ${appleCredential.familyName}');
       // is_private_email : true 인 경우 이메일 가리기 처리 한 상태
       if (authResult.user != null) {
         await login(
-          // email: authResult.user!.email,
+          email: authResult.user!.email,
           snsId: authResult.user!.uid,
           snsType: SnsType.apple,
           snsEmail: appleCredential.email,
-          // iOsFirstName: appleCredential.givenName,
-          // iOsLastName: appleCredential.familyName,
+          iOsFirstName: appleCredential.givenName,
+          iOsLastName: appleCredential.familyName,
         );
       }
     } catch (error) {
@@ -192,6 +194,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   login({
     required String snsId,
     required SnsType snsType,
+    String? email,
     String? snsEmail,
     String? iOsLastName,
     String? iOsFirstName,
@@ -212,9 +215,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ? SignUpModel(
                 sns_type: snsType.name,
                 sns_id: snsId,
-                email: snsEmail,
+                email: email ?? snsEmail,
                 // XXX: 애플로그인 이름 자동 입력 안 되도록
-                // name: '$iOsFirstName $iOsLastName',
+                name: '$iOsFirstName $iOsLastName',
               )
             : SignUpModel(
                 sns_type: snsType.name,
