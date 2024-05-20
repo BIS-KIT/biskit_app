@@ -2,9 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:biskit_app/meet/model/meet_up_detail_model.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class UserSystemModelBase {}
 
@@ -21,6 +20,7 @@ class UserSystemUserModel {
   final int id;
   final String? email;
   final String? profile_photo;
+  final String nick_name;
   final String name;
   final String birth;
   final String gender;
@@ -29,6 +29,7 @@ class UserSystemUserModel {
     required this.id,
     this.email,
     this.profile_photo,
+    required this.nick_name,
     required this.name,
     required this.birth,
     required this.gender,
@@ -39,6 +40,7 @@ class UserSystemUserModel {
     int? id,
     ValueGetter<String?>? email,
     ValueGetter<String?>? profile_photo,
+    String? nick_name,
     String? name,
     String? birth,
     String? gender,
@@ -48,6 +50,7 @@ class UserSystemUserModel {
       id: id ?? this.id,
       email: email?.call() ?? this.email,
       profile_photo: profile_photo?.call() ?? this.profile_photo,
+      nick_name: nick_name ?? this.nick_name,
       name: name ?? this.name,
       birth: birth ?? this.birth,
       gender: gender ?? this.gender,
@@ -60,6 +63,7 @@ class UserSystemUserModel {
       'id': id,
       'email': email,
       'profile_photo': profile_photo,
+      'nick_name': nick_name,
       'name': name,
       'birth': birth,
       'gender': gender,
@@ -72,6 +76,7 @@ class UserSystemUserModel {
       id: map['id']?.toInt() ?? 0,
       email: map['email'],
       profile_photo: map['profile_photo'],
+      nick_name: map['nick_name'] ?? '',
       name: map['name'] ?? '',
       birth: map['birth'] ?? '',
       gender: map['gender'] ?? '',
@@ -87,7 +92,7 @@ class UserSystemUserModel {
 
   @override
   String toString() {
-    return 'UserSystemUserModel(id: $id, email: $email, profile_photo: $profile_photo, name: $name, birth: $birth, gender: $gender, user_nationality: $user_nationality)';
+    return 'UserSystemUserModel(id: $id, email: $email, profile_photo: $profile_photo, nick_name: $nick_name, name: $name, birth: $birth, gender: $gender, user_nationality: $user_nationality)';
   }
 
   @override
@@ -98,6 +103,7 @@ class UserSystemUserModel {
         other.id == id &&
         other.email == email &&
         other.profile_photo == profile_photo &&
+        other.nick_name == nick_name &&
         other.name == name &&
         other.birth == birth &&
         other.gender == gender &&
@@ -109,6 +115,7 @@ class UserSystemUserModel {
     return id.hashCode ^
         email.hashCode ^
         profile_photo.hashCode ^
+        nick_name.hashCode ^
         name.hashCode ^
         birth.hashCode ^
         gender.hashCode ^

@@ -106,7 +106,7 @@ class _UserBlockListScreenState extends ConsumerState<UserBlockListScreen> {
                                     ),
                                     Text(
                                       blockedIdList!
-                                          .ban_list[index].target.name,
+                                          .ban_list[index].target.nick_name,
                                       style: getTsBody16Rg(context)
                                           .copyWith(color: kColorContentWeak),
                                     ),
