@@ -88,15 +88,15 @@ String getLevelSubTitle(int level) {
 
 String getLanMaxDescription(String levelStr) {
   switch (levelStr) {
-    case '능숙':
+    case ('능숙' || 'Mastery'):
       return 'meetupDetailScreen.langLevel.mastery'.tr();
-    case '고급':
+    case ('고급' || 'Advanced'):
       return 'meetupDetailScreen.langLevel.advanced'.tr();
-    case '중급':
+    case ('중급' || 'Intermediate'):
       return 'meetupDetailScreen.langLevel.intermediate'.tr();
-    case '기초':
+    case ('기초' || 'Elementary'):
       return 'meetupDetailScreen.langLevel.elementary'.tr();
-    case '초보':
+    case ('초보' || 'Beginner'):
       return 'meetupDetailScreen.langLevel.beginner'.tr();
     default:
       return '';
