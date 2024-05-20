@@ -112,18 +112,19 @@ class AccountSettingScreen extends ConsumerWidget {
               ],
             ),
           ),
-          ListWidget(
-            text: 'accountScreen.changePw'.tr(),
-            selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
-            onTapCallback: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CurrentPasswordVerifyScreen(),
-                ),
-              );
-            },
-          ),
+          if (userState is UserModel && userState.sns_type == null)
+            ListWidget(
+              text: 'accountScreen.changePw'.tr(),
+              selectIconPath: 'assets/icons/ic_chevron_right_line_24.svg',
+              onTapCallback: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CurrentPasswordVerifyScreen(),
+                  ),
+                );
+              },
+            ),
           ListWidget(
             text: 'accountScreen.logout'.tr(),
             onTapCallback: () {

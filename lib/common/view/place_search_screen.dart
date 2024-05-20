@@ -1,6 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'dart:async';
 
 import 'package:biskit_app/common/components/custom_loading.dart';
 import 'package:biskit_app/common/components/list_widget_temp.dart';
@@ -12,6 +10,9 @@ import 'package:biskit_app/common/model/kakao/kakao_document_model.dart';
 import 'package:biskit_app/common/model/kakao/kakao_local_keyword_res_model.dart';
 import 'package:biskit_app/common/repository/kakao_map_repository.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class PlaceSearchScreen extends StatefulWidget {
   final bool isEng;
@@ -34,6 +35,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   List<KakaoDocumentModel> resultList = [];
   bool isFirstSearch = false;
   // int page = 1;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -47,6 +49,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   void dispose() {
     _pagingController.dispose();
     searchController.dispose();
+    _debounce?.cancel();
+
     super.dispose();
   }
 
@@ -78,6 +82,15 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
     _pagingController.refresh();
   }
 
+  _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      if (value.isNotEmpty) {
+        _search();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewPadding = MediaQuery.of(context).viewPadding;
@@ -91,9 +104,10 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
               controller: searchController,
               hintText: 'selectLocationBottomSheet.find'.tr(),
               maxLength: 20,
-              onChanged: (value) {},
+              onChanged: (value) {
+                _onSearchChanged(value);
+              },
               onFieldSubmitted: (value) {
-                // searchPlace();
                 _search();
               },
             ),
@@ -124,7 +138,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                             height: 4,
                           ),
                           Text(
-                            widget.isEng
+                            (context.locale.languageCode == 'en' &&
+                                    item.eng_road_address_name != '')
                                 ? item.eng_road_address_name
                                 : item.road_address_name,
                             style: getTsBody14Rg(context).copyWith(

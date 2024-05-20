@@ -59,6 +59,10 @@ class ProfileRepository {
       }
     } catch (e) {
       logger.e(e.toString());
+      result = {
+        'kr_nick_name': '',
+        'en_nick_name': '',
+      };
     }
 
     return result;

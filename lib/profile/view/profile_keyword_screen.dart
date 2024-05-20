@@ -142,7 +142,7 @@ class _ProfileKeywordScreenState extends State<ProfileKeywordScreen> {
                   height: 8,
                 ),
                 Text(
-                  '${context.locale.languageCode == 'en' ? 'Welcome ' : ''} ${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}${'addKeywordScreen.title'.tr()}',
+                  '${context.locale.languageCode == 'en' ? 'Welcome ' : ''}${widget.isEditorMode ? widget.userNickName ?? '' : widget.profileCreateModel!.nick_name}${'addKeywordScreen.title'.tr()}',
                   style: getTsHeading24(context).copyWith(
                     color: kColorContentDefault,
                   ),
