@@ -605,7 +605,7 @@
 
     "unableLeaveModal": {
       "title": "You can't leave\nuntil the end of the meetup",
-      "subtitle": "Leave the meetup in the meetup page\nbefore you leave the chatroom",
+      "subtitle": "To leave the chat room, you need to leave the meeting first\nGo to the meeting page > Leave meeting”",
       "ok": "OK"
     },
 

@@ -479,6 +479,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     }
   }
 
+// TODO: 채팅 공지, 참여 메세지 번역처리하려면 파베 구조 수정 필요
   @override
   Widget build(BuildContext context) {
     userState = ref.watch(userMeProvider);
@@ -1099,7 +1100,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ),
                   Expanded(
                     child: Text(
-                      text,
+                      chatRowType == 'noticeOnlyMe'
+                          ? 'chatroomScreen.description'.tr()
+                          : text,
                       style: getTsBody14Rg(context).copyWith(
                         color: kColorContentWeaker,
                       ),
