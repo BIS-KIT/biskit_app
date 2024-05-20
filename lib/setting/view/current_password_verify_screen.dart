@@ -80,7 +80,7 @@ class _CurrentPasswordVerifyScreenState
                             setState(() {
                               currentPassword = value;
                             });
-                            if (currentPasswordError!.isNotEmpty) {
+                            if (currentPasswordError != '') {
                               setState(() {
                                 currentPasswordError = null;
                               });
