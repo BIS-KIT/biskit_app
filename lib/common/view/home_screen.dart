@@ -14,6 +14,7 @@ import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/schedule_card_widget.dart';
+import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
@@ -146,6 +147,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     context,
                                     homeState,
                                     size,
+                                    false,
+                                  ),
+
+                                // 전체 학교 Meetup
+                                if (homeState.meetings.isNotEmpty)
+                                  _buildMeetupList(
+                                    context,
+                                    homeState,
+                                    size,
+                                    true,
                                   ),
 
                                 // Tag
@@ -207,6 +218,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             context,
                                             homeState,
                                             size,
+                                            false,
+                                          ),
+                                        // 전체 학교 Meetup
+                                        if (homeState.allMeetings.isNotEmpty)
+                                          _buildMeetupList(
+                                            context,
+                                            homeState,
+                                            size,
+                                            true,
                                           ),
 
                                         // Tag
@@ -478,7 +498,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   SizedBox _buildMeetupList(
-      BuildContext context, HomeState homeState, Size size) {
+      BuildContext context, HomeState homeState, Size size, bool isPublic) {
+    final List<MeetUpModel> filteredMeetings =
+        isPublic ? homeState.allMeetings : homeState.meetings;
     return SizedBox(
       height: 230 + 36,
       child: Column(
@@ -492,7 +514,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    'homeScreen.schoolMeetups'.tr(),
+                    isPublic
+                        ? 'homeScreen.allSchoolMeetups'.tr()
+                        : 'homeScreen.schoolMeetups'.tr(),
                     style: getTsHeading18(context).copyWith(
                       color: kColorContentDefault,
                     ),
@@ -530,9 +554,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           SizedBox(
             height: 186,
-            child: homeState.meetings.length == 1
+            child: filteredMeetings.length == 1
                 ? MeetUpCardWidget(
-                    model: homeState.meetings[0],
+                    model: filteredMeetings[0],
                     userModel: ref.watch(userMeProvider),
                     systemModel: ref.watch(systemProvider),
                     sizeType: MeetUpCardSizeType.M,
@@ -542,7 +566,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => MeetUpDetailScreen(
-                            meetupId: homeState.meetings[0].id,
+                            meetupId: filteredMeetings[0].id,
                             userModel: ref.watch(userMeProvider),
                           ),
                         ),
@@ -555,7 +579,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => MeetUpCardWidget(
-                      model: homeState.meetings[index],
+                      model: filteredMeetings[index],
                       userModel: ref.watch(userMeProvider),
                       systemModel: ref.watch(systemProvider),
                       sizeType: MeetUpCardSizeType.M,
@@ -565,7 +589,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => MeetUpDetailScreen(
-                              meetupId: homeState.meetings[index].id,
+                              meetupId: filteredMeetings[index].id,
                               userModel: ref.watch(userMeProvider),
                             ),
                           ),
@@ -575,7 +599,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     separatorBuilder: (context, index) => const SizedBox(
                       width: 12,
                     ),
-                    itemCount: homeState.meetings.length,
+                    itemCount: filteredMeetings.length,
                   ),
           ),
           const SizedBox(
