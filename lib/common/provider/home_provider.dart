@@ -1,4 +1,5 @@
 import 'package:biskit_app/common/repository/util_repository.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/meet_up_model.dart';
 import 'package:biskit_app/meet/model/tag_model.dart';
 import 'package:biskit_app/meet/model/topic_model.dart';
@@ -39,6 +40,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
   }
 
   init() async {
+    logger.d('homeInit!');
     List<MeetUpModel>? approveMeetings =
         await profileRepository.getMyApproveMeetings(
       skip: 0,

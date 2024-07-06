@@ -33,6 +33,7 @@ class MeetUpStateNotifier
     bool forceRefetch = false,
     Object? orderBy,
     Object? filter,
+    bool? isPublic,
   }) async {
     isLoading = true;
     orderBy = orderBy;
@@ -44,6 +45,7 @@ class MeetUpStateNotifier
       forceRefetch: forceRefetch,
       orderBy: orderBy,
       filter: filter,
+      isPublic: isPublic,
     );
     isLoading = false;
   }

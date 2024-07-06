@@ -4,6 +4,7 @@ import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/model/cursor_pagination_model.dart';
 import 'package:biskit_app/common/model/model_with_id.dart';
 import 'package:biskit_app/common/provider/pagination_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/pagination_utils.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
@@ -27,6 +28,7 @@ class PaginationListView<T extends IModelWithId>
   final EdgeInsetsGeometry? padding;
   final VoidCallback? scrollUp;
   final VoidCallback? scrollDown;
+  final bool? isPublic;
   const PaginationListView({
     required this.provider,
     required this.itemBuilder,
@@ -36,6 +38,7 @@ class PaginationListView<T extends IModelWithId>
     this.padding,
     this.scrollDown,
     this.scrollUp,
+    this.isPublic,
     Key? key,
   }) : super(key: key);
 
@@ -90,6 +93,7 @@ class _PaginationListViewState<T extends IModelWithId>
 
   @override
   Widget build(BuildContext context) {
+    logger.d('isPublic!!! ${widget.isPublic}');
     final state = ref.watch(widget.provider);
     // 완전 처음 로딩일때
     if (state is CursorPaginationLoading) {
@@ -114,6 +118,7 @@ class _PaginationListViewState<T extends IModelWithId>
               ref.read(widget.provider.notifier).paginate(
                     forceRefetch: true,
                     orderBy: ref.read(meetUpFilterProvider).meetUpOrderState,
+                    isPublic: widget.isPublic,
                   );
             },
             child: Text(
@@ -129,11 +134,13 @@ class _PaginationListViewState<T extends IModelWithId>
     // CursorPaginationRefetching
 
     final cp = state as CursorPagination<T>;
+    logger.d('item~!! cp: ${cp.data}');
     return CustomMaterialIndicator(
       onRefresh: () async {
         ref.read(widget.provider.notifier).paginate(
               forceRefetch: true,
               orderBy: ref.read(meetUpFilterProvider).meetUpOrderState,
+              isPublic: widget.isPublic,
             );
       },
       indicatorBuilder: (context, controller) {
@@ -181,7 +188,7 @@ class _PaginationListViewState<T extends IModelWithId>
               }
 
               final pItem = cp.data[index];
-
+              logger.d('item~!! $pItem');
               return AutoScrollTag(
                 key: ValueKey(pItem.id),
                 controller: controller,

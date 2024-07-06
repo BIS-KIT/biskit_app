@@ -3,6 +3,7 @@ import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
@@ -18,6 +19,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class MeetUpListScreen extends ConsumerStatefulWidget {
   const MeetUpListScreen({super.key});
@@ -26,7 +28,9 @@ class MeetUpListScreen extends ConsumerStatefulWidget {
   ConsumerState<MeetUpListScreen> createState() => _MeetUpListScreenState();
 }
 
-class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
+class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
   bool isTopVisible = true;
   bool isPopupMenuVisible = false;
   late MeetUpListOrder selectedOrder;
@@ -51,6 +55,26 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
     selectedOrder = meetUpListOrder[0];
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final rootState = ref.watch(rootProvider);
+    tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: rootState.isPublic == true ? 1 : 0,
+    );
+    tabController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   void onTapFilter() {
     // ref.read(meetUpFilterProvider.notifier).tempSave();
     showBiskitBottomSheet(
@@ -63,8 +87,10 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
       height: MediaQuery.of(context).size.height -
           MediaQuery.of(context).padding.top -
           48,
-      contentWidget: const Expanded(
-        child: MeetUpFilterSheetWidget(),
+      contentWidget: Expanded(
+        child: MeetUpFilterSheetWidget(
+          isPublic: tabController.index == 1,
+        ),
       ),
     );
   }
@@ -96,6 +122,9 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                   ),
                   child: _buildTop(context, filterState),
                 ),
+
+                // 탭
+                _buildTabBar(rootState),
 
                 // 필터
                 _buildFilter(),
@@ -180,6 +209,44 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
                   .toList(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildTabBar(RootState rootState) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: TabBar(
+        controller: tabController,
+        tabs: const [
+          Tab(height: 25, text: '우리 학교'),
+          Tab(height: 25, text: '모든 학교'),
+        ],
+        onTap: (value) async {
+          context.loaderOverlay.show();
+          logger.d('isPublic-index ${tabController.index}');
+          await ref.read(meetUpProvider.notifier).paginate(
+                isPublic: tabController.index == 1,
+              );
+          if (!mounted) return;
+          context.loaderOverlay.hide();
+        },
+        padding: EdgeInsets.zero,
+        isScrollable: true,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorColor: kColorBorderPrimary,
+        indicatorWeight: 2,
+        labelStyle: getTsBody16Sb(context),
+        labelColor: kColorContentDefault,
+        unselectedLabelStyle: getTsBody16Sb(context),
+        unselectedLabelColor: kColorContentWeakest,
+        indicatorPadding: EdgeInsets.zero,
+        splashFactory: NoSplash.splashFactory,
+        labelPadding: EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: screenWidth / 6,
         ),
       ),
     );
@@ -270,8 +337,10 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen> {
   }
 
   Expanded _buildList(BuildContext context, MeetUpState filterState) {
+    logger.d('aaaa ${tabController.index}');
     return Expanded(
       child: PaginationListView(
+        isPublic: tabController.index == 1,
         provider: meetUpProvider,
         scrollUp: () {
           setState(() {

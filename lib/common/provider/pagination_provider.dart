@@ -12,12 +12,14 @@ class _PaginationInfo {
   final bool forceRefetch;
   final Object? orderBy;
   final Object? filter;
+  final bool? isPublic;
   _PaginationInfo({
     this.fetchCount = 20,
     this.fetchMore = false,
     this.forceRefetch = false,
     this.orderBy,
     this.filter,
+    this.isPublic,
   });
 }
 
@@ -54,6 +56,8 @@ class PaginationProvider<T extends IModelWithId,
     bool forceRefetch = false,
     Object? orderBy,
     Object? filter,
+    // 전체 학교 여부
+    bool? isPublic,
   }) async {
     paginationThrottle.setValue(_PaginationInfo(
       fetchMore: fetchMore,
@@ -61,6 +65,7 @@ class PaginationProvider<T extends IModelWithId,
       forceRefetch: forceRefetch,
       orderBy: orderBy,
       filter: filter,
+      isPublic: isPublic,
     ));
   }
 
@@ -70,6 +75,9 @@ class PaginationProvider<T extends IModelWithId,
     final forceRefetch = info.forceRefetch;
     final orderBy = info.orderBy;
     final filter = info.filter;
+    final isPublic = info.isPublic;
+    logger.d('isPublic~~~~~ $isPublic');
+
     try {
       // 5가지 가능성
       // State의 상태
@@ -98,7 +106,7 @@ class PaginationProvider<T extends IModelWithId,
       final isLoading = state is CursorPaginationLoading;
       final isRefetching = state is CursorPaginationRefetching;
       final isFetchingMore = state is CursorPaginationFetchingMore;
-
+      logger.d('isLoading.....: $isLoading');
       // 2번 반환 상황
       if (fetchMore && (isLoading || isRefetching || isFetchingMore)) {
         logger.d('case2: $state');
@@ -134,6 +142,7 @@ class PaginationProvider<T extends IModelWithId,
           logger.d('case4: $state');
           final pState = state as CursorPagination<T>;
 
+          logger.d('case44: ${pState.data}');
           state = CursorPaginationRefetching<T>(
             meta: pState.meta,
             data: pState.data,
@@ -150,6 +159,7 @@ class PaginationProvider<T extends IModelWithId,
         paginationParams: paginationParams,
         orderBy: orderBy,
         filter: filter,
+        isPublic: isPublic,
       );
 
       if (state is CursorPaginationFetchingMore) {

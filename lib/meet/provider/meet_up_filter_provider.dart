@@ -192,11 +192,12 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
     ];
   }
 
-  Future<int?> getMeetingsCount(List<MeetUpFilterGroup> filterGroupList) async {
+  Future<int?> getMeetingsCount(
+      List<MeetUpFilterGroup> filterGroupList, bool isPublic) async {
     int? totalCount;
     totalCount = await ref
         .watch(meetUpRepositoryProvider)
-        .paginateCount(filterGroupList);
+        .paginateCount(filterGroupList, isPublic);
     return totalCount;
   }
 
@@ -234,6 +235,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
   void onTapTopicAndTag({
     required MeetUpFilterType type,
     required int id,
+    bool? isPublic,
   }) async {
     List<MeetUpFilterGroup> filterGroupList = await getInitFixFilterGroupList();
     filterGroupList = filterGroupList.map(
@@ -259,7 +261,7 @@ class MeetUpFilterStateNotifiar extends StateNotifier<MeetUpState> {
       filterGroupList: filterGroupList,
       isSelected: true,
       isHomeTagAndTopic: true,
-      totalCount: await getMeetingsCount(filterGroupList),
+      totalCount: await getMeetingsCount(filterGroupList, isPublic ?? false),
     );
   }
 }

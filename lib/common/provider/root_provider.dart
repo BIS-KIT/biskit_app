@@ -24,6 +24,7 @@ class RootStateNotifier extends StateNotifier<RootState> {
             index: 0,
             // 홈에서 태그나 토픽 선택해서 탐색 탭으로 넘어가는 경우 = true
             isLoading: false,
+            isPublic: false,
           ),
         ) {
     //
@@ -31,6 +32,7 @@ class RootStateNotifier extends StateNotifier<RootState> {
   }
 
   init() async {
+    logger.d('root init');
     state = state.copyWith(
       index: 0,
       scafoldBackgroundColor: kColorBgDefault,
@@ -77,6 +79,13 @@ class RootStateNotifier extends StateNotifier<RootState> {
   //   );
   // }
 
+  // 전체/우리 학교
+  void onSelectPublic(final isPublic) {
+    state = state.copyWith(
+      isPublic: isPublic,
+    );
+  }
+
   void onTapBottomNav({
     required final int index,
     final bool isLoading = false,
@@ -120,22 +129,27 @@ class RootState {
   final Color scafoldBackgroundColor;
   final int index;
   final bool? isLoading;
+  // 탐색 탭에서 전체학교/우리학교 isPublic
+  final bool? isPublic;
   RootState({
     required this.scafoldBackgroundColor,
     required this.index,
     required this.isLoading,
+    required this.isPublic,
   });
 
   RootState copyWith({
     Color? scafoldBackgroundColor,
     int? index,
     bool? isLoading,
+    bool? isPublic,
   }) {
     return RootState(
       scafoldBackgroundColor:
           scafoldBackgroundColor ?? this.scafoldBackgroundColor,
       index: index ?? this.index,
       isLoading: isLoading ?? this.isLoading,
+      isPublic: isPublic ?? this.isPublic,
     );
   }
 }
