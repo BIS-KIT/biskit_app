@@ -11,7 +11,6 @@ import 'package:biskit_app/common/const/enums.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/schedule_card_widget.dart';
@@ -502,7 +501,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       BuildContext context, HomeState homeState, Size size, bool isPublic) {
     final List<MeetUpModel> filteredMeetings =
         isPublic ? homeState.allMeetings : homeState.meetings;
-    logger.d('home...... ${homeState.meetings}');
     return SizedBox(
       height: 230 + 36,
       child: Column(

@@ -32,7 +32,6 @@ class RootStateNotifier extends StateNotifier<RootState> {
   }
 
   init() async {
-    logger.d('root init');
     state = state.copyWith(
       index: 0,
       scafoldBackgroundColor: kColorBgDefault,

@@ -134,7 +134,6 @@ class _PaginationListViewState<T extends IModelWithId>
     // CursorPaginationRefetching
 
     final cp = state as CursorPagination<T>;
-    logger.d('item~!! cp: ${cp.data}');
     return CustomMaterialIndicator(
       onRefresh: () async {
         ref.read(widget.provider.notifier).paginate(
@@ -188,7 +187,7 @@ class _PaginationListViewState<T extends IModelWithId>
               }
 
               final pItem = cp.data[index];
-              logger.d('item~!! $pItem');
+
               return AutoScrollTag(
                 key: ValueKey(pItem.id),
                 controller: controller,
