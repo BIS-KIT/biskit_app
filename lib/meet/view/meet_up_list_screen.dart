@@ -3,7 +3,6 @@ import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
-import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
@@ -226,10 +225,9 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
         ],
         onTap: (value) async {
           context.loaderOverlay.show();
-          logger.d('isPublic-index ${tabController.index}');
-          await ref.read(meetUpProvider.notifier).paginate(
-                isPublic: tabController.index == 1,
-              );
+          ref
+              .read(rootProvider.notifier)
+              .onSelectPublic(tabController.index == 1);
           if (!mounted) return;
           context.loaderOverlay.hide();
         },
@@ -337,7 +335,6 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
   }
 
   Expanded _buildList(BuildContext context, MeetUpState filterState) {
-    logger.d('aaaa ${tabController.index}');
     return Expanded(
       child: PaginationListView(
         isPublic: tabController.index == 1,
