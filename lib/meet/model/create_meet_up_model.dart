@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class CreateMeetUpModel {
+  final bool? is_public;
   final String? name;
   final String? location;
   final String? description;
@@ -23,6 +24,7 @@ class CreateMeetUpModel {
   final String? y_coord;
   final String? place_url;
   CreateMeetUpModel({
+    this.is_public,
     this.name,
     this.location,
     this.description,
@@ -43,6 +45,7 @@ class CreateMeetUpModel {
   });
 
   CreateMeetUpModel copyWith({
+    bool? is_public,
     String? name,
     String? location,
     String? description,
@@ -62,6 +65,7 @@ class CreateMeetUpModel {
     String? place_url,
   }) {
     return CreateMeetUpModel(
+      is_public: is_public ?? this.is_public,
       name: name ?? this.name,
       location: location ?? this.location,
       description: description ?? this.description,
@@ -84,6 +88,7 @@ class CreateMeetUpModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'is_public': is_public,
       'name': name,
       'location': location,
       'description': description,
@@ -106,6 +111,7 @@ class CreateMeetUpModel {
 
   factory CreateMeetUpModel.fromMap(Map<String, dynamic> map) {
     return CreateMeetUpModel(
+      is_public: map['is_public'],
       name: map['name'],
       location: map['location'],
       description: map['description'],
@@ -133,7 +139,7 @@ class CreateMeetUpModel {
 
   @override
   String toString() {
-    return 'CreateMeetUpModel(name: $name, location: $location, description: $description, meeting_time: $meeting_time, max_participants: $max_participants, image_url: $image_url, is_active: $is_active, custom_tags: $custom_tags, custom_topics: $custom_topics, creator_id: $creator_id, tag_ids: $tag_ids, topic_ids: $topic_ids, language_ids: $language_ids, chat_id: $chat_id, x_coord: $x_coord, y_coord: $y_coord, place_url: $place_url)';
+    return 'CreateMeetUpModel(is_public:$is_public, name: $name, location: $location, description: $description, meeting_time: $meeting_time, max_participants: $max_participants, image_url: $image_url, is_active: $is_active, custom_tags: $custom_tags, custom_topics: $custom_topics, creator_id: $creator_id, tag_ids: $tag_ids, topic_ids: $topic_ids, language_ids: $language_ids, chat_id: $chat_id, x_coord: $x_coord, y_coord: $y_coord, place_url: $place_url)';
   }
 
   @override
@@ -141,6 +147,7 @@ class CreateMeetUpModel {
     if (identical(this, other)) return true;
 
     return other is CreateMeetUpModel &&
+        other.is_public == is_public &&
         other.name == name &&
         other.location == location &&
         other.description == description &&
@@ -162,7 +169,8 @@ class CreateMeetUpModel {
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return is_public.hashCode ^
+        name.hashCode ^
         location.hashCode ^
         description.hashCode ^
         meeting_time.hashCode ^
