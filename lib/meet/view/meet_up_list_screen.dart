@@ -219,9 +219,9 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
       padding: const EdgeInsets.only(bottom: 20),
       child: TabBar(
         controller: tabController,
-        tabs: const [
-          Tab(height: 25, text: '우리 학교'),
-          Tab(height: 25, text: '모든 학교'),
+        tabs: [
+          Tab(height: 25, text: 'exploreMeetupScreen.tap.private'.tr()),
+          Tab(height: 25, text: 'exploreMeetupScreen.tap.public'.tr()),
         ],
         onTap: (value) async {
           context.loaderOverlay.show();
