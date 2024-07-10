@@ -8,6 +8,7 @@ import 'package:biskit_app/meet/model/topic_model.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
 import 'package:biskit_app/meet/provider/meet_up_provider.dart';
 import 'package:biskit_app/meet/repository/meet_up_repository.dart';
+import 'package:biskit_app/meet/view/meet_up_create_select_school_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_1_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_2_tab.dart';
 import 'package:biskit_app/meet/view/meet_up_create_step_3_tab.dart';
@@ -51,7 +52,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 4, vsync: this);
+    controller = TabController(length: 5, vsync: this);
     controller.addListener(tabListener);
     init();
 
@@ -168,20 +169,25 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
     final createMeetUpState = ref.watch(createMeetUpProvider);
     if (createMeetUpState != null) {
       if (pageIndex == 0) {
+        if ((createMeetUpState.is_public != null)) {
+          return true;
+        }
+      }
+      if (pageIndex == 1) {
         if ((createMeetUpState.topic_ids.isNotEmpty ||
                 createMeetUpState.custom_topics.isNotEmpty) &&
             createMeetUpState.location != null) {
           return true;
         }
-      } else if (pageIndex == 1) {
-        return true;
       } else if (pageIndex == 2) {
+        return true;
+      } else if (pageIndex == 3) {
         if ((createMeetUpState.tag_ids.isNotEmpty ||
                 createMeetUpState.custom_tags.isNotEmpty) &&
             createMeetUpState.language_ids.isNotEmpty) {
           return true;
         }
-      } else if (pageIndex == 3) {
+      } else if (pageIndex == 4) {
         if (createMeetUpState.name != null &&
             createMeetUpState.name!.length >= 2) {
           return true;
@@ -209,23 +215,26 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 4,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ProgressBarWidget(
-                isFirstDone: true,
-                isSecondDone: pageIndex > 0,
-                isThirdDone: pageIndex > 1,
-                isFourthDone: pageIndex > 2,
+            if (pageIndex != 0)
+              const SizedBox(
+                height: 4,
               ),
-            ),
+            if (pageIndex != 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ProgressBarWidget(
+                  isFirstDone: pageIndex > 0,
+                  isSecondDone: pageIndex > 1,
+                  isThirdDone: pageIndex > 2,
+                  isFourthDone: pageIndex > 3,
+                ),
+              ),
             Expanded(
               child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
                 controller: controller,
                 children: [
+                  const MeetUpCreateSelectSchoolTab(),
                   MeetUpCreateStep1Tab(
                     topics: topics,
                     systemModel: ref.watch(systemProvider),
@@ -260,7 +269,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                           },
                     child: FilledButtonWidget(
                       height: 56,
-                      text: pageIndex == 3
+                      text: pageIndex == 4
                           ? widget.isEditMode
                               ? 'createMeetupScreen4.editComplete'.tr()
                               : 'createMeetupScreen4.createMeetup'.tr()
@@ -270,7 +279,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                   ),
                 );
               } else {
-                if (pageIndex == 3) {
+                if (pageIndex == 4) {
                   return GestureDetector(
                     onTap: (isCreateLoading || userState is! UserModel)
                         ? null
@@ -279,7 +288,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                           },
                     child: FilledButtonWidget(
                       height: 52,
-                      text: pageIndex == 3
+                      text: pageIndex == 4
                           ? widget.isEditMode
                               ? 'createMeetupScreen4.editComplete'.tr()
                               : 'createMeetupScreen4.createMeetup'.tr()
@@ -304,7 +313,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
         setState(() {
           isCreateLoading = true;
         });
-        if (pageIndex >= 0 && pageIndex < 3) {
+        if (pageIndex >= 0 && pageIndex < 4) {
           controller.animateTo(pageIndex + 1);
         } else {
           if (widget.isEditMode) {
