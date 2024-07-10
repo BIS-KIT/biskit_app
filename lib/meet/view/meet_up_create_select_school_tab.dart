@@ -4,11 +4,13 @@ import 'package:biskit_app/common/const/data.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/provider/create_meet_up_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MeetUpCreateSelectSchoolTab extends ConsumerStatefulWidget {
-  const MeetUpCreateSelectSchoolTab({super.key});
+  final TabController controller;
+  const MeetUpCreateSelectSchoolTab({super.key, required this.controller});
 
   @override
   ConsumerState<MeetUpCreateSelectSchoolTab> createState() =>
@@ -35,8 +37,8 @@ class _MeetUpCreateSelectSchoolTabState
             Padding(
               padding: const EdgeInsets.only(top: 40),
               child: Text(
-                '어떤 모임을 만들까요?',
-                style: getTsHeading18(context).copyWith(
+                'createMeetupScreen0.title'.tr(),
+                style: getTsHeading20(context).copyWith(
                   color: kColorContentDefault,
                 ),
               ),
@@ -50,6 +52,7 @@ class _MeetUpCreateSelectSchoolTabState
                   child: GestureDetector(
                     onTap: () {
                       onTapIsPublic(false);
+                      widget.controller.animateTo(1);
                     },
                     child: Container(
                       height: 172,
@@ -96,7 +99,7 @@ class _MeetUpCreateSelectSchoolTabState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "우리학교 모임",
+                                "createMeetupScreen0.private.title".tr(),
                                 style: getTsBody16Sb(context).copyWith(
                                   color: kColorContentDefault,
                                 ),
@@ -105,7 +108,7 @@ class _MeetUpCreateSelectSchoolTabState
                                 height: 8,
                               ),
                               Text(
-                                "우리학교 학생들만 참여할 수 있어요",
+                                "createMeetupScreen0.private.desc".tr(),
                                 style: getTsBody14Rg(context).copyWith(
                                   color: kColorContentWeaker,
                                 ),
@@ -124,6 +127,7 @@ class _MeetUpCreateSelectSchoolTabState
                   child: GestureDetector(
                     onTap: () {
                       onTapIsPublic(true);
+                      widget.controller.animateTo(1);
                     },
                     child: Container(
                       height: 172,
@@ -170,7 +174,7 @@ class _MeetUpCreateSelectSchoolTabState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "모든학교 모임",
+                                "createMeetupScreen0.public.title".tr(),
                                 style: getTsBody16Sb(context).copyWith(
                                   color: kColorContentDefault,
                                 ),
@@ -179,7 +183,7 @@ class _MeetUpCreateSelectSchoolTabState
                                 height: 8,
                               ),
                               Text(
-                                "모든학교 학생들이 참여할 수 있어요",
+                                "createMeetupScreen0.public.desc".tr(),
                                 style: getTsBody14Rg(context).copyWith(
                                   color: kColorContentWeaker,
                                 ),

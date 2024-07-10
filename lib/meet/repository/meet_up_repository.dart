@@ -101,7 +101,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
             'topics_ids': topicsFilter,
             'creator_nationality': nationalFilter,
             'time_filters': timeFilter,
-            'user_id': userState.id,
+            // 'user_id': userState.id,
             'is_public': isPublic,
           },
         );
@@ -188,7 +188,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
             },
           ),
           queryParameters: {
-            'user_id': userState.id,
+            // 'user_id': userState.id,
             'order_by': ((orderBy as MeetUpOrderState?) ??
                     MeetUpOrderState.created_time)
                 .name,
@@ -247,7 +247,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
             'skip': skip,
             'limit': limit,
             'is_public': is_public,
-            'user_id': userState.id,
+            // 'user_id': userState.id,
           },
         );
         // logger.d(res.data);

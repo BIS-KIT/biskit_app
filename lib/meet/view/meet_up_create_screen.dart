@@ -234,7 +234,7 @@ class _MeetUpCreateScreenState extends ConsumerState<MeetUpCreateScreen>
                 physics: const NeverScrollableScrollPhysics(),
                 controller: controller,
                 children: [
-                  const MeetUpCreateSelectSchoolTab(),
+                  MeetUpCreateSelectSchoolTab(controller: controller),
                   MeetUpCreateStep1Tab(
                     topics: topics,
                     systemModel: ref.watch(systemProvider),
