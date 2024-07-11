@@ -8,7 +8,7 @@ const kREFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 const kServerIp = kDebugMode ? '13.209.4.21' : '13.209.4.21';
 /** product */
 // const kServerIp = kDebugMode ? '13.125.249.201' : '13.125.249.201';
-const kServerPort = kDebugMode ? '8000' : '8000';
+const kServerPort = kDebugMode ? '80' : '80';
 const kServerVersion = kDebugMode ? 'v1' : 'v1';
 
 const kS3Url = 'https://biskit-bucket.s3.ap-northeast-2.amazonaws.com';
