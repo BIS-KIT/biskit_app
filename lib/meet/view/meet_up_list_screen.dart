@@ -3,6 +3,7 @@ import 'package:biskit_app/common/components/pagination_list_view.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/meet/components/meet_up_card_widget.dart';
 import 'package:biskit_app/meet/components/meet_up_filter_sheet_widget.dart';
@@ -97,6 +98,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
   @override
   Widget build(BuildContext context) {
     final filterState = ref.watch(meetUpFilterProvider);
+    logger.d('filterState! ${filterState.meetUpOrderState}');
     final rootState = ref.watch(rootProvider);
     return GestureDetector(
       onTap: () {
@@ -150,7 +152,7 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
 
   Positioned _buildPopUpMenu(BuildContext context) {
     return Positioned(
-      top: 100,
+      top: isTopVisible ? 170 : 125,
       left: 20,
       child: Container(
         height: isPopupMenuVisible ? null : 0,
@@ -194,7 +196,10 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
                         ),
                         child: Text(
                           e.text,
-                          style: e == selectedOrder
+                          style: e.state ==
+                                  ref
+                                      .read(meetUpFilterProvider)
+                                      .meetUpOrderState
                               ? getTsBody16Sb(context).copyWith(
                                   color: kColorContentSecondary,
                                 )
@@ -273,7 +278,12 @@ class _MeetUpListScreenState extends ConsumerState<MeetUpListScreen>
       child: Row(
         children: [
           ChipWidget(
-            text: selectedOrder.text,
+            // text: selectedOrder.text,
+            text: meetUpListOrder
+                .where((e) =>
+                    e.state == ref.read(meetUpFilterProvider).meetUpOrderState)
+                .map((e) => e.text)
+                .single,
             textColor: kColorContentDefault,
             isSelected: false,
             onTapDelete: () {
