@@ -40,7 +40,7 @@ class MeetUpStateNotifier
     final rootState = ref.watch(rootProvider);
 
     isLoading = true;
-    orderBy = orderBy;
+    orderBy = orderBy ?? ref.read(meetUpFilterProvider).meetUpOrderState;
     filter = ref.read(meetUpFilterProvider).filterGroupList;
     logger.d('isPublic-paginate: ${rootState.isPublic}');
     filter = super.paginate(

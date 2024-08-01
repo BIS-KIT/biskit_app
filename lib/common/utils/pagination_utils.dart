@@ -5,11 +5,10 @@ class PaginationUtils {
   static void paginate({
     required ScrollController controller,
     required PaginationProvider provider,
+    Object? orderBy,
   }) {
     if (controller.offset > controller.position.maxScrollExtent - 300) {
-      provider.paginate(
-        fetchMore: true,
-      );
+      provider.paginate(fetchMore: true, orderBy: orderBy);
     }
   }
 }

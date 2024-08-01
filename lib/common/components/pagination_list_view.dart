@@ -80,6 +80,7 @@ class _PaginationListViewState<T extends IModelWithId>
     PaginationUtils.paginate(
       controller: controller,
       provider: ref.read(widget.provider.notifier),
+      orderBy: ref.read(meetUpFilterProvider).meetUpOrderState,
     );
   }
 
