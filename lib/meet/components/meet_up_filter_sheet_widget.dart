@@ -3,6 +3,7 @@ import 'package:biskit_app/common/components/filled_button_widget.dart';
 import 'package:biskit_app/common/components/outlined_button_widget.dart';
 import 'package:biskit_app/common/const/colors.dart';
 import 'package:biskit_app/common/const/fonts.dart';
+import 'package:biskit_app/common/utils/logger_util.dart';
 import 'package:biskit_app/meet/model/meet_up_filter_model.dart';
 import 'package:biskit_app/meet/provider/meet_up_filter_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MeetUpFilterSheetWidget extends ConsumerStatefulWidget {
-  const MeetUpFilterSheetWidget({super.key});
+  final bool isPublic;
+  const MeetUpFilterSheetWidget({Key? key, required this.isPublic})
+      : super(key: key);
 
   @override
   ConsumerState<MeetUpFilterSheetWidget> createState() =>
@@ -51,6 +54,7 @@ class _MeetUpFilterSheetWidgetState
     MeetUpFilterModel model,
   ) async {
     setState(() {
+      logger.d('kakakakak');
       filterGroupList = filterGroupList.map((group) {
         if (group.filterType == filterType) {
           return group.copyWith(
@@ -76,7 +80,7 @@ class _MeetUpFilterSheetWidgetState
   setTotalCount() async {
     int? count = await ref
         .read(meetUpFilterProvider.notifier)
-        .getMeetingsCount(filterGroupList);
+        .getMeetingsCount(filterGroupList, widget.isPublic);
     // logger.d('count>>>$count');
     setState(() {
       totalCount = count ?? 0;

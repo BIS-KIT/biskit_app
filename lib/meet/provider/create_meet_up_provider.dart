@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:biskit_app/chat/repository/chat_repository.dart';
 import 'package:biskit_app/common/model/kakao/kakao_document_model.dart';
 import 'package:biskit_app/common/repository/util_repository.dart';
@@ -10,6 +8,7 @@ import 'package:biskit_app/meet/repository/meet_up_repository.dart';
 import 'package:biskit_app/profile/model/available_language_model.dart';
 import 'package:biskit_app/user/model/user_model.dart';
 import 'package:biskit_app/user/provider/user_me_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final createMeetUpProvider =
     StateNotifierProvider<CreateMeetUpStateNotifier, CreateMeetUpModel?>((ref) {
@@ -73,6 +72,15 @@ class CreateMeetUpStateNotifier extends StateNotifier<CreateMeetUpModel?> {
     List<TagModel> list = [];
     list = await utilRepository.getTags(isCustom: isCustom);
     return list;
+  }
+
+  // 학교 설정
+  onTapIsPublic(bool isPublic) {
+    if (state != null) {
+      state = state!.copyWith(
+        is_public: isPublic,
+      );
+    }
   }
 
   // 토픽 생성

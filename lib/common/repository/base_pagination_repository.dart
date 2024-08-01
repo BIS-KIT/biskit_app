@@ -7,5 +7,6 @@ abstract class IBasePaginationRepository<T extends IModelWithId> {
     PaginationParams? paginationParams = const PaginationParams(),
     Object? orderBy,
     Object? filter,
+    bool? isPublic,
   });
 }

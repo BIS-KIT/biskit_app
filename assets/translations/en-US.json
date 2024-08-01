@@ -324,6 +324,18 @@
     "verify": "Verify"
   },
 
+  "createMeetupScreen0": {
+    "title": "What kind of meetup\nwould you like to create?",
+    "private": {
+      "title": "My School Meetup",
+      "desc": "Only students from my school can join"
+    },
+    "public": {
+      "title": "All Schools Meetup",
+      "desc": "Students from all schools can join"
+    }
+  },
+
   "createMeetupScreen1": {
     "title1": "What are you going to do?",
     "subtitle1": "Select up to 3 topics to promote your meetup",
@@ -518,7 +530,11 @@
     },
     "recruitForeigner": "Recruit foreigner",
     "recruitKorean": "Recruit Korean",
-    "noMeetups": "No meetups found"
+    "noMeetups": "No meetups found",
+    "tap": {
+      "private": "My School",
+      "public": "All Schools"
+    }
   },
 
   "exploreFilterBottomSheet": {
@@ -778,6 +794,7 @@
       "hobby": "Hobby",
       "etc": "ETC"
     },
+    "allSchoolMeetups": "Check out other schools' meetups!",
     "schoolMeetups": "Meetups in my Univ.",
     "findTags": {
       "title": "Search by tags",

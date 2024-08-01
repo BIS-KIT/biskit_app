@@ -48,7 +48,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   //   return data;
   // }
 
-  paginateCount(List<MeetUpFilterGroup> filter) async {
+  paginateCount(List<MeetUpFilterGroup> filter, bool isPublic) async {
     int? totalCount;
     List<String> timeFilter = [];
     List<int> tagFilter = [];
@@ -102,6 +102,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
             'creator_nationality': nationalFilter,
             'time_filters': timeFilter,
             'user_id': userState.id,
+            'is_public': isPublic,
           },
         );
         // logger.d(res.data);
@@ -122,6 +123,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     PaginationParams? paginationParams = const PaginationParams(),
     Object? orderBy,
     Object? filter,
+    bool? isPublic = false,
   }) async {
     List<MeetUpModel> data = [];
     int totalCount = 0;
@@ -172,7 +174,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
     }
     logger.d('orderBy>>>$orderBy');
     logger.d('tagFilter>>>$tagFilter');
-
+    logger.d('isPublic.. $isPublic');
     final userState = ref.watch(userMeProvider);
     if (userState is UserModel) {
       try {
@@ -196,9 +198,10 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
             'topics_ids': topicsFilter,
             'creator_nationality': nationalFilter,
             'time_filters': timeFilter,
+            'is_public': isPublic ?? false,
           },
         );
-        // logger.d(res.data);
+        logger.d('meetingsRes: ${userState.id} $isPublic ${res.data}');
         if (res.statusCode == 200) {
           if ((res.data as Map).containsKey('total_count')) {
             totalCount = res.data['total_count'];
@@ -225,6 +228,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
   Future<List<MeetUpModel>?> getMeetings({
     required int skip,
     int limit = 20,
+    bool is_public = false,
   }) async {
     List<MeetUpModel>? meetings;
     try {
@@ -242,6 +246,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
           queryParameters: {
             'skip': skip,
             'limit': limit,
+            'is_public': is_public,
             'user_id': userState.id,
           },
         );
@@ -250,6 +255,7 @@ class MeetUpRepository implements IBasePaginationRepository<MeetUpModel> {
           if ((res.data as Map).containsKey('total_count')) {
             meetings = List.from((res.data['meetings'] as List)
                 .map((e) => MeetUpModel.fromMap(e)));
+            logger.d('homeMeetingsRes:${userState.id} $is_public ${res.data} ');
           }
         }
       }

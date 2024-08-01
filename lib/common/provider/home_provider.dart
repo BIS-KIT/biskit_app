@@ -31,6 +31,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
             fixTopics: [],
             tags: [],
             meetings: [],
+            allMeetings: [],
             approveMeetings: [],
           ),
         ) {
@@ -58,6 +59,11 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
         skip: 0,
         limit: 5,
       ),
+      allMeetings: await meetUpRepository.getMeetings(
+        skip: 0,
+        limit: 5,
+        is_public: true,
+      ),
       approveMeetings: sortedApproveMeetings,
     );
     if (state.approveMeetings.isNotEmpty) {
@@ -75,11 +81,15 @@ class HomeState {
 
   // 우리 학교에서 개설된 모임 5개
   final List<MeetUpModel> meetings;
+
+  // 전체 학교에서 개설된 모임 5개
+  final List<MeetUpModel> allMeetings;
   HomeState({
     required this.fixTopics,
     required this.tags,
     required this.approveMeetings,
     required this.meetings,
+    required this.allMeetings,
   });
 
   HomeState copyWith({
@@ -87,12 +97,14 @@ class HomeState {
     List<TagModel>? tags,
     List<MeetUpModel>? approveMeetings,
     List<MeetUpModel>? meetings,
+    List<MeetUpModel>? allMeetings,
   }) {
     return HomeState(
       fixTopics: fixTopics ?? this.fixTopics,
       tags: tags ?? this.tags,
       approveMeetings: approveMeetings ?? this.approveMeetings,
       meetings: meetings ?? this.meetings,
+      allMeetings: allMeetings ?? this.allMeetings,
     );
   }
 }
