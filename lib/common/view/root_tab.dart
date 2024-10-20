@@ -6,6 +6,7 @@ import 'package:biskit_app/common/layout/default_layout.dart';
 import 'package:biskit_app/common/provider/home_provider.dart';
 import 'package:biskit_app/common/provider/root_provider.dart';
 import 'package:biskit_app/common/utils/logger_util.dart';
+import 'package:biskit_app/common/utils/verifyVersion.dart';
 import 'package:biskit_app/common/utils/widget_util.dart';
 import 'package:biskit_app/common/view/home_screen.dart';
 import 'package:biskit_app/meet/view/meet_up_create_screen.dart';
@@ -44,6 +45,8 @@ class _RootTabState extends ConsumerState<RootTab>
   @override
   void initState() {
     super.initState();
+
+    verifyVersion(context);
 
     // controller = TabController(length: 5, vsync: this);
 
