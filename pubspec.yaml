@@ -66,12 +66,13 @@ dependencies:
   extended_wrap: ^0.1.5
   package_info_plus: ^4.2.0
   fl_chart: ^0.64.0
-  url_launcher: ^6.2.1
+  url_launcher: ^6.2.4
   flutter_local_notifications: ^16.1.0
   custom_refresh_indicator: ^3.0.0
   permission_handler: ^11.0.1
   flutter_image_compress: ^2.1.0
   path_provider: ^2.1.1
+  app_version_update: ^4.0.1
 
 dev_dependencies:
   flutter_test:
